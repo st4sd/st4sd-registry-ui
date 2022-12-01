@@ -1,0 +1,48 @@
+language: node_js
+node_js:
+  - 16
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+stages:
+  - name: "Build test image"
+    if: tag is blank AND branch != main
+  - name: "Build production image"
+    if: branch = main AND type != pull_request AND tag is blank 
+  - name: "Build platform image"
+    if: tag is present
+
+before_install:
+  # Install the buildx plugin
+  - mkdir -vp ~/.docker/cli-plugins/
+  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  - chmod a+x ~/.docker/cli-plugins/docker-buildx
+  # Enable experimental features
+  - export DOCKER_CLI_EXPERIMENTAL=enabled
+  - export DOCKER_BUILD_KIT=1
+  # Change buildx output style
+  - export BUILDKIT_PROGRESS=plain
+  - set -e
+
+jobs:
+  include:
+    - stage: "Build test image"
+      os: linux
+      services:
+        - docker
+      script:
+        - ./build_and_push.sh ${DOCKER_REGISTRY}/experimental/st4sd-registry-ui
+    - stage: "Build production image"
+      os: linux
+      services:
+        - docker
+      script:
+        - ./build_and_push.sh ${DOCKER_REGISTRY}/st4sd-registry-ui
+    - stage: "Build platform image"
+      os: linux
+      services:
+        - docker
+      script:
+        - ./build_and_push.sh ${DOCKER_REGISTRY}/st4sd-registry-ui:platform-release-latest

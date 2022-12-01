@@ -1,0 +1,15 @@
+# Ignore MacOS-specific files
+.DS_Store
+
+# Ignore env vars
+.env*
+env_vars
+
+# Ignore actual deployment values
+openshift-deployment/actual_values
+
+# Ignore node modules
+node_modules/
+
+# Ignore dist folder, output of yarn build
+dist/
