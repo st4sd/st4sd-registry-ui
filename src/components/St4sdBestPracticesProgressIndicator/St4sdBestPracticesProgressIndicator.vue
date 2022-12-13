@@ -94,7 +94,7 @@
               <dds-structured-list-row>
                 <dds-structured-list-cell
                   >Experiment is stored on a Git repository and specifies a
-                  commit ID</dds-structured-list-cell
+                  commit ID or a tag</dds-structured-list-cell
                 ><dds-structured-list-cell
                   tooltip="This ensures that the experiment package definition will not change over time"
                 >
@@ -102,7 +102,7 @@
                 ><dds-structured-list-cell
                   ><div
                     v-html="
-                      getTestIcon(checkBasePackagesHaveCommit(experiment))
+                      getTestIcon(checkBasePackagesHaveCommitOrTag(experiment))
                     "
                   ></div
                 ></dds-structured-list-cell>
@@ -355,7 +355,7 @@
 <script>
 import {
   checkContainerImagesHaveTagOtherThanLatest,
-  checkBasePackagesHaveCommit,
+  checkBasePackagesHaveCommitOrTag,
   getStrongVersioningScore,
 } from "@/functions/strong_versioning.js";
 
@@ -398,7 +398,7 @@ export default {
   },
   methods: {
     checkContainerImagesHaveTagOtherThanLatest,
-    checkBasePackagesHaveCommit,
+    checkBasePackagesHaveCommitOrTag,
     getStrongVersioningScore,
     checkVeInterfaceIsPresent,
     checkParameterisedPackageHasDescription,

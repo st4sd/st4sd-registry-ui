@@ -28,13 +28,31 @@ export function checkContainerImagesHaveTagOtherThanLatest(experiment) {
   return true;
 }
 
-export function checkBasePackagesHaveCommit(experiment) {
+export function checkBasePackagesHaveCommitOrTag(experiment) {
   for (let i = 0; i < experiment.base.packages.length; i++) {
     let base_package = experiment.base.packages[i];
+
+    // It's not a git package
+    if (!("git" in base_package.source)) return false;
+
+    // The git package does not have a key for commit or tag
     if (
-      !("git" in base_package.source) ||
-      !("commit" in base_package.source.git.location) ||
+      !("commit" in base_package.source.git.location) &&
+      !("tag" in base_package.source.git.location)
+    )
+      return false;
+
+    // The git package specifies the commit field but it's null
+    if (
+      "commit" in base_package.source.git.location &&
       base_package.source.git.location.commit == null
+    )
+      return false;
+
+    // The git package specifies the tag field but it's null
+    if (
+      "tag" in base_package.source.git.location &&
+      base_package.source.git.location.tag == null
     )
       return false;
   }
@@ -51,7 +69,7 @@ export function getStrongVersioningScore(experiment) {
   let imagesAreTagged = checkContainerImagesHaveTagOtherThanLatest(experiment)
     ? weight
     : 0;
-  let basePackagesHaveCommit = checkBasePackagesHaveCommit(experiment)
+  let basePackagesHaveCommit = checkBasePackagesHaveCommitOrTag(experiment)
     ? weight
     : 0;
 
