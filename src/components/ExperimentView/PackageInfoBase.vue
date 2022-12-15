@@ -1,13 +1,13 @@
 <template>
-  <div class="cds--row pad1">
-    <div class="cds--col-lg-4">
+  <cv-row class="pad1">
+    <cv-column :sm="4" :md="2" :lg="4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >Base</dds-content-block-heading
         >
       </dds-content-block>
-    </div>
-    <div class="cds--col">
+    </cv-column>
+    <cv-column :sm="4" :md="6" :lg="12">
       <dds-structured-list>
         <dds-structured-list-body>
           <dds-structured-list-group
@@ -19,8 +19,9 @@
             :title="basePackage.name"
           >
             <dds-structured-list-row>
-              <dds-structured-list-cell>Source</dds-structured-list-cell
-              ><dds-structured-list-cell>
+              <dds-structured-list-cell class="cds--col-sm-1"
+                >Source</dds-structured-list-cell
+              ><dds-structured-list-cell class="cds--col-sm-3">
                 <bx-link :href="getUrl(basePackage.source.git)"
                   >{{ getUrl(basePackage.source.git) }}
                 </bx-link>
@@ -29,8 +30,9 @@
             <dds-structured-list-row
               v-if="basePackage.source.git.location.commit != null"
             >
-              <dds-structured-list-cell>Version</dds-structured-list-cell
-              ><dds-structured-list-cell>
+              <dds-structured-list-cell class="cds--col-sm-1"
+                >Version</dds-structured-list-cell
+              ><dds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.commit }}</code>
               </dds-structured-list-cell>
             </dds-structured-list-row>
@@ -49,9 +51,9 @@
               </dds-structured-list-cell>
             </dds-structured-list-row>
             <dds-structured-list-row>
-              <dds-structured-list-cell
+              <dds-structured-list-cell class="cds--col-sm-1"
                 >Report a problem</dds-structured-list-cell
-              ><dds-structured-list-cell>
+              ><dds-structured-list-cell class="cds--col-sm-3">
                 <bx-link
                   :href="
                     createIssueForGitPackage(experiment, basePackage.source.git)
@@ -70,8 +72,8 @@
           </dds-structured-list-group>
         </dds-structured-list-body>
       </dds-structured-list>
-    </div>
-  </div>
+    </cv-column>
+  </cv-row>
 </template>
 
 <script>
@@ -144,4 +146,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+dds-structured-list {
+  overflow-x: hidden;
+}
+</style>

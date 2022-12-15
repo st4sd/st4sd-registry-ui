@@ -8,7 +8,36 @@
   <div class="cds--grid cds--grid--full-width">
     <!-- Show something while we're loading -->
     <template v-if="loading != 0">
-      <LoadingOverlayVue />
+      <div class="breadcrumb">
+        <bx-breadcrumb>
+          <bx-breadcrumb-item>
+            <router-link to="/">Virtual Experiments</router-link>
+          </bx-breadcrumb-item>
+          <bx-breadcrumb-item>
+            <bx-skeleton-text></bx-skeleton-text>
+          </bx-breadcrumb-item>
+        </bx-breadcrumb>
+      </div>
+      <div class="cds--row pad1">
+        <div class="cds--col-lg-10">
+          <p style="padding: 64px"></p>
+          <bx-skeleton-text type="heading"></bx-skeleton-text>
+          <p style="padding: 10px; margin: 10px"></p>
+          <bx-skeleton-text type="line"></bx-skeleton-text>
+          <bx-skeleton-text type="line"></bx-skeleton-text>
+        </div>
+        <div class="cds--col" style="padding: 64px">
+          <bx-progress-indicator-skeleton
+            class="ve-progress-indicator"
+            vertical
+          >
+            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
+            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
+            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
+            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
+          </bx-progress-indicator-skeleton>
+        </div>
+      </div>
     </template>
 
     <!-- Actual content -->
@@ -110,7 +139,6 @@ import {
 import { getBestPracticesScore } from "@/functions/best_practices";
 
 import TitleElement from "@/components/ExperimentView/TitleElement.vue";
-import LoadingOverlayVue from "@/components/ExperimentView/LoadingOverlay.vue";
 import PageHeroVue from "@/components/ExperimentView/PageHero.vue";
 import VirtualExperimentInterfaceVue from "@/components/ExperimentView/VirtualExperimentInterface.vue";
 import ExperimentInputsVue from "@/components/ExperimentView/ExperimentInputs.vue";
@@ -126,7 +154,6 @@ import axios from "axios";
 export default {
   name: "ExperimentView",
   components: {
-    LoadingOverlayVue,
     PageHeroVue,
     VirtualExperimentInterfaceVue,
     ExperimentInputsVue,
@@ -291,20 +318,39 @@ export default {
 @use "@carbon/layout";
 @use "@carbon/colors";
 
+bx-breadcrumb-item {
+  display: inline;
+}
+
 .ve-progress-indicator {
-  margin-top: 64px;
+  margin-top: 0;
 }
 
 .ve-content-block {
   padding: 0;
+  padding-bottom: 0.5rem;
 }
 
 .ve-heading {
+  @media screen and (max-width: 1056px) and (min-width: 672px) {
+    font-size: calc(16px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
+    margin-bottom: 1rem;
+  }
+  @media screen and (max-width: 672px) {
+    margin-bottom: 16px;
+    margin-left: 0;
+  }
   font-size: 1.5em;
 }
 
 .ve-copy {
+  @media screen and (max-width: 1056px) and (min-width: 672px) {
+    font-size: calc(12.8px + (19.2 - 12.8) * ((100vw - 42rem) / (1056 - 672)));
+  }
   font-size: 1.2em;
+  @media screen and (max-width: 672px) {
+    margin-left: 0;
+  }
   margin-left: 16px;
   margin-right: 16px;
 }

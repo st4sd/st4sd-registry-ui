@@ -53,301 +53,46 @@
       </bx-progress-indicator>
 
       <!-- Modals -->
+
       <!-- Strong versioning modal -->
-      <bx-modal id="strong-versioning-modal">
-        <bx-modal-header>
-          <bx-modal-close-button></bx-modal-close-button>
-          <bx-modal-label>ST4SD Best Practices</bx-modal-label>
-          <bx-modal-heading>Strong versioning</bx-modal-heading>
-        </bx-modal-header>
-        <bx-modal-body
-          ><dds-structured-list col-span-1="13" col-span-2="2" col-span-3="3">
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell
-                >Check</dds-structured-list-header-cell
-              >
-              <dds-structured-list-header-cell
-                >Info</dds-structured-list-header-cell
-              ><dds-structured-list-header-cell
-                >Status</dds-structured-list-header-cell
-              >
-            </dds-structured-list-header-row>
-            <dds-structured-list-body>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Container images in this experiment are using tags other than
-                  <code>latest</code></dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="The image referenced by the latest tag will likely change over time"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell>
-                  <div
-                    v-html="
-                      getTestIcon(
-                        checkContainerImagesHaveTagOtherThanLatest(experiment)
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Experiment is stored on a Git repository and specifies a
-                  commit ID or a tag</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="This ensures that the experiment package definition will not change over time"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(checkBasePackagesHaveCommitOrTag(experiment))
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-            </dds-structured-list-body> </dds-structured-list
-        ></bx-modal-body>
-        <bx-modal-footer>
-          <bx-modal-footer-button kind="primary" data-modal-close
-            >Close</bx-modal-footer-button
-          >
-        </bx-modal-footer>
-      </bx-modal>
+      <St4sdModal
+        id="strong-versioning-modal"
+        title="Strong Versioning"
+        heading1="Check"
+        heading2="Info"
+        heading3="Status"
+        :structuredListData="strongVersioningData"
+      />
 
       <!-- Virtual experiment interface modal -->
-      <bx-modal id="virtual-experiment-interface-modal">
-        <bx-modal-header>
-          <bx-modal-close-button></bx-modal-close-button>
-          <bx-modal-label>ST4SD Best Practices</bx-modal-label>
-          <bx-modal-heading>Virtual experiment interface</bx-modal-heading>
-        </bx-modal-header>
-        <bx-modal-body
-          ><dds-structured-list col-span-1="13" col-span-2="2" col-span-3="3">
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell
-                >Check</dds-structured-list-header-cell
-              >
-              <dds-structured-list-header-cell
-                >Info</dds-structured-list-header-cell
-              ><dds-structured-list-header-cell
-                >Status</dds-structured-list-header-cell
-              >
-            </dds-structured-list-header-row>
-            <dds-structured-list-body>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >The experiment has a virtual experiment
-                  interface</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="A virtual-experiment interface makes information retrieval and integrations easier"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="getTestIcon(checkVeInterfaceIsPresent(experiment))"
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-            </dds-structured-list-body> </dds-structured-list
-        ></bx-modal-body>
-        <bx-modal-footer>
-          <bx-modal-footer-button kind="primary" data-modal-close
-            >Close</bx-modal-footer-button
-          >
-        </bx-modal-footer>
-      </bx-modal>
+      <St4sdModal
+        id="virtual-experiment-interface-modal"
+        title="Virtual experiment interface"
+        heading1="Check"
+        heading2="Info"
+        heading3="Status"
+        :structuredListData="VEInterfaceData"
+      />
 
       <!-- Developer metadata modal -->
-      <bx-modal id="developer-metadata-modal">
-        <bx-modal-header>
-          <bx-modal-close-button></bx-modal-close-button>
-          <bx-modal-label>ST4SD Best Practices</bx-modal-label>
-          <bx-modal-heading>Developer metadata</bx-modal-heading>
-        </bx-modal-header>
-        <bx-modal-body
-          ><dds-structured-list col-span-1="13" col-span-2="2" col-span-3="3">
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell
-                >Check</dds-structured-list-header-cell
-              >
-              <dds-structured-list-header-cell
-                >Info</dds-structured-list-header-cell
-              ><dds-structured-list-header-cell
-                >Status</dds-structured-list-header-cell
-              >
-            </dds-structured-list-header-row>
-            <dds-structured-list-body>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Parameterised package has a
-                  description</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="This helps other users understand more easily what the experiment does"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(
-                        checkParameterisedPackageHasDescription(experiment)
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Parameterised package specifies a
-                  maintainer</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="This allows users to get in touch with someone in case of need"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(
-                        checkParameterisedPackageHasMaintainer(experiment)
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Parameterised package specifies a
-                  license</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="This helps the user be aware of any kind of restrictions on modification and reuse"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(
-                        checkParameterisedPackageHasLicense(experiment)
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Parameterised package has a tag other than
-                  <code>latest</code></dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="Developers should define a tag other than latest to help strong versioning requirements"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(
-                        checkParameterisedPackageHasTagOtherThanLatest(
-                          experiment
-                        )
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Parameterised package lists its
-                  inputs</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  tooltip="Developers should list the inputs of their experiments"
-                >
-                </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="
-                      getTestIcon(
-                        checkParameterisedPackageListsInputs(experiment)
-                      )
-                    "
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-            </dds-structured-list-body> </dds-structured-list
-        ></bx-modal-body>
-        <bx-modal-footer>
-          <bx-modal-footer-button kind="primary" data-modal-close
-            >Close</bx-modal-footer-button
-          >
-        </bx-modal-footer>
-      </bx-modal>
+      <St4sdModal
+        id="developer-metadata-modal"
+        title="Developer metadata"
+        heading1="Check"
+        heading2="Info"
+        heading3="Status"
+        :structuredListData="developerMetadataData"
+      />
 
       <!-- Best practices modal -->
-      <bx-modal id="best-practices-modal">
-        <bx-modal-header>
-          <bx-modal-close-button></bx-modal-close-button>
-          <bx-modal-label>ST4SD Best Practices</bx-modal-label>
-          <bx-modal-heading>Summary</bx-modal-heading>
-        </bx-modal-header>
-        <bx-modal-body
-          ><dds-structured-list col-span-1="13" col-span-2="2" col-span-3="3">
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell
-                >Check</dds-structured-list-header-cell
-              >
-              <dds-structured-list-header-cell
-                >Score</dds-structured-list-header-cell
-              ><dds-structured-list-header-cell
-                >Status</dds-structured-list-header-cell
-              >
-            </dds-structured-list-header-row>
-            <dds-structured-list-body>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Strong versioning score</dds-structured-list-cell
-                ><dds-structured-list-cell>
-                  {{
-                    getStrongVersioningScore(experiment)
-                  }}% </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="getTestIcon(getStrongVersioningScore(experiment))"
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Virtual experiment interface score</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  v-if="checkVeInterfaceIsPresent(experiment)"
-                  >Pass</dds-structured-list-cell
-                >
-                <dds-structured-list-cell v-else>Fail</dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="getTestIcon(checkVeInterfaceIsPresent(experiment))"
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-              <dds-structured-list-row>
-                <dds-structured-list-cell
-                  >Developer metadata score</dds-structured-list-cell
-                ><dds-structured-list-cell>
-                  {{
-                    getDeveloperMetadataScore(experiment)
-                  }}% </dds-structured-list-cell
-                ><dds-structured-list-cell
-                  ><div
-                    v-html="getTestIcon(getDeveloperMetadataScore(experiment))"
-                  ></div
-                ></dds-structured-list-cell>
-              </dds-structured-list-row>
-            </dds-structured-list-body> </dds-structured-list
-        ></bx-modal-body>
-        <bx-modal-footer>
-          <bx-modal-footer-button kind="primary" data-modal-close
-            >Close</bx-modal-footer-button
-          >
-        </bx-modal-footer>
-      </bx-modal>
+      <St4sdModal
+        id="best-practices-modal"
+        title="Summary"
+        heading1="Check"
+        heading2="Score"
+        heading3="Status"
+        :structuredListData="bestPracticesData"
+      />
     </template>
   </div>
 </template>
@@ -369,6 +114,7 @@ import {
 } from "@/functions/developer_metadata.js";
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getBestPracticesScore } from "@/functions/best_practices";
+import St4sdModal from "@/components/St4sdBestPracticesProgressIndicator/St4sdModal.vue";
 
 // Icons
 const successGreenImage = require("../../assets/checkmark--filled.svg");
@@ -381,6 +127,9 @@ const failRedImageHTML = `<img width="20" height="20" class="fail-red" src="${fa
 
 export default {
   name: "ST4SDBestPracticesProgressIndicator",
+  components: {
+    St4sdModal,
+  },
   props: {
     experiment: {
       type: Object,
@@ -390,6 +139,100 @@ export default {
       type: Number,
       default: 4,
     },
+  },
+  data() {
+    return {
+      strongVersioningData: [
+        {
+          col1: "Container images in this experiment are using tags other than <code>latest</code>",
+          col2: "The image referenced by the latest tag will likely change over time",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkContainerImagesHaveTagOtherThanLatest(this.experiment)
+          ),
+        },
+        {
+          col1: "Experiment is stored on a Git repository and specifies a commit ID or a tag",
+          col2: "This ensures that the experiment package definition will not change over time",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkBasePackagesHaveCommitOrTag(this.experiment)
+          ),
+        },
+      ],
+      VEInterfaceData: [
+        {
+          col1: "The experiment has a virtual experiment interface",
+          col2: "A virtual-experiment interface makes information retrieval and integrations easier",
+          col2Type: "info",
+          col3: this.getTestIcon(checkVeInterfaceIsPresent(this.experiment)),
+        },
+      ],
+      developerMetadataData: [
+        {
+          col1: "Parameterised package has a description",
+          col2: "This helps other users understand more easily what the experiment does",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkParameterisedPackageHasDescription(this.experiment)
+          ),
+        },
+        {
+          col1: "Parameterised package specifies a maintainer",
+          col2: "This allows users to get in touch with someone in case of need",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkParameterisedPackageHasMaintainer(this.experiment)
+          ),
+        },
+        {
+          col1: "Parameterised package specifies a license",
+          col2: "This helps the user be aware of any kind of restrictions on modification and reuse",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkParameterisedPackageHasLicense(this.experiment)
+          ),
+        },
+        {
+          col1: "Parameterised package has a tag other than <code>latest</code>",
+          col2: "Developers should define a tag other than latest to help strong versioning requirements",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkParameterisedPackageHasTagOtherThanLatest(this.experiment)
+          ),
+        },
+        {
+          col1: "Parameterised package lists its inputs",
+          col2: "Developers should list the inputs of their experiments",
+          col2Type: "info",
+          col3: this.getTestIcon(
+            checkParameterisedPackageListsInputs(this.experiment)
+          ),
+        },
+      ],
+      bestPracticesData: [
+        {
+          col1: "Strong versioning score",
+          col2: this.getStrongVersioningScore(this.experiment) + "%",
+          col2Type: "score",
+          col3: this.getTestIcon(getStrongVersioningScore(this.experiment)),
+        },
+        {
+          col1: "Virtual experiment interface score",
+          col2: this.checkVeInterfaceIsPresent(this.experiment)
+            ? "Pass"
+            : "Fail",
+          col2Type: "score",
+          col3: this.getTestIcon(checkVeInterfaceIsPresent(this.experiment)),
+        },
+        {
+          col1: "Developer metadata score",
+          col2: this.getDeveloperMetadataScore(this.experiment) + "%",
+          col2Type: "score",
+          col3: this.getTestIcon(getDeveloperMetadataScore(this.experiment)),
+        },
+      ],
+    };
   },
   computed: {
     interfaceStatus() {

@@ -61,53 +61,56 @@
     </template>
 
     <template v-else>
-      <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
-        <bx-table-head>
-          <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
-          <bx-table-header-row>
-            <bx-table-header-cell
-              data-column-id="identifier"
-              sort-direction="none"
-              >Component ID</bx-table-header-cell
-            >
-            <bx-table-header-cell data-column-id="state" sort-direction="none"
-              >State</bx-table-header-cell
-            >
-            <bx-table-header-cell>Log</bx-table-header-cell>
-          </bx-table-header-row>
-        </bx-table-head>
-
-        <bx-table-body>
-          <bx-table-row v-for="(component, idx) in getTableSlice" :key="idx">
-            <bx-table-cell>{{ component.identifier }}</bx-table-cell>
-            <bx-table-cell>{{ component.state }}</bx-table-cell>
-            <bx-table-cell
-              ><bx-link
-                :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}/${
-                  component.identifier
-                }`"
-                >Logs</bx-link
+      <div class="tableOverflowContainer">
+        <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
+          <bx-table-head>
+            <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
+            <bx-table-header-row>
+              <bx-table-header-cell
+                data-column-id="identifier"
+                sort-direction="none"
+                >Component ID</bx-table-header-cell
               >
-            </bx-table-cell>
-          </bx-table-row>
-        </bx-table-body>
-      </bx-table>
+              <bx-table-header-cell data-column-id="state" sort-direction="none"
+                >State</bx-table-header-cell
+              >
+              <bx-table-header-cell>Log</bx-table-header-cell>
+            </bx-table-header-row>
+          </bx-table-head>
 
-      <bx-pagination
-        :page-size="elementsToShow"
-        :start="firstElement"
-        :total="instance_components.length"
-        @bx-pages-select-changed="handleTablePagesSelectChanged"
-        @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-        @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
-      >
-        <bx-page-sizes-select slot="page-sizes-select">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </bx-page-sizes-select>
-        <bx-pages-select></bx-pages-select> </bx-pagination
-    ></template>
+          <bx-table-body>
+            <bx-table-row v-for="(component, idx) in getTableSlice" :key="idx">
+              <bx-table-cell>{{ component.identifier }}</bx-table-cell>
+              <bx-table-cell>{{ component.state }}</bx-table-cell>
+              <bx-table-cell
+                ><bx-link
+                  :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}/${
+                    component.identifier
+                  }`"
+                  >Logs</bx-link
+                >
+              </bx-table-cell>
+            </bx-table-row>
+          </bx-table-body>
+        </bx-table>
+
+        <bx-pagination
+          :page-size="elementsToShow"
+          :start="firstElement"
+          :total="instance_components.length"
+          @bx-pages-select-changed="handleTablePagesSelectChanged"
+          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
+          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+        >
+          <bx-page-sizes-select slot="page-sizes-select">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </bx-page-sizes-select>
+          <bx-pages-select></bx-pages-select>
+        </bx-pagination>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -212,3 +215,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.tableOverflowContainer {
+  width: 100%;
+  overflow-x: scroll;
+}
+</style>

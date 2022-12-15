@@ -1,13 +1,13 @@
 <template>
-  <div class="cds--row pad1">
-    <div class="cds--col-lg-4">
+  <cv-row class="pad1">
+    <cv-column :sm="4" :md="2" :lg="4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >Container images</dds-content-block-heading
         >
       </dds-content-block>
-    </div>
-    <div class="cds--col">
+    </cv-column>
+    <cv-column :sm="4" :md="6" :lg="12">
       <dds-structured-list>
         <dds-structured-list-head>
           <dds-structured-list-header-row>
@@ -28,8 +28,8 @@
           </dds-structured-list-row>
         </dds-structured-list-body>
       </dds-structured-list>
-    </div>
-  </div>
+    </cv-column>
+  </cv-row>
 </template>
 
 <script>
@@ -40,5 +40,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

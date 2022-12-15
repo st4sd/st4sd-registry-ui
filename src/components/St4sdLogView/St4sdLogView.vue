@@ -5,9 +5,9 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--row">
+  <cv-row class="logViewFlexContainer">
     <template v-if="loading">
-      <div class="cds--col">
+      <cv-column :lg="12">
         <p>
           <bx-skeleton-text
             v-for="i in 3"
@@ -15,20 +15,23 @@
             type="line"
           ></bx-skeleton-text>
         </p>
-      </div>
-      <div class="cds--col-lg-4">
+      </cv-column>
+      <cv-column :lg="4">
         <bx-btn-skeleton></bx-btn-skeleton>
-      </div>
+      </cv-column>
     </template>
     <template v-else>
-      <div class="cds--col">
-        <pre v-if="log.length != 0"><code>{{log}}</code></pre>
-        <pre v-else>
+      <cv-column :lg="12">
+        <pre
+          class="logWidths"
+          v-if="log.length != 0"
+        ><div class="tableOverflowContainer"><cv-code-snippet kind="multiline" id="logViewCodeSnippet">{{log}}</cv-code-snippet></div></pre>
+        <pre class="logWidths" v-else>
 No logs available
       </pre
         >
-      </div>
-      <div class="cds--col-lg-4">
+      </cv-column>
+      <cv-column :lg="4">
         <bx-btn
           v-if="log.length != 0"
           class="bx--btn--primary"
@@ -38,9 +41,9 @@ No logs available
           Download log&nbsp;
           <img class="download-icon" src="../../assets/download.svg"
         /></bx-btn>
-      </div>
+      </cv-column>
     </template>
-  </div>
+  </cv-row>
 </template>
 
 <script>
@@ -85,5 +88,27 @@ p {
   font-size: small;
   background-color: #f4f4f4;
   padding: 20px;
+}
+
+.tableOverflowContainer {
+  overflow-x: scroll;
+}
+
+.logWidths {
+  min-width: 220px;
+}
+
+@media screen and (max-width: 1056px) {
+  .logViewFlexContainer {
+    flex-direction: column-reverse;
+  }
+}
+
+.bx--btn--primary {
+  margin-top: 0;
+}
+
+#logViewCodeSnippet {
+  max-width: unset;
 }
 </style>

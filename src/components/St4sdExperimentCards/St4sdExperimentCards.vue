@@ -1,7 +1,7 @@
 <template>
-  <div class="cds--col-lg-12">
+  <div>
     <div
-      class="cds--row card-row"
+      class="card-row"
       v-for="experiment in experimentsToShow"
       :key="experiment.metadata.package.name"
     >
@@ -118,11 +118,26 @@ export default {
 @use "@carbon/grid";
 @use "@carbon/layout";
 .card-row {
-  margin-bottom: layout.$spacing-06;
+  margin-top: layout.$spacing-05;
   // max-height: 200px;
 }
 
 .card-proportions {
   max-height: 300px;
+}
+
+@media screen and (max-width: 750px) {
+  .card-proportions {
+    max-height: 350px;
+  }
+}
+
+@media screen and (max-width: 672px) {
+  .card-proportions {
+    max-height: none;
+  }
+  .bx--link {
+    overflow-wrap: anywhere;
+  }
 }
 </style>

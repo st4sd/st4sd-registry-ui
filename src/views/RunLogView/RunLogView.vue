@@ -93,5 +93,6 @@ pre {
   font-size: small;
   background-color: #f4f4f4;
   padding: 20px;
+  min-width: 400px;
 }
 </style>
