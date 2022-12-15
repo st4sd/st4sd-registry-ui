@@ -1,5 +1,5 @@
 <template>
-  <div class="cds--col-lg-4">
+  <div class="filter-container">
     <dds-filter-panel-composite
       @dds-selection-clear="passSelectedFilters"
       @dds-checkbox-select="passSelectedFilters"
@@ -82,6 +82,10 @@ export default {
     };
   },
   methods: {
+    handleFilterClear() {
+      this.selectedFilters = [];
+      return [this.selectedFilters, this.experiments];
+    },
     handleCheckboxSelect(event) {
       // Handle clear button
       if (event.type == "dds-selection-clear") {
@@ -128,3 +132,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.filter-container {
+  padding-right: 1rem;
+}
+dds-filter-panel-composite {
+  @media screen and (max-width: 1056px) {
+    margin-left: -16px;
+  }
+}
+</style>

@@ -23,18 +23,22 @@
     </template>
     <template v-else>
       <!-- Filter column -->
-      <div class="cds--row">
-        <St4sdLocalFilters
-          :experiments="this.experiments"
-          @updateSelectedFilters="updateSelectedFilters($event)"
-        />
+      <cv-row>
+        <cv-column :lg="4">
+          <St4sdLocalFilters
+            :experiments="this.experiments"
+            @updateSelectedFilters="updateSelectedFilters($event)"
+          />
+        </cv-column>
 
         <!-- Card rows and columns -->
-        <St4sdExperimentCards
-          :experiments="this.experiments"
-          :selectedFilters="this.selectedFilters"
-        />
-      </div>
+        <cv-column :lg="12">
+          <St4sdExperimentCards
+            :experiments="this.experiments"
+            :selectedFilters="this.selectedFilters"
+          />
+        </cv-column>
+      </cv-row>
     </template>
   </div>
 </template>
@@ -82,6 +86,26 @@ export default {
   methods: {
     updateSelectedFilters(selectedFilters) {
       this.selectedFilters = selectedFilters;
+    },
+    //-----------------------------NEW CODE END-----------------
+    findTagsForPackageName(name) {
+      let tags = new Set();
+      for (let i = 0; i < this.experiments.length; i++) {
+        if (this.experiments[i].metadata.package.name != name) continue;
+        this.experiments[i].metadata.package.tags.forEach((tag) => {
+          tags.add(tag);
+        });
+      }
+      return Array.from(tags);
+    },
+    updateSearchedExperiments(searchedExperiments) {
+      this.searchedExperiments = searchedExperiments;
+    },
+    updateSelectedFiltersAndFilteredExperiments(
+      selectedFiltersAndFilteredExperiments
+    ) {
+      this.selectedFilters = selectedFiltersAndFilteredExperiments[0];
+      this.selectedExperiments = selectedFiltersAndFilteredExperiments[1];
     },
   },
 };

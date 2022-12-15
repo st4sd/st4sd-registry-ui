@@ -1,62 +1,64 @@
 <template>
   <!-- Experiment header -->
-  <div class="cds--row pad1">
-    <!-- Left column  -->
-    <div class="cds--col-lg-10">
-      <!-- Experiment name and description -->
-      <dds-content-block>
-        <dds-content-block-heading>{{
-          experiment.metadata.package.name
-        }}</dds-content-block-heading>
-        <dds-content-block-copy>{{
-          experiment.metadata.package.description
-        }}</dds-content-block-copy>
+  <div>
+    <cv-row class="pad1 topPad">
+      <!-- Left column  -->
+      <cv-column :sm="4" :md="8" :lg="10" class="pad1">
+        <!-- Experiment name and description -->
+        <dds-content-block>
+          <dds-content-block-heading>{{
+            experiment.metadata.package.name
+          }}</dds-content-block-heading>
+          <dds-content-block-copy>{{
+            experiment.metadata.package.description
+          }}</dds-content-block-copy>
 
-        <!-- Experiment tags -->
-        <dds-tag-group>
-          <!-- Virtual experiment -->
-          <bx-tag v-if="checkVeInterfaceIsPresent(experiment)" type="green">
-            virtual-experiment
-          </bx-tag>
-          <!-- Platforms -->
-          <bx-tag
-            v-for="option in getAvailablePlatforms"
-            :key="`platformoption-${option}`"
-            type="red"
-          >
-            platform: {{ option }}
-          </bx-tag>
-          <!-- Tags -->
-          <bx-tag
-            v-for="(tag, idx) in experiment.metadata.registry.tags"
-            :key="`registrytag-${idx}`"
-            type="blue"
-          >
-            tag: {{ tag }}
-          </bx-tag>
-          <!-- Digest -->
-          <bx-tag type="blue">
-            digest: {{ experiment.metadata.registry.digest }}
-          </bx-tag>
-        </dds-tag-group>
+          <!-- Experiment tags -->
+          <dds-tag-group>
+            <!-- Virtual experiment -->
+            <bx-tag v-if="checkVeInterfaceIsPresent(experiment)" type="green">
+              virtual-experiment
+            </bx-tag>
+            <!-- Platforms -->
+            <bx-tag
+              v-for="option in getAvailablePlatforms"
+              :key="`platformoption-${option}`"
+              type="red"
+            >
+              platform: {{ option }}
+            </bx-tag>
+            <!-- Tags -->
+            <bx-tag
+              v-for="(tag, idx) in experiment.metadata.registry.tags"
+              :key="`registrytag-${idx}`"
+              type="blue"
+            >
+              tag: {{ tag }}
+            </bx-tag>
+            <!-- Digest -->
+            <bx-tag type="blue">
+              digest: {{ experiment.metadata.registry.digest }}
+            </bx-tag>
+          </dds-tag-group>
 
-        <!-- Call to action -->
-        <dds-text-cta slot="footer" cta-type="local" v-if="!isGlobalRegistry">
-          <bx-link :href="`${getDeploymentEndpoint()}experiment/${id}/runs`"
-            >View Runs</bx-link
-          >
-        </dds-text-cta>
-      </dds-content-block>
-    </div>
+          <!-- Call to action -->
+          <dds-text-cta slot="footer" cta-type="local" v-if="!isGlobalRegistry">
+            <bx-link :href="`${getDeploymentEndpoint()}experiment/${id}/runs`"
+              >View Runs</bx-link
+            >
+          </dds-text-cta>
+        </dds-content-block>
+      </cv-column>
 
-    <!-- Right column -->
-    <div class="cds--col">
-      <!-- Progress indicator -->
-      <St4sdBestPracticesProgressIndicator
-        :loading="loading"
-        :experiment="experiment"
-      />
-    </div>
+      <!-- Right column -->
+      <cv-column :sm="4" :md="8" :lg="6" class="pad1">
+        <!-- Progress indicator -->
+        <St4sdBestPracticesProgressIndicator
+          :loading="loading"
+          :experiment="experiment"
+        />
+      </cv-column>
+    </cv-row>
   </div>
 </template>
 
@@ -81,3 +83,17 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+dds-content-block {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+dds-structured-list-cell {
+  overflow-wrap: anywhere;
+}
+
+.topPad {
+  padding-top: 2rem;
+}
+</style>

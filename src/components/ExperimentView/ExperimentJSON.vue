@@ -1,26 +1,26 @@
 <template>
-  <div class="cds--row pad1">
-    <div class="cds--col-lg-4">
+  <cv-row class="pad1">
+    <cv-column :sm="4" :md="2" :lg="4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >Description</dds-content-block-heading
         >
       </dds-content-block>
-    </div>
-    <div class="cds--col">
-      <div class="cds--row">
+    </cv-column>
+    <cv-column :sm="4" :md="6" :lg="12">
+      <cv-row>
         <bx-code-snippet language="json" type="multi">
           {{ JSON.stringify(exp_no_interface, null, 2) }}
         </bx-code-snippet>
-      </div>
-      <div class="cds--row">
+      </cv-row>
+      <cv-row>
         <bx-btn class="bx--btn--primary" type="button" @click="download()">
           Download JSON&nbsp;
           <img class="download-icon" src="../../assets/download.svg"
         /></bx-btn>
-      </div>
-    </div>
-  </div>
+      </cv-row>
+    </cv-column>
+  </cv-row>
 </template>
 
 <script>

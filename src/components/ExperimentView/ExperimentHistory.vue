@@ -1,87 +1,91 @@
 <template>
-  <div class="cds--row pad1">
-    <div class="cds--col-lg-4">
+  <cv-row class="pad1">
+    <cv-column :sm="4" :md="2" :lg="4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >History</dds-content-block-heading
         >
       </dds-content-block>
-    </div>
-    <div class="cds--col no-padding">
-      <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
-        <bx-table-head>
-          <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
-          <bx-table-header-row>
-            <bx-table-header-cell
-              sort-direction="descending"
-              data-column-id="tag"
-              >Tag</bx-table-header-cell
-            >
-            <bx-table-header-cell sort-direction="none" data-column-id="digest"
-              >Digest</bx-table-header-cell
-            >
-            <!-- <bx-table-header-cell>Times executed</bx-table-header-cell> -->
-            <bx-table-header-cell
-              sort-direction="none"
-              data-column-id="originalTag"
-              >Previous tag</bx-table-header-cell
-            >
-            <bx-table-header-cell
-              sort-direction="none"
-              data-column-id="createdOn"
-              >Creation date</bx-table-header-cell
-            >
-          </bx-table-header-row>
-        </bx-table-head>
-        <bx-table-body>
-          <!-- Tagged entries -->
-          <bx-table-row
-            v-for="(entry, entryIdx) in getTableSlice"
-            :key="entryIdx"
-          >
-            <bx-table-cell
-              ><bx-link
-                :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
-                  id
-                )}:${entry.tag}`"
+    </cv-column>
+    <cv-column :sm="4" :md="6" :lg="12">
+      <div class="tableOverflowContainer">
+        <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
+          <bx-table-head>
+            <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
+            <bx-table-header-row>
+              <bx-table-header-cell
+                sort-direction="descending"
+                data-column-id="tag"
+                >Tag</bx-table-header-cell
               >
-                {{ entry.tag }}
-              </bx-link></bx-table-cell
-            >
-            <bx-table-cell
-              ><bx-link
-                :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
-                  id
-                )}@${entry.digest}`"
+              <bx-table-header-cell
+                sort-direction="none"
+                data-column-id="digest"
+                >Digest</bx-table-header-cell
               >
-                {{ entry.digest }}
-              </bx-link></bx-table-cell
+              <!-- <bx-table-header-cell>Times executed</bx-table-header-cell> -->
+              <bx-table-header-cell
+                sort-direction="none"
+                data-column-id="originalTag"
+                >Previous tag</bx-table-header-cell
+              >
+              <bx-table-header-cell
+                sort-direction="none"
+                data-column-id="createdOn"
+                >Creation date</bx-table-header-cell
+              >
+            </bx-table-header-row>
+          </bx-table-head>
+          <bx-table-body>
+            <!-- Tagged entries -->
+            <bx-table-row
+              v-for="(entry, entryIdx) in getTableSlice"
+              :key="entryIdx"
             >
-            <!-- <bx-table-cell>Placeholder</bx-table-cell> -->
-            <bx-table-cell>{{ entry.originalTag }}</bx-table-cell>
-            <bx-table-cell>{{
-              new Date(Date.parse(entry.createdOn))
-            }}</bx-table-cell>
-          </bx-table-row>
-        </bx-table-body>
-      </bx-table>
-      <bx-pagination
-        :page-size="elementsToShow"
-        :start="firstElement"
-        :total="history.tags.length + history.untagged.length"
-        @bx-pages-select-changed="handleTablePagesSelectChanged"
-        @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-        @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
-      >
-        <bx-page-sizes-select slot="page-sizes-select">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </bx-page-sizes-select>
-        <bx-pages-select></bx-pages-select>
-      </bx-pagination>
-    </div>
-  </div>
+              <bx-table-cell
+                ><bx-link
+                  :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
+                    id
+                  )}:${entry.tag}`"
+                >
+                  {{ entry.tag }}
+                </bx-link></bx-table-cell
+              >
+              <bx-table-cell
+                ><bx-link
+                  :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
+                    id
+                  )}@${entry.digest}`"
+                >
+                  {{ entry.digest }}
+                </bx-link></bx-table-cell
+              >
+              <!-- <bx-table-cell>Placeholder</bx-table-cell> -->
+              <bx-table-cell>{{ entry.originalTag }}</bx-table-cell>
+              <bx-table-cell>{{
+                new Date(Date.parse(entry.createdOn))
+              }}</bx-table-cell>
+            </bx-table-row>
+          </bx-table-body>
+        </bx-table>
+        <bx-pagination
+          :page-size="elementsToShow"
+          :start="firstElement"
+          :total="history.tags.length + history.untagged.length"
+          @bx-pages-select-changed="handleTablePagesSelectChanged"
+          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
+          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+        >
+          <bx-page-sizes-select slot="page-sizes-select">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </bx-page-sizes-select>
+          <bx-pages-select></bx-pages-select>
+        </bx-pagination>
+      </div>
+    </cv-column>
+  </cv-row>
 </template>
 
 <script>
@@ -172,4 +176,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+bx-link {
+  overflow-wrap: anywhere;
+}
+
+bx-table-cell {
+  padding-right: 0;
+}
+
+.tableOverflowContainer {
+  width: 100%;
+  overflow-x: scroll;
+}
+</style>
