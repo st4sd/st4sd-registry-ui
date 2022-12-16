@@ -1,6 +1,7 @@
 # ST4SD Registry UI
 
-The ST4SD Registry UI is a web interface for the ST4SD Runtime Service, written in Vue 2.
+The ST4SD Registry UI is a web interface for the ST4SD Runtime Service, written
+in Vue 2.
 
 ## Quick links
 
@@ -16,13 +17,15 @@ The ST4SD Registry UI is a web interface for the ST4SD Runtime Service, written 
 
 #### Node.js
 
-Running and developing this website requires an up-to-date Node.js version. You can check what Node.js version you have currently installed with
+Running and developing this website requires an up-to-date Node.js version. You
+can check what Node.js version you have currently installed with
 
 ```bash
 node -v
 ```
 
-Please refer to the [Node.js download page](https://nodejs.org/en/download/) if you don't have it installed or if your installed version is older than 16.
+Please refer to the [Node.js download page](https://nodejs.org/en/download/) if
+you don't have it installed or if your installed version is older than 16.
 
 #### Vue CLI
 
@@ -38,21 +41,37 @@ Or install it with:
 npm install -g @vue/cli
 ```
 
-Additional intructions are available on the [official Vue CLI website](https://cli.vuejs.org/#getting-started).
+Additional intructions are available on the
+[official Vue CLI website](https://cli.vuejs.org/#getting-started).
 
 ## Development
 
 ### Accessing the backend
 
-The project requires access to a [backend service](https://github.com/st4sd/st4sd-registry-backend) to work. The [development configuration provided](vue.config.js) intercepts the calls to the backend and forwards them to `localhost:8085`.
+The project requires access to a
+[backend service](https://github.com/st4sd/st4sd-registry-backend) to work. The
+[development configuration provided](vue.config.js) intercepts the calls to the
+backend and forwards them to `0.0.0.0:8085`.
 
-This way we can use the backend service that is deployed on OpenShift and connected to the actual [runtime service](https://github.com/st4sd/st4sd-runtime-service) to serve real data. To access it, **after ensuring we are logged in to the OpenShift cluster**, we can run the following command:
+#### Spinning up a development version of the st4sd-registry-backend
+
+To use a local development version of the `st4sd-registry-backend` please follow
+the instructions provided at:
+https://github.com/st4sd/st4sd-registry-backend#developing-locally.
+
+#### Port-forwarding the backend from an OpenShift deployment
+
+Another option is to port-forward the backend from the OpenShift project where
+we deployed ST4SD. To access it, **after ensuring we are logged in to the
+OpenShift cluster**, we can run the following command:
 
 ```shell
 kubectl port-forward svc/st4sd-registry-backend 8085:8085 -n $DEPLOYMENT_NAMESPACE
 ```
 
-Where `$DEPLOYMENT_NAMESPACE` is the namespace where you deployed ST4SD. You can omit it if you're forwarding the service from the active namespace (you can check what the active namespace is with `oc project`).
+Where `$DEPLOYMENT_NAMESPACE` is the namespace where you deployed ST4SD. You can
+omit it if you're forwarding the service from the active namespace (you can
+check what the active namespace is with `oc project`).
 
 ### Installing dependencies
 
@@ -64,7 +83,9 @@ yarn install
 
 ### Build a development version of this project with hot reloading
 
-This command will build a development version of the website (without optimizations) and start a server where you can preview the changes you've made, with hot reloading capabilities.
+This command will build a development version of the website (without
+optimizations) and start a server where you can preview the changes you've made,
+with hot reloading capabilities.
 
 ```bash
 yarn serve
@@ -72,7 +93,8 @@ yarn serve
 
 ### Build for production
 
-This command will create a production-ready build of the website. It will apply optimizations such as minifying the output files.
+This command will create a production-ready build of the website. It will apply
+optimizations such as minifying the output files.
 
 ```bash
 yarn build
@@ -86,16 +108,23 @@ To ensure there are no linting errors in the files, run:
 yarn lint
 ```
 
-The dev configuration already includes `prettier`, which will help during development, giving errors in case of missing `;`, wrong indentation, etc. These errors can often be fixed automatically in IDEs such as Visual Studio Code using the "Format Document" key binding (`notebook.formatCell`, Option+Shift+F on MacOS).
+The dev configuration already includes `prettier`, which will help during
+development, giving errors in case of missing `;`, wrong indentation, etc. These
+errors can often be fixed automatically in IDEs such as Visual Studio Code using
+the "Format Document" key binding (`notebook.formatCell`, Option+Shift+F on
+MacOS).
 
 ## Help and Support
 
-Please feel free to reach out to one of the maintainers listed in the [MAINTAINERS.md](MAINTAINERS.md) page.
+Please feel free to reach out to one of the maintainers listed in the
+[MAINTAINERS.md](MAINTAINERS.md) page.
 
-## Contributing 
+## Contributing
 
-We always welcome external contributions. Please see our [guidance](CONTRIBUTING.md) for details on how to do so.
+We always welcome external contributions. Please see our
+[guidance](CONTRIBUTING.md) for details on how to do so.
 
 ## License
 
-This project is licensed under the Apache 2.0 license. Please [see details here](LICENSE.md).
+This project is licensed under the Apache 2.0 license. Please
+[see details here](LICENSE.md).
