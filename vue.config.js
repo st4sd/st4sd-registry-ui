@@ -12,7 +12,7 @@ module.exports = defineConfig({
     server: "https",
     proxy: {
       "^/registry-ui/backend": {
-        target: "http://localhost:8085",
+        target: "http://0.0.0.0:8085",
         pathRewrite: { "^/registry-ui/backend/": "/" },
       },
     },
