@@ -43,18 +43,15 @@
     <!-- Actual content -->
     <template v-else>
       <!-- Navigation breadcrumb -->
-      <div class="breadcrumb">
-        <bx-breadcrumb>
-          <bx-breadcrumb-item>
-            <router-link to="/">Virtual Experiments</router-link>
-          </bx-breadcrumb-item>
-          <bx-breadcrumb-item>
-            <bx-breadcrumb-link aria-current="page">{{
-              experiment.metadata.package.name
-            }}</bx-breadcrumb-link>
-          </bx-breadcrumb-item>
-        </bx-breadcrumb>
-      </div>
+      <St4sdBreadcrumb
+        :breadcrumbs="[
+          { name: 'Virtual Experiments', path: '/' },
+          {
+            name: experiment.metadata.package.name,
+            path: `/experiment/${id}`,
+          },
+        ]"
+      />
 
       <PageHeroVue
         :experiment="experiment"
@@ -139,6 +136,9 @@ import {
 import { getBestPracticesScore } from "@/functions/best_practices";
 
 import TitleElement from "@/components/ExperimentView/TitleElement.vue";
+
+import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
+
 import PageHeroVue from "@/components/ExperimentView/PageHero.vue";
 import VirtualExperimentInterfaceVue from "@/components/ExperimentView/VirtualExperimentInterface.vue";
 import ExperimentInputsVue from "@/components/ExperimentView/ExperimentInputs.vue";
@@ -165,6 +165,7 @@ export default {
     AddPackageVue,
     ExperimentJSONVue,
     TitleElement,
+    St4sdBreadcrumb,
   },
   props: {
     id: {
@@ -377,5 +378,9 @@ bx-breadcrumb-item {
   // Input: #0f62fe
   filter: invert(30%) sepia(94%) saturate(4587%) hue-rotate(218deg)
     brightness(104%) contrast(103%);
+}
+
+.ve-progress-indicator {
+  margin-top: 64px;
 }
 </style>

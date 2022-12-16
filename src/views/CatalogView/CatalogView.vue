@@ -7,15 +7,7 @@
 <template>
   <div class="cds--grid cds--grid--full-width">
     <!-- Navigation breadcrumb -->
-    <div class="breadcrumb">
-      <bx-breadcrumb>
-        <bx-breadcrumb-item>
-          <bx-breadcrumb-link aria-current="page"
-            >Virtual Experiments</bx-breadcrumb-link
-          >
-        </bx-breadcrumb-item>
-      </bx-breadcrumb>
-    </div>
+    <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
 
     <!-- Overlay during loading -->
     <template v-if="loading">
@@ -61,18 +53,21 @@ import axios from "axios";
 
 import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.vue";
 import St4sdExperimentCards from "@/components/St4sdExperimentCards/St4sdExperimentCards.vue";
+import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 
 export default {
   name: "CatalogView",
   components: {
     St4sdLocalFilters,
     St4sdExperimentCards,
+    St4sdBreadcrumb,
   },
   data() {
     return {
       selectedFilters: {},
       experiments: [],
       loading: true,
+      breadcrumbs: [{ name: "Virtual Experiments", path: "/" }],
     };
   },
   mounted() {
@@ -86,17 +81,6 @@ export default {
   methods: {
     updateSelectedFilters(selectedFilters) {
       this.selectedFilters = selectedFilters;
-    },
-    //-----------------------------NEW CODE END-----------------
-    findTagsForPackageName(name) {
-      let tags = new Set();
-      for (let i = 0; i < this.experiments.length; i++) {
-        if (this.experiments[i].metadata.package.name != name) continue;
-        this.experiments[i].metadata.package.tags.forEach((tag) => {
-          tags.add(tag);
-        });
-      }
-      return Array.from(tags);
     },
     updateSearchedExperiments(searchedExperiments) {
       this.searchedExperiments = searchedExperiments;

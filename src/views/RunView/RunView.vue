@@ -6,19 +6,19 @@
 -->
 <template>
   <div class="cds--grid cds--grid--full-width">
-    <div class="breadcrumb">
-      <bx-breadcrumb>
-        <bx-breadcrumb-item>
-          <router-link to="/">Virtual Experiments</router-link>
-        </bx-breadcrumb-item>
-        <bx-breadcrumb-item>
-          <router-link :to="`/experiment/${id}`">{{ id }}</router-link>
-        </bx-breadcrumb-item>
-        <bx-breadcrumb-item>
-          <bx-breadcrumb-link aria-current="page">Runs</bx-breadcrumb-link>
-        </bx-breadcrumb-item>
-      </bx-breadcrumb>
-    </div>
+    <St4sdBreadcrumb
+      :breadcrumbs="[
+        { name: 'Virtual Experiments', path: '/' },
+        {
+          name: id,
+          path: `/experiment/${id}`,
+        },
+        {
+          name: 'Runs',
+          path: `/experiment/${id}/runs`,
+        },
+      ]"
+    />
 
     <template v-if="loading">
       <div class="tableOverflowContainer">
@@ -145,13 +145,14 @@
 <script>
 import "carbon-web-components/es/components/loading/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
+import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 
 //
 import axios from "axios";
 
 export default {
   name: "RunView",
-  components: {},
+  components: { St4sdBreadcrumb },
   props: {
     id: {
       type: String,
