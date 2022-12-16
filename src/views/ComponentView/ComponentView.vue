@@ -6,28 +6,23 @@
 -->
 <template>
   <div class="cds--grid cds--grid--full-width">
-    <div class="breadcrumb">
-      <bx-breadcrumb>
-        <bx-breadcrumb-item>
-          <router-link to="/">Virtual Experiments</router-link>
-        </bx-breadcrumb-item>
-        <bx-breadcrumb-item>
-          <router-link :to="`/experiment/${experiment_id}`">{{
-            experiment_id
-          }}</router-link>
-        </bx-breadcrumb-item>
-        <bx-breadcrumb-item>
-          <router-link :to="`/experiment/${experiment_id}/runs`"
-            >Runs</router-link
-          >
-        </bx-breadcrumb-item>
-        <bx-breadcrumb-item>
-          <bx-breadcrumb-link aria-current="page">{{
-            instance_id
-          }}</bx-breadcrumb-link>
-        </bx-breadcrumb-item>
-      </bx-breadcrumb>
-    </div>
+    <St4sdBreadcrumb
+      :breadcrumbs="[
+        { name: 'Virtual Experiments', path: '/' },
+        {
+          name: experiment_id,
+          path: `/experiment/${experiment_id}`,
+        },
+        {
+          name: 'Runs',
+          path: `/experiment/${experiment_id}/runs`,
+        },
+        {
+          name: instance_id,
+          path: `/experiment/${experiment_id}/runs/${instance_id}`,
+        },
+      ]"
+    />
 
     <template v-if="loading">
       <bx-table>
@@ -117,13 +112,14 @@
 <script>
 import "carbon-web-components/es/components/loading/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
+import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 
 //
 import axios from "axios";
 
 export default {
   name: "RunView",
-  components: {},
+  components: { St4sdBreadcrumb },
   props: {
     experiment_id: {
       type: String,
