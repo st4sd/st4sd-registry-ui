@@ -380,7 +380,10 @@ bx-breadcrumb-item {
     brightness(104%) contrast(103%);
 }
 
-.ve-progress-indicator {
-  margin-top: 64px;
+@media screen and (max-width: 1056px) {
+  .ve-progress-indicator {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
 }
 </style>
