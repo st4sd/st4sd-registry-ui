@@ -12,7 +12,7 @@
     "@carbon/grid": "^11.10.0",
     "@carbon/ibmdotcom-web-components": "1.25.0",
     "@carbon/styles": "^1.20.0",
-    "@carbon/vue": "^2.44.2",
+    "@carbon/vue": "^2.45.0",
     "axios": "^1.2.2",
     "vue": "^2.7.14",
     "vue-router": "^3.6.5"
