@@ -39,14 +39,16 @@
             <dds-structured-list-row
               v-else-if="basePackage.source.git.location.branch != null"
             >
-              <dds-structured-list-cell>Branch</dds-structured-list-cell
-              ><dds-structured-list-cell>
+              <dds-structured-list-cell class="cds--col-sm-1"
+                >Branch</dds-structured-list-cell
+              ><dds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.branch }}</code>
               </dds-structured-list-cell>
             </dds-structured-list-row>
             <dds-structured-list-row v-else>
-              <dds-structured-list-cell>Tag</dds-structured-list-cell
-              ><dds-structured-list-cell>
+              <dds-structured-list-cell class="cds--col-sm-1"
+                >Tag</dds-structured-list-cell
+              ><dds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.tag }}</code>
               </dds-structured-list-cell>
             </dds-structured-list-row>
