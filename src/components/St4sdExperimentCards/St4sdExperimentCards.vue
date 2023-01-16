@@ -2,7 +2,7 @@
   <div>
     <div
       class="card-row"
-      v-for="experiment in experimentsToShow"
+      v-for="experiment in getPageSlice"
       :key="experiment.metadata.package.name"
     >
       <dds-card
@@ -57,18 +57,53 @@
         <dds-card-footer> </dds-card-footer>
       </dds-card>
     </div>
+    <div v-if="experimentsToShow.length != 0">
+      <bx-pagination
+        :page-size="elementsToShow"
+        :start="firstElement"
+        :total="experimentsToShow.length"
+        @bx-pages-select-changed="handleTablePagesSelectChanged"
+        @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
+        @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+      >
+        <bx-page-sizes-select slot="page-sizes-select">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="25">25</option>
+        </bx-page-sizes-select>
+        <bx-pages-select></bx-pages-select>
+      </bx-pagination>
+    </div>
+    <div id="no-results-message" v-else>
+      <p>No matching experiments</p>
+    </div>
   </div>
 </template>
 
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
+import "carbon-web-components/es/components/pagination/index.js";
 
 export default {
   props: {
     selectedFilters: Object,
     experiments: Array,
   },
+  data() {
+    return {
+      firstElement: 0,
+      elementsToShow: 5,
+    };
+  },
   computed: {
+    //--------
+    getPageSlice() {
+      return this.experimentsToShow.slice(
+        this.firstElement,
+        this.firstElement + this.elementsToShow
+      );
+    },
+    //--------
     experimentsTaggedLatest() {
       return Array.from(
         this.experiments.filter((experiment) => {
@@ -95,6 +130,7 @@ export default {
           );
         });
       }
+      this.handleFilterSelect();
       return toShow;
     },
   },
@@ -109,6 +145,19 @@ export default {
         });
       }
       return Array.from(tags);
+    },
+    handleFilterSelect() {
+      this.firstElement = 0;
+    },
+    handleTablePaginationChangedCurrent(event) {
+      this.firstElement = event.detail.start;
+    },
+    handleTablePagesSelectChanged(event) {
+      this.firstElement = event.detail.value * this.elementsToShow;
+    },
+    handleTablePageSizesSelectChanged(event) {
+      this.firstElement = 0;
+      this.elementsToShow = event.detail.value;
     },
   },
 };
@@ -139,5 +188,14 @@ export default {
   .bx--link {
     overflow-wrap: anywhere;
   }
+}
+
+#no-results-message {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  text-decoration: underline 1px;
+  text-underline-offset: 5px;
+  text-align: center;
 }
 </style>
