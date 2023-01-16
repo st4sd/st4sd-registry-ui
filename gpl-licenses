@@ -1,0 +1,12 @@
+You can find the licenses of GPL packages in this container under 
+/usr/share/doc/${PACKAGE_NAME}/copyright 
+
+If you would like the source to the GPL packages in this image then 
+send a request to this address, specifying the package you want and 
+the name and hash of this image: 
+
+IBM Research Ireland,
+IBM Technology Campus
+Damastown Industrial Park
+Mulhuddart Co. Dublin D15 HN66
+Ireland
