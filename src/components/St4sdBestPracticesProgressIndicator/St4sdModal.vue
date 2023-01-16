@@ -31,10 +31,11 @@
               v-if="row.col2Type == 'info'"
               class="center"
             >
-              <dds-structured-list-cell
+              <cv-tooltip :tip="row.col2" direction="left"> </cv-tooltip>
+              <!-- <dds-structured-list-cell
                 :tooltip="row.col2"
                 class="iconPaddingFix"
-              />
+              /> -->
             </cv-structured-list-data>
             <cv-structured-list-data v-else class="center">
               {{ row.col2 }}
@@ -44,6 +45,11 @@
               v-html="row.col3"
             ></cv-structured-list-data>
           </cv-structured-list-item>
+
+          <!-- cv-tooltip seems to have a bug that autofocuses the last cv-tooltip on the page -->
+          <!-- included this 'invisible' cv-tooltip to prevent auto focus on the displayed cv-tooltips -->
+          <cv-tooltip tip="" style="top: -10000px"></cv-tooltip>
+          <!-- -------------------------------------- -->
         </template>
       </cv-structured-list>
     </bx-modal-body>

@@ -18,9 +18,13 @@
     ></template>
     <!-- Ready -->
     <template v-else
-      ><bx-progress-indicator class="ve-progress-indicator" vertical>
+      ><bx-progress-indicator
+        class="ve-progress-indicator"
+        :vertical="direction"
+      >
         <!-- Strong versioning -->
         <bx-progress-step
+          class="mediumHorizontalSpacing"
           label-text="Strong versioning"
           :secondary-label-text="`${getStrongVersioningScore(experiment)}%`"
           :state="getIndicatorState(getStrongVersioningScore(experiment))"
@@ -29,6 +33,7 @@
 
         <!-- Virtual experiment interface -->
         <bx-progress-step
+          class="mediumHorizontalSpacing"
           label-text="Virtual-experiment interface"
           @click="openModal('virtual-experiment-interface-modal')"
           :secondary-label-text="interfaceStatus"
@@ -37,6 +42,7 @@
 
         <!-- Developer metadata -->
         <bx-progress-step
+          class="mediumHorizontalSpacing"
           label-text="Developer metadata"
           :secondary-label-text="`${getDeveloperMetadataScore(experiment)}%`"
           @click="openModal('developer-metadata-modal')"
@@ -45,6 +51,7 @@
 
         <!-- Execution environment -->
         <bx-progress-step
+          class="mediumHorizontalSpacing"
           label-text="ST4SD best practices"
           :secondary-label-text="`${getBestPracticesScore(experiment)}%`"
           @click="openModal('best-practices-modal')"
@@ -142,6 +149,8 @@ export default {
   },
   data() {
     return {
+      direction: true,
+      width: document.documentElement.clientWidth,
       strongVersioningData: [
         {
           col1: "Container images in this experiment are using tags other than <code>latest</code>",
@@ -234,6 +243,10 @@ export default {
       ],
     };
   },
+  mounted() {
+    window.addEventListener("resize", this.getWidth);
+    this.getWidth();
+  },
   computed: {
     interfaceStatus() {
       return checkVeInterfaceIsPresent(this.experiment) ? "Present" : "Missing";
@@ -251,6 +264,14 @@ export default {
     getDeveloperMetadataScore,
     getBestPracticesScore,
     checkParameterisedPackageListsInputs,
+    getWidth() {
+      this.width = document.documentElement.clientWidth;
+      if (this.width >= 672 && this.width <= 1056) {
+        this.direction = false;
+      } else {
+        this.direction = true;
+      }
+    },
     openModal(id) {
       document.getElementById(id).open = true;
     },
@@ -314,5 +335,11 @@ export default {
   // Input: #f1c21b
   filter: invert(69%) sepia(82%) saturate(455%) hue-rotate(2deg) brightness(98%)
     contrast(94%);
+}
+
+@media screen and (max-width: 1056px) and (min-width: 672px) {
+  .mediumHorizontalSpacing {
+    width: 25%;
+  }
 }
 </style>
