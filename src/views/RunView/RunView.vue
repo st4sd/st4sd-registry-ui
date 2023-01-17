@@ -22,6 +22,12 @@
 
     <template v-if="loading">
       <div class="tableOverflowContainer">
+        <bx-table-toolbar>
+          <bx-table-toolbar-search
+            expanded
+            placeholder="Search by REST UID"
+          ></bx-table-toolbar-search>
+        </bx-table-toolbar>
         <bx-table>
           <bx-table-head>
             <bx-table-header-row>
@@ -51,11 +57,11 @@
               ></bx-table-cell-skeleton> </bx-table-row
           ></bx-table-body>
         </bx-table>
-        <bx-pagination page-size="10" start="0" :total="5">
+        <bx-pagination page-size="5" start="0" :total="5">
           <bx-page-sizes-select slot="page-sizes-select">
+            <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
-            <option value="50">50</option>
           </bx-page-sizes-select>
           <bx-pages-select></bx-pages-select>
         </bx-pagination>
@@ -64,9 +70,16 @@
 
     <template v-else>
       <div class="tableOverflowContainer">
+        <bx-table-toolbar @focusout="setExpandedOnFocusOut">
+          <bx-table-toolbar-search
+            id="search"
+            expanded
+            placeholder="Search by REST UID"
+            @bx-search-input="searchTable"
+          ></bx-table-toolbar-search>
+        </bx-table-toolbar>
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
-            <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
             <bx-table-header-row>
               <bx-table-header-cell
                 sort-direction="none"
@@ -125,15 +138,15 @@
         <bx-pagination
           :page-size="elementsToShow"
           :start="firstElement"
-          :total="runs.length"
+          :total="dataToDisplay.length"
           @bx-pages-select-changed="handleTablePagesSelectChanged"
           @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
           @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
         >
           <bx-page-sizes-select slot="page-sizes-select">
+            <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
-            <option value="50">50</option>
           </bx-page-sizes-select>
           <bx-pages-select></bx-pages-select>
         </bx-pagination>
@@ -162,13 +175,15 @@ export default {
   data() {
     return {
       runs: null,
-      data: null,
+      dataToDisplay: [],
+      data: [],
       loading: true,
       firstElement: 0,
-      elementsToShow: 10,
+      elementsToShow: 5,
       sortDirection: undefined,
       sortColumnId: "",
       collator: new Intl.Collator("en"),
+      searchQuery: "",
     };
   },
   mounted() {
@@ -184,14 +199,15 @@ export default {
           digest: run.metadata.userMetadata["st4sd-package-digest"],
         }));
         this.loading = false;
+        this.dataToDisplay = this.data;
       });
   },
   computed: {
     getSortedElements() {
       if (this.sortDirection == undefined || this.sortDirection == "none")
-        return this.data;
+        return this.dataToDisplay;
 
-      return this.data.slice().sort((lhs, rhs) => {
+      return this.dataToDisplay.slice().sort((lhs, rhs) => {
         const lhsValue = lhs[this.sortColumnId];
         const rhsValue = rhs[this.sortColumnId];
         return (
@@ -233,6 +249,24 @@ export default {
         )
           headers[i].sortDirection = "none";
       }
+    },
+    searchTable(event) {
+      this.searchQuery = event.detail.value;
+      this.dataToDisplay = [];
+      for (let i in this.data) {
+        if (
+          this.data[i].rest_uid
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
+        ) {
+          this.dataToDisplay.push(this.data[i]);
+        }
+      }
+    },
+    setExpandedOnFocusOut() {
+      var attr = document.createAttribute("expanded");
+      attr.value = "";
+      document.getElementById("search").setAttributeNode(attr);
     },
   },
 };
