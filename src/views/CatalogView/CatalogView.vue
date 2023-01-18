@@ -9,11 +9,14 @@
     <!-- Navigation breadcrumb -->
     <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
 
-    <!-- Overlay during loading -->
-    <template v-if="loading">
-      <bx-loading type="overlay"></bx-loading>
-    </template>
-    <template v-else>
+    <template>
+      <!-- Advanced Search Filter -->
+      <St4sdAdvancedSearchFilter
+        :experiments="this.experiments"
+        @updateSearchedExperiments="updateSearchedExperiments"
+        @LoadingWheelStatusChanged="updateLoadingWheelStatus"
+      />
+
       <!-- Filter column -->
       <cv-row>
         <cv-column :lg="4">
@@ -26,8 +29,10 @@
         <!-- Card rows and columns -->
         <cv-column :lg="12">
           <St4sdExperimentCards
-            :experiments="this.experiments"
+            :searchedExperiments="this.searchedExperiments"
             :selectedFilters="this.selectedFilters"
+            :experiments="this.experiments"
+            :experimentsLoading="this.experimentsLoading"
           />
         </cv-column>
       </cv-row>
@@ -52,6 +57,7 @@ import "carbon-web-components/es/components/loading/index.js";
 import axios from "axios";
 
 import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.vue";
+import St4sdAdvancedSearchFilter from "@/components/St4sdAdvancedSearchFilter/St4sdAdvancedSearchFilter.vue";
 import St4sdExperimentCards from "@/components/St4sdExperimentCards/St4sdExperimentCards.vue";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 
@@ -59,15 +65,17 @@ export default {
   name: "CatalogView",
   components: {
     St4sdLocalFilters,
+    St4sdAdvancedSearchFilter,
     St4sdExperimentCards,
     St4sdBreadcrumb,
   },
   data() {
     return {
       selectedFilters: {},
+      searchedExperiments: [],
       experiments: [],
-      loading: true,
       breadcrumbs: [{ name: "Virtual Experiments", path: "/" }],
+      experimentsLoading: false,
     };
   },
   mounted() {
@@ -75,7 +83,7 @@ export default {
       .get(window.location.origin + "/registry-ui/backend/experiments/")
       .then((response) => {
         this.experiments = response.data.entries;
-        this.loading = false;
+        this.searchedExperiments = response.data.entries;
       });
   },
   methods: {
@@ -85,11 +93,8 @@ export default {
     updateSearchedExperiments(searchedExperiments) {
       this.searchedExperiments = searchedExperiments;
     },
-    updateSelectedFiltersAndFilteredExperiments(
-      selectedFiltersAndFilteredExperiments
-    ) {
-      this.selectedFilters = selectedFiltersAndFilteredExperiments[0];
-      this.selectedExperiments = selectedFiltersAndFilteredExperiments[1];
+    updateLoadingWheelStatus(loadingWheelStatus) {
+      this.experimentsLoading = loadingWheelStatus;
     },
   },
 };
