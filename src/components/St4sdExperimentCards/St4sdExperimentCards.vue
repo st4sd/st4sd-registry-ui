@@ -1,82 +1,91 @@
 <template>
   <div>
-    <div
-      class="card-row"
-      v-for="experiment in getPageSlice"
-      :key="experiment.metadata.package.name"
-    >
-      <dds-card
-        border
-        logo
-        class="card-proportions"
-        :href="`experiment/${experiment.metadata.package.name}`"
+    <template v-if="experimentsLoading">
+      <div class="card-row" id="experimentLoadingContainer">
+        <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
+      </div>
+    </template>
+    <template v-else>
+      <div
+        class="card-row"
+        v-for="experiment in getPageSlice"
+        :key="experiment.metadata.package.name"
       >
-        <dds-card-eyebrow>{{
-          experiment.metadata.package.name
-        }}</dds-card-eyebrow>
-        <p>
-          {{ experiment.metadata.package.description }}
-        </p>
-        <dds-tag-group>
-          <!-- VE interface -->
-          <bx-tag
-            v-if="
-              Object.keys(experiment.metadata.registry.interface).length != 0
-            "
-            type="green"
-          >
-            virtual-experiment
-          </bx-tag>
-          <!-- Platform -->
-          <bx-tag
-            v-for="(platform, platformIdx) in getAvailablePlatforms(experiment)"
-            :key="`platform-${platformIdx}`"
-            type="red"
-          >
-            platform: {{ platform }}
-          </bx-tag>
-          <!-- Available tags -->
-          <bx-tag
-            v-for="(tag, tagIdx) in findTagsForPackageName(
-              experiment.metadata.package.name
-            )"
-            :key="`tag-${tagIdx}`"
-            type="blue"
-          >
-            tag: {{ tag }}
-          </bx-tag>
-          <!-- User metadata -->
-          <bx-tag
-            v-for="label in experiment.metadata.package.keywords"
-            :key="label"
-            type="purple"
-          >
-            {{ label }}
-          </bx-tag>
-        </dds-tag-group>
-        <dds-card-footer> </dds-card-footer>
-      </dds-card>
-    </div>
-    <div v-if="experimentsToShow.length != 0">
-      <bx-pagination
-        :page-size="elementsToShow"
-        :start="firstElement"
-        :total="experimentsToShow.length"
-        @bx-pages-select-changed="handleTablePagesSelectChanged"
-        @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-        @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
-      >
-        <bx-page-sizes-select slot="page-sizes-select">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-        </bx-page-sizes-select>
-        <bx-pages-select></bx-pages-select>
-      </bx-pagination>
-    </div>
-    <div id="no-results-message" v-else>
-      <p>No matching experiments</p>
-    </div>
+        <dds-card
+          border
+          logo
+          class="card-proportions"
+          :href="`experiment/${experiment.metadata.package.name}`"
+        >
+          <dds-card-eyebrow>{{
+            experiment.metadata.package.name
+          }}</dds-card-eyebrow>
+          <p>
+            {{ experiment.metadata.package.description }}
+          </p>
+          <dds-tag-group>
+            <!-- VE interface -->
+            <bx-tag
+              v-if="
+                Object.keys(experiment.metadata.registry.interface).length != 0
+              "
+              type="green"
+            >
+              virtual-experiment
+            </bx-tag>
+            <!-- Platform -->
+            <bx-tag
+              v-for="(platform, platformIdx) in getAvailablePlatforms(
+                experiment
+              )"
+              :key="`platform-${platformIdx}`"
+              type="red"
+            >
+              platform: {{ platform }}
+            </bx-tag>
+            <!-- Available tags -->
+            <bx-tag
+              v-for="(tag, tagIdx) in findTagsForPackageName(
+                experiment.metadata.package.name
+              )"
+              :key="`tag-${tagIdx}`"
+              type="blue"
+            >
+              tag: {{ tag }}
+            </bx-tag>
+            <!-- User metadata -->
+            <bx-tag
+              v-for="label in experiment.metadata.package.keywords"
+              :key="label"
+              type="purple"
+            >
+              {{ label }}
+            </bx-tag>
+          </dds-tag-group>
+          <dds-card-footer> </dds-card-footer>
+        </dds-card>
+      </div>
+      <div v-if="experimentsToShow.length != 0">
+        <bx-pagination
+          :page-size="elementsToShow"
+          :start="firstElement"
+          :total="experimentsToShow.length"
+          @bx-pages-select-changed="handleTablePagesSelectChanged"
+          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
+          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+        >
+          <bx-page-sizes-select slot="page-sizes-select">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+          </bx-page-sizes-select>
+          <bx-pages-select></bx-pages-select>
+        </bx-pagination>
+      </div>
+      <div id="no-results-message" v-else>
+        <p>No matching experiments</p>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -86,8 +95,10 @@ import "carbon-web-components/es/components/pagination/index.js";
 
 export default {
   props: {
+    searchedExperiments: Array,
     selectedFilters: Object,
     experiments: Array,
+    experimentsLoading: Boolean,
   },
   data() {
     return {
@@ -106,7 +117,7 @@ export default {
     //--------
     experimentsTaggedLatest() {
       return Array.from(
-        this.experiments.filter((experiment) => {
+        this.searchedExperiments.filter((experiment) => {
           return experiment.metadata.registry.tags.includes("latest");
         })
       );
@@ -197,5 +208,18 @@ export default {
   text-decoration: underline 1px;
   text-underline-offset: 5px;
   text-align: center;
+}
+
+#experimentLoadingContainer {
+  width: 100%;
+  height: 300px;
+}
+
+#experimentLoadingWheel {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  background-color: white;
 }
 </style>
