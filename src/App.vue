@@ -30,4 +30,10 @@ export default {
 
 <style lang="scss">
 @import "./styles/carbon";
+
+@media screen and (max-width: 671px) {
+  .bx--content {
+    padding: 2rem 1rem;
+  }
+}
 </style>

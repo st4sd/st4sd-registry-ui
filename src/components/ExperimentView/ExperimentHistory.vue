@@ -176,7 +176,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 bx-link {
   overflow-wrap: anywhere;
 }
@@ -188,5 +188,11 @@ bx-table-cell {
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
+}
+
+.bx--col-sm-4,
+.bx--col-md-6,
+.bx--col-lg-12 {
+  padding: 0 !important;
 }
 </style>
