@@ -7,7 +7,7 @@
         >
       </dds-content-block>
     </cv-column>
-    <cv-column :sm="4" :md="6" :lg="12">
+    <cv-column id="code-snippet" :sm="4" :md="6" :lg="12">
       <cv-row>
         <bx-code-snippet language="json" type="multi">
           {{ JSON.stringify(exp_no_interface, null, 2) }}
@@ -54,10 +54,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .download-icon {
   height: 16px;
   width: 16px;
   filter: invert(100);
+}
+
+#code-snippet {
+  padding-left: 1rem;
 }
 </style>

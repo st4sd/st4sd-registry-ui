@@ -10,6 +10,7 @@ import ExperimentView from "@/views/ExperimentView";
 import RunLogView from "@/views/RunLogView";
 import ComponentLogView from "@/views/ComponentLogView";
 import RunView from "@/views/RunView";
+import PropertiesView from "@/views/PropertiesView";
 import Vue from "vue";
 import VueRouter from "vue-router";
 
@@ -29,6 +30,11 @@ const routes = [
   {
     path: "/experiment/:id/runs",
     component: RunView,
+    props: true,
+  },
+  {
+    path: "/experiment/:id/runs/properties",
+    component: PropertiesView,
     props: true,
   },
   {

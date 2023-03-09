@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import "carbon-web-components/es/components/tooltip/index.js";
+import "@carbon/web-components/es/components/tooltip/index.js";
 export default {
   name: "St4sdModal",
   props: {

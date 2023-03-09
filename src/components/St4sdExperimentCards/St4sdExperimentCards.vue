@@ -91,7 +91,7 @@
 
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
-import "carbon-web-components/es/components/pagination/index.js";
+import "@carbon/web-components/es/components/pagination/index.js";
 
 export default {
   props: {

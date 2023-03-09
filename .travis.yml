@@ -7,8 +7,10 @@ cache:
     - node_modules
 
 stages:
-  - name: "Build test image"
-    if: tag is blank AND branch != main
+  - name: "Build test image non-pr"
+    if: tag is blank AND branch != main AND type != pull_request
+  - name: "Build test image pr"
+    if: tag is blank AND branch != main AND type = pull_request
   - name: "Build production image"
     if: branch = main AND type != pull_request AND tag is blank 
   - name: "Build platform image"
@@ -25,24 +27,40 @@ before_install:
   # Change buildx output style
   - export BUILDKIT_PROGRESS=plain
   - set -e
+after_success: 
+  - wget --no-check-certificate https://w3twistlock.sos.ibm.com/download/tt_latest.zip
+  - unzip tt_latest.zip
+  - cd tt_*/linux_x86_64
+  - chmod +x tt
+  - ./tt image pull-and-scan --user $TT_USER:$TT_API_KEY --url "https://w3twistlock.sos.ibm.com" --control-group $TT_CONTROL_GROUP --output-format json $FULL_IMAGE_ID
 
 jobs:
   include:
-    - stage: "Build test image"
+    - stage: "Build test image non-pr"
       os: linux
       services:
         - docker
       script:
-        - ./build_and_push.sh ${DOCKER_REGISTRY}/experimental/st4sd-registry-ui
+        - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:$TRAVIS_BRANCH
+        - ./build_and_push.sh $FULL_IMAGE_ID
+    - stage: "Build test image pr"
+      os: linux
+      services:
+        - docker
+      script:
+        - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:$TRAVIS_PULL_REQUEST_BRANCH
+        - ./build_and_push.sh $FULL_IMAGE_ID
     - stage: "Build production image"
       os: linux
       services:
         - docker
       script:
-        - ./build_and_push.sh ${DOCKER_REGISTRY}/st4sd-registry-ui
+        - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui
+        - ./build_and_push.sh $FULL_IMAGE_ID
     - stage: "Build platform image"
       os: linux
       services:
         - docker
       script:
-        - ./build_and_push.sh ${DOCKER_REGISTRY}/st4sd-registry-ui:platform-release-latest
+        - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:release-candidate
+        - ./build_and_push.sh $FULL_IMAGE_ID

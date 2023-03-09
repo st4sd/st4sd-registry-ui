@@ -5,7 +5,7 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--grid cds--grid--full-width">
+  <div>
     <!-- Navigation breadcrumb -->
     <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
 
@@ -46,12 +46,12 @@ import "@carbon/ibmdotcom-web-components/es/components/card/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/carousel/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/filter-panel/index.js";
 
-import "carbon-web-components/es/components/modal/index.js";
-import "carbon-web-components/es/components/code-snippet/index.js";
-import "carbon-web-components/es/components/button/index.js";
-import "carbon-web-components/es/components/tag/tag";
-import "carbon-web-components/es/components/breadcrumb/index.js";
-import "carbon-web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/modal/index.js";
+import "@carbon/web-components/es/components/code-snippet/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/tag/tag";
+import "@carbon/web-components/es/components/breadcrumb/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
 
 //
 import axios from "axios";

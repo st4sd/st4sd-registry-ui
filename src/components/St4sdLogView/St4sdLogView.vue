@@ -47,7 +47,7 @@ No logs available
 </template>
 
 <script>
-import "carbon-web-components/es/components/skeleton-text/index.js";
+import "@carbon/web-components/es/components/skeleton-text/index.js";
 
 export default {
   name: "ST4SDLogView",
@@ -110,5 +110,11 @@ p {
 
 #logViewCodeSnippet {
   max-width: unset;
+}
+
+.download-icon {
+  height: 16px;
+  width: 16px;
+  filter: invert(100);
 }
 </style>

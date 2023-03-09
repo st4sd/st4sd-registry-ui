@@ -36,6 +36,7 @@ export default {
         { Id: "name", Name: "Experiment Name" },
         { Id: "description", Name: "Experiment Description" },
         { Id: "maintainer", Name: "Experiment Maintainer" },
+        { Id: "property_name", Name: "Property Name" },
       ],
       searchSelector: "",
       clearButtonToggle: true,
@@ -81,7 +82,7 @@ export default {
         window.location.origin +
           `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`
       );
-      this.searchedExperiments = response.data;
+      this.searchedExperiments = response.data.entries;
       this.$emit("updateSearchedExperiments", this.searchedExperiments);
       this.$emit("LoadingWheelStatusChanged", false);
     },

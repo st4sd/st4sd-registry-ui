@@ -7,7 +7,7 @@
         >
       </dds-content-block>
     </cv-column>
-    <cv-column :sm="4" :md="6" :lg="12">
+    <cv-column id="padding-fix" :sm="4" :md="6" :lg="12">
       <div class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
@@ -190,9 +190,7 @@ bx-table-cell {
   overflow-x: scroll;
 }
 
-.bx--col-sm-4,
-.bx--col-md-6,
-.bx--col-lg-12 {
-  padding: 0 !important;
+#padding-fix {
+  padding-left: 0;
 }
 </style>

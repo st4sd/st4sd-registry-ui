@@ -5,7 +5,7 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--grid cds--grid--full-width">
+  <div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import "carbon-web-components/es/components/loading/index.js";
-import "carbon-web-components/es/components/toggle/index.js";
-import "carbon-web-components/es/components/code-snippet/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/toggle/index.js";
+import "@carbon/web-components/es/components/code-snippet/index.js";
 import St4sdLogView from "@/components/St4sdLogView";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 

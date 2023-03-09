@@ -5,7 +5,7 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--grid cds--grid--full-width">
+  <div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -19,6 +19,18 @@
         },
       ]"
     />
+
+    <dds-content-block>
+      <dds-content-block-heading>{{ id }}</dds-content-block-heading>
+      <St4sdStatusIndicator :data="data" />
+      <dds-text-cta cta-type="local" :disabled="runs == null">
+        <bx-link
+          :disabled="runs == null"
+          :href="`${getDeploymentEndpoint()}experiment/${id}/runs/properties`"
+          >Compare Experiment Run Properties</bx-link
+        >
+      </dds-text-cta>
+    </dds-content-block>
 
     <template v-if="loading">
       <div class="tableOverflowContainer">
@@ -46,13 +58,16 @@
               <bx-table-header-cell sort-direction="none"
                 >Package Digest</bx-table-header-cell
               >
+              <bx-table-header-cell sort-direction="none"
+                >Creation Date</bx-table-header-cell
+              >
               <bx-table-header-cell>Logs</bx-table-header-cell>
             </bx-table-header-row>
           </bx-table-head>
           <bx-table-body
             ><bx-table-row v-for="rowIdx in 5" :key="rowIdx">
               <bx-table-cell-skeleton
-                v-for="cellIdx in 6"
+                v-for="cellIdx in 7"
                 :key="cellIdx"
               ></bx-table-cell-skeleton> </bx-table-row
           ></bx-table-body>
@@ -69,8 +84,8 @@
     </template>
 
     <template v-else>
-      <div class="tableOverflowContainer">
-        <bx-table-toolbar @focusout="setExpandedOnFocusOut">
+      <div>
+        <bx-table-toolbar @focusout="setExpandedOnFocusOut" v-if="runs != null">
           <bx-table-toolbar-search
             id="search"
             expanded
@@ -78,94 +93,107 @@
             @bx-search-input="searchTable"
           ></bx-table-toolbar-search>
         </bx-table-toolbar>
-        <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
-          <bx-table-head>
-            <bx-table-header-row>
-              <bx-table-header-cell
-                sort-direction="none"
-                data-column-id="rest_uid"
-                >REST UID</bx-table-header-cell
-              >
-              <bx-table-header-cell
-                sort-direction="none"
-                data-column-id="experiment_state"
-                >State</bx-table-header-cell
-              >
-              <bx-table-header-cell
-                sort-direction="none"
-                data-column-id="exit_status"
-                >Exit status</bx-table-header-cell
-              >
-              <bx-table-header-cell
-                sort-direction="none"
-                data-column-id="version"
-                >ST4SD Version</bx-table-header-cell
-              >
-              <bx-table-header-cell
-                sort-direction="none"
-                data-column-id="digest"
-                >Package Digest</bx-table-header-cell
-              >
-              <bx-table-header-cell>Logs</bx-table-header-cell>
-            </bx-table-header-row>
-          </bx-table-head>
-          <bx-table-body>
-            <!-- Tagged entries -->
-            <bx-table-row v-for="(run, idx) in getTableSlice" :key="idx">
-              <bx-table-cell>
-                <bx-link
-                  :href="`${getDeploymentEndpoint()}experiment/${id}/runs/${
-                    run.rest_uid
-                  }`"
-                  >{{ run.rest_uid }}</bx-link
+        <div v-if="dataToDisplay.length == 0">
+          <div id="no-results-message">
+            <p>No Runs Available</p>
+          </div>
+        </div>
+        <div class="tableOverflowContainer" v-else>
+          <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
+            <bx-table-head>
+              <bx-table-header-row>
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="rest_uid"
+                  >REST UID</bx-table-header-cell
                 >
-              </bx-table-cell>
-              <bx-table-cell>{{ run.experiment_state }}</bx-table-cell>
-              <bx-table-cell>{{ run.exit_status }}</bx-table-cell>
-              <bx-table-cell>{{ run.version }}</bx-table-cell>
-              <bx-table-cell>{{ run.digest }}</bx-table-cell>
-              <bx-table-cell
-                ><bx-link
-                  :href="`${getDeploymentEndpoint()}experiment/${id}/logs/${
-                    run.rest_uid
-                  }`"
-                  >Logs</bx-link
-                ></bx-table-cell
-              >
-            </bx-table-row>
-          </bx-table-body>
-        </bx-table>
-        <bx-pagination
-          :page-size="elementsToShow"
-          :start="firstElement"
-          :total="dataToDisplay.length"
-          @bx-pages-select-changed="handleTablePagesSelectChanged"
-          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
-        >
-          <bx-page-sizes-select slot="page-sizes-select">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-          </bx-page-sizes-select>
-          <bx-pages-select></bx-pages-select>
-        </bx-pagination>
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="experiment_state"
+                  >State</bx-table-header-cell
+                >
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="exit_status"
+                  >Exit status</bx-table-header-cell
+                >
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="version"
+                  >ST4SD Version</bx-table-header-cell
+                >
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="digest"
+                  >Package Digest</bx-table-header-cell
+                >
+                <bx-table-header-cell
+                  sort-direction="none"
+                  data-column-id="creationDate"
+                  >Creation Date</bx-table-header-cell
+                >
+                <bx-table-header-cell>Logs</bx-table-header-cell>
+              </bx-table-header-row>
+            </bx-table-head>
+            <bx-table-body>
+              <!-- Tagged entries -->
+              <bx-table-row v-for="(run, idx) in getTableSlice" :key="idx">
+                <bx-table-cell>
+                  <bx-link
+                    :href="`${getDeploymentEndpoint()}experiment/${id}/runs/${
+                      run.rest_uid
+                    }`"
+                    >{{ run.rest_uid }}</bx-link
+                  >
+                </bx-table-cell>
+                <bx-table-cell>{{ run.experiment_state }}</bx-table-cell>
+                <bx-table-cell>{{ run.exit_status }}</bx-table-cell>
+                <bx-table-cell>{{ run.version }}</bx-table-cell>
+                <bx-table-cell>{{ run.digest }}</bx-table-cell>
+                <bx-table-cell>{{ run.creationDate }}</bx-table-cell>
+                <bx-table-cell
+                  ><bx-link
+                    :href="`${getDeploymentEndpoint()}experiment/${id}/logs/${
+                      run.rest_uid
+                    }`"
+                    >Logs</bx-link
+                  ></bx-table-cell
+                >
+              </bx-table-row>
+            </bx-table-body>
+          </bx-table>
+          <bx-pagination
+            :page-size="elementsToShow"
+            :start="firstElement"
+            :total="dataToDisplay.length"
+            @bx-pages-select-changed="handleTablePagesSelectChanged"
+            @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
+            @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+          >
+            <bx-page-sizes-select slot="page-sizes-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+            </bx-page-sizes-select>
+            <bx-pages-select></bx-pages-select>
+          </bx-pagination>
+        </div>
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import "carbon-web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
+import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusIndicator.vue";
 
-//
 import axios from "axios";
 
 export default {
   name: "RunView",
-  components: { St4sdBreadcrumb },
+  components: { St4sdBreadcrumb, St4sdStatusIndicator },
   props: {
     id: {
       type: String,
@@ -190,16 +218,20 @@ export default {
     axios
       .get(window.location.origin + "/registry-ui/backend/runs/" + this.id)
       .then((response) => {
-        this.runs = response.data;
-        this.data = this.runs.map((run) => ({
-          rest_uid: run.metadata.userMetadata["rest-uid"],
-          experiment_state: run.status["experiment-state"],
-          exit_status: run.status["exit-status"],
-          version: run.metadata.version,
-          digest: run.metadata.userMetadata["st4sd-package-digest"],
-        }));
+        if (response.data.length > 0) {
+          this.runs = response.data;
+          this.data = this.runs.map((run) => ({
+            rest_uid: run.metadata.userMetadata["rest-uid"],
+            experiment_state: run.status["experiment-state"],
+            exit_status: run.status["exit-status"],
+            version: run.metadata.version,
+            digest: run.metadata.userMetadata["st4sd-package-digest"],
+            creationDate: new Date(Date.parse(run.status["created-on"])),
+          }));
+
+          this.dataToDisplay = this.data;
+        }
         this.loading = false;
-        this.dataToDisplay = this.data;
       });
   },
   computed: {
@@ -251,6 +283,7 @@ export default {
       }
     },
     searchTable(event) {
+      this.firstElement = 0;
       this.searchQuery = event.detail.value;
       this.dataToDisplay = [];
       for (let i in this.data) {
@@ -272,7 +305,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
@@ -280,5 +313,24 @@ export default {
 
 bx-table-cell {
   overflow-wrap: anywhere;
+  text-align: left;
+}
+
+dds-content-block-heading {
+  margin: 0;
+  padding-bottom: 1rem;
+}
+
+dds-text-cta {
+  padding-bottom: 2rem;
+}
+
+#no-results-message {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  text-decoration: underline 1px;
+  text-underline-offset: 5px;
+  text-align: center;
 }
 </style>

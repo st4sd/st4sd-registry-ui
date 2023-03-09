@@ -5,19 +5,19 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--grid cds--grid--full-width">
+  <!-- Navigation breadcrumb -->
+  <div>
+    <St4sdBreadcrumb
+      :breadcrumbs="[
+        { name: 'Virtual Experiments', path: '/' },
+        {
+          name: id,
+          path: `/experiment/${id}`,
+        },
+      ]"
+    />
     <!-- Show something while we're loading -->
     <template v-if="loading != 0">
-      <div class="breadcrumb">
-        <bx-breadcrumb>
-          <bx-breadcrumb-item>
-            <router-link to="/">Virtual Experiments</router-link>
-          </bx-breadcrumb-item>
-          <bx-breadcrumb-item>
-            <bx-skeleton-text></bx-skeleton-text>
-          </bx-breadcrumb-item>
-        </bx-breadcrumb>
-      </div>
       <div class="cds--row pad1">
         <div class="cds--col-lg-10">
           <p style="padding: 64px"></p>
@@ -42,17 +42,6 @@
 
     <!-- Actual content -->
     <template v-else>
-      <!-- Navigation breadcrumb -->
-      <St4sdBreadcrumb
-        :breadcrumbs="[
-          { name: 'Virtual Experiments', path: '/' },
-          {
-            name: experiment.metadata.package.name,
-            path: `/experiment/${id}`,
-          },
-        ]"
-      />
-
       <PageHeroVue
         :experiment="experiment"
         :loading="loading"
@@ -100,23 +89,23 @@
 </template>
 
 <script>
-import "carbon-web-components/es/components/code-snippet/index.js";
+import "@carbon/web-components/es/components/code-snippet/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/content-block/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/tag-group/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/structured-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta/text-cta.js";
-import "carbon-web-components/es/components/tag/index.js";
-import "carbon-web-components/es/components/button/index.js";
-import "carbon-web-components/es/components/progress-indicator/index.js";
-import "carbon-web-components/es/components/data-table/index.js";
-import "carbon-web-components/es/components/list/index.js";
+import "@carbon/web-components/es/components/tag/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/progress-indicator/index.js";
+import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/content-item/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/horizontal-rule/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
-import "carbon-web-components/es/components/pagination/index.js";
-import "carbon-web-components/es/components/loading/index.js";
-import "carbon-web-components/es/components/skeleton-text/index.js";
-import "carbon-web-components/es/components/progress-indicator/index.js";
+import "@carbon/web-components/es/components/pagination/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/skeleton-text/index.js";
+import "@carbon/web-components/es/components/progress-indicator/index.js";
 
 import {
   checkContainerImagesHaveTagOtherThanLatest,

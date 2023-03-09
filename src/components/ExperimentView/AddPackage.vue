@@ -8,7 +8,7 @@
         >
       </dds-content-block>
     </cv-column>
-    <cv-column :sm="4" :md="6" :lg="12">
+    <cv-column id="padding-fix" :sm="4" :md="6" :lg="12">
       <bx-code-snippet language="python">
         api.api_experiment_push({{ exp_python }})
       </bx-code-snippet>
@@ -26,9 +26,7 @@ export default {
 </script>
 
 <style scoped>
-.bx--col-sm-4,
-.bx--col-md-6,
-.bx--col-lg-12 {
-  padding: 0 !important;
+#padding-fix {
+  padding-left: 0;
 }
 </style>
