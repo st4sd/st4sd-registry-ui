@@ -17,4 +17,19 @@ module.exports = defineConfig({
       },
     },
   },
+  //Properly declares the carbon web components in Vue 3
+  chainWebpack: (config) => {
+    config.module
+      .rule("vue")
+      .use("vue-loader")
+      .tap((options) => {
+        return {
+          ...options,
+          compilerOptions: {
+            isCustomElement: (tag) =>
+              tag.includes("bx-") || tag.includes("dds-"),
+          },
+        };
+      });
+  },
 });

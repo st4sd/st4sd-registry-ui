@@ -9,7 +9,7 @@
     <!-- Navigation breadcrumb -->
     <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
 
-    <template>
+    <div>
       <!-- Advanced Search Filter -->
       <St4sdAdvancedSearchFilter
         :experiments="this.experiments"
@@ -18,25 +18,25 @@
       />
 
       <!-- Filter column -->
-      <cv-row>
-        <cv-column :lg="4">
+      <div class="cds--row">
+        <div class="cds--col-lg-4">
           <St4sdLocalFilters
             :experiments="this.experiments"
             @updateSelectedFilters="updateSelectedFilters($event)"
           />
-        </cv-column>
+        </div>
 
         <!-- Card rows and columns -->
-        <cv-column :lg="12">
+        <div class="cds--col-lg-12">
           <St4sdExperimentCards
             :searchedExperiments="this.searchedExperiments"
             :selectedFilters="this.selectedFilters"
             :experiments="this.experiments"
             :experimentsLoading="this.experimentsLoading"
           />
-        </cv-column>
-      </cv-row>
-    </template>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

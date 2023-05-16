@@ -73,6 +73,7 @@
           ></bx-table-body>
         </bx-table>
         <bx-pagination page-size="5" start="0" :total="5">
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <bx-page-sizes-select slot="page-sizes-select">
             <option value="5">5</option>
             <option value="10">10</option>
@@ -170,6 +171,7 @@
             @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
             @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
           >
+            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
             <bx-page-sizes-select slot="page-sizes-select">
               <option value="5">5</option>
               <option value="10">10</option>

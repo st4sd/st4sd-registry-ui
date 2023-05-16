@@ -24,38 +24,38 @@
       >
         <!-- Strong versioning -->
         <bx-progress-step
+          id="strongVersioning"
           class="mediumHorizontalSpacing"
           label-text="Strong versioning"
           :secondary-label-text="`${getStrongVersioningScore(experiment)}%`"
-          :state="getIndicatorState(getStrongVersioningScore(experiment))"
           @click="openModal('strong-versioning-modal')"
         ></bx-progress-step>
 
         <!-- Virtual experiment interface -->
         <bx-progress-step
+          id="virtualExperimentInterface"
           class="mediumHorizontalSpacing"
           label-text="Virtual-experiment interface"
           @click="openModal('virtual-experiment-interface-modal')"
           :secondary-label-text="interfaceStatus"
-          :state="getIndicatorState(checkVeInterfaceIsPresent(experiment))"
         ></bx-progress-step>
 
         <!-- Developer metadata -->
         <bx-progress-step
+          id="developerMetadata"
           class="mediumHorizontalSpacing"
           label-text="Developer metadata"
           :secondary-label-text="`${getDeveloperMetadataScore(experiment)}%`"
           @click="openModal('developer-metadata-modal')"
-          :state="getIndicatorState(getDeveloperMetadataScore(experiment))"
         ></bx-progress-step>
 
         <!-- Execution environment -->
         <bx-progress-step
+          id="ST4SDBestPractices"
           class="mediumHorizontalSpacing"
           label-text="ST4SD best practices"
           :secondary-label-text="`${getBestPracticesScore(experiment)}%`"
           @click="openModal('best-practices-modal')"
-          :state="getIndicatorState(getBestPracticesScore(experiment))"
         ></bx-progress-step>
       </bx-progress-indicator>
 
@@ -246,6 +246,30 @@ export default {
   mounted() {
     window.addEventListener("resize", this.getWidth);
     this.getWidth();
+    document
+      .getElementById("strongVersioning")
+      .setAttribute(
+        "state",
+        this.getIndicatorState(this.getStrongVersioningScore(this.experiment))
+      );
+    document
+      .getElementById("virtualExperimentInterface")
+      .setAttribute(
+        "state",
+        this.getIndicatorState(this.checkVeInterfaceIsPresent(this.experiment))
+      );
+    document
+      .getElementById("developerMetadata")
+      .setAttribute(
+        "state",
+        this.getIndicatorState(this.getDeveloperMetadataScore(this.experiment))
+      );
+    document
+      .getElementById("ST4SDBestPractices")
+      .setAttribute(
+        "state",
+        this.getIndicatorState(this.getBestPracticesScore(this.experiment))
+      );
   },
   computed: {
     interfaceStatus() {
@@ -265,8 +289,8 @@ export default {
     getBestPracticesScore,
     checkParameterisedPackageListsInputs,
     getWidth() {
-      this.width = document.documentElement.clientWidth;
-      if (this.width >= 672 && this.width <= 1056) {
+      this.width = window.innerWidth;
+      if (this.width >= 672 && this.width < 1056) {
         this.direction = false;
       } else {
         this.direction = true;
@@ -337,7 +361,7 @@ export default {
     contrast(94%);
 }
 
-@media screen and (max-width: 1056px) and (min-width: 672px) {
+@media screen and (max-width: 1055px) and (min-width: 672px) {
   .mediumHorizontalSpacing {
     width: 25%;
   }

@@ -32,13 +32,13 @@
       <bx-loading type="overlay"></bx-loading>
     </template> -->
 
-    <template>
+    <div>
       <st4sd-log-view
         :log="log"
         :filename="`log-${instanceId}.log`"
         :loading="loading"
       ></st4sd-log-view>
-    </template>
+    </div>
   </div>
 </template>
 

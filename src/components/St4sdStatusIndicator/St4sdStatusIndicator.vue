@@ -20,8 +20,13 @@ export default {
     this.createStatusChart();
   },
   watch: {
-    data() {
-      this.populateStatusChart();
+    //Runs once the data array is updated (populated)
+    data: {
+      handler() {
+        this.populateStatusChart();
+      },
+      //This flag monitors the contents inside the array for updates
+      deep: true,
     },
   },
   methods: {

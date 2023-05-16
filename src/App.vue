@@ -7,16 +7,21 @@
 <template>
   <div>
     <st4sd-header />
-    <cv-content id="#main-content">
+    <div
+      class="bx-content"
+      id="#main-content"
+      style="padding: 2rem; will-change: margin-left"
+    >
       <router-view />
-    </cv-content>
+    </div>
     <dds-back-to-top></dds-back-to-top>
   </div>
 </template>
 
 <script>
-import St4sdHeader from "./components/St4sdHeader";
 import "@carbon/ibmdotcom-web-components/es/components/back-to-top/index.js";
+import St4sdHeader from "./components/St4sdHeader";
+
 export default {
   name: "App",
   components: {

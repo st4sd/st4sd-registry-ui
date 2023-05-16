@@ -314,6 +314,10 @@ bx-breadcrumb-item {
 
 .ve-progress-indicator {
   margin-top: 0;
+  @media screen and (max-width: 1055px) {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .ve-content-block {
@@ -367,12 +371,5 @@ bx-breadcrumb-item {
   // Input: #0f62fe
   filter: invert(30%) sepia(94%) saturate(4587%) hue-rotate(218deg)
     brightness(104%) contrast(103%);
-}
-
-@media screen and (max-width: 1056px) {
-  .ve-progress-indicator {
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-  }
 }
 </style>

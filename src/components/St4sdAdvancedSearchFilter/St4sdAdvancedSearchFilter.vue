@@ -1,26 +1,39 @@
 <template>
-  <cv-grid>
-    <cv-row kind="condensed">
-      <cv-column :lg="4" :xlg="4" :max="4">
-        <cv-dropdown v-model="searchSelector">
-          <cv-dropdown-item
-            v-for="searchSelector in searchSelectorArray"
-            v-bind:key="searchSelector.Id"
-            v-bind:value="searchSelector.Id"
-            >{{ searchSelector.Name }}</cv-dropdown-item
-          >
-        </cv-dropdown>
-      </cv-column>
-      <cv-column :lg="12" :xlg="12" :max="12">
-        <cv-search id="advancedSearchBar" v-model="searchQuery"></cv-search>
-      </cv-column>
-    </cv-row>
-  </cv-grid>
+  <div class="cds--grid search-container">
+    <div class="cds--row cds--grid--condensed">
+      <div
+        class="cds--col-lg-4 cds--col-xlg-4 cds--col-max-4 search-dropdown-container"
+      >
+        <bx-dropdown
+          size="xl"
+          :value="searchSelector"
+          @bx-dropdown-selected="searchSelector = $event.target.value"
+        >
+          <bx-dropdown-item
+            v-for="(searchSelector, idx) in searchSelectorArray"
+            :key="idx"
+            :value="searchSelector.Id"
+            >{{ searchSelector.Name }}
+          </bx-dropdown-item>
+        </bx-dropdown>
+      </div>
+      <div
+        class="cds--col-lg-12 cds--col-xlg-12 cds--col-max-12 search-bar-container"
+      >
+        <bx-search
+          size="xl"
+          id="advancedSearchBar"
+          @bx-search-input="handleSearchQueryChanges"
+        ></bx-search>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-
+import "@carbon/web-components/es/components/dropdown/index.js";
+import "@carbon/web-components/es/components/search/index.js";
 import debounce from "lodash.debounce";
 
 export default {
@@ -44,10 +57,6 @@ export default {
     };
   },
   watch: {
-    searchQuery(...args) {
-      this.startLoadingWheel();
-      this.debouncedHandler(...args);
-    },
     searchSelector() {
       this.startLoadingWheel();
       this.getSearchedExperiments();
@@ -55,17 +64,22 @@ export default {
   },
   created() {
     this.debouncedHandler = debounce(() => {
-      this.handleSearchQueryChanges();
+      this.updateSearchedExperiments();
     }, this.debounceDelay);
   },
   mounted() {
-    this.searchSelector = "name";
+    this.searchSelector = this.searchSelectorArray[0].Id;
   },
   beforeUnmount() {
     this.debouncedHandler.cancel();
   },
   methods: {
-    handleSearchQueryChanges() {
+    handleSearchQueryChanges(event, ...args) {
+      this.searchQuery = event.detail.value;
+      this.startLoadingWheel();
+      this.debouncedHandler(...args);
+    },
+    updateSearchedExperiments() {
       if (this.searchQuery == "") {
         this.searchedExperiments = this.experiments;
         this.$emit("updateSearchedExperiments", this.searchedExperiments);
@@ -109,5 +123,24 @@ export default {
 }
 .card-row {
   margin-bottom: layout.$spacing-06;
+}
+bx-search {
+  border-left: 1px solid #ffffff;
+}
+
+.search-bar-container {
+  padding: 0;
+}
+
+.search-dropdown-container {
+  padding: 0;
+  border-right: 2px;
+  border-color: #ffffff;
+}
+
+.search-container {
+  padding: 0 1rem !important;
+  max-width: none !important;
+  height: 3rem !important;
 }
 </style>

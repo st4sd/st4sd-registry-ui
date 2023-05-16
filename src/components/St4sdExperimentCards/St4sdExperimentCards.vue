@@ -12,7 +12,8 @@
         :key="experiment.metadata.package.name"
       >
         <dds-card
-          border
+          color-scheme="light"
+          border="true"
           logo
           class="card-proportions"
           :href="`experiment/${experiment.metadata.package.name}`"
@@ -74,6 +75,7 @@
           @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
           @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
         >
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <bx-page-sizes-select slot="page-sizes-select">
             <option value="5">5</option>
             <option value="10">10</option>
@@ -213,13 +215,13 @@ export default {
 #experimentLoadingContainer {
   width: 100%;
   height: 300px;
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
 }
 
 #experimentLoadingWheel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  background-color: white;
+  display: inline-block;
+  animation: none;
 }
 </style>

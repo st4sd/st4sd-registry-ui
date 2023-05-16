@@ -1,14 +1,14 @@
 <template>
   <div>
-    <cv-row class="pad1">
-      <cv-column :sm="4" :md="2" :lg="4">
+    <div class="cds--row pad1">
+      <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
         <dds-content-block class="ve-content-block">
           <dds-content-block-heading class="ve-heading"
             >Inputs</dds-content-block-heading
           >
         </dds-content-block>
-      </cv-column>
-      <cv-column :sm="4" :md="6" :lg="12">
+      </div>
+      <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
         <dds-structured-list>
           <dds-structured-list-head>
             <dds-structured-list-header-row>
@@ -38,8 +38,8 @@
             </dds-structured-list-row>
           </dds-structured-list-body>
         </dds-structured-list>
-      </cv-column>
-    </cv-row>
+      </div>
+    </div>
   </div>
 </template>
 

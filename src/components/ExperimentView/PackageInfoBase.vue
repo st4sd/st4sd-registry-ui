@@ -1,13 +1,13 @@
 <template>
-  <cv-row class="pad1">
-    <cv-column :sm="4" :md="2" :lg="4">
+  <div class="cds--row pad1">
+    <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >Base</dds-content-block-heading
         >
       </dds-content-block>
-    </cv-column>
-    <cv-column :sm="4" :md="6" :lg="12">
+    </div>
+    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
       <dds-structured-list>
         <dds-structured-list-body>
           <dds-structured-list-group
@@ -60,7 +60,9 @@
                   :href="
                     createIssueForGitPackage(experiment, basePackage.source.git)
                   "
-                  >Open new issue
+                  >Open new issue &nbsp;
+                  <!-- eslint-disable -->
+                  <!-- linting disabled for web component slot attribute - can't use "eslint-disable-next-line vue/no-deprecated-slot-attribute" as it's multiline-->
                   <img
                     slot="icon"
                     width="20"
@@ -68,14 +70,15 @@
                     class="arrow-link"
                     src="../../assets/arrow--right.svg"
                   />
+                  <!-- eslint-enable -->
                 </bx-link>
               </dds-structured-list-cell>
             </dds-structured-list-row>
           </dds-structured-list-group>
         </dds-structured-list-body>
       </dds-structured-list>
-    </cv-column>
-  </cv-row>
+    </div>
+  </div>
 </template>
 
 <script>

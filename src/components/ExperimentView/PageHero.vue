@@ -1,9 +1,9 @@
 <template>
   <!-- Experiment header -->
   <div>
-    <cv-row class="pad1 topPad">
+    <div class="cds--row pad1 topPad">
       <!-- Left column  -->
-      <cv-column :sm="4" :md="8" :lg="10" class="pad1">
+      <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-12 pad1">
         <!-- Experiment name and description -->
         <dds-content-block>
           <dds-content-block-heading>{{
@@ -41,24 +41,24 @@
             </bx-tag>
           </dds-tag-group>
 
-          <!-- Call to action -->
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <dds-text-cta slot="footer" cta-type="local" v-if="!isGlobalRegistry">
             <bx-link :href="`${getDeploymentEndpoint()}experiment/${id}/runs`"
               >View Runs</bx-link
             >
           </dds-text-cta>
         </dds-content-block>
-      </cv-column>
+      </div>
 
       <!-- Right column -->
-      <cv-column :sm="4" :md="8" :lg="6" class="pad1">
+      <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-4 pad1">
         <!-- Progress indicator -->
         <St4sdBestPracticesProgressIndicator
           :loading="loading"
           :experiment="experiment"
         />
-      </cv-column>
-    </cv-row>
+      </div>
+    </div>
   </div>
 </template>
 

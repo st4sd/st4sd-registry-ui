@@ -1,13 +1,13 @@
 <template>
-  <cv-row class="pad1">
-    <cv-column :sm="4" :md="2" :lg="4">
+  <div class="cds--row pad1">
+    <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
       <dds-content-block class="ve-content-block">
         <dds-content-block-heading class="ve-heading"
           >History</dds-content-block-heading
         >
       </dds-content-block>
-    </cv-column>
-    <cv-column id="padding-fix" :sm="4" :md="6" :lg="12">
+    </div>
+    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12" id="padding-fix">
       <div class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
@@ -76,6 +76,7 @@
           @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
           @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
         >
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <bx-page-sizes-select slot="page-sizes-select">
             <option value="10">10</option>
             <option value="25">25</option>
@@ -84,8 +85,8 @@
           <bx-pages-select></bx-pages-select>
         </bx-pagination>
       </div>
-    </cv-column>
-  </cv-row>
+    </div>
+  </div>
 </template>
 
 <script>

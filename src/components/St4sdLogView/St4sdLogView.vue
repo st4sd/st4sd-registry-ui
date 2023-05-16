@@ -5,9 +5,9 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <cv-row class="logViewFlexContainer">
+  <div class="cds--row logViewFlexContainer">
     <template v-if="loading">
-      <cv-column :lg="12">
+      <div class="cds--col-lg-12">
         <p>
           <bx-skeleton-text
             v-for="i in 3"
@@ -15,23 +15,26 @@
             type="line"
           ></bx-skeleton-text>
         </p>
-      </cv-column>
-      <cv-column :lg="4">
+      </div>
+      <div class="cds--col-lg-4">
         <bx-btn-skeleton></bx-btn-skeleton>
-      </cv-column>
+      </div>
     </template>
     <template v-else>
-      <cv-column :lg="12">
-        <pre
-          class="logWidths"
-          v-if="log.length != 0"
-        ><div class="tableOverflowContainer"><cv-code-snippet kind="multiline" id="logViewCodeSnippet">{{log}}</cv-code-snippet></div></pre>
+      <div class="cds--col-lg-12">
+        <div class="logWidths" v-if="log.length != 0">
+          <div class="tableOverflowContainer">
+            <bx-code-snippet type="multi" id="logViewCodeSnippet"
+              ><p>{{ log }}</p></bx-code-snippet
+            >
+          </div>
+        </div>
         <pre class="logWidths" v-else>
 No logs available
       </pre
         >
-      </cv-column>
-      <cv-column :lg="4">
+      </div>
+      <div class="cds--col-lg-4">
         <bx-btn
           v-if="log.length != 0"
           class="bx--btn--primary"
@@ -41,13 +44,14 @@ No logs available
           Download log&nbsp;
           <img class="download-icon" src="../../assets/download.svg"
         /></bx-btn>
-      </cv-column>
+      </div>
     </template>
-  </cv-row>
+  </div>
 </template>
 
 <script>
 import "@carbon/web-components/es/components/skeleton-text/index.js";
+import "@carbon/web-components/es/components/code-snippet/index.js";
 
 export default {
   name: "ST4SDLogView",
@@ -63,6 +67,19 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+  },
+  watch: {
+    //Watches the loading variable and when it changes adds a scroll to the code snippet if the snippet is over 5000 chars
+    loading: function () {
+      if (this.loading == false && this.log.length > 5000) {
+        setTimeout(function () {
+          //Selects the container for the code snippet and adds a Y-overflow scroll
+          let bxSnippetContainer = document.querySelector("#logViewCodeSnippet")
+            .shadowRoot.adoptedStyleSheets[0].cssRules[477];
+          bxSnippetContainer.style.overflowY = "scroll";
+        }, 1);
+      }
     },
   },
   methods: {
@@ -90,26 +107,42 @@ p {
   padding: 20px;
 }
 
-.tableOverflowContainer {
-  overflow-x: scroll;
-}
+#logViewCodeSnippet {
+  max-width: 100%;
 
-.logWidths {
-  min-width: 220px;
+  p {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 }
 
 @media screen and (max-width: 1056px) {
   .logViewFlexContainer {
     flex-direction: column-reverse;
   }
+
+  #logViewCodeSnippet {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #logViewCodeSnippet p {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.logWidths {
+  min-width: 220px;
+  white-space: pre-wrap;
+  font-size: small;
+  background-color: #f4f4f4;
+  padding: 20px;
 }
 
 .bx--btn--primary {
   margin-top: 0;
-}
-
-#logViewCodeSnippet {
-  max-width: unset;
 }
 
 .download-icon {

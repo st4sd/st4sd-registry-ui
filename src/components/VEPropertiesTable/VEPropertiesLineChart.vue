@@ -7,14 +7,18 @@
 
       <div v-else class="cds--row">
         <div v-if="data.length != 0">
-          <cv-dropdown label="Y-Axis Data Selector" v-model="graphHeader">
-            <cv-dropdown-item
+          <bx-dropdown
+            label="Y-Axis Data Selector"
+            :value="graphHeader"
+            @bx-dropdown-selected="graphHeader = $event.target.value"
+          >
+            <bx-dropdown-item
               v-for="(header, idx) in dynamicDataHeaders"
               v-bind:key="idx"
               v-bind:value="header"
-              >{{ header }}</cv-dropdown-item
+              >{{ header }}</bx-dropdown-item
             >
-          </cv-dropdown>
+          </bx-dropdown>
         </div>
         <div id="no-results-message" v-else>
           <p>No Graphs Available</p>
@@ -46,14 +50,17 @@ export default {
     propertyHeaders: Array,
   },
   watch: {
-    propertyHeaders() {
-      if (this.data.length != 0) {
-        this.dynamicDataHeaders = [...this.propertyHeaders];
-        this.removeHeadersFromOptions();
-        this.graphHeader = this.dynamicDataHeaders[0];
-        this.createChart();
-      }
-      this.loading = false;
+    propertyHeaders: {
+      handler() {
+        if (this.data.length != 0) {
+          this.dynamicDataHeaders = [...this.propertyHeaders];
+          this.removeHeadersFromOptions();
+          this.graphHeader = this.dynamicDataHeaders[0];
+          this.createChart();
+        }
+        this.loading = false;
+      },
+      deep: true,
     },
     graphHeader() {
       this.updateChart();

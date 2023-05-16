@@ -11,10 +11,7 @@ import RunLogView from "@/views/RunLogView";
 import ComponentLogView from "@/views/ComponentLogView";
 import RunView from "@/views/RunView";
 import PropertiesView from "@/views/PropertiesView";
-import Vue from "vue";
-import VueRouter from "vue-router";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
@@ -54,10 +51,9 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes: routes,
 });
 
 export default router;
