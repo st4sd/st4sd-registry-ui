@@ -1,5 +1,5 @@
 <template>
-  <bx-modal id="strong-versioning-modal">
+  <bx-modal id="strong-versioning-modal" class="no-transform">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-label>ST4SD Best Practices</bx-modal-label>
@@ -82,6 +82,16 @@ export default {
 </script>
 
 <style lang="scss">
+// The modal was slightly shifted up in small screen (smaller than 840)
+// this code will change transofrm from translate3d(0px, -24px, 0px)
+// to none when the screen width falls under 840
+/// @link https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/10480
+@media screen and (max-width: 839px) {
+  .no-transform::part(dialog) {
+    transform: none;
+  }
+}
+
 bx-modal-body {
   padding-right: 0;
 }
