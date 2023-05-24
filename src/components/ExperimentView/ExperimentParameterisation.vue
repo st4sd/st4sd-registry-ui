@@ -378,8 +378,12 @@ export default {
   },
 };
 </script>
-
-<style>
+<style
+  lang="css"
+  scoped
+  src="../../styles/structured-list-grid-column-styles.css"
+></style>
+<style scoped>
 bx-unordered-list {
   padding-left: 0;
 }

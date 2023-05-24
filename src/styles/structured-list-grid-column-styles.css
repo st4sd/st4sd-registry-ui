@@ -1,0 +1,13 @@
+/* Styling for the structured list cells of metadata, 
+preset parameters and base package info tables 
+in Experiment View*/
+
+.cds--col-sm-1 {
+  overflow-wrap: normal;
+}
+.cds--col-sm-3 {
+  padding-left: 2.5rem;
+}
+dds-structured-list {
+  overflow-x: hidden;
+}

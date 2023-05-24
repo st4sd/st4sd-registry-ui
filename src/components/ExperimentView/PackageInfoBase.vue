@@ -150,9 +150,8 @@ export default {
   },
 };
 </script>
-
-<style>
-dds-structured-list {
-  overflow-x: hidden;
-}
-</style>
+<style
+  lang="css"
+  scoped
+  src="../../styles/structured-list-grid-column-styles.css"
+></style>

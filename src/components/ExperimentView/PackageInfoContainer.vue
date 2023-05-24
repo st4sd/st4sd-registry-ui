@@ -40,3 +40,8 @@ export default {
   },
 };
 </script>
+<style
+  lang="css"
+  scoped
+  src="../../styles/structured-list-grid-column-styles.css"
+></style>

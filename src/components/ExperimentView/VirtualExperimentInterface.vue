@@ -15,10 +15,10 @@
         <dds-structured-list>
           <dds-structured-list-head>
             <dds-structured-list-header-row>
-              <dds-structured-list-header-cell
+              <dds-structured-list-header-cell class="cds--col-sm-1"
                 >Property name</dds-structured-list-header-cell
               >
-              <dds-structured-list-header-cell
+              <dds-structured-list-header-cell class="cds--col-sm-3"
                 >Property description</dds-structured-list-header-cell
               >
             </dds-structured-list-header-row>
@@ -29,10 +29,10 @@
                 .propertiesSpec"
               :key="property.name"
             >
-              <dds-structured-list-cell>{{
+              <dds-structured-list-cell class="cds--col-sm-1">{{
                 property.name
               }}</dds-structured-list-cell>
-              <dds-structured-list-cell>
+              <dds-structured-list-cell class="cds--col-sm-3">
                 {{ property.description }}
               </dds-structured-list-cell>
             </dds-structured-list-row>
@@ -55,5 +55,8 @@ export default {
   },
 };
 </script>
-
-<style></style>
+<style
+  lang="css"
+  scoped
+  src="../../styles/structured-list-grid-column-styles.css"
+></style>
