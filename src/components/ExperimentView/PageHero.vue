@@ -97,3 +97,12 @@ dds-structured-list-cell {
   padding-top: 2rem;
 }
 </style>
+<style scoped lang="scss">
+@media screen and (max-width: 671px) {
+  dds-content-block-copy,
+  dds-content-block-heading,
+  dds-text-cta {
+    margin-left: 0;
+  }
+}
+</style>
