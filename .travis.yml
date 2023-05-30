@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 16
+  - 18
 cache:
   yarn: true
   directories:
@@ -19,7 +19,7 @@ stages:
 before_install:
   # Install the buildx plugin
   - mkdir -vp ~/.docker/cli-plugins/
-  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.10.5/buildx-v0.10.5.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
   - chmod a+x ~/.docker/cli-plugins/docker-buildx
   # Enable experimental features
   - export DOCKER_CLI_EXPERIMENTAL=enabled
