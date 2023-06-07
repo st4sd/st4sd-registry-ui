@@ -22,7 +22,13 @@
 
     <dds-content-block>
       <dds-content-block-heading>{{ id }}</dds-content-block-heading>
-      <St4sdStatusIndicator :data="data" />
+      <St4sdStatusIndicator :data="dataToDisplay" />
+      <St4sdDateFilter
+        :data="data"
+        :loading="loading"
+        @updateDataToDisplay="updateDataToDisplay"
+      />
+
       <dds-text-cta cta-type="local" :disabled="runs == null">
         <bx-link
           :disabled="runs == null"
@@ -86,7 +92,10 @@
 
     <template v-else>
       <div>
-        <bx-table-toolbar @focusout="setExpandedOnFocusOut" v-if="runs != null">
+        <bx-table-toolbar
+          @focusout="setExpandedOnFocusOut"
+          v-if="filteredData.length > 0"
+        >
           <bx-table-toolbar-search
             id="search"
             expanded
@@ -190,12 +199,13 @@ import "@carbon/web-components/es/components/loading/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusIndicator.vue";
+import St4sdDateFilter from "@/components/St4sdDateFilter/St4sdDateFilter.vue";
 
 import axios from "axios";
 
 export default {
   name: "RunView",
-  components: { St4sdBreadcrumb, St4sdStatusIndicator },
+  components: { St4sdBreadcrumb, St4sdStatusIndicator, St4sdDateFilter },
   props: {
     id: {
       type: String,
@@ -205,8 +215,9 @@ export default {
   data() {
     return {
       runs: null,
-      dataToDisplay: [],
       data: [],
+      filteredData: [],
+      dataToDisplay: [],
       loading: true,
       firstElement: 0,
       elementsToShow: 5,
@@ -231,6 +242,7 @@ export default {
             creationDate: new Date(Date.parse(run.status["created-on"])),
           }));
 
+          this.filteredData = this.data;
           this.dataToDisplay = this.data;
         }
         this.loading = false;
@@ -288,13 +300,13 @@ export default {
       this.firstElement = 0;
       this.searchQuery = event.detail.value;
       this.dataToDisplay = [];
-      for (let i in this.data) {
+      for (let i in this.filteredData) {
         if (
-          this.data[i].rest_uid
+          this.filteredData[i].rest_uid
             .toLowerCase()
             .includes(this.searchQuery.toLowerCase())
         ) {
-          this.dataToDisplay.push(this.data[i]);
+          this.dataToDisplay.push(this.filteredData[i]);
         }
       }
     },
@@ -302,6 +314,10 @@ export default {
       var attr = document.createAttribute("expanded");
       attr.value = "";
       document.getElementById("search").setAttributeNode(attr);
+    },
+    updateDataToDisplay(filteredData) {
+      this.filteredData = filteredData;
+      this.dataToDisplay = filteredData;
     },
   },
 };
@@ -324,6 +340,7 @@ dds-content-block-heading {
 }
 
 dds-text-cta {
+  padding-top: 1rem;
   padding-bottom: 2rem;
 }
 

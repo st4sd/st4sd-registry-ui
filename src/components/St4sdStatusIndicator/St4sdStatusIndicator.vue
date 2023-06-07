@@ -13,19 +13,20 @@ export default {
   data() {
     return {
       statusIndicator: null,
-      loading: true,
     };
   },
   mounted() {
     this.createStatusChart();
   },
   watch: {
-    //Runs once the data array is updated (populated)
     data: {
       handler() {
-        this.populateStatusChart();
+        if (this.data.length != 0) {
+          this.populateStatusChart();
+        } else {
+          this.populateEmptyStatusChart();
+        }
       },
-      //This flag monitors the contents inside the array for updates
       deep: true,
     },
   },
@@ -62,26 +63,65 @@ export default {
 
       const title = this.getChartTitle(data[0].value, this.data.length);
 
-      const options = this.getOptions(this.data.length, title);
+      const colors = {
+        scale: {
+          Success: "#198038",
+          Failure: "#da1e28",
+        },
+      };
+
+      const options = this.getOptions(this.data.length, title, colors);
 
       this.statusIndicator.model.setData(data);
       this.statusIndicator.model.setOptions(options);
+
+      document.getElementsByClassName("cds--cc--legend")[0].style.visibility =
+        "visible";
+    },
+    populateEmptyStatusChart() {
+      const data = [
+        {
+          group: "NaN",
+          value: 0,
+        },
+      ];
+
+      const colors = {
+        pairing: {
+          option: 0,
+        },
+      };
+
+      const options = this.getOptions(1, "Success rate: N/A", colors);
+
+      this.statusIndicator.model.setData(data);
+      this.statusIndicator.model.setOptions(options);
+
+      document.getElementsByClassName("cds--cc--legend")[0].style.visibility =
+        "hidden";
     },
     createStatusChart() {
       const data = [
         {
-          group: "loading",
+          group: "NaN",
           value: 0,
         },
       ];
-      const options = this.getOptions(0, "Success rate");
+
+      const colors = {
+        pairing: {
+          option: 0,
+        },
+      };
+
+      const options = this.getOptions(1, "Success rate: N/A", colors);
       const chartHolder = document.getElementById("statusChart");
       this.statusIndicator = new MeterChart(chartHolder, {
         data,
         options,
       });
     },
-    getOptions(totalRuns, title) {
+    getOptions(totalRuns, title, colors) {
       return {
         title: title,
         height: "100px",
@@ -92,12 +132,7 @@ export default {
             unit: "runs",
           },
         },
-        color: {
-          scale: {
-            Success: "#198038",
-            Failure: "#da1e28",
-          },
-        },
+        color: colors,
         toolbar: {
           enabled: false,
         },
