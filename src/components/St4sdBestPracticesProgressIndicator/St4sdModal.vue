@@ -27,9 +27,11 @@
             v-for="row in structuredListData"
             :key="row.col1"
           >
+            <!-- eslint-disable vue/no-v-text-v-html-on-component -->
             <bx-structured-list-cell
               v-html="row.col1"
             ></bx-structured-list-cell>
+            <!-- eslint-enable -->
             <bx-structured-list-cell
               v-if="row.col2Type == 'info'"
               class="center"
@@ -44,10 +46,12 @@
             <bx-structured-list-cell v-else class="center">
               {{ row.col2 }}
             </bx-structured-list-cell>
+            <!-- eslint-disable vue/no-v-text-v-html-on-component -->
             <bx-structured-list-cell
               class="center"
               v-html="row.col3"
             ></bx-structured-list-cell>
+            <!-- eslint-enable -->
           </bx-structured-list-row>
 
           <!-- cv-tooltip seems to have a bug that autofocuses the last cv-tooltip on the page -->
