@@ -1,5 +1,5 @@
 <template>
-  <bx-modal id="strong-versioning-modal" class="no-transform">
+  <bx-modal class="no-transform">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-label>ST4SD Best Practices</bx-modal-label>

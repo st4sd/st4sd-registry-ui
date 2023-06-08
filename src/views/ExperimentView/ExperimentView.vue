@@ -138,6 +138,7 @@ import PackageInfoMetadataVue from "@/components/ExperimentView/PackageInfoMetad
 import ExperimentHistoryVue from "@/components/ExperimentView/ExperimentHistory.vue";
 import AddPackageVue from "@/components/ExperimentView/AddPackage.vue";
 import ExperimentJSONVue from "@/components/ExperimentView/ExperimentJSON.vue";
+import { registryUISharedState } from "@/stores/registryUISharedState";
 import axios from "axios";
 
 export default {
@@ -246,16 +247,8 @@ export default {
       });
 
     // Fetch settings
-    axios
-      .get(window.location.origin + "/registry-ui/backend/settings/")
-      .then((response) => {
-        if (
-          "ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL" in response.data &&
-          response.data["ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL"] == "yes"
-        )
-          this.isGlobalRegistry = true;
-        this.loading--;
-      });
+    this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
+    this.loading--;
   },
   methods: {
     getPackageName(id) {
