@@ -156,11 +156,19 @@
                     >{{ run.rest_uid }}</bx-link
                   >
                 </bx-table-cell>
-                <bx-table-cell>{{ run.experiment_state }}</bx-table-cell>
+                <bx-table-cell class="wrap-text">{{
+                  run.experiment_state
+                }}</bx-table-cell>
                 <bx-table-cell>{{ run.exit_status }}</bx-table-cell>
-                <bx-table-cell>{{ run.version }}</bx-table-cell>
-                <bx-table-cell>{{ run.digest }}</bx-table-cell>
-                <bx-table-cell>{{ run.creationDate }}</bx-table-cell>
+                <bx-table-cell class="wrap-text">{{
+                  run.version
+                }}</bx-table-cell>
+                <bx-table-cell class="wrap-text">{{
+                  run.digest
+                }}</bx-table-cell>
+                <bx-table-cell class="wrap-text">{{
+                  run.creationDate
+                }}</bx-table-cell>
                 <bx-table-cell
                   ><bx-link
                     :href="`${getDeploymentEndpoint()}experiment/${id}/logs/${
@@ -330,8 +338,11 @@ export default {
 }
 
 bx-table-cell {
-  overflow-wrap: anywhere;
   text-align: left;
+}
+
+.wrap-text {
+  overflow-wrap: anywhere;
 }
 
 dds-content-block-heading {
