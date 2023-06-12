@@ -103,7 +103,7 @@
             @bx-search-input="searchTable"
           ></bx-table-toolbar-search>
         </bx-table-toolbar>
-        <div v-if="dataToDisplay.length == 0">
+        <div v-if="noDataAvailable">
           <div id="no-results-message">
             <p>No Runs Available</p>
           </div>
@@ -153,7 +153,8 @@
                     :href="`${getDeploymentEndpoint()}experiment/${id}/runs/${
                       run.rest_uid
                     }`"
-                    >{{ run.rest_uid }}</bx-link
+                  >
+                    {{ run.rest_uid }}</bx-link
                   >
                 </bx-table-cell>
                 <bx-table-cell class="wrap-text">{{
@@ -174,12 +175,14 @@
                     :href="`${getDeploymentEndpoint()}experiment/${id}/logs/${
                       run.rest_uid
                     }`"
-                    >Logs</bx-link
-                  ></bx-table-cell
-                >
+                  >
+                    Logs
+                  </bx-link>
+                </bx-table-cell>
               </bx-table-row>
             </bx-table-body>
           </bx-table>
+          <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
           <bx-pagination
             :page-size="elementsToShow"
             :start="firstElement"
@@ -208,12 +211,18 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusIndicator.vue";
 import St4sdDateFilter from "@/components/St4sdDateFilter/St4sdDateFilter.vue";
+import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 
 import axios from "axios";
 
 export default {
   name: "RunView",
-  components: { St4sdBreadcrumb, St4sdStatusIndicator, St4sdDateFilter },
+  components: {
+    St4sdBreadcrumb,
+    St4sdStatusIndicator,
+    St4sdDateFilter,
+    NoSearchResultsEmptyState,
+  },
   props: {
     id: {
       type: String,
@@ -223,9 +232,10 @@ export default {
   data() {
     return {
       runs: null,
+      noDataAvailable: false,
+      dataToDisplay: [],
       data: [],
       filteredData: [],
-      dataToDisplay: [],
       loading: true,
       firstElement: 0,
       elementsToShow: 5,
@@ -249,9 +259,12 @@ export default {
             digest: run.metadata.userMetadata["st4sd-package-digest"],
             creationDate: new Date(Date.parse(run.status["created-on"])),
           }));
-
           this.filteredData = this.data;
           this.dataToDisplay = this.data;
+        } else {
+          if (this.dataToDisplay.length == 0) {
+            this.noDataAvailable = true;
+          }
         }
         this.loading = false;
       });

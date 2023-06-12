@@ -66,7 +66,12 @@
           <dds-card-footer> </dds-card-footer>
         </dds-card>
       </div>
-      <div v-if="experimentsToShow.length != 0">
+      <NoSearchResultsEmptyState
+        class="full-height-empty-state"
+        v-if="experimentsToShow.length == 0"
+      />
+
+      <div>
         <bx-pagination
           :page-size="elementsToShow"
           :start="firstElement"
@@ -84,18 +89,19 @@
           <bx-pages-select></bx-pages-select>
         </bx-pagination>
       </div>
-      <div id="no-results-message" v-else>
-        <p>No matching experiments</p>
-      </div>
     </template>
   </div>
 </template>
 
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
+import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
 
 export default {
+  components: {
+    NoSearchResultsEmptyState,
+  },
   props: {
     searchedExperiments: Array,
     selectedFilters: Object,
@@ -181,7 +187,11 @@ export default {
 @use "@carbon/layout";
 .card-row {
   margin-top: layout.$spacing-05;
-  // max-height: 200px;
+}
+.full-height-empty-state {
+  margin-top: layout.$spacing-05;
+  padding-top: layout.$spacing-11;
+  height: 75vh;
 }
 
 .card-proportions {

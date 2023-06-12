@@ -105,7 +105,6 @@ export default {
           this.propertiesArray = this.getPropertiesArray(
             Object.values(response.data)
           );
-
           //Extract the property keys into an Array
           this.propertyHeaders = Object.keys(Object.values(response.data)[0]);
 

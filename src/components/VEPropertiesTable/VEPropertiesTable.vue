@@ -55,7 +55,7 @@
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
-        <div id="no-results-message" v-if="dataToDisplay.length == 0">
+        <div id="no-results-message" v-if="noDataAvailable">
           <p>No Properties Avaiblable</p>
         </div>
         <div class="tableOverflowContainer" v-else>
@@ -79,6 +79,7 @@
               </bx-table-row>
             </bx-table-body>
           </bx-table>
+          <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
           <bx-pagination
             :page-size="elementsToShow"
             :start="firstElement"
@@ -102,12 +103,18 @@
 </template>
 
 <script>
+import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
+
 export default {
   name: "VEPropertiesTables",
+  components: {
+    NoSearchResultsEmptyState,
+  },
   data() {
     return {
       loading: true,
       filename: "",
+      noDataAvailable: false,
       dataToDisplay: [],
       firstElement: 0,
       elementsToShow: 5,
@@ -136,6 +143,8 @@ export default {
         if (this.propertiesArray.length != 0) {
           this.dataToDisplay = this.propertiesArray;
           this.loading = false;
+        } else {
+          this.noDataAvailable = true;
         }
       },
       deep: true,
