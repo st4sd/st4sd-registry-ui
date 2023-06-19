@@ -31,7 +31,6 @@
             <bx-structured-list-cell
               v-html="row.col1"
             ></bx-structured-list-cell>
-            <!-- eslint-enable -->
             <bx-structured-list-cell
               v-if="row.col2Type == 'info'"
               class="center"
@@ -51,7 +50,6 @@
               class="center"
               v-html="row.col3"
             ></bx-structured-list-cell>
-            <!-- eslint-enable -->
           </bx-structured-list-row>
 
           <!-- cv-tooltip seems to have a bug that autofocuses the last cv-tooltip on the page -->
@@ -85,20 +83,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-// The modal was slightly shifted up in small screen (smaller than 840)
-// this code will change transofrm from translate3d(0px, -24px, 0px)
-// to none when the screen width falls under 840
-/// @link https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/10480
-@media screen and (max-width: 839px) {
-  .no-transform::part(dialog) {
-    transform: none;
-  }
-}
-
-bx-modal-body {
-  padding-right: 0;
-}
+<style lang="css" scoped src="@/styles/bx-modal-styles.css">
 .iconPaddingFix {
   border-bottom: none;
   padding-inline-start: 30%;

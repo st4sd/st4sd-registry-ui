@@ -40,23 +40,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-// The modal was slightly shifted up in small screen (smaller than 840)
-// this code will change transofrm from translate3d(0px, -24px, 0px)
-// to none when the screen width falls under 840
-/// @link https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/10480
-@media screen and (max-width: 839px) {
-  .no-transform::part(dialog) {
-    transform: none;
-  }
-}
-
-bx-modal-body {
-  padding-right: 1rem;
-  height: 100%;
-  width: 100%;
-}
-
+<style lang="css" scoped src="@/styles/bx-modal-styles.css">
 bx-code-snippet {
   margin-top: 0.5rem;
 }

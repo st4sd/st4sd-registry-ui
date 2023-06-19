@@ -47,6 +47,21 @@
               >View Runs</bx-link
             >
           </dds-text-cta>
+
+          <!-- eslint-disable -->
+          <dds-text-cta
+            style="margin-top: 1.5rem !important"
+            slot="footer"
+            cta-type="local"
+            v-if="!isCanvasDisabled"
+          >
+            <!-- eslint-enable -->
+            <bx-link
+              :href="`${getDeploymentEndpoint()}experiment/${id}/viewcanvas`"
+            >
+              View Experiment Canvas
+            </bx-link>
+          </dds-text-cta>
         </dds-content-block>
       </div>
 
@@ -73,6 +88,7 @@ export default {
   props: {
     experiment: Object,
     id: String,
+    isCanvasDisabled: Boolean,
     isGlobalRegistry: Boolean,
     loading: Number,
     getAvailablePlatforms: Array,

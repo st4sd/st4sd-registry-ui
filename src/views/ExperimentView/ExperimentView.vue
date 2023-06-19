@@ -46,6 +46,7 @@
         :experiment="experiment"
         :loading="loading"
         :isGlobalRegistry="isGlobalRegistry"
+        :isCanvasDisabled="isCanvasDisabled"
         :id="id"
         :getAvailablePlatforms="getAvailablePlatforms()"
       />
@@ -173,6 +174,7 @@ export default {
       loading: 5,
       data: null,
       isGlobalRegistry: false,
+      isCanvasDisabled: false,
     };
   },
   mounted() {
@@ -247,6 +249,7 @@ export default {
       });
 
     // Fetch settings
+    this.isCanvasDisabled = registryUISharedState.isCanvasDisabled;
     this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
     this.loading--;
   },
