@@ -6,7 +6,7 @@
     </bx-modal-header>
     <bx-modal-body>
       <bx-accordion>
-        <bx-accordion-item open title-text="Overview">
+        <bx-accordion-item data-modal-primary-focus open title-text="Overview">
           <bx-structured-list>
             <bx-structured-list-head>
               <bx-structured-list-header-row>
@@ -37,7 +37,7 @@
                   >Name</bx-structured-list-header-cell
                 >
                 <bx-structured-list-header-cell
-                  >Default value</bx-structured-list-header-cell
+                  >Value</bx-structured-list-header-cell
                 >
               </bx-structured-list-header-row>
             </bx-structured-list-head>
@@ -49,10 +49,17 @@
                 <bx-structured-list-cell>{{
                   param.name
                 }}</bx-structured-list-cell>
-                <bx-structured-list-cell v-if="param.default != undefined">{{
-                  param.default
-                }}</bx-structured-list-cell>
-                <bx-structured-list-cell v-else></bx-structured-list-cell>
+                <bx-structured-list-cell
+                  v-if="getParameterValue(param.name) != undefined"
+                >
+                  {{ getParameterValue(param.name) }}
+                </bx-structured-list-cell>
+                <template v-else>
+                  <bx-structured-list-cell v-if="param.default != undefined">{{
+                    param.default
+                  }}</bx-structured-list-cell>
+                  <bx-structured-list-cell v-else></bx-structured-list-cell
+                ></template>
               </bx-structured-list-row>
             </bx-structured-list-body>
           </bx-structured-list>
@@ -149,6 +156,7 @@ export default {
   props: {
     title: String,
     node: Object,
+    inputingEdges: Array,
   },
   data() {
     return {
@@ -163,6 +171,15 @@ export default {
     this.workflowParams = this.node.definition.signature.parameters;
     this.workflowSteps = this.node.definition.steps;
     this.workflowExecute = this.node.definition.execute;
+  },
+  methods: {
+    getParameterValue(paramName) {
+      for (var edge of this.inputingEdges) {
+        if (edge.definition[paramName] != undefined) {
+          return edge.definition[paramName];
+        }
+      }
+    },
   },
 };
 </script>

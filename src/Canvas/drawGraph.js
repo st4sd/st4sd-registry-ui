@@ -4,11 +4,11 @@ const componentHorizontalSpacing = 20;
 const componentDefaultHeight = 35;
 //measurments variables - Workflows
 const workflowHorizontalIndent = 10;
-const workflowVerticalIndent = 150;
+const workflowVerticalIndent = 80;
 const workflowHorizontalSpacing = 20;
 const workflowVerticalSpacing = 80;
 //measurments variables - General
-const generalVerticalSpacing = 100;
+const generalVerticalSpacing = 80;
 
 export function drawGraph(graph) {
   let drawn = {

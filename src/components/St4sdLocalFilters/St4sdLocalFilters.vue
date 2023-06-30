@@ -96,14 +96,13 @@ export default {
     onUpdateSelectedFilters(selectedFilters) {
       this.$emit("updateSelectedFilters", selectedFilters);
     },
-    findSelectedCheckbox() {
-      setTimeout(this.findShadowDomChildren(), 5000);
-    },
-    findShadowDomChildren() {
-      let elements = document.querySelectorAll(".filterCheckbox");
-      let shadowDomChildNodes = Array.from(elements[0].shadowRoot.childNodes);
-      console.log(shadowDomChildNodes);
-    },
+    // findSelectedCheckbox() {
+    //   setTimeout(this.findShadowDomChildren(), 5000);
+    // },
+    // findShadowDomChildren() {
+    //   let elements = document.querySelectorAll(".filterCheckbox");
+    //   let shadowDomChildNodes = Array.from(elements[0].shadowRoot.childNodes);
+    // },
   },
 };
 </script>

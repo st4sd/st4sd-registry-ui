@@ -16,9 +16,9 @@ export function toJSON(nodes, entrypointNodeId, experimentName = "experiment") {
 }
 
 const duplicateLabelsExist = (elements) => {
-  let labels = Set();
+  let labels = new Set();
   elements.forEach((element) => labels.add(element.label));
-  return elements.length != labels.length;
+  return elements.length != labels.size;
 };
 
 const download = (filename, exp) => {

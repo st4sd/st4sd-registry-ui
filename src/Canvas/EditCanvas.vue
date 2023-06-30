@@ -14,12 +14,10 @@
       <Controls />
 
       <Panel :position="PanelPosition.TopRight" class="controls">
-        <bx-btn title="Edit Experiment" @click="$emit('editButtonClicked')">
-          Edit Experiment
-        </bx-btn>
         <bx-btn
+          size="sm"
           v-if="doesOtherOrPresetsExist()"
-          title="toggle inputs visibility"
+          title="Toggle inputs visibility"
           @click="showHideInputNodes"
         >
           {{ showHideButtonTitle }}
@@ -53,11 +51,12 @@
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
-    <!-- v-if is necessary
-      Modals need to only render once the props (clickedNode) 
-      are populated, if it's rendered on start and the modal 
-      is toggled with open/close then the prop data will not 
-      be passed to the modal and the modal will appear empty -->
+    <TransformLibrary
+      v-if="!props.transformApplied"
+      :transforms="props.transforms"
+      @transform-selected="handleTransformSelected"
+    />
+
     <readWorkflowModal
       v-if="modalVisibilities.readWorkflowModal.value"
       title="Workflow Details"
@@ -65,7 +64,8 @@
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
-    />
+    >
+    </readWorkflowModal>
     <readComponentModal
       v-if="modalVisibilities.readComponentModal.value"
       title="Component Details"
@@ -73,7 +73,8 @@
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
-    />
+    >
+    </readComponentModal>
     <readInputModal
       v-if="modalVisibilities.readInputModal.value"
       @bx-modal-closed="toggleModalVisibility('readInputModal')"
@@ -103,34 +104,25 @@ import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { dagStore } from "@/Canvas/stores/dagStore";
 import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
 import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
-import readEdgeModal from "@/Canvas/Modals/edgeCRUD/readEdge.vue";
 import readWorkflowModal from "@/Canvas/Modals/nodeCRUD/readWorkflow.vue";
 import readComponentModal from "@/Canvas/Modals/nodeCRUD/readComponent.vue";
 import readInputModal from "@/Canvas/Modals/nodeCRUD/readInput.vue";
+import readEdgeModal from "@/Canvas/Modals/edgeCRUD/readEdge.vue";
 import { toJSON } from "@/Canvas/downloadJSON";
 import {
   getWorkflowsDimensions,
   getWorkflowsEdges,
   hide,
 } from "@/Canvas/hideExpand";
+import TransformLibrary from "./TransformLibrary.vue";
 
 /**
  * useVueFlow provides all event handlers and store properties
  * You can pass the composable an object that has the same properties as the VueFlow component props
  */
 
+//Vue Flow setup
 const elements = ref(dagStore.DAG);
-
-let clickedNode;
-let clickedEdge;
-let inputingEdges;
-let modalVisibilities = {
-  readEdgeModal: ref(false),
-  readComponentModal: ref(false),
-  readWorkflowModal: ref(false),
-  readInputModal: ref(false),
-};
-const dark = ref(false);
 
 const {
   onPaneReady,
@@ -143,21 +135,53 @@ const {
   edges,
 } = useVueFlow(elements.value);
 
+//Variable declaration
+let clickedNode;
+let clickedEdge;
+let inputingEdges;
+let modalVisibilities = {
+  readEdgeModal: ref(false),
+  readInputModal: ref(false),
+  readComponentModal: ref(false),
+  readWorkflowModal: ref(false),
+};
+const dark = ref(false);
+
+let showHideButtonTitle = ref("Show all inputs");
+let inputNodesVisibility = ref(false);
+
+const workflowsDims = getWorkflowsDimensions(nodes.value);
+const workflowsEdges = getWorkflowsEdges(nodes.value, edges.value);
+
+const props = defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+  // default: [] gives an error https://github.com/vuejs/vue/issues/1032
+  transforms: {
+    type: Array,
+    default: () => [],
+  },
+  transformApplied: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const doesOtherOrPresetsExist = () => {
   return nodes.value.some((node) => node.id == "other" || node.id == "presets");
 };
 
-let showHideButtonTitle = ref("Show all inputs");
-let inputNodesVisability = ref(false);
 const showHideInputNodes = () => {
-  inputNodesVisability.value = !inputNodesVisability.value;
-  let Other = nodes.value.find((a) => a.id == "other");
-  if (Other != undefined) {
-    Other.hidden = !inputNodesVisability.value;
+  inputNodesVisibility.value = !inputNodesVisibility.value;
+  let other = nodes.value.find((a) => a.id == "other");
+  if (other != undefined) {
+    other.hidden = !inputNodesVisibility.value;
   }
-  let Presets = nodes.value.find((a) => a.id == "presets");
-  if (Presets != undefined) {
-    Presets.hidden = !inputNodesVisability.value;
+  let presets = nodes.value.find((a) => a.id == "presets");
+  if (presets != undefined) {
+    presets.hidden = !inputNodesVisibility.value;
   }
   showHideButtonTitle.value =
     showHideButtonTitle.value == "Hide presets & other"
@@ -165,8 +189,6 @@ const showHideInputNodes = () => {
       : "Hide presets & other";
 };
 
-const workflowsDims = getWorkflowsDimensions(nodes.value);
-const workflowsEdges = getWorkflowsEdges(nodes.value, edges.value);
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
  *
@@ -179,7 +201,6 @@ onPaneReady(({ fitView }) => {
 const toggleModalVisibility = (modal) => {
   modalVisibilities[modal].value = !modalVisibilities[modal].value;
 };
-
 onNodeDoubleClick(({ node }) => {
   clickedNode = { ...node };
   inputingEdges = edges.value.filter((n) => n.target == node.id);
@@ -189,6 +210,7 @@ onNodeDoubleClick(({ node }) => {
     //there is an issue to track this
     //https://github.ibm.com/st4sd/overview/issues/517
   } else if (node.type == "") {
+    inputingEdges = edges.value.filter((n) => n.target == node.id);
     toggleModalVisibility("readComponentModal");
   } else if (node.type == "input") {
     toggleModalVisibility("readInputModal");
@@ -227,19 +249,10 @@ const downloadJSON = () => {
   );
   toJSON(nodesToDownload, entrypointNodeId);
 };
-</script>
-<style>
-.canvas-logo {
-  max-height: 16px;
-  max-width: 16px;
-  width: 100%;
-  height: 100%;
-  -webkit-filter: invert(0.99);
-  filter: invert(0.99);
-}
 
-bx-btn::part(button) {
-  padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
-  margin: 0.2rem;
-}
-</style>
+const emit = defineEmits(["transformSelected"]);
+
+const handleTransformSelected = (loading, transformId) => {
+  emit("transformSelected", loading, transformId);
+};
+</script>
