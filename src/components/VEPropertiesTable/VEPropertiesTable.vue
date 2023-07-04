@@ -161,6 +161,27 @@ export default {
         const lhsValue = lhs[index];
         const rhsValue = rhs[index];
 
+        // Always sort NaNs last
+        if (
+          lhsValue === undefined ||
+          (typeof lhsValue !== "string" && isNaN(lhsValue))
+        ) {
+          return 1;
+        }
+        if (
+          rhsValue === undefined ||
+          (typeof rhsValue !== "string" && isNaN(rhsValue))
+        )
+          return -1;
+
+        // Ensure we don't sort dates by their string value
+        // when using the collator
+        if (lhsValue instanceof Date && rhsValue instanceof Date) {
+          return this.sortDirection === "ascending"
+            ? lhsValue - rhsValue
+            : rhsValue - lhsValue;
+        }
+
         return (
           (this.sortDirection === "ascending" ? 1 : -1) *
           this.collator.compare(lhsValue, rhsValue)

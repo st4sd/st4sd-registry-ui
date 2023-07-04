@@ -14,8 +14,9 @@
             <!-- <bx-table-toolbar-search></bx-table-toolbar-search> -->
             <bx-table-header-row>
               <bx-table-header-cell
-                sort-direction="descending"
+                sort-direction="ascending"
                 data-column-id="tag"
+                id="tagCell"
                 >Tag</bx-table-header-cell
               >
               <bx-table-header-cell
@@ -91,6 +92,10 @@
 
 <script>
 import { getDeploymentEndpoint } from "@/functions/public_path";
+import {
+  get_table_sort_dummy_event,
+  get_sorted_elements,
+} from "@/functions/table_sort";
 
 export default {
   name: "ExperimentHistory",
@@ -106,29 +111,24 @@ export default {
       decrement: 1,
       sortDirection: undefined,
       sortColumnId: "",
-      collator: new Intl.Collator("en"),
+      tableSortInitialized: false,
     };
+  },
+  mounted() {
+    if (this.data != null && !this.tableSortInitialized) {
+      this.handleTableHeaderCellSort(
+        get_table_sort_dummy_event("tagCell", "ascending")
+      );
+      this.tableSortInitialized = true;
+    }
   },
   computed: {
     getTableSlice() {
-      return this.getSortedElements.slice(
-        this.firstElement,
-        this.firstElement + this.elementsToShow
-      );
-    },
-    getSortedElements() {
-      if (this.sortDirection == undefined || this.sortDirection == "none") {
-        return this.data;
-      }
-
-      return this.data.slice().sort((lhs, rhs) => {
-        const lhsValue = lhs[this.sortColumnId];
-        const rhsValue = rhs[this.sortColumnId];
-        return (
-          (this.sortDirection === "ascending" ? 1 : -1) *
-          this.collator.compare(lhsValue, rhsValue)
-        );
-      });
+      return get_sorted_elements(
+        this.data,
+        this.sortDirection,
+        this.sortColumnId
+      ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },
   methods: {

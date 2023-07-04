@@ -88,6 +88,7 @@
 
 <script>
 import { getDeploymentEndpoint } from "@/functions/public_path";
+import { get_sorted_elements } from "@/functions/table_sort";
 import axios from "axios";
 
 export default {
@@ -133,24 +134,12 @@ export default {
       });
   },
   computed: {
-    getSortedElements() {
-      if (this.sortDirection == undefined || this.sortDirection == "none")
-        return this.data;
-
-      return this.data.slice().sort((lhs, rhs) => {
-        const lhsValue = lhs[this.sortColumnId];
-        const rhsValue = rhs[this.sortColumnId];
-        return (
-          (this.sortDirection === "ascending" ? 1 : -1) *
-          this.collator.compare(lhsValue, rhsValue)
-        );
-      });
-    },
     getTableSlice() {
-      return this.getSortedElements.slice(
-        this.firstElement,
-        this.firstElement + this.elementsToShow
-      );
+      return get_sorted_elements(
+        this.data,
+        this.sortDirection,
+        this.sortColumnId
+      ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },
   methods: {

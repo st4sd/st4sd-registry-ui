@@ -138,8 +138,9 @@
                   >Package Digest</bx-table-header-cell
                 >
                 <bx-table-header-cell
-                  sort-direction="none"
+                  sort-direction="descending"
                   data-column-id="creationDate"
+                  id="creationDateCell"
                   >Creation Date</bx-table-header-cell
                 >
                 <bx-table-header-cell>Logs</bx-table-header-cell>
@@ -208,6 +209,10 @@
 <script>
 import "@carbon/web-components/es/components/loading/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
+import {
+  get_table_sort_dummy_event,
+  get_sorted_elements,
+} from "@/functions/table_sort";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusIndicator.vue";
 import St4sdDateFilter from "@/components/St4sdDateFilter/St4sdDateFilter.vue";
@@ -241,8 +246,8 @@ export default {
       elementsToShow: 5,
       sortDirection: undefined,
       sortColumnId: "",
-      collator: new Intl.Collator("en"),
       searchQuery: "",
+      tableSortInitialized: false,
     };
   },
   mounted() {
@@ -269,25 +274,22 @@ export default {
         this.loading = false;
       });
   },
-  computed: {
-    getSortedElements() {
-      if (this.sortDirection == undefined || this.sortDirection == "none")
-        return this.dataToDisplay;
-
-      return this.dataToDisplay.slice().sort((lhs, rhs) => {
-        const lhsValue = lhs[this.sortColumnId];
-        const rhsValue = rhs[this.sortColumnId];
-        return (
-          (this.sortDirection === "ascending" ? 1 : -1) *
-          this.collator.compare(lhsValue, rhsValue)
-        );
-      });
-    },
-    getTableSlice() {
-      return this.getSortedElements.slice(
-        this.firstElement,
-        this.firstElement + this.elementsToShow
+  updated() {
+    //Sets the table to be sorted by creation date on page load
+    if (!this.tableSortInitialized && !this.loading && this.runs != null) {
+      this.handleTableHeaderCellSort(
+        get_table_sort_dummy_event("creationDateCell", "descending")
       );
+      this.tableSortInitialized = true;
+    }
+  },
+  computed: {
+    getTableSlice() {
+      return get_sorted_elements(
+        this.dataToDisplay,
+        this.sortDirection,
+        this.sortColumnId
+      ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },
   methods: {
