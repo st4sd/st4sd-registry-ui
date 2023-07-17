@@ -76,7 +76,7 @@ export default {
           "/registry-ui/backend/logs/" +
           this.instanceId +
           "/" +
-          this.componentId
+          this.componentId,
       )
       .then((response) => {
         this.log = response.data;

@@ -12,7 +12,7 @@ stages:
   - name: "Build test image pr"
     if: tag is blank AND branch != main AND type = pull_request
   - name: "Build production image"
-    if: branch = main AND type != pull_request AND tag is blank 
+    if: branch = main AND type != pull_request AND tag is blank
   - name: "Build platform image"
     if: tag is present
 
@@ -27,7 +27,7 @@ before_install:
   # Change buildx output style
   - export BUILDKIT_PROGRESS=plain
   - set -e
-after_success: 
+after_success:
   - wget --no-check-certificate https://w3twistlock.sos.ibm.com/download/tt_latest.zip
   - unzip tt_latest.zip
   - cd tt_*/linux_x86_64

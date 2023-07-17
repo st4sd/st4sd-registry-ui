@@ -216,7 +216,7 @@ export default {
         .post(
           window.location.origin +
             `/registry-ui/backend/experiments/${this.id}`,
-          data
+          data,
         )
         .then((response) => {
           if (response.status == 200) {
@@ -231,7 +231,7 @@ export default {
             alert(`${error.response.data.message}`);
           } else {
             alert(
-              "Experiment not found or internal error while creating experiment"
+              "Experiment not found or internal error while creating experiment",
             );
           }
         });
@@ -256,7 +256,7 @@ export default {
               headers: {
                 "Content-Type": "application/json",
               },
-            }
+            },
           )
           .then((response) => {
             if (response.status == 200) {
@@ -270,7 +270,7 @@ export default {
               alert(`${error.response.data.message}`);
             } else {
               alert(
-                "Experiment not found or internal error while creating experiment"
+                "Experiment not found or internal error while creating experiment",
               );
             }
           });

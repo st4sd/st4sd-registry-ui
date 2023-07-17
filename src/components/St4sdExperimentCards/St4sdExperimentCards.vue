@@ -37,7 +37,7 @@
             <!-- Platform -->
             <bx-tag
               v-for="(platform, platformIdx) in getAvailablePlatforms(
-                experiment
+                experiment,
               )"
               :key="`platform-${platformIdx}`"
               type="red"
@@ -47,7 +47,7 @@
             <!-- Available tags -->
             <bx-tag
               v-for="(tag, tagIdx) in findTagsForPackageName(
-                experiment.metadata.package.name
+                experiment.metadata.package.name,
               )"
               :key="`tag-${tagIdx}`"
               type="blue"
@@ -119,7 +119,7 @@ export default {
     getPageSlice() {
       return this.experimentsToShow.slice(
         this.firstElement,
-        this.firstElement + this.elementsToShow
+        this.firstElement + this.elementsToShow,
       );
     },
     //--------
@@ -127,7 +127,7 @@ export default {
       return Array.from(
         this.searchedExperiments.filter((experiment) => {
           return experiment.metadata.registry.tags.includes("latest");
-        })
+        }),
       );
     },
     experimentsToShow() {
@@ -145,7 +145,7 @@ export default {
         //
         toShow = toShow.filter(function (element) {
           return selectedFilter.every((d) =>
-            element.metadata.package.keywords.includes(d)
+            element.metadata.package.keywords.includes(d),
           );
         });
       }

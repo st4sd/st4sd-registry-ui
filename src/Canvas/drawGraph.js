@@ -40,12 +40,12 @@ function draw(startWorkflow, graph, drawn) {
   let startWorkflowID = startWorkflow.id;
   let startWorkflowInputID = `${startWorkflowID}/input`;
   let startWorkflowInputNode = graph.nodes.find(
-    (node) => node.id == startWorkflowInputID
+    (node) => node.id == startWorkflowInputID,
   );
   addToDrawnArray(startWorkflowInputNode, drawn);
   let children = graph.nodes.filter(
     (node) =>
-      node.parentNode == startWorkflowID && node.id != startWorkflowInputID
+      node.parentNode == startWorkflowID && node.id != startWorkflowInputID,
   );
   // https://github.ibm.com/st4sd/st4sd-registry-ui/pull/165#discussion_r7632114
   let childrenCounter = children.length;
@@ -65,7 +65,7 @@ function draw(startWorkflow, graph, drawn) {
           calculatedPosition = getNonOverlappingPosition(
             drawn,
             child,
-            calculatedPosition
+            calculatedPosition,
           );
           child.position = calculatedPosition;
           if (child.type == "workflow") {
@@ -121,7 +121,7 @@ function getSources(graph, node) {
       // connecting the source node that on the same level
       // of the node we are checking to that node
       candidateSourceNode = graph.nodes.find(
-        (n) => n.id == candidateSourceNode.parentNode
+        (n) => n.id == candidateSourceNode.parentNode,
       );
     }
     if (candidateSourceNode != undefined) {
@@ -241,7 +241,7 @@ function fixInputPositions(drawn) {
 //and fix it's positioning
 function fixIntersections(startWorkflow, drawn) {
   let children = drawn.nodes.filter(
-    (node) => node.parentNode == startWorkflow.id
+    (node) => node.parentNode == startWorkflow.id,
   );
   //will compare all array elements with each others
   for (var i = 0; i < children.length; i++) {
@@ -374,7 +374,7 @@ function getNonOverlappingPosition(drawn, child, calculatedPosition) {
     (node) =>
       node.position.x == calculatedPosition.x &&
       node.position.y == calculatedPosition.y &&
-      node.parentNode == child.parentNode
+      node.parentNode == child.parentNode,
   );
   if (samePlaceNode == undefined) return calculatedPosition;
   if (samePlaceNode.type == "workflow") {
@@ -426,7 +426,7 @@ function getSingletons(drawn, wf) {
     else if (inputs.length == 1) {
       let input = inputs[0];
       let edgesWithSameSource = drawn.edges.filter(
-        (edge) => edge.source == input.source
+        (edge) => edge.source == input.source,
       );
       //if there is only one child - it is a singleton
       if (edgesWithSameSource.length == 1) {

@@ -163,7 +163,7 @@ export default {
       // Find the element the filter belongs to
 
       let selectedDomainFilter = this.domainFilters.filter((pf) =>
-        pf.filters.some((f) => f.name == event)
+        pf.filters.some((f) => f.name == event),
       )[0].filterFor;
       // Create a copy of the filters
       let updatedFilters = JSON.parse(JSON.stringify(this.selectedFilters));
@@ -187,7 +187,7 @@ export default {
       }
       // We are only removing an item from the list
       updatedFilters[selectedDomainFilter] = Array.from(
-        updatedFilters[selectedDomainFilter].filter((f) => f != event)
+        updatedFilters[selectedDomainFilter].filter((f) => f != event),
       );
       this.selectedFilters = updatedFilters;
     },

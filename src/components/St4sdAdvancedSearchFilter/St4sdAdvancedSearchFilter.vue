@@ -94,7 +94,7 @@ export default {
     async getSearchedExperiments() {
       let response = await axios.get(
         window.location.origin +
-          `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`
+          `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`,
       );
       this.searchedExperiments = response.data.entries;
       this.$emit("updateSearchedExperiments", this.searchedExperiments);

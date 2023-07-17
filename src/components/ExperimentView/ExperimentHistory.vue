@@ -46,7 +46,7 @@
               <bx-table-cell
                 ><bx-link
                   :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
-                    id
+                    id,
                   )}:${entry.tag}`"
                 >
                   {{ entry.tag }}
@@ -55,7 +55,7 @@
               <bx-table-cell
                 ><bx-link
                   :href="`${getDeploymentEndpoint()}experiment/${getPackageName(
-                    id
+                    id,
                   )}@${entry.digest}`"
                 >
                   {{ entry.digest }}
@@ -117,7 +117,7 @@ export default {
   mounted() {
     if (this.data != null && !this.tableSortInitialized) {
       this.handleTableHeaderCellSort(
-        get_table_sort_dummy_event("tagCell", "ascending")
+        get_table_sort_dummy_event("tagCell", "ascending"),
       );
       this.tableSortInitialized = true;
     }
@@ -127,7 +127,7 @@ export default {
       return get_sorted_elements(
         this.data,
         this.sortDirection,
-        this.sortColumnId
+        this.sortColumnId,
       ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },

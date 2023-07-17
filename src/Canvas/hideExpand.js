@@ -27,7 +27,7 @@ export const getWorkflowsEdges = (nodes, edges) => {
       // we want to remove edges that start and end inside this workflow
       //meaning that the source and target nodes are children/nested inside this workflow
       let workflowFinalEdges = workflowEdges.filter(
-        (e) => !e.target.includes(node.id)
+        (e) => !e.target.includes(node.id),
       );
       for (var edge of workflowFinalEdges) {
         workflowEdgesDictionary[node.id].edges.push(edge);
@@ -43,7 +43,7 @@ export const hide = (
   edges,
   workFlowsDims,
   workFlowsEdges,
-  isHidden
+  isHidden,
 ) => {
   if (node.type == "workflow") {
     hideChildren(node, nodes, isHidden);

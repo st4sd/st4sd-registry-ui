@@ -74,7 +74,7 @@ export default {
   mounted() {
     axios
       .get(
-        window.location.origin + "/registry-ui/backend/logs/" + this.instanceId
+        window.location.origin + "/registry-ui/backend/logs/" + this.instanceId,
       )
       .then((response) => {
         this.log = response.data;

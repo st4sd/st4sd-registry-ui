@@ -181,7 +181,7 @@ export default {
     // Fetch experiment
     axios
       .get(
-        window.location.origin + "/registry-ui/backend/experiments/" + this.id
+        window.location.origin + "/registry-ui/backend/experiments/" + this.id,
       )
       .then((response) => {
         this.experiment = response.data.entry;
@@ -194,7 +194,7 @@ export default {
         window.location.origin +
           "/registry-ui/backend/experiments/" +
           this.id +
-          "?outputFormat=json&hideMetadataRegistry=y&hideNone=y&hideBeta=y"
+          "?outputFormat=json&hideMetadataRegistry=y&hideNone=y&hideBeta=y",
       )
       .then((response) => {
         this.exp_no_interface = response.data.entry;
@@ -212,7 +212,7 @@ export default {
         window.location.origin +
           "/registry-ui/backend/experiments/" +
           this.getPackageName(this.id) +
-          "/history"
+          "/history",
       )
       .then((response) => {
         this.history = response.data;
@@ -230,7 +230,7 @@ export default {
               digest: entry.digest,
               originalTag: entry.originalTag,
               timesExecuted: entry.timesExecuted,
-            }))
+            })),
           );
         this.loading--;
       });
@@ -241,7 +241,7 @@ export default {
         window.location.origin +
           "/registry-ui/backend/experiments/" +
           this.id +
-          "?outputFormat=python&hideMetadataRegistry=y&hideNone=y"
+          "?outputFormat=python&hideMetadataRegistry=y&hideNone=y",
       )
       .then((response) => {
         this.exp_python = response.data.entry;

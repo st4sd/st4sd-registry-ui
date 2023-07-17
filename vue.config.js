@@ -5,6 +5,8 @@
     Author: Alessandro Pomponio
 */
 const { defineConfig } = require("@vue/cli-service");
+const webpack = require('webpack')
+
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: process.env.NODE_ENV === "production" ? "/registry-ui/" : "/",
@@ -16,6 +18,13 @@ module.exports = defineConfig({
         pathRewrite: { "^/registry-ui/backend/": "/" },
       },
     },
+  },
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
+    ],
   },
   //Properly declares the carbon web components in Vue 3
   chainWebpack: (config) => {

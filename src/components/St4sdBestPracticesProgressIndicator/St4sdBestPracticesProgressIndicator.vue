@@ -157,7 +157,7 @@ export default {
           col2: "The image referenced by the latest tag will likely change over time",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkContainerImagesHaveTagOtherThanLatest(this.experiment)
+            checkContainerImagesHaveTagOtherThanLatest(this.experiment),
           ),
         },
         {
@@ -165,7 +165,7 @@ export default {
           col2: "This ensures that the experiment package definition will not change over time",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkBasePackagesHaveCommitOrTag(this.experiment)
+            checkBasePackagesHaveCommitOrTag(this.experiment),
           ),
         },
       ],
@@ -183,7 +183,7 @@ export default {
           col2: "This helps other users understand more easily what the experiment does",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkParameterisedPackageHasDescription(this.experiment)
+            checkParameterisedPackageHasDescription(this.experiment),
           ),
         },
         {
@@ -191,7 +191,7 @@ export default {
           col2: "This allows users to get in touch with someone in case of need",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkParameterisedPackageHasMaintainer(this.experiment)
+            checkParameterisedPackageHasMaintainer(this.experiment),
           ),
         },
         {
@@ -199,7 +199,7 @@ export default {
           col2: "This helps the user be aware of any kind of restrictions on modification and reuse",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkParameterisedPackageHasLicense(this.experiment)
+            checkParameterisedPackageHasLicense(this.experiment),
           ),
         },
         {
@@ -207,7 +207,7 @@ export default {
           col2: "Developers should define a tag other than latest to help strong versioning requirements",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkParameterisedPackageHasTagOtherThanLatest(this.experiment)
+            checkParameterisedPackageHasTagOtherThanLatest(this.experiment),
           ),
         },
         {
@@ -215,7 +215,7 @@ export default {
           col2: "Developers should list the inputs of their experiments",
           col2Type: "info",
           col3: this.getTestIcon(
-            checkParameterisedPackageListsInputs(this.experiment)
+            checkParameterisedPackageListsInputs(this.experiment),
           ),
         },
       ],
@@ -250,25 +250,25 @@ export default {
       .getElementById("strongVersioning")
       .setAttribute(
         "state",
-        this.getIndicatorState(this.getStrongVersioningScore(this.experiment))
+        this.getIndicatorState(this.getStrongVersioningScore(this.experiment)),
       );
     document
       .getElementById("virtualExperimentInterface")
       .setAttribute(
         "state",
-        this.getIndicatorState(this.checkVeInterfaceIsPresent(this.experiment))
+        this.getIndicatorState(this.checkVeInterfaceIsPresent(this.experiment)),
       );
     document
       .getElementById("developerMetadata")
       .setAttribute(
         "state",
-        this.getIndicatorState(this.getDeveloperMetadataScore(this.experiment))
+        this.getIndicatorState(this.getDeveloperMetadataScore(this.experiment)),
       );
     document
       .getElementById("ST4SDBestPractices")
       .setAttribute(
         "state",
-        this.getIndicatorState(this.getBestPracticesScore(this.experiment))
+        this.getIndicatorState(this.getBestPracticesScore(this.experiment)),
       );
   },
   computed: {

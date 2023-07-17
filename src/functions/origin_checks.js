@@ -10,7 +10,7 @@ export function checkExperimentIsContributed(experiment) {
     if (
       !("git" in packages[i].source) ||
       !packages[i].source.git.location.url.startsWith(
-        "https://github.com/st4sd/"
+        "https://github.com/st4sd/",
       )
     )
       return false;

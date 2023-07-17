@@ -47,7 +47,7 @@ export function getDeveloperMetadataScore(experiment) {
 
   //
   let packageHasDescription = checkParameterisedPackageHasDescription(
-    experiment
+    experiment,
   )
     ? weight
     : 0;
@@ -69,6 +69,6 @@ export function getDeveloperMetadataScore(experiment) {
         packageHasMaintainer +
         packageHasLicense +
         packageHasTagOtherThanLatest +
-        packageListsInputs)
+        packageListsInputs),
   );
 }

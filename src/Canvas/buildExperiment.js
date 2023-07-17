@@ -1,11 +1,11 @@
 export default function buildExperiment(nodes, entryPointID) {
   let entryNode = nodes.find((n) => n.id == entryPointID.value);
   let workflows = nodes.filter(
-    (n) => n.type == "workflow" && typeof n.parentNode == "string"
+    (n) => n.type == "workflow" && typeof n.parentNode == "string",
   );
 
   let components = nodes.filter(
-    (n) => n.type == "" && typeof n.parentNode === "string"
+    (n) => n.type == "" && typeof n.parentNode === "string",
   );
 
   let result = {};
@@ -28,7 +28,7 @@ export default function buildExperiment(nodes, entryPointID) {
 
     //Component
     components.forEach((component) =>
-      result.components.push(component.definition)
+      result.components.push(component.definition),
     );
   }
 

@@ -526,7 +526,7 @@
                           @click="
                             removeFromArray(
                               'executionOptions.runtime.args',
-                              idx
+                              idx,
                             )
                           "
                         >
@@ -557,7 +557,7 @@
                 @click="
                   addToArray(
                     'executionOptions.runtime.args',
-                    executionOptionsRuntimeArg
+                    executionOptionsRuntimeArg,
                   )
                 "
               >
@@ -623,7 +623,7 @@
                 @click="
                   addToArray(
                     'executionOptions.platform',
-                    executionOptionsPlatform
+                    executionOptionsPlatform,
                   )
                 "
               >
@@ -699,7 +699,7 @@ export default {
           window.location.origin +
             "/registry-ui/backend/experiments/" +
             this.id +
-            "/parameterisation"
+            "/parameterisation",
         )
         .then((response) => {
           this.parameterisationPayload = response.data.entry;
@@ -776,25 +776,25 @@ export default {
       if (key == "presets") {
         duplicateAcrossForms =
           this.parameterisation.executionOptions.variables.filter(
-            (element) => this.presetVariable.name === element.name
+            (element) => this.presetVariable.name === element.name,
           );
       } else {
         duplicateAcrossForms = this.parameterisation.presets.variables.filter(
-          (element) => this.executionOptionsVariable.name === element.name
+          (element) => this.executionOptionsVariable.name === element.name,
         );
       }
 
       let duplicateInPresets = this.parameterisation.presets.variables.filter(
-        (element) => this.presetVariable.name === element.name
+        (element) => this.presetVariable.name === element.name,
       );
       let duplicateInExecutionOptions =
         this.parameterisation.executionOptions.variables.filter(
-          (element) => this.executionOptionsVariable.name === element.name
+          (element) => this.executionOptionsVariable.name === element.name,
         );
 
       let matchingVariables = duplicateAcrossForms.concat(
         duplicateInPresets,
-        duplicateInExecutionOptions
+        duplicateInExecutionOptions,
       );
 
       return matchingVariables;

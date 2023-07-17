@@ -122,7 +122,7 @@ export default {
           "/registry-ui/backend/runs/" +
           this.experiment_id +
           "/" +
-          this.instance_id
+          this.instance_id,
       )
       .then((response) => {
         this.instance_components = response.data;
@@ -138,7 +138,7 @@ export default {
       return get_sorted_elements(
         this.data,
         this.sortDirection,
-        this.sortColumnId
+        this.sortColumnId,
       ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },

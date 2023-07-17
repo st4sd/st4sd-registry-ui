@@ -134,13 +134,13 @@ export default {
           "/registry-ui/backend/properties/" +
           this.experiment_id +
           "/" +
-          this.rest_uid
+          this.rest_uid,
       )
       .then((response) => {
         if (Object.keys(response.data).length != 0) {
           //Extract property values into an Array that can be looped through in the HTML
           this.properties = this.getPropertiesArray(
-            Object.values(response.data)[0]
+            Object.values(response.data)[0],
           );
 
           //Extract the property keys into an Array
@@ -158,7 +158,7 @@ export default {
     getTableSlice() {
       return this.propertiesToDisplay.slice(
         this.firstElement,
-        this.firstElement + this.elementsToShow
+        this.firstElement + this.elementsToShow,
       );
     },
   },

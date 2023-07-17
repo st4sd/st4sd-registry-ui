@@ -19,6 +19,6 @@ export function getBestPracticesScore(experiment) {
 
   return Math.round(
     (strongVersioningScore + developerMetadataScore + interfacePresent) /
-      numberOfTests
+      numberOfTests,
   );
 }

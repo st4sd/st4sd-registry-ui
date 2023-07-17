@@ -34,13 +34,13 @@ export default {
     download() {
       // Create a fictitious anchor to download JSON
       let jsonData = encodeURIComponent(
-        JSON.stringify(this.exp_no_interface, null, 2)
+        JSON.stringify(this.exp_no_interface, null, 2),
       );
       var element = document.createElement("a");
       element.setAttribute("href", "data:text/plain;charset=utf-8," + jsonData);
       element.setAttribute(
         "download",
-        "experiment-" + this.experiment.metadata.package.name + ".json"
+        "experiment-" + this.experiment.metadata.package.name + ".json",
       );
 
       element.style.display = "none";

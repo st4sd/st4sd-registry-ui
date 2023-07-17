@@ -94,7 +94,7 @@ export default {
   mounted() {
     axios
       .get(
-        window.location.origin + "/registry-ui/backend/properties/" + this.id
+        window.location.origin + "/registry-ui/backend/properties/" + this.id,
       )
       .then((response) => {
         if (Object.keys(response.data).length != 0) {
@@ -103,7 +103,7 @@ export default {
 
           //Extract property values into an Array that can be looped through in the HTML
           this.propertiesArray = this.getPropertiesArray(
-            Object.values(response.data)
+            Object.values(response.data),
           );
           //Extract the property keys into an Array
           this.propertyHeaders = Object.keys(Object.values(response.data)[0]);
@@ -139,7 +139,7 @@ export default {
             propertyValue++
           ) {
             rowOfProperties.push(
-              Object.values(data[rest_uid])[propertyValue][value]
+              Object.values(data[rest_uid])[propertyValue][value],
             );
           }
           propertiesArray.push(rowOfProperties);

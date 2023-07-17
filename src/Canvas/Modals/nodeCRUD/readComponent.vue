@@ -874,15 +874,15 @@ export default {
     Object.assign(this.componentCommand, this.node.definition.command);
     Object.assign(
       this.componentWFAttributes,
-      this.node.definition.workflowAttributes
+      this.node.definition.workflowAttributes,
     );
     Object.assign(
       this.componentResourceManager,
-      this.node.definition.resourceManager
+      this.node.definition.resourceManager,
     );
     Object.assign(
       this.componentResourceRequest,
-      this.node.definition.resourceRequest
+      this.node.definition.resourceRequest,
     );
   },
   methods: {

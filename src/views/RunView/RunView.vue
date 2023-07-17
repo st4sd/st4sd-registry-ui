@@ -279,7 +279,7 @@ export default {
     //Sets the table to be sorted by creation date on page load
     if (!this.tableSortInitialized && !this.loading && this.runs != null) {
       this.handleTableHeaderCellSort(
-        get_table_sort_dummy_event("creationDateCell", "descending")
+        get_table_sort_dummy_event("creationDateCell", "descending"),
       );
       this.tableSortInitialized = true;
     }
@@ -289,7 +289,7 @@ export default {
       return get_sorted_elements(
         this.dataToDisplay,
         this.sortDirection,
-        this.sortColumnId
+        this.sortColumnId,
       ).slice(this.firstElement, this.firstElement + this.elementsToShow);
     },
   },

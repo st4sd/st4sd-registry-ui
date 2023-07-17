@@ -98,7 +98,8 @@
             <dds-structured-list-row
               v-if="
                 Object.keys(
-                  experiment.parameterisation.executionOptions.runtime.resources
+                  experiment.parameterisation.executionOptions.runtime
+                    .resources,
                 ).length != 0
               "
               ><dds-structured-list-cell class="cds--col-sm-1"
@@ -140,10 +141,10 @@
                         'executionOptionsDefaults' in
                           experiment.metadata.registry &&
                         experiment.metadata.registry.executionOptionsDefaults.variables.find(
-                          (item) => item.name == entry.name
+                          (item) => item.name == entry.name,
                         ) != null &&
                         experiment.metadata.registry.executionOptionsDefaults.variables.find(
-                          (item) => item.name == entry.name
+                          (item) => item.name == entry.name,
                         ).length != 0
                       "
                     >
@@ -152,15 +153,15 @@
                           v-if="
                             allPlatformHaveSameValue(
                               experiment.metadata.registry.executionOptionsDefaults.variables.find(
-                                (item) => item.name == entry.name
-                              ).valueFrom
+                                (item) => item.name == entry.name,
+                              ).valueFrom,
                             )
                           "
                         >
                           All platforms:
                           <code>{{
                             experiment.metadata.registry.executionOptionsDefaults.variables.find(
-                              (item) => item.name == entry.name
+                              (item) => item.name == entry.name,
                             ).valueFrom[0].value
                           }}</code>
                         </bx-list-item>
@@ -169,7 +170,7 @@
                           v-for="(
                             option, optIdx
                           ) in experiment.metadata.registry.executionOptionsDefaults.variables.find(
-                            (item) => item.name == entry.name
+                            (item) => item.name == entry.name,
                           ).valueFrom"
                           :key="optIdx"
                         >
@@ -316,7 +317,7 @@
             <dds-structured-list-row
               v-if="
                 Object.keys(
-                  experiment.parameterisation.presets.runtime.resources
+                  experiment.parameterisation.presets.runtime.resources,
                 ).length != 0
               "
               ><dds-structured-list-cell class="cds--col-sm-1"

@@ -9,11 +9,11 @@ export const registryUISharedState = reactive({
     this.settings = obj;
     this.setIsGlobalRegistry(
       "ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL"] == "yes"
+        obj["ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL"] == "yes",
     );
     this.setIsCanvasDisabled(
       "ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS"] == "yes"
+        obj["ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS"] == "yes",
     );
   },
   setIsGlobalRegistry(obj) {

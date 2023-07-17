@@ -126,7 +126,9 @@
   border-radius: 10px;
   color: #000;
   font-weight: 700;
-  box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+  box-shadow:
+    0 4px 6px -1px #0000001a,
+    0 2px 4px -2px #0000001a;
 }
 .buttons .button:hover {
   background: black;

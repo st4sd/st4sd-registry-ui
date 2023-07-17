@@ -191,7 +191,7 @@ export default {
     getTableSlice() {
       return this.getSortedElements.slice(
         this.firstElement,
-        this.firstElement + this.elementsToShow
+        this.firstElement + this.elementsToShow,
       );
     },
   },

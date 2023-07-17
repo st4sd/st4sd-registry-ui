@@ -90,7 +90,7 @@ const getGraphTransforms = () => {
   axios
     .get(
       window.location.origin +
-        `/registry-ui/backend/canvas/${props.id}/relationships`
+        `/registry-ui/backend/canvas/${props.id}/relationships`,
     )
     .then((response) => {
       if (response.data.length != 0) {
@@ -116,7 +116,7 @@ const getGraph = async () => {
     });
   await axios
     .get(
-      window.location.origin + "/registry-ui/backend/experiments/" + props.id
+      window.location.origin + "/registry-ui/backend/experiments/" + props.id,
     )
     .then((inputsResponse) => {
       if (inputsResponse.data.length != 0) {
@@ -152,7 +152,7 @@ const getPreviewGraph = async () => {
       window.location.origin +
         "/registry-ui/backend/canvas/preview/" +
         experimentTransformId +
-        "/dsl"
+        "/dsl",
     )
     .then((graphResponse) => {
       if (graphResponse.data.length != 0) {
@@ -164,7 +164,7 @@ const getPreviewGraph = async () => {
       window.location.origin +
         "/registry-ui/backend/canvas/preview/" +
         experimentTransformId +
-        "/inputs"
+        "/inputs",
     )
     .then((inputsResponse) => {
       if (inputsResponse.data.length != 0) {
@@ -183,12 +183,12 @@ const postNewExperiment = (experimentName) => {
   axios
     .post(
       window.location.origin +
-        `/registry-ui/backend/canvas/relationships/${experimentTransformId}/synthesize/${experimentName}`
+        `/registry-ui/backend/canvas/relationships/${experimentTransformId}/synthesize/${experimentName}`,
     )
     .then(
       setTimeout(() => {
         router.push({ path: `/experiment/${experimentName}` });
-      }, "5000")
+      }, "5000"),
     );
 };
 

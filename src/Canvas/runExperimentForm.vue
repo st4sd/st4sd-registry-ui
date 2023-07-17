@@ -492,7 +492,7 @@
               addRuntimePolicyConfigToPayload(
                 'config',
                 runtimePolicyConfigKey,
-                runtimePolicyConfigValue
+                runtimePolicyConfigValue,
               );
             "
           >
@@ -621,7 +621,7 @@
             addS3StoreKeyToPayload();
             addS3StoreCredentialsToPayload(
               'accessKey',
-              s3Store.credentials.accessKey
+              s3Store.credentials.accessKey,
             );
           "
           :value="s3Store.credentials.accessKey"
@@ -634,7 +634,7 @@
             addS3StoreKeyToPayload();
             addS3StoreCredentialsToPayload(
               'secretAccessKey',
-              s3Store.credentials.secretAccessKey
+              s3Store.credentials.secretAccessKey,
             );
           "
           :value="s3Store.credentials.secretAccessKey"
@@ -647,7 +647,7 @@
             addS3StoreKeyToPayload();
             addS3StoreCredentialsToPayload(
               'bucket',
-              s3Store.credentials.bucket
+              s3Store.credentials.bucket,
             );
           "
           :value="s3Store.credentials.bucket"
@@ -660,7 +660,7 @@
             addS3StoreKeyToPayload();
             addS3StoreCredentialsToPayload(
               'endpoint',
-              s3Store.credentials.endpoint
+              s3Store.credentials.endpoint,
             );
           "
           :value="s3Store.credentials.endpoint"
@@ -673,7 +673,7 @@
             addS3StoreKeyToPayload();
             addS3StoreCredentialsToPayload(
               'region',
-              s3Store.credentials.region
+              s3Store.credentials.region,
             );
           "
           :value="s3Store.credentials.region"

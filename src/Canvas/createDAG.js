@@ -33,7 +33,7 @@ function addEntries(graph, dslData, experimentData) {
   let entryWorkflowName = dslData["entrypoint"]["entry-instance"];
   //get the definition of the entry workflow
   let entryWorkflow = dslData.workflows.find(
-    (o) => o.signature.name === entryWorkflowName
+    (o) => o.signature.name === entryWorkflowName,
   );
 
   //Get the inputs of the entry workflow
@@ -46,7 +46,7 @@ function addEntries(graph, dslData, experimentData) {
   // - metadata.registry.inputs
   let executionOptions = [];
   executionOptions.push(
-    ...experimentData.parameterisation.executionOptions.variables
+    ...experimentData.parameterisation.executionOptions.variables,
   );
   let executionOptionsData =
     experimentData.parameterisation.executionOptions.data;
@@ -83,7 +83,7 @@ function addEntries(graph, dslData, experimentData) {
         inputs,
         input,
         experimentData,
-        entryWorkflow
+        entryWorkflow,
       );
       executionOptionsDefinition[input] = definition;
       continue;
@@ -95,7 +95,7 @@ function addEntries(graph, dslData, experimentData) {
         inputs,
         input,
         experimentData,
-        entryWorkflow
+        entryWorkflow,
       );
       presetsDefinition[input] = definition;
     } else {
@@ -112,14 +112,14 @@ function addEntries(graph, dslData, experimentData) {
       executionOptionsDefinition,
       "",
       executionOptionsNodeType,
-      ""
+      "",
     );
     addEdge(
       graph,
       "executionOptions",
       entryWorkflowName,
       "executionOptions",
-      executionOptionsDefinition
+      executionOptionsDefinition,
     );
   }
 
@@ -132,7 +132,7 @@ function addEntries(graph, dslData, experimentData) {
       presetsDefinition,
       "",
       presetsNodeType,
-      ""
+      "",
     );
     addEdge(graph, "presets", entryWorkflowName, "presets", presetsDefinition);
   }
@@ -167,7 +167,7 @@ function addEntries(graph, dslData, experimentData) {
     workflowInput,
     entryWorkflowName,
     "param",
-    ""
+    "",
   );
   return entryWorkflow;
 }
@@ -177,7 +177,7 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
   let workflowSteps = workflow.steps;
   for (var step in workflowSteps) {
     let stepWorkflow = data.workflows.find(
-      (o) => o.signature.name === workflowSteps[step]
+      (o) => o.signature.name === workflowSteps[step],
     );
     let stepId;
     if (stepParent == "") {
@@ -196,7 +196,7 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
         workflow,
         prevStepId,
         "workflow",
-        stepId
+        stepId,
       );
       addNode(
         graph,
@@ -205,13 +205,13 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
         `${id}/input`,
         id,
         "param",
-        ""
+        "",
       );
       //draw the blocks inside that workflow
       addBlocks(graph, data, stepWorkflow, id, stepId);
     } else {
       let componentDefinition = data.components.find(
-        (o) => o.signature.name === workflowSteps[step]
+        (o) => o.signature.name === workflowSteps[step],
       );
       addNode(
         graph,
@@ -220,7 +220,7 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
         componentDefinition,
         prevStepId,
         "",
-        stepId
+        stepId,
       );
     }
   }
@@ -263,7 +263,7 @@ function addConnection(graph, data, workflow, workflowName) {
           edgeDefinition,
           source,
           "param",
-          ""
+          "",
         );
         source = `${workflowName}.${arg}`;
       }
@@ -272,7 +272,7 @@ function addConnection(graph, data, workflow, workflowName) {
     //CHECK IF THE STEP IS REFERENCING A WORKFLOW
     //IF IT IS A WORKFLOW - DRAW ITS CONNECTIONS.
     let innerWorkflow = data.workflows.find(
-      (o) => o.signature.name === workflow.steps[targetStep]
+      (o) => o.signature.name === workflow.steps[targetStep],
     );
     if (innerWorkflow != undefined) {
       addConnection(graph, data, innerWorkflow, target);
@@ -387,7 +387,7 @@ function removeSymbolCharacters(stringWithSymbols) {
     } else {
       cleanedString = stringWithSymbols.substring(
         2,
-        stringWithSymbols.length - 2
+        stringWithSymbols.length - 2,
       );
     }
   } else if (stringWithSymbols.includes("<")) {
@@ -402,7 +402,7 @@ function getExecutionOptionsDefaults(
   inputs,
   input,
   inputClassificationData,
-  entryWorkflow
+  entryWorkflow,
 ) {
   let definition = inputs[input];
   if (input.startsWith("data.") || input.startsWith("input.")) {
@@ -410,7 +410,7 @@ function getExecutionOptionsDefaults(
   } else {
     let variable =
       inputClassificationData.parameterisation.executionOptions.variables.find(
-        (a) => a.name == input
+        (a) => a.name == input,
       );
     if (variable != undefined) {
       if (variable.value != "None") {
@@ -423,7 +423,7 @@ function getExecutionOptionsDefaults(
   }
   if (definition == undefined) {
     let defaultValueFromDSL = entryWorkflow.signature.parameters.find(
-      (p) => p.name == input
+      (p) => p.name == input,
     );
     if (defaultValueFromDSL != undefined) {
       definition = defaultValueFromDSL.default;
@@ -436,18 +436,18 @@ function getPresetsDefaults(
   inputs,
   input,
   inputClassificationData,
-  entryWorkflow
+  entryWorkflow,
 ) {
   let definition = inputs[input];
   if (!input.startsWith("data.")) {
     definition =
       inputClassificationData.parameterisation.presets.variables.find(
-        (a) => a.name == input
+        (a) => a.name == input,
       ).value;
   }
   if (definition == undefined) {
     let defaultValueFromDSL = entryWorkflow.signature.parameters.find(
-      (p) => p.name == input
+      (p) => p.name == input,
     );
     if (defaultValueFromDSL != undefined) {
       definition = defaultValueFromDSL.default;

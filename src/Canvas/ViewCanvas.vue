@@ -215,7 +215,7 @@ const onChangeVisibility = (node, isHidden) => {
     edges.value,
     workflowsDims,
     workflowsEdges,
-    isHidden
+    isHidden,
   );
   removeEdges(result.toDelete);
 };
@@ -223,7 +223,7 @@ const onChangeVisibility = (node, isHidden) => {
 const downloadJSON = () => {
   let nodesToDownload = elements.value.nodes;
   let entrypointNodeId = ref(
-    elements.value.nodes.find((node) => node.isEntry == true).id
+    elements.value.nodes.find((node) => node.isEntry == true).id,
   );
   toJSON(nodesToDownload, entrypointNodeId);
 };

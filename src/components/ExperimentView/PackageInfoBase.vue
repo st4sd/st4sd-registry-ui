@@ -13,7 +13,7 @@
           <dds-structured-list-group
             v-for="(basePackage, idx) in filterBasePackages(
               experiment.base.packages,
-              'git'
+              'git',
             )"
             :key="idx"
             :title="basePackage.name"
