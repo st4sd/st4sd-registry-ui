@@ -176,6 +176,7 @@
                     :href="`${getDeploymentEndpoint()}experiment/${id}/logs/${
                       run.rest_uid
                     }`"
+                    :disabled="run.exit_status == null"
                   >
                     Logs
                   </bx-link>
