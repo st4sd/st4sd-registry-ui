@@ -34,6 +34,7 @@
         id="TabForVEPropertiesLineChart"
         value="PropertiesLineChart"
         target="VEPropertiesLineChart"
+        :disabled="formattedChartData.length === 0"
         >Line Chart</bx-tab
       >
     </bx-tabs>
@@ -49,6 +50,7 @@
           :id="id"
           :propertiesArray="propertiesArray"
           :propertyHeaders="propertyHeaders"
+          :loading="loading"
         />
       </div>
       <div
@@ -83,7 +85,6 @@ export default {
   },
   data() {
     return {
-      properties: [],
       propertiesArray: [],
       propertyHeaders: null,
       loading: true,

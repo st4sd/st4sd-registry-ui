@@ -33,7 +33,10 @@
     </template>
 
     <template v-else>
-      <div>
+      <div id="no-results-message" v-if="noDataAvailable">
+        <p>No Properties Avaiblable</p>
+      </div>
+      <div v-else>
         <bx-table-toolbar @focusout="setExpandedOnFocusOut">
           <bx-table-toolbar-content>
             <bx-table-toolbar-search
@@ -55,10 +58,7 @@
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
-        <div id="no-results-message" v-if="noDataAvailable">
-          <p>No Properties Avaiblable</p>
-        </div>
-        <div class="tableOverflowContainer" v-else>
+        <div class="tableOverflowContainer">
           <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
             <bx-table-head>
               <bx-table-header-row>
@@ -112,7 +112,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       filename: "",
       noDataAvailable: false,
       dataToDisplay: [],
@@ -136,13 +135,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    loading: {
+      type: Boolean,
+      default: true,
+    },
   },
   watch: {
-    propertiesArray: {
+    loading: {
       handler() {
         if (this.propertiesArray.length != 0) {
           this.dataToDisplay = this.propertiesArray;
-          this.loading = false;
         } else {
           this.noDataAvailable = true;
         }
