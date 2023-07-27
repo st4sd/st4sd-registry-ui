@@ -47,6 +47,8 @@
         :loading="loading"
         :isGlobalRegistry="isGlobalRegistry"
         :isCanvasDisabled="isCanvasDisabled"
+        :isRunExperimentEnabled="isRunExperimentEnabled"
+        :isParameterisationEnabled="isParameterisationEnabled"
         :id="id"
         :getAvailablePlatforms="getAvailablePlatforms()"
       />
@@ -61,7 +63,6 @@
         :id="id"
       />
       <ExperimentParameterisationVue :experiment="experiment" :id="id" />
-
       <!-- Package history and information -->
       <div>
         <!-- Package history and info title -->
@@ -175,6 +176,8 @@ export default {
       data: null,
       isGlobalRegistry: false,
       isCanvasDisabled: false,
+      isParameterisationEnabled: false,
+      isRunExperimentEnabled: false,
     };
   },
   mounted() {
@@ -249,6 +252,9 @@ export default {
       });
 
     // Fetch settings
+    this.isParameterisationEnabled =
+      registryUISharedState.isParameterisationEnabled;
+    this.isRunExperimentEnabled = registryUISharedState.isRunExperimentEnabled;
     this.isCanvasDisabled = registryUISharedState.isCanvasDisabled;
     this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
     this.loading--;

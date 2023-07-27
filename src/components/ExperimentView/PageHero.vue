@@ -56,6 +56,7 @@
                 />
               </dds-link-list-item>
               <dds-link-list-item
+                v-if="!isCanvasDisabled"
                 :href="`${getDeploymentEndpoint()}experiment/${id}/viewcanvas`"
               >
                 View Graph
@@ -67,6 +68,7 @@
                 />
               </dds-link-list-item>
               <dds-link-list-item
+                v-if="isParameterisationEnabled"
                 @click="toggleModalVisibility('parameterisationModal')"
               >
                 Parameterisation Options
@@ -78,6 +80,7 @@
                 />
               </dds-link-list-item>
               <dds-link-list-item
+                v-if="isRunExperimentEnabled"
                 @click="toggleModalVisibility('runExperimentFormModal')"
               >
                 Run Experiment
@@ -164,6 +167,8 @@ export default {
   props: {
     experiment: Object,
     id: String,
+    isParameterisationEnabled: Boolean,
+    isRunExperimentEnabled: Boolean,
     isCanvasDisabled: Boolean,
     isGlobalRegistry: Boolean,
     loading: Number,
