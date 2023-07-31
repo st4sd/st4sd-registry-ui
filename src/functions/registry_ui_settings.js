@@ -4,7 +4,7 @@ export default async function getSettings(origin) {
   let settings = {};
   await axios
     .get(origin + "/registry-ui/backend/settings/", {
-      signal: AbortSignal.timeout(1000),
+      signal: AbortSignal.timeout(500),
     })
     .then((response) => {
       settings = response.data;
