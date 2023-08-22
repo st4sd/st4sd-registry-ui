@@ -42,25 +42,25 @@ jobs:
         - docker
       script:
         - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:$TRAVIS_BRANCH
-        - ./build_and_push.sh $FULL_IMAGE_ID
+        - ./build_and_push.sh $FULL_IMAGE_ID || travis_terminate 1
     - stage: "Build test image pr"
       os: linux
       services:
         - docker
       script:
         - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:$TRAVIS_PULL_REQUEST_BRANCH
-        - ./build_and_push.sh $FULL_IMAGE_ID
+        - ./build_and_push.sh $FULL_IMAGE_ID || travis_terminate 1
     - stage: "Build production image"
       os: linux
       services:
         - docker
       script:
         - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui
-        - ./build_and_push.sh $FULL_IMAGE_ID
+        - ./build_and_push.sh $FULL_IMAGE_ID || travis_terminate 1
     - stage: "Build platform image"
       os: linux
       services:
         - docker
       script:
         - export FULL_IMAGE_ID=${DOCKER_REGISTRY}/st4sd-registry-ui:release-candidate
-        - ./build_and_push.sh $FULL_IMAGE_ID
+        - ./build_and_push.sh $FULL_IMAGE_ID || travis_terminate 1
