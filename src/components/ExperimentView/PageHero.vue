@@ -45,6 +45,7 @@
           <dds-cta-block no-border>
             <dds-link-list slot="link-list" type="end">
               <dds-link-list-item
+                v-if="!isGlobalRegistry"
                 :href="`${getDeploymentEndpoint()}experiment/${id}/runs`"
               >
                 View Runs
