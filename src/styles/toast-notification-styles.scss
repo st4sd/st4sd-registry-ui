@@ -1,0 +1,16 @@
+@use "@carbon/layout";
+
+#toast-notification-container {
+  width: 75%;
+  position: fixed;
+  z-index: 1000;
+  top: layout.$spacing-09;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+bx-toast-notification {
+  min-width: fit-content;
+}

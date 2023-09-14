@@ -7,7 +7,22 @@
         >
       </dds-content-block>
     </div>
-    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12" id="padding-fix">
+    <div
+      class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12"
+      id="padding-fix"
+      v-if="error.code != 0"
+    >
+      <HttpErrorEmptyState
+        :errorDescription="error.description"
+        :errorStatusText="error.statusText"
+        :errorCode="error.code"
+      />
+    </div>
+    <div
+      class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12"
+      id="padding-fix"
+      v-else
+    >
       <div class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
@@ -97,12 +112,18 @@ import {
   get_sorted_elements,
 } from "@/functions/table_sort";
 
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 export default {
   name: "ExperimentHistory",
+  components: {
+    HttpErrorEmptyState,
+  },
   props: {
     history: Object,
     data: Array,
     id: String,
+    error: Object,
   },
   data() {
     return {

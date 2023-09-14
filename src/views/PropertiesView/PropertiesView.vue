@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-if="isError"
+        kind="error"
+        :title="errorDescription"
+        :caption="errorStatusText + ' (error ' + errorCode + ')'"
+        timeout="10000"
+      >
+      </bx-toast-notification>
+    </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -39,7 +49,14 @@
       >
     </bx-tabs>
 
-    <div class="bx-ce-demo-devenv--tab-panels">
+    <HttpErrorEmptyState
+      :errorDescription="errorDescription"
+      :errorStatusText="errorStatusText"
+      :errorCode="errorCode"
+      v-if="isError"
+    />
+
+    <div class="bx-ce-demo-devenv--tab-panels" v-else>
       <div
         id="VEPropertiesTable"
         aria-labelledby="tab-VEPropertiesTable"
@@ -75,11 +92,18 @@ import VEPropertiesLineChart from "@/components/VEPropertiesTable/VEPropertiesLi
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 import axios from "axios";
 
 export default {
   name: "PropertiesView",
-  components: { VEPropertiesTable, St4sdBreadcrumb, VEPropertiesLineChart },
+  components: {
+    VEPropertiesTable,
+    St4sdBreadcrumb,
+    VEPropertiesLineChart,
+    HttpErrorEmptyState,
+  },
   props: {
     id: String,
   },
@@ -90,6 +114,10 @@ export default {
       loading: true,
       formattedChartData: [],
       tempObj: {},
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
+      errorDescription: "Unable to load properties",
     };
   },
   mounted() {
@@ -119,6 +147,14 @@ export default {
 
           this.formatChartData();
         }
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
+      })
+      .finally(() => {
         this.loading = false;
       });
   },
@@ -198,7 +234,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@use "@carbon/layout";
+
+@import "@/styles/toast-notification-styles.scss";
+
 dds-content-block-heading {
   margin: 0;
   padding-bottom: 1rem;

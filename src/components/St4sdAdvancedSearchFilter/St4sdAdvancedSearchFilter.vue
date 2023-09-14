@@ -92,13 +92,20 @@ export default {
       this.$emit("LoadingWheelStatusChanged", true);
     },
     async getSearchedExperiments() {
-      let response = await axios.get(
-        window.location.origin +
-          `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`,
-      );
+      let response = await axios
+        .get(
+          window.location.origin +
+            `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`,
+        )
+        .catch((error) => {
+          this.updateErrorHandling(error);
+        });
       this.searchedExperiments = response.data.entries;
       this.$emit("updateSearchedExperiments", this.searchedExperiments);
       this.$emit("LoadingWheelStatusChanged", false);
+    },
+    updateErrorHandling(error) {
+      this.$emit("updateErrorHandling", error);
     },
   },
 };

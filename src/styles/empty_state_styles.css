@@ -1,0 +1,17 @@
+div.empty-state {
+  padding: 5rem;
+  min-height: 15rem;
+  margin: 0;
+}
+
+div.greyBackgroundColor {
+  background-color: var(--cds-ui-01, #f4f4f4);
+}
+
+.empty-state-icon {
+  max-height: 100px;
+  max-width: 100px;
+  width: 100%;
+  height: 100%;
+  margin: auto 0rem auto 0.2rem;
+}

@@ -61,7 +61,16 @@
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
-        <div id="no-results-message" v-if="propertiesToDisplay.length == 0">
+        <HttpErrorEmptyState
+          errorDescription="Unable to fetch properties"
+          :errorStatusText="errorStatusText"
+          :errorCode="errorCode"
+          v-if="isError"
+        />
+        <div
+          id="no-results-message"
+          v-else-if="propertiesToDisplay.length == 0"
+        >
           <p>No Properties Available</p>
         </div>
         <div class="tableOverflowContainer" v-else>
@@ -109,8 +118,13 @@
 <script>
 import axios from "axios";
 
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 export default {
   name: "RunPropertiesTable",
+  components: {
+    HttpErrorEmptyState,
+  },
   props: {
     experiment_id: String,
     rest_uid: String,
@@ -125,6 +139,9 @@ export default {
       elementsToShow: 5,
       searchQuery: "",
       filename: "properties-" + this.rest_uid + ".csv",
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
     };
   },
   mounted() {
@@ -151,6 +168,14 @@ export default {
           this.moveItemToFrontOfTable("input-id");
         }
         this.propertiesToDisplay = this.properties;
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
+        this.updateErrorHandling(error);
+      })
+      .finally(() => {
         this.loading = false;
       });
   },
@@ -245,6 +270,9 @@ export default {
       element.click();
 
       document.body.removeChild(element);
+    },
+    updateErrorHandling(error) {
+      this.$emit("updatePropertyErrorHandling", error);
     },
   },
 };

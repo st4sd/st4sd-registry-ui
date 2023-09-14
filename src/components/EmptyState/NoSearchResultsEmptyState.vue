@@ -4,7 +4,7 @@
       <div>
         <div class="empty-state">
           <img
-            class="empty-search-results-icon"
+            class="empty-state-icon"
             src="@/assets/empty-state-bright-magnifying-glass.svg"
           />
           <div>
@@ -20,21 +20,4 @@ export default {
   name: "NoSearchResultsEmptyState",
 };
 </script>
-<style scoped>
-div.empty-state {
-  padding: 5rem;
-  min-height: 15rem;
-}
-
-div.greyBackgroundColor {
-  background-color: var(--cds-ui-01, #f4f4f4);
-}
-
-.empty-search-results-icon {
-  max-height: 100px;
-  max-width: 100px;
-  width: 100%;
-  height: 100%;
-  margin: auto 0rem auto 0.2rem;
-}
-</style>
+<style lang="css" scoped src="../../styles/empty_state_styles.css"></style>

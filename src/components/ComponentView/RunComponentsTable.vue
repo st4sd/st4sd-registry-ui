@@ -32,7 +32,14 @@
       </bx-pagination>
     </template>
 
-    <template v-else>
+    <HttpErrorEmptyState
+      errorDescription="Unable to fetch components"
+      :errorStatusText="errorStatusText"
+      :errorCode="errorCode"
+      v-if="isError"
+    />
+
+    <template v-if="!isError && !loading">
       <div class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
@@ -87,12 +94,17 @@
 </template>
 
 <script>
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import { get_sorted_elements } from "@/functions/table_sort";
 import axios from "axios";
 
 export default {
   name: "RunComponentsTable",
+  components: {
+    HttpErrorEmptyState,
+  },
   props: {
     experiment_id: {
       type: String,
@@ -113,6 +125,9 @@ export default {
       sortDirection: undefined,
       sortColumnId: "",
       collator: new Intl.Collator("en"),
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
     };
   },
   mounted() {
@@ -130,6 +145,14 @@ export default {
           identifier: component["component-identifier"],
           state: component["component-state"],
         }));
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
+        this.updateErrorHandling(error);
+      })
+      .finally(() => {
         this.loading = false;
       });
   },
@@ -168,6 +191,9 @@ export default {
         )
           headers[i].sortDirection = "none";
       }
+    },
+    updateErrorHandling(error) {
+      this.$emit("updateComponentErrorHandling", error);
     },
   },
 };

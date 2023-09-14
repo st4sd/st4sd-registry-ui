@@ -14,7 +14,12 @@
         </bx-code-snippet>
       </div>
       <div class="cds--row">
-        <bx-btn class="bx--btn--primary" type="button" @click="download()">
+        <bx-btn
+          class="bx--btn--primary"
+          type="button"
+          @click="download()"
+          :disabled="Object.keys(exp_no_interface).length === 0"
+        >
           Download JSON&nbsp;
           <img class="download-icon" src="../../assets/download.svg"
         /></bx-btn>

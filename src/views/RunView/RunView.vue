@@ -6,6 +6,16 @@
 -->
 <template>
   <div>
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-if="isError"
+        kind="error"
+        :title="errorDescription"
+        :caption="errorStatusText + ' (error ' + errorCode + ')'"
+        timeout="10000"
+      >
+      </bx-toast-notification>
+    </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -19,7 +29,6 @@
         },
       ]"
     />
-
     <dds-content-block>
       <dds-content-block-heading>{{ id }}</dds-content-block-heading>
       <St4sdStatusIndicator :data="dataToDisplay" />
@@ -37,7 +46,6 @@
         >
       </dds-text-cta>
     </dds-content-block>
-
     <template v-if="loading">
       <div class="tableOverflowContainer">
         <bx-table-toolbar>
@@ -92,10 +100,7 @@
 
     <template v-else>
       <div>
-        <bx-table-toolbar
-          @focusout="setExpandedOnFocusOut"
-          v-if="filteredData.length > 0"
-        >
+        <bx-table-toolbar @focusout="setExpandedOnFocusOut">
           <bx-table-toolbar-search
             id="search"
             expanded
@@ -108,6 +113,12 @@
             <p>No Runs Available</p>
           </div>
         </div>
+        <HttpErrorEmptyState
+          :errorDescription="errorDescription"
+          :errorStatusText="errorStatusText"
+          :errorCode="errorCode"
+          v-if="isError"
+        />
         <div class="tableOverflowContainer" v-else>
           <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
             <bx-table-head>
@@ -184,7 +195,9 @@
               </bx-table-row>
             </bx-table-body>
           </bx-table>
-          <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
+          <NoSearchResultsEmptyState
+            v-if="dataToDisplay.length == 0 && !isError"
+          />
           <bx-pagination
             :page-size="elementsToShow"
             :start="firstElement"
@@ -209,6 +222,7 @@
 
 <script>
 import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import {
   get_table_sort_dummy_event,
@@ -218,6 +232,7 @@ import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusIndicator.vue";
 import St4sdDateFilter from "@/components/St4sdDateFilter/St4sdDateFilter.vue";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 import axios from "axios";
 
@@ -228,6 +243,7 @@ export default {
     St4sdStatusIndicator,
     St4sdDateFilter,
     NoSearchResultsEmptyState,
+    HttpErrorEmptyState,
   },
   props: {
     id: {
@@ -248,6 +264,10 @@ export default {
       sortDirection: undefined,
       sortColumnId: "",
       searchQuery: "",
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
+      errorDescription: "Unable to load runs",
       tableSortInitialized: false,
     };
   },
@@ -272,12 +292,24 @@ export default {
             this.noDataAvailable = true;
           }
         }
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
+      })
+      .finally(() => {
         this.loading = false;
       });
   },
   updated() {
     //Sets the table to be sorted by creation date on page load
-    if (!this.tableSortInitialized && !this.loading && this.runs != null) {
+    if (
+      !this.tableSortInitialized &&
+      !this.loading &&
+      this.runs != null &&
+      !this.isError
+    ) {
       this.handleTableHeaderCellSort(
         get_table_sort_dummy_event("creationDateCell", "descending"),
       );
@@ -347,7 +379,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@carbon/layout";
+
+@import "@/styles/toast-notification-styles.scss";
+
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
@@ -378,5 +414,13 @@ dds-text-cta {
   text-decoration: underline 1px;
   text-underline-offset: 5px;
   text-align: center;
+}
+
+.overlay-error {
+  position: fixed; /* Sit on top of the page content */
+  margin-bottom: 0.5rem;
+  min-width: 20rem;
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  right: 1rem;
 }
 </style>

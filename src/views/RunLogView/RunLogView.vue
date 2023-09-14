@@ -6,6 +6,16 @@
 -->
 <template>
   <div>
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-if="isError"
+        kind="error"
+        :title="errorDescription"
+        :caption="errorStatusText + ' (error ' + errorCode + ')'"
+        timeout="10000"
+      >
+      </bx-toast-notification>
+    </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -33,10 +43,18 @@
     </template> -->
 
     <div>
+      <HttpErrorEmptyState
+        :errorDescription="errorDescription"
+        :errorStatusText="errorStatusText"
+        :errorCode="errorCode"
+        v-if="isError"
+      />
+
       <st4sd-log-view
         :log="log"
         :filename="`log-${instanceId}.log`"
         :loading="loading"
+        v-else
       ></st4sd-log-view>
     </div>
   </div>
@@ -49,12 +67,14 @@ import "@carbon/web-components/es/components/code-snippet/index.js";
 import St4sdLogView from "@/components/St4sdLogView";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 //
 import axios from "axios";
 
 export default {
   name: "RunLogView",
-  components: { St4sdLogView, St4sdBreadcrumb },
+  components: { St4sdLogView, St4sdBreadcrumb, HttpErrorEmptyState },
   props: {
     experimentId: {
       type: String,
@@ -69,6 +89,10 @@ export default {
     return {
       log: null,
       loading: true,
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
+      errorDescription: "Unable to load logs",
     };
   },
   mounted() {
@@ -78,14 +102,24 @@ export default {
       )
       .then((response) => {
         this.log = response.data;
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
+      })
+      .finally(() => {
         this.loading = false;
       });
   },
-  methods: {},
 };
 </script>
 
-<style>
+<style lang="scss">
+@use "@carbon/layout";
+
+@import "@/styles/toast-notification-styles.scss";
+
 pre {
   white-space: pre-wrap;
   font-size: small;

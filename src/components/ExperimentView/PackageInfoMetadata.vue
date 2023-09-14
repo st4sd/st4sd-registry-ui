@@ -57,9 +57,13 @@
               Available tags
             </dds-structured-list-cell>
             <dds-structured-list-cell
+              v-if="tags != null"
               class="cds--col-sm-3"
               :tags="tags.toString()"
             ></dds-structured-list-cell>
+            <dds-structured-list-cell v-else class="cds--col-sm-3"
+              >Failed to load</dds-structured-list-cell
+            >
           </dds-structured-list-row>
           <dds-structured-list-row>
             <dds-structured-list-cell class="cds--col-sm-1">

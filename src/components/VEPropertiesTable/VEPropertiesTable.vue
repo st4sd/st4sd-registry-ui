@@ -173,8 +173,9 @@ export default {
         if (
           rhsValue === undefined ||
           (typeof rhsValue !== "string" && isNaN(rhsValue))
-        )
+        ) {
           return -1;
+        }
 
         // Ensure we don't sort dates by their string value
         // when using the collator

@@ -1,4 +1,15 @@
 <template>
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="error in errors"
+      :key="error.description"
+      kind="error"
+      :title="error.description"
+      :caption="error.statusText + ' (error ' + error.code + ')'"
+      timeout="10000"
+    >
+    </bx-toast-notification>
+  </div>
   <St4sdBreadcrumb
     :breadcrumbs="[
       { name: 'Virtual Experiments', path: '/' },
@@ -19,6 +30,14 @@
     <div id="loadingContainer">
       <bx-loading id="loadingWheel" type="overlay"></bx-loading>
     </div>
+  </div>
+  <div v-else-if="fatalGraphError.isError">
+    <HttpErrorEmptyState
+      id="http-error-empty-state"
+      :errorDescription="fatalGraphError.description"
+      :errorStatusText="fatalGraphError.statusText"
+      :errorCode="fatalGraphError.code"
+    />
   </div>
   <div v-else>
     <div id="no-results-message" v-if="response == null">
@@ -64,6 +83,7 @@ import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import ViewCanvas from "@/Canvas/ViewCanvas.vue";
 import EditCanvas from "@/Canvas/EditCanvas.vue";
 import submitExperimentModal from "@/Canvas/Modals/submitExperimentModal.vue";
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import { ref, defineProps, onMounted } from "vue";
 import { dagStore } from "@/Canvas/stores/dagStore";
 import { createDAG } from "@/Canvas/createDAG";
@@ -86,6 +106,8 @@ const toggleEditButtonClicked = () => {
   getGraphTransforms();
 };
 
+let errors = [];
+
 const getGraphTransforms = () => {
   axios
     .get(
@@ -98,11 +120,25 @@ const getGraphTransforms = () => {
       } else {
         transforms.value = [];
       }
+    })
+    .catch((error) => {
+      errors.push({
+        description: "Unable to load graph transformations",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
     });
 };
 
 let graphLoading = ref(true);
 let response = ref(null);
+
+let fatalGraphError = {
+  isError: false,
+  statusText: "",
+  code: 0,
+  description: "Unable to load graph",
+};
 
 const getGraph = async () => {
   let graphData;
@@ -113,7 +149,20 @@ const getGraph = async () => {
       if (graphResponse.data.length != 0) {
         graphData = graphResponse.data;
       }
+    })
+    .catch((error) => {
+      if (!fatalGraphError.isError) {
+        fatalGraphError.statusText = error.response.statusText;
+        fatalGraphError.code = error.response.status;
+        fatalGraphError.isError = true;
+      }
+      errors.push({
+        description: "Unable to load graph data",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
     });
+
   await axios
     .get(
       window.location.origin + "/registry-ui/backend/experiments/" + props.id,
@@ -122,11 +171,25 @@ const getGraph = async () => {
       if (inputsResponse.data.length != 0) {
         inputsData = inputsResponse.data.entry;
       }
+    })
+    .catch((error) => {
+      if (!fatalGraphError.isError) {
+        fatalGraphError.statusText = error.response.statusText;
+        fatalGraphError.code = error.response.status;
+        fatalGraphError.isError = true;
+      }
+      errors.push({
+        description: "Unable to load input data",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
     });
 
-  const elements = ref(createDAG(graphData, inputsData));
-  response.value = elements.value;
-  dagStore.setDAG(elements);
+  if (!fatalGraphError.isError) {
+    const elements = ref(createDAG(graphData, inputsData));
+    response.value = elements.value;
+    dagStore.setDAG(elements);
+  }
   graphLoading.value = false;
 };
 
@@ -147,6 +210,8 @@ let isPreview = ref(false);
 const getPreviewGraph = async () => {
   let graphData;
   let inputsData;
+  let previewError = false;
+
   await axios
     .get(
       window.location.origin +
@@ -158,7 +223,16 @@ const getPreviewGraph = async () => {
       if (graphResponse.data.length != 0) {
         graphData = graphResponse.data;
       }
+    })
+    .catch((error) => {
+      previewError = true;
+      errors.push({
+        description: "Unable to load graph preview data",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
     });
+
   await axios
     .get(
       window.location.origin +
@@ -170,13 +244,24 @@ const getPreviewGraph = async () => {
       if (inputsResponse.data.length != 0) {
         inputsData = inputsResponse.data.entry;
       }
+    })
+    .catch((error) => {
+      previewError = true;
+      errors.push({
+        description: "Unable to load input preview data",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
     });
 
-  const elements = ref(createDAG(graphData, inputsData));
-  response.value = elements.value;
-  dagStore.setDAG(elements);
+  if (!previewError) {
+    const elements = ref(createDAG(graphData, inputsData));
+    response.value = elements.value;
+    dagStore.setDAG(elements);
+
+    isPreview.value = true;
+  }
   graphLoading.value = false;
-  isPreview.value = true;
 };
 
 const postNewExperiment = (experimentName) => {
@@ -189,7 +274,14 @@ const postNewExperiment = (experimentName) => {
       setTimeout(() => {
         router.push({ path: `/experiment/${experimentName}` });
       }, "5000"),
-    );
+    )
+    .catch((error) => {
+      errors.push({
+        description: "Unable to submit experiment",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
+    });
 };
 
 let modalVisibilities = {
@@ -201,7 +293,15 @@ const toggleModalVisibility = (modal) => {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+@use "@carbon/layout";
+
+@import "@/styles/toast-notification-styles.scss";
+
+#http-error-empty-state {
+  min-height: 70vh;
+}
+
 #loadingContainer {
   width: 100%;
   height: calc(100vh - 12rem);

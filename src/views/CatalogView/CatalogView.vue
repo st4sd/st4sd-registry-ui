@@ -6,6 +6,16 @@
 -->
 <template>
   <div>
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-if="isError"
+        kind="error"
+        :title="errorDescription"
+        :caption="errorStatusText + ' (error ' + errorCode + ')'"
+        timeout="10000"
+      >
+      </bx-toast-notification>
+    </div>
     <!-- Navigation breadcrumb -->
     <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
 
@@ -15,6 +25,7 @@
         :experiments="this.experiments"
         @updateSearchedExperiments="updateSearchedExperiments"
         @LoadingWheelStatusChanged="updateLoadingWheelStatus"
+        @updateErrorHandling="updateErrorHandling"
       />
 
       <!-- Filter column -->
@@ -28,11 +39,19 @@
 
         <!-- Card rows and columns -->
         <div class="cds--col-lg-12">
+          <HttpErrorEmptyState
+            id="http-error-empty-state"
+            :errorDescription="errorDescription"
+            :errorStatusText="errorStatusText"
+            :errorCode="errorCode"
+            v-if="isError"
+          />
           <St4sdExperimentCards
             :searchedExperiments="this.searchedExperiments"
             :selectedFilters="this.selectedFilters"
             :experiments="this.experiments"
             :experimentsLoading="this.experimentsLoading"
+            v-else
           />
         </div>
       </div>
@@ -60,6 +79,7 @@ import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.
 import St4sdAdvancedSearchFilter from "@/components/St4sdAdvancedSearchFilter/St4sdAdvancedSearchFilter.vue";
 import St4sdExperimentCards from "@/components/St4sdExperimentCards/St4sdExperimentCards.vue";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 export default {
   name: "CatalogView",
@@ -68,6 +88,7 @@ export default {
     St4sdAdvancedSearchFilter,
     St4sdExperimentCards,
     St4sdBreadcrumb,
+    HttpErrorEmptyState,
   },
   data() {
     return {
@@ -76,6 +97,10 @@ export default {
       experiments: [],
       breadcrumbs: [{ name: "Virtual Experiments", path: "/" }],
       experimentsLoading: false,
+      isError: false,
+      errorStatusText: "",
+      errorCode: 0,
+      errorDescription: "Unable to load experiments",
     };
   },
   mounted() {
@@ -84,6 +109,11 @@ export default {
       .then((response) => {
         this.experiments = response.data.entries;
         this.searchedExperiments = response.data.entries;
+      })
+      .catch((error) => {
+        this.errorStatusText = error.response.statusText;
+        this.errorCode = error.response.status;
+        this.isError = true;
       });
   },
   methods: {
@@ -96,14 +126,26 @@ export default {
     updateLoadingWheelStatus(loadingWheelStatus) {
       this.experimentsLoading = loadingWheelStatus;
     },
+    updateErrorHandling(error) {
+      this.errorStatusText = error.response.statusText;
+      this.errorCode = error.response.status;
+      this.isError = true;
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "@carbon/grid";
 @use "@carbon/layout";
 @include grid.flex-grid();
+
+@import "@/styles/toast-notification-styles.scss";
+
+#http-error-empty-state {
+  min-height: 24rem;
+  margin-top: 1rem;
+}
 
 .breadcrumb {
   padding-bottom: layout.$spacing-07;

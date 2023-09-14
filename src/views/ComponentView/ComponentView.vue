@@ -5,6 +5,17 @@
   Author: Alessandro Pomponio
 -->
 <template>
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="error in errors"
+      :key="error.call"
+      kind="error"
+      :title="error.description"
+      :caption="error.statusText + ' (error ' + error.code + ')'"
+      timeout="10000"
+    >
+    </bx-toast-notification>
+  </div>
   <div>
     <St4sdBreadcrumb
       :breadcrumbs="[
@@ -58,6 +69,7 @@
         hidden
       >
         <RunComponentsTable
+          @updateComponentErrorHandling="updateComponentErrorHandling"
           :experiment_id="experiment_id"
           :instance_id="instance_id"
         />
@@ -69,6 +81,7 @@
         hidden
       >
         <RunPropertiesTable
+          @updatePropertyErrorHandling="updatePropertyErrorHandling"
           :experiment_id="experiment_id"
           :rest_uid="instance_id"
         />
@@ -91,7 +104,6 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 export default {
   name: "RunView",
   components: { St4sdBreadcrumb, RunComponentsTable, RunPropertiesTable },
-  methods: { getDeploymentEndpoint },
   props: {
     experiment_id: {
       type: String,
@@ -103,12 +115,37 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      errors: [],
+    };
+  },
+  methods: {
+    getDeploymentEndpoint,
+    updateComponentErrorHandling(error) {
+      this.errors.push({
+        call: "Components",
+        description: "Unable to fetch components",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
+    },
+    updatePropertyErrorHandling(error) {
+      this.errors.push({
+        call: "Properties",
+        description: "Unable to fetch properties",
+        statusText: error.response.statusText,
+        code: error.response.status,
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@use "@carbon/layout";
+
+@import "@/styles/toast-notification-styles.scss";
+
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;

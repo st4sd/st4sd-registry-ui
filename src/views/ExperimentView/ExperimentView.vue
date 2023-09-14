@@ -7,6 +7,17 @@
 <template>
   <!-- Navigation breadcrumb -->
   <div>
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-for="error in errors"
+        :key="error.description"
+        kind="error"
+        :title="error.description"
+        :caption="error.statusText + ' (error ' + error.code + ')'"
+        timeout="10000"
+      >
+      </bx-toast-notification>
+    </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
         { name: 'Virtual Experiments', path: '/' },
@@ -37,6 +48,17 @@
             <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
           </bx-progress-indicator-skeleton>
         </div>
+      </div>
+    </template>
+
+    <template v-else-if="experimentError.code != 0">
+      <div class="empty-state">
+        <HttpErrorEmptyState
+          id="http-error-empty-state"
+          :errorDescription="experimentError.description"
+          :errorStatusText="experimentError.statusText"
+          :errorCode="experimentError.code"
+        />
       </div>
     </template>
 
@@ -71,7 +93,6 @@
           name="package-information"
           :id="id"
         />
-
         <PackageInfoBaseVue :experiment="experiment" />
         <PackageInfoContainerVue :experiment="experiment" />
         <PackageInfoMetadataVue
@@ -79,7 +100,12 @@
           :getAvailablePlatforms="getAvailablePlatforms()"
           :tags="tags"
         />
-        <ExperimentHistoryVue :history="history" :data="data" :id="id" />
+        <ExperimentHistoryVue
+          :error="historyError"
+          :history="history"
+          :data="data"
+          :id="id"
+        />
         <AddPackageVue :exp_python="exp_python" />
         <ExperimentJSONVue
           :exp_no_interface="exp_no_interface"
@@ -143,6 +169,8 @@ import ExperimentJSONVue from "@/components/ExperimentView/ExperimentJSON.vue";
 import { registryUISharedState } from "@/stores/registryUISharedState";
 import axios from "axios";
 
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
 export default {
   name: "ExperimentView",
   components: {
@@ -158,6 +186,7 @@ export default {
     ExperimentJSONVue,
     TitleElement,
     St4sdBreadcrumb,
+    HttpErrorEmptyState,
   },
   props: {
     id: {
@@ -178,6 +207,17 @@ export default {
       isCanvasDisabled: false,
       isParameterisationEnabled: false,
       isRunExperimentEnabled: false,
+      errors: [],
+      experimentError: {
+        description: "Unable to load experiment",
+        statusText: "",
+        code: 0,
+      },
+      historyError: {
+        description: "Unable to load experiment history",
+        statusText: "",
+        code: 0,
+      },
     };
   },
   mounted() {
@@ -188,6 +228,13 @@ export default {
       )
       .then((response) => {
         this.experiment = response.data.entry;
+      })
+      .catch((error) => {
+        this.experimentError.statusText = error.response.statusText;
+        this.experimentError.code = error.response.status;
+        this.errors.push(this.experimentError);
+      })
+      .finally(() => {
         this.loading--;
       });
 
@@ -206,6 +253,17 @@ export default {
             delete this.exp_no_interface.base.packages[i].source.git.version;
           }
         }
+      })
+      .catch((error) => {
+        //Used description for description display name as it's the UI section it appears under
+        this.errors.push({
+          description: "Unable to load experiment description",
+          statusText: error.response.statusText,
+          code: error.response.status,
+        });
+        this.exp_no_interface = {};
+      })
+      .finally(() => {
         this.loading--;
       });
 
@@ -235,6 +293,13 @@ export default {
               timesExecuted: entry.timesExecuted,
             })),
           );
+      })
+      .catch((error) => {
+        this.historyError.statusText = error.response.statusText;
+        this.historyError.code = error.response.status;
+        this.errors.push(this.historyError);
+      })
+      .finally(() => {
         this.loading--;
       });
 
@@ -248,6 +313,17 @@ export default {
       )
       .then((response) => {
         this.exp_python = response.data.entry;
+      })
+      .catch((error) => {
+        //Used 'Get this package' information for description display name as it's the UI section it appears under
+        this.errors.push({
+          description: "Unable to load 'Get this package' information",
+          statusText: error.response.statusText,
+          code: error.response.status,
+        });
+        this.exp_python = "";
+      })
+      .finally(() => {
         this.loading--;
       });
 
@@ -309,6 +385,16 @@ export default {
 @use "@carbon/grid";
 @use "@carbon/layout";
 @use "@carbon/colors";
+
+@import "@/styles/toast-notification-styles.scss";
+
+.empty-state {
+  margin: 1rem 0;
+}
+
+#http-error-empty-state {
+  min-height: 70vh;
+}
 
 bx-breadcrumb-item {
   display: inline;
