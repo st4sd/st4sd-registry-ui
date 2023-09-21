@@ -49,7 +49,7 @@
           @changeVisibility="onChangeVisibility(nodeProps, $event.value)"
         />
       </template>
-      <template #node-param="{ label }">
+      <template #node-workflow-input="{ label }">
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
@@ -228,16 +228,8 @@ const downloadJSON = () => {
   toJSON(nodesToDownload, entrypointNodeId);
 };
 </script>
-<style>
-.canvas-logo {
-  max-height: 16px;
-  max-width: 16px;
-  width: 100%;
-  height: 100%;
-  -webkit-filter: invert(0.99);
-  filter: invert(0.99);
-}
-
+<style lang="scss">
+@import "@/Canvas/main.scss";
 bx-btn::part(button) {
   padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
   margin: 0.2rem;

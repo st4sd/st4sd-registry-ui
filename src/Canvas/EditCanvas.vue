@@ -47,7 +47,7 @@
           @changeVisibility="onChangeVisibility(nodeProps, $event.value)"
         />
       </template>
-      <template #node-param="{ label }">
+      <template #node-workflow-input="{ label }">
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
@@ -243,11 +243,7 @@ const onChangeVisibility = (node, isHidden) => {
 };
 
 const downloadJSON = () => {
-  let nodesToDownload = elements.value.nodes;
-  let entrypointNodeId = ref(
-    elements.value.nodes.find((node) => node.isEntry == true).id,
-  );
-  toJSON(nodesToDownload, entrypointNodeId);
+  toJSON(nodes.value, edges.value, "experiment");
 };
 
 const emit = defineEmits(["transformSelected"]);
@@ -256,3 +252,4 @@ const handleTransformSelected = (loading, transformId) => {
   emit("transformSelected", loading, transformId);
 };
 </script>
+<style lang="scss" src="@/Canvas/main.scss"></style>

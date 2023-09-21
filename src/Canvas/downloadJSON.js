@@ -1,16 +1,17 @@
 import buildExperiment from "./buildExperiment";
 
-export function toJSON(nodes, entrypointNodeId, experimentName = "experiment") {
+export function toJSON(nodes, edges, experimentName) {
+  let entryNode = nodes.find((node) => node.isEntry == true);
   if (duplicateLabelsExist(nodes)) {
     alert(
       "2 or more WF/Components have the same name, experiment elements names has to be unique",
     );
-  } else if (entrypointNodeId.value === "") {
+  } else if (entryNode == undefined) {
     alert("Entry point is not selected, an experiment needs an entry point");
   } else {
     download(
       experimentName + ".json",
-      buildExperiment(nodes, entrypointNodeId),
+      buildExperiment(nodes, edges, entryNode),
     );
   }
 }

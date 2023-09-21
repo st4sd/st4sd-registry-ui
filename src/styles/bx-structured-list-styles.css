@@ -1,0 +1,11 @@
+.structured-list-delete-button-middle {
+  vertical-align: middle;
+}
+
+.structured-list-delete-button-bottom {
+  vertical-align: bottom;
+}
+
+bx-structured-list-cell.updateModals {
+  padding: 0rem 0.5rem 0.5rem;
+}

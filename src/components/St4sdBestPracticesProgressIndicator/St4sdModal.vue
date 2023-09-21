@@ -82,7 +82,9 @@ export default {
 };
 </script>
 
-<style lang="css" scoped src="@/styles/bx-modal-styles.css">
+<style lang="css" scoped>
+@import "@/styles/bx-modal-styles.css";
+
 .iconPaddingFix {
   border-bottom: none;
   padding-inline-start: 30%;

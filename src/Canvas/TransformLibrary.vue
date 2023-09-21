@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";

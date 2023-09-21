@@ -11,7 +11,6 @@ export function createDAG(dslData, experimentData) {
     edges: [],
     elevateEdgesOnSelect: true,
   };
-
   //Check if the entry point section exists in the file
   //If it doesn't  exist - it means this file is not an experiment
   //and just a collection of workflows and components
@@ -19,12 +18,62 @@ export function createDAG(dslData, experimentData) {
     let entryWorkflow = addEntries(graph, dslData, experimentData);
     let entryWorkflowName = entryWorkflow.signature.name;
     //add all workflows/components inside the entry workflow
-    addBlocks(graph, dslData, entryWorkflow, entryWorkflowName, "");
+    addBlocks(graph, dslData, entryWorkflow, entryWorkflowName);
     //add edges/connections between the blocks
     addConnection(graph, dslData, entryWorkflow, entryWorkflowName);
     graph = { ...drawGraph(graph) };
   }
 
+  return graph;
+}
+
+export function createWorkflowDAG(experimentData) {
+  let graph = {
+    nodes: [],
+    edges: [],
+    elevateEdgesOnSelect: true,
+  };
+  //Check if the entry point section exists in the file
+  //If it doesn't  exist - it means this file is not an experiment
+  //and just a collection of workflows and components
+  if (experimentData["entrypoint"] != undefined) {
+    let entryWorkflowName = experimentData["entrypoint"]["entry-instance"];
+    //get the definition of the entry workflow
+    let entryWorkflow = experimentData.workflows.find(
+      (o) => o.signature.name === entryWorkflowName,
+    );
+
+    var node = {
+      id: entryWorkflowName,
+      label: entryWorkflowName,
+      type: "workflow",
+      definition: entryWorkflow,
+      parentNode: "",
+      position: { x: 1, y: 100 },
+      style: {
+        backgroundColor: "rgba(16, 185, 129, 0.5)",
+        width: entryWorkflowName.length * 11 + "px",
+        height: "1px",
+      },
+      isEntry: true,
+    };
+    graph.nodes.push(node);
+    let workflowInput = `${entryWorkflowName}/input`;
+    addNode(
+      graph,
+      workflowInput,
+      `${entryWorkflowName} inputs`,
+      workflowInput,
+      entryWorkflowName,
+      "workflow-input",
+      "",
+    );
+    //add all workflows/components inside the entry workflow
+    addBlocks(graph, experimentData, entryWorkflow, entryWorkflowName);
+    //add edges/connections between the blocks
+    addConnection(graph, experimentData, entryWorkflow, entryWorkflowName);
+    graph = { ...drawGraph(graph) };
+  }
   return graph;
 }
 
@@ -166,25 +215,20 @@ function addEntries(graph, dslData, experimentData) {
     `${entryWorkflowName} inputs`,
     workflowInput,
     entryWorkflowName,
-    "param",
+    "workflow-input",
     "",
   );
   return entryWorkflow;
 }
 
 //This function adds nodes to DAG based on the steps of a given workflow
-function addBlocks(graph, data, workflow, prevStepId, stepParent) {
+function addBlocks(graph, data, workflow, prevStepId) {
   let workflowSteps = workflow.steps;
   for (var step in workflowSteps) {
     let stepWorkflow = data.workflows.find(
       (o) => o.signature.name === workflowSteps[step],
     );
-    let stepId;
-    if (stepParent == "") {
-      stepId = step;
-    } else {
-      stepId = `${stepParent}.${step}`;
-    }
+    let stepId = step;
     let id = `${prevStepId}.${step}`;
 
     //if the step is a workflow
@@ -193,7 +237,7 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
         graph,
         id,
         workflowSteps[step],
-        workflow,
+        stepWorkflow,
         prevStepId,
         "workflow",
         stepId,
@@ -204,11 +248,11 @@ function addBlocks(graph, data, workflow, prevStepId, stepParent) {
         `${workflowSteps[step]} inputs`,
         `${id}/input`,
         id,
-        "param",
+        "workflow-input",
         "",
       );
       //draw the blocks inside that workflow
-      addBlocks(graph, data, stepWorkflow, id, stepId);
+      addBlocks(graph, data, stepWorkflow, id);
     } else {
       let componentDefinition = data.components.find(
         (o) => o.signature.name === workflowSteps[step],
@@ -262,7 +306,7 @@ function addConnection(graph, data, workflow, workflowName) {
           arg,
           edgeDefinition,
           source,
-          "param",
+          "workflow-input",
           "",
         );
         source = `${workflowName}.${arg}`;
@@ -288,6 +332,7 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
     definition: definition,
     parentNode: parent,
     stepId: stepId,
+    isEntry: false,
   };
 
   if (parent != "") {
@@ -304,31 +349,31 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
   } else {
     let X = 10;
     let Y = 1;
-    if (type.includes("input")) {
-      //INPUT STYLE
+    //Input styles
+    if (type == executionOptionsNodeType) {
       node.type = "input";
-      if (type == executionOptionsNodeType) {
-        node.style = {
-          borderColor: "green",
-        };
-        X = 0;
-      } else if (type == presetsNodeType) {
-        node.style = {
-          borderColor: "red",
-        };
-        node.hidden = true;
-        X = 200;
-      } else if (type == otherNodeType) {
-        node.style = {
-          borderColor: "grey",
-        };
-        node.hidden = true;
-        X = 290;
-      }
-      // end of styles
-    } else if (type == "param") {
+      node.style = {
+        borderColor: "green",
+      };
+      X = 0;
+    } else if (type == presetsNodeType) {
+      node.type = "input";
+      node.style = {
+        borderColor: "red",
+      };
+      node.hidden = true;
+      X = 200;
+    } else if (type == otherNodeType) {
+      node.type = "input";
+      node.style = {
+        borderColor: "grey",
+      };
+      node.hidden = true;
+      X = 290;
+    } else if (type == "workflow-input") {
       Y = 40;
     }
+    // end of styles
     node.position = { x: X, y: Y };
     node.width = label.length * 11;
   }

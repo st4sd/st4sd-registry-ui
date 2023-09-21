@@ -1,6 +1,6 @@
 <template>
   <div class="workflow-input-node">
-    <slot name="node-param">{{ props.label }}</slot>
+    <slot name="node-workflow-input">{{ props.label }}</slot>
     <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>

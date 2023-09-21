@@ -704,7 +704,6 @@ export default {
         .then((response) => {
           this.parameterisationPayload = response.data.entry;
           this.parameterisation = response.data.entry.parameterisation;
-          console.log(this.parameterisation.presets.platform);
           this.parameterisationOptionsLoading = false;
         });
     },

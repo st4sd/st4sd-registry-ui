@@ -11,6 +11,7 @@ import RunLogView from "@/views/RunLogView";
 import ComponentLogView from "@/views/ComponentLogView";
 import RunView from "@/views/RunView";
 import PropertiesView from "@/views/PropertiesView";
+import BuildCanvasView from "@/views/BuildCanvasView";
 import ViewCanvasView from "@/views/ViewCanvasView";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -19,6 +20,11 @@ const routes = [
     path: "/",
     name: "catalog",
     component: CatalogView,
+  },
+  {
+    path: "/build-canvas",
+    name: "build canvas",
+    component: BuildCanvasView,
   },
   {
     path: "/experiment/:id",

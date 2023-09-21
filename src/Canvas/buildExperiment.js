@@ -1,11 +1,10 @@
-export default function buildExperiment(nodes, entryPointID) {
-  let entryNode = nodes.find((n) => n.id == entryPointID.value);
+export default function buildExperiment(nodes, edges, entryNode) {
   let workflows = nodes.filter(
-    (n) => n.type == "workflow" && typeof n.parentNode == "string",
+    (node) => node.type == "workflow" && typeof node.parentNode == "string",
   );
 
   let components = nodes.filter(
-    (n) => n.type == "" && typeof n.parentNode === "string",
+    (node) => node.type == "" && typeof node.parentNode === "string",
   );
 
   let result = {};
@@ -23,9 +22,14 @@ export default function buildExperiment(nodes, entryPointID) {
       workflows: [],
       components: [],
     };
-    initialiseEntrypoint(result, nodes);
-    workflows.forEach((workflow) => result.workflows.push(workflow.definition));
-
+    //initialiseEntrypoint(result, nodes);
+    workflows.forEach((workflow) => {
+      //before adding the workflows to the experiment dsl, the definition needs
+      //to be updated to reflect the edges
+      //information in edges will form the execute part of a workflow definition
+      createExecutionConfig(workflow, nodes, edges);
+      result.workflows.push(workflow.definition);
+    });
     //Component
     components.forEach((component) =>
       result.components.push(component.definition),
@@ -35,13 +39,72 @@ export default function buildExperiment(nodes, entryPointID) {
   return result;
 }
 
-function initialiseEntrypoint(result, nodes) {
-  let inputs = nodes.filter((o) => o.type === "input");
-  if (inputs != undefined) {
-    for (var input in inputs) {
-      result.entrypoint.execute[0].args[inputs[input].label] =
-        inputs[input].definition;
+//To be revised now that how we handle experiment inputs have changed
+// function initialiseEntrypoint(result, nodes) {
+//   let inputs = nodes.filter((node) => node.type === "input");
+//   if (inputs != undefined) {
+//     for (var input in inputs) {
+//       result.entrypoint.execute[0].args[inputs[input].label] =
+//         inputs[input].definition;
+//     }
+//   }
+//   return result;
+// }
+
+function createExecutionConfig(workflow, nodes, edges) {
+  let newExecute = [];
+  workflow.stepReference = "";
+  setStepReferences(workflow, workflow.stepReference, nodes);
+  let workflowStepsNodes = nodes.filter(
+    (node) => node.parentNode == workflow.id && node.type != "workflow-input",
+  );
+  workflowStepsNodes.forEach((stepNode) => {
+    let execution = {
+      target: `<${stepNode.stepId}>`,
+      args: {},
+    };
+    let incomingEdges = edges.filter((edge) => edge.target == stepNode.id);
+    incomingEdges.forEach((edge) => {
+      //To account for nodes coming into the canvas using the
+      //export to build canvas button on the view canvas
+      //Will be removed once that function is finalised
+      if (edge.sourceNode.id.includes("dnd")) {
+        Object.keys(edge.definition).forEach((argument) => {
+          if (edge.sourceNode.stepId == "") {
+            execution.args[argument] = edge.definition[argument];
+          } else {
+            execution.args[argument] = edge.definition[argument].replace(
+              edge.source,
+              edge.sourceNode.stepReference,
+            );
+          }
+        });
+      } else {
+        Object.keys(edge.definition).forEach((argument) => {
+          execution.args[argument] = edge.definition[argument].replace(
+            edge.sourceNode.id,
+            edge.sourceNode.stepReference,
+          );
+        });
+      }
+    });
+    newExecute.push(execution);
+  });
+  workflow.definition.execute = newExecute;
+}
+
+function setStepReferences(workflow, stepReference, nodes) {
+  let workflowStepsNodes = nodes.filter(
+    (node) => node.parentNode == workflow.id && node.type != "workflow-input",
+  );
+  workflowStepsNodes.forEach((node) => {
+    if (stepReference == "") {
+      node.stepReference = node.stepId;
+    } else {
+      node.stepReference = `${stepReference}.${node.stepId}`;
     }
-  }
-  return result;
+    if (node.type == "workflow") {
+      setStepReferences(node, node.stepReference, nodes);
+    }
+  });
 }

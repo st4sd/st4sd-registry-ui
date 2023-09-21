@@ -1,5 +1,5 @@
 <template>
-  <bx-modal class="no-transform">
+  <bx-modal open class="no-transform">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading>{{ title }}</bx-modal-heading>
@@ -29,7 +29,9 @@
           </bx-structured-list>
         </bx-accordion-item>
 
-        <bx-accordion-item title-text="Parameters">
+        <bx-accordion-item
+          :title-text="'Parameters (' + workflowParams.length + ')'"
+        >
           <bx-structured-list>
             <bx-structured-list-head>
               <bx-structured-list-header-row>
@@ -65,7 +67,9 @@
           </bx-structured-list>
         </bx-accordion-item>
 
-        <bx-accordion-item title-text="Steps">
+        <bx-accordion-item
+          :title-text="'Steps (' + Object.keys(workflowSteps).length + ')'"
+        >
           <bx-structured-list>
             <bx-structured-list-head>
               <bx-structured-list-header-row>
@@ -183,7 +187,9 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped src="@/styles/bx-modal-styles.css">
+<style lang="css" scoped>
+@import "@/styles/bx-modal-styles.css";
+
 bx-accordion-item::part(content) {
   /* border: dashed 2px black; */
   padding-right: 1rem;

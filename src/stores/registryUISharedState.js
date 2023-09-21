@@ -1,43 +1,55 @@
 import { reactive } from "vue";
+import getValueForEnvVar from "@/functions/get_value_for_env_var";
 
 export const registryUISharedState = reactive({
   settings: {},
   isGlobalRegistry: true,
   isCanvasDisabled: true,
+  isBuildCanvasEnabled: false,
   isParameterisationEnabled: false,
   isRunExperimentEnabled: false,
 
   setSettings(obj) {
     this.settings = obj;
     this.setIsGlobalRegistry(
-      "ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL"] == "yes",
+      getValueForEnvVar("ST4SD_REGISTRY_UI_SETTINGS_IS_GLOBAL", obj) == "yes",
     );
     this.setIsCanvasDisabled(
-      "ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS"] == "yes",
+      getValueForEnvVar("ST4SD_REGISTRY_UI_SETTINGS_DISABLE_CANVAS", obj) ==
+        "yes",
     );
     this.setIsParameterisationEnabled(
-      "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_EDIT_PARAMETERISATION" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_ENABLE_EDIT_PARAMETERISATION"] == "yes",
+      getValueForEnvVar(
+        "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_EDIT_PARAMETERISATION",
+        obj,
+      ) == "yes",
     );
     this.setIsRunExperimentEnabled(
-      "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_RUN_EXPERIMENT" in obj &&
-        obj["ST4SD_REGISTRY_UI_SETTINGS_ENABLE_RUN_EXPERIMENT"] == "yes",
+      getValueForEnvVar(
+        "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_RUN_EXPERIMENT",
+        obj,
+      ) == "yes",
+    );
+    this.setIsBuildCanvasEnabled(
+      !this.isCanvasDisabled &&
+        getValueForEnvVar(
+          "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_BUILD_CANVAS",
+          obj,
+        ) == "yes",
     );
   },
   setIsGlobalRegistry(obj) {
     this.isGlobalRegistry = obj;
   },
-
   setIsCanvasDisabled(obj) {
     this.isCanvasDisabled = obj;
   },
-
+  setIsBuildCanvasEnabled(obj) {
+    this.isBuildCanvasEnabled = obj;
+  },
   setIsParameterisationEnabled(obj) {
     this.isParameterisationEnabled = obj;
   },
-
   setIsRunExperimentEnabled(obj) {
     this.isRunExperimentEnabled = obj;
   },

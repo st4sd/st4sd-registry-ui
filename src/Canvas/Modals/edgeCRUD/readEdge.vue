@@ -1,5 +1,5 @@
 <template>
-  <bx-modal class="no-transform">
+  <bx-modal open class="no-transform">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading>{{ title }}</bx-modal-heading>
@@ -17,7 +17,10 @@
           </bx-structured-list-header-row>
         </bx-structured-list-head>
         <bx-structured-list-body>
-          <bx-structured-list-row v-for="key in edge.argName" :key="key">
+          <bx-structured-list-row
+            v-for="key in Object.keys(edge.definition)"
+            :key="key"
+          >
             <bx-structured-list-cell>{{ key }}</bx-structured-list-cell>
             <bx-structured-list-cell>{{
               edge.definition[key]

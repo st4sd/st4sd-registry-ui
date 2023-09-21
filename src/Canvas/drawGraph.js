@@ -4,7 +4,7 @@ const componentHorizontalSpacing = 20;
 const componentDefaultHeight = 35;
 //measurments variables - Workflows
 const workflowHorizontalIndent = 10;
-const workflowVerticalIndent = 80;
+const workflowVerticalIndent = 10;
 const workflowHorizontalSpacing = 20;
 const workflowVerticalSpacing = 80;
 //measurments variables - General
@@ -73,7 +73,7 @@ function draw(startWorkflow, graph, drawn) {
             addToDrawnArray(child, drawn);
             childrenCounter--;
             //removeItem(childrenCounter, child);
-            draw(graph, drawn, child);
+            draw(child, graph, drawn);
           } else {
             addToDrawnArray(child, drawn);
             childrenCounter--;
@@ -226,7 +226,7 @@ function fixWorkflowsHeight(drawn, workflow) {
 
 function fixInputPositions(drawn) {
   for (var node of drawn.nodes) {
-    if (node.type == "param") {
+    if (node.type == "workflow-input") {
       let nodeParent = drawn.nodes.find((n) => n.id == node.parentNode);
       let parentWidth = parseInt(nodeParent.style.width.split("px")[0]);
       let parentCentre = parentWidth / 2;

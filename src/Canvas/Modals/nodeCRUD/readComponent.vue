@@ -1,23 +1,13 @@
 <template>
-  <bx-modal class="no-transform">
+  <bx-modal open class="no-transform">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading>{{ title }}</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
       <bx-accordion>
-        <bx-accordion-item data-modal-primary-focus open title-text="Overview">
+        <bx-accordion-item open data-modal-primary-focus title-text="Overview">
           <bx-structured-list>
-            <bx-structured-list-head>
-              <bx-structured-list-header-row>
-                <bx-structured-list-header-cell
-                  >Name</bx-structured-list-header-cell
-                >
-                <bx-structured-list-header-cell
-                  >Definition</bx-structured-list-header-cell
-                >
-              </bx-structured-list-header-row>
-            </bx-structured-list-head>
             <bx-structured-list-body>
               <bx-structured-list-row v-if="componentName != undefined">
                 <bx-structured-list-cell>Name</bx-structured-list-cell>
@@ -896,11 +886,7 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped src="@/styles/bx-modal-styles.css">
-bx-accordion-item::part(content) {
-  padding-right: 1rem;
-}
-:host(.a) {
-  border: 1px solid red;
-}
+<style lang="css" scoped>
+@import "@/styles/bx-accordion-styles.css";
+@import "@/styles/bx-modal-styles.css";
 </style>
