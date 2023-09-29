@@ -7,11 +7,7 @@
 <template>
   <div>
     <st4sd-header />
-    <div
-      class="bx-content"
-      id="#main-content"
-      style="padding: 2rem; will-change: margin-left"
-    >
+    <div id="main-content" class="bx--grid">
       <router-view />
     </div>
     <dds-back-to-top></dds-back-to-top>
@@ -33,12 +29,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "./styles/carbon";
+<style>
+#main-content {
+  margin: 2rem;
+}
 
 @media screen and (max-width: 671px) {
-  .bx--content {
-    padding: 2rem 1rem;
+  #main-content {
+    margin: 1.5rem;
   }
 }
 </style>

@@ -1,32 +1,30 @@
 <template>
-  <div class="cds--grid">
-    <div>
-      <div class="card-row" id="experimentLoadingContainer" v-if="loading">
-        <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
-      </div>
+  <div>
+    <div class="card-row" id="experimentLoadingContainer" v-if="loading">
+      <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
+    </div>
 
-      <div v-else class="cds--row">
-        <div v-if="data.length != 0">
-          <bx-dropdown
-            label="Y-Axis Data Selector"
-            :value="graphHeader"
-            @bx-dropdown-selected="graphHeader = $event.target.value"
+    <div v-else class="cds--row">
+      <div v-if="data.length != 0">
+        <bx-dropdown
+          label="Y-Axis Data Selector"
+          :value="graphHeader"
+          @bx-dropdown-selected="graphHeader = $event.target.value"
+        >
+          <bx-dropdown-item
+            v-for="(header, idx) in dynamicDataHeaders"
+            v-bind:key="idx"
+            v-bind:value="header"
+            >{{ header }}</bx-dropdown-item
           >
-            <bx-dropdown-item
-              v-for="(header, idx) in dynamicDataHeaders"
-              v-bind:key="idx"
-              v-bind:value="header"
-              >{{ header }}</bx-dropdown-item
-            >
-          </bx-dropdown>
-        </div>
-        <div id="no-results-message" v-else>
-          <p>No Graphs Available</p>
-        </div>
+        </bx-dropdown>
+      </div>
+      <div id="no-results-message" v-else>
+        <p>No Graphs Available</p>
       </div>
     </div>
-    <div id="chart-area" class="cds--row"></div>
   </div>
+  <div id="chart-area" class="cds--row"></div>
 </template>
 
 <script>

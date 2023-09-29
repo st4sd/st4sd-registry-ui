@@ -1,0 +1,438 @@
+<template>
+  <div class="cds--row tab" v-if="tabSelector == 'platforms'">
+    <div
+      class="cds--col-lg-14 cds--col-md-6"
+      v-if="parameterisation.presets.platform != undefined"
+    >
+      <h3>Platform</h3>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell
+              >Name</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Type</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row>
+            <dds-structured-list-cell>{{
+              parameterisation.presets.platform
+            }}</dds-structured-list-cell>
+            <dds-structured-list-cell>Preset</dds-structured-list-cell>
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+    <div
+      class="cds--col-lg-14 cds--col-md-6"
+      v-else-if="parameterisation.executionOptions.platform.length != 0"
+    >
+      <h3>Platform</h3>
+      <p v-if="parameterisation.executionOptions.platform.length < 2">
+        When launching the workflow, the platform can be set to any value, with
+        the default being:
+      </p>
+      <p v-else>
+        When launching the workflow, the platform can be set to one of the
+        following values:
+      </p>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell class="list-spacing"
+              >Name</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Type</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row
+            v-for="(platform, idx) in parameterisation.executionOptions
+              .platform"
+            :key="idx"
+          >
+            <dds-structured-list-cell class="list-spacing">{{
+              platform
+            }}</dds-structured-list-cell>
+            <dds-structured-list-cell
+              >Execution Option</dds-structured-list-cell
+            >
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+    <div v-else class="cds--col-lg-14 cds--col-md-6">
+      <h3>Platform</h3>
+      <p>
+        When launching the workflow, the platform can be set to any value, with
+        the default being:
+      </p>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell class="list-spacing"
+              >Name</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Type</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row>
+            <dds-structured-list-cell class="list-spacing"
+              >default</dds-structured-list-cell
+            >
+            <dds-structured-list-cell
+              >Execution Option</dds-structured-list-cell
+            >
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+  </div>
+  <div v-if="tabSelector == 'variables'" class="cds--row tab">
+    <div
+      v-if="variables != undefined && variables.length != 0"
+      class="cds--col-lg-14 cds--col-md-6"
+    >
+      <h3>Variables</h3>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell class="list-spacing"
+              >Name</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Type</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Value</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row
+            v-for="(variable, idx) in variables"
+            :key="idx"
+          >
+            <dds-structured-list-cell class="list-spacing">{{
+              variable.name
+            }}</dds-structured-list-cell>
+            <dds-structured-list-cell>
+              <span v-if="variable.type == 'presets'">Preset</span>
+              <span v-else-if="variable.type == 'default'">Default</span>
+              <span v-else>Execution Option</span>
+            </dds-structured-list-cell>
+            <dds-structured-list-cell>
+              <p
+                v-if="variable.value != undefined && variable.type == 'presets'"
+              >
+                {{ variable.value }}
+              </p>
+              <span
+                v-else-if="
+                  variable.type == 'executionOptions' && variable.value == ''
+                "
+              >
+                <p>Any value accepted</p>
+                <p>Default: set by platform</p>
+              </span>
+              <span
+                v-else-if="
+                  'value' in variable && variable.type == 'executionOptions'
+                "
+              >
+                <p>Any value accepted</p>
+                <p>Default: {{ variable.value }}</p>
+              </span>
+              <span
+                v-else-if="
+                  'valueFrom' in variable && variable.type == 'executionOptions'
+                "
+              >
+                <p>Possible Values:</p>
+                <p v-for="(value, idx) in variable.valueFrom" :key="idx">
+                  -{{ value.value }}
+                </p>
+              </span>
+              <span v-else-if="variable.type == 'default'">
+                <span
+                  v-if="
+                    allPlatformHaveSameValue(
+                      this.executionOptionsDefaults.variables.find(
+                        (item) => item.name == variable.name,
+                      ).valueFrom,
+                    )
+                  "
+                >
+                  <p>Set by platform:</p>
+                  <p>
+                    - All platforms:
+                    {{
+                      this.executionOptionsDefaults.variables.find(
+                        (item) => item.name == variable.name,
+                      ).valueFrom[0].value
+                    }}
+                  </p>
+                </span>
+                <span v-else>
+                  <p>Set by platform:</p>
+                  <p
+                    v-for="(platform, index) in findPlatformValues(variable)"
+                    :key="index"
+                  >
+                    -{{ platform.platform }}: {{ platform.value }}
+                  </p>
+                </span>
+              </span>
+            </dds-structured-list-cell>
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+  </div>
+  <div v-if="tabSelector == 'data'" class="cds--row tab">
+    <div
+      class="cds--col-lg-14 cds--col-md-6"
+      v-if="executionOptionsData.length != 0 || presetData.length != 0"
+    >
+      <h3>Data Files</h3>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell class="list-spacing"
+              >File</dds-structured-list-header-cell
+            >
+            <dds-structured-list-header-cell
+              >Type</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row v-for="(file, idx) in presetData" :key="idx">
+            <dds-structured-list-cell class="list-spacing">{{
+              file
+            }}</dds-structured-list-cell>
+            <dds-structured-list-cell>Preset</dds-structured-list-cell>
+          </dds-structured-list-row>
+          <dds-structured-list-row
+            v-for="(file, idx) in executionOptionsData"
+            :key="idx"
+          >
+            <dds-structured-list-cell class="list-spacing">{{
+              file.name
+            }}</dds-structured-list-cell>
+            <dds-structured-list-cell
+              >Execution Option</dds-structured-list-cell
+            >
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+    <div v-else>
+      <div class="cds--col-lg-16 cds--col-md-8">
+        <h3>Data Files</h3>
+        <p>No Data Files</p>
+      </div>
+    </div>
+  </div>
+  <div v-if="tabSelector == 'input'" class="cds--row tab">
+    <div class="cds--col-lg-14 cds--col-md-6" v-if="inputs != undefined">
+      <h3>Input Files</h3>
+      <dds-structured-list>
+        <dds-structured-list-head>
+          <dds-structured-list-header-row>
+            <dds-structured-list-header-cell class="list-spacing"
+              >File</dds-structured-list-header-cell
+            >
+          </dds-structured-list-header-row>
+        </dds-structured-list-head>
+        <dds-structured-list-body>
+          <dds-structured-list-row v-for="(input, idx) in inputs" :key="idx">
+            <dds-structured-list-cell class="list-spacing">{{
+              input.name
+            }}</dds-structured-list-cell>
+          </dds-structured-list-row>
+        </dds-structured-list-body>
+      </dds-structured-list>
+    </div>
+    <div v-else>
+      <div class="cds--col-lg-16 cds--col-md-8">
+        <h3>Input Files</h3>
+        <p>No Input Files</p>
+      </div>
+    </div>
+  </div>
+  <div v-if="tabSelector == 'runtime'" class="tab">
+    <div class="cds--row">
+      <div
+        v-if="runtimeArgs != undefined && runtimeArgs.length != 0"
+        class="cds--col-lg-14 cds--col-md-6"
+      >
+        <h3>Runtime Args</h3>
+        <dds-structured-list>
+          <dds-structured-list-head>
+            <dds-structured-list-header-row>
+              <dds-structured-list-header-cell class="list-spacing"
+                >Name</dds-structured-list-header-cell
+              >
+            </dds-structured-list-header-row>
+          </dds-structured-list-head>
+          <dds-structured-list-body>
+            <dds-structured-list-row
+              v-for="(arg, idx) in runtimeArgs"
+              :key="idx"
+            >
+              <dds-structured-list-cell class="list-spacing">{{
+                arg
+              }}</dds-structured-list-cell>
+            </dds-structured-list-row>
+          </dds-structured-list-body>
+        </dds-structured-list>
+      </div>
+      <div v-else>
+        <div class="cds--col-lg-16 cds--col-md-8">
+          <h3>Runtime Args</h3>
+          <p>No Runtime Args Set</p>
+        </div>
+      </div>
+    </div>
+    <div class="cds--row">
+      <div
+        v-if="
+          orchestratorResources != undefined &&
+          Object.keys(orchestratorResources).length != 0
+        "
+        class="cds--col-lg-14 cds--col-md-6"
+      >
+        <h3 id="orchestrator-resources">Orchestrator Resources</h3>
+        <dds-structured-list>
+          <dds-structured-list-head>
+            <dds-structured-list-header-row>
+              <dds-structured-list-header-cell class="list-spacing"
+                >Resource</dds-structured-list-header-cell
+              >
+              <dds-structured-list-header-cell
+                >Value</dds-structured-list-header-cell
+              >
+            </dds-structured-list-header-row>
+          </dds-structured-list-head>
+          <dds-structured-list-body>
+            <dds-structured-list-row>
+              <dds-structured-list-cell class="list-spacing"
+                >CPU</dds-structured-list-cell
+              >
+              <dds-structured-list-cell>{{
+                orchestratorResources.cpu
+              }}</dds-structured-list-cell>
+            </dds-structured-list-row>
+            <dds-structured-list-row>
+              <dds-structured-list-cell class="list-spacing"
+                >Memory</dds-structured-list-cell
+              >
+              <dds-structured-list-cell>{{
+                orchestratorResources.memory
+              }}</dds-structured-list-cell>
+            </dds-structured-list-row>
+          </dds-structured-list-body>
+        </dds-structured-list>
+      </div>
+      <div v-else>
+        <div class="cds--col-lg-16 cds--col-md-8">
+          <h3 id="orchestrator-resources">Orchestrator Resources</h3>
+          <p>No Orchestrator Resources</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "ReadParamterisationOptions",
+  props: {
+    tabSelector: String,
+    parameterisation: Object,
+    inputs: Array,
+    variables: Array,
+    dataOptionsProp: Array,
+    dataExecutionOptionsProp: Array,
+    runtimeArgs: Array,
+    orchestratorResources: Object,
+    executionOptionsDefaults: Object,
+  },
+  data() {
+    return {
+      presetData: null,
+      executionOptionsData: null,
+    };
+  },
+  watch: {
+    dataExecutionOptionsProp: {
+      // the callback will be called immediately after the start of the observation
+      immediate: true,
+      handler() {
+        this.executionOptionsData = this.dataExecutionOptionsProp;
+        if (this.executionOptionsData.length == 0) {
+          this.presetData = this.dataOptionsProp.map((option) => option.name);
+        } else {
+          let dataOptionNames = this.dataOptionsProp.map(
+            (option) => option.name,
+          );
+          let executionOptionsDataNames = this.executionOptionsData.map(
+            (option) => option.name,
+          );
+          this.presetData = dataOptionNames.filter(
+            (name) => executionOptionsDataNames.indexOf(name) == -1,
+          );
+        }
+      },
+    },
+  },
+  methods: {
+    allPlatformHaveSameValue(defaultValues) {
+      return defaultValues.every(
+        (value) => value.value == defaultValues[0].value,
+      );
+    },
+    findPlatformValues(variable) {
+      return this.executionOptionsDefaults.variables.find(
+        (item) => item.name == variable.name,
+      ).valueFrom;
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+@use "@carbon/layout";
+p {
+  font-size: 0.875rem;
+}
+
+h3 {
+  padding-bottom: layout.$spacing-05;
+}
+
+.tab {
+  margin-left: layout.$spacing-07;
+  margin-right: layout.$spacing-07;
+}
+.execution-options-input {
+  width: 100%;
+}
+
+.list-spacing {
+  min-width: 12rem;
+}
+
+#orchestrator-resources {
+  padding-top: layout.$spacing-05;
+}
+</style>

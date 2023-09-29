@@ -69,8 +69,7 @@
                 />
               </dds-link-list-item>
               <dds-link-list-item
-                v-if="isParameterisationEnabled"
-                @click="toggleModalVisibility('parameterisationModal')"
+                :href="`${getDeploymentEndpoint()}experiment/${id}/parameterisation-options`"
               >
                 Parameterisation Options
                 <img
@@ -106,26 +105,8 @@
           :experiment="experiment"
         />
       </div>
-
       <formModal
-        v-if="modalVisibilities.parameterisationModal"
-        @submit="toggleParameterisationFormEmit"
-        @bx-modal-closed="toggleModalVisibility('parameterisationModal')"
-        open="true"
-        :parameterisationLoading="parameterisationLoading"
-        title="Change Experiment Parameterisation"
-      >
-        <div class="modal-content">
-          <parameterisationForm
-            :id="id"
-            :formEmit="parameterisationFormEmit"
-            :parameterisationLoading="parameterisationLoading"
-            @post-parameterisation-options="postNewParameterisation"
-          />
-        </div>
-      </formModal>
-      <formModal
-        v-if="modalVisibilities.runExperimentFormModal"
+        v-if="runExperimentFormModal"
         @submit="toggleRunExperimentFormEmit"
         @bx-modal-closed="toggleModalVisibility('runExperimentFormModal')"
         open="true"
@@ -145,7 +126,6 @@ import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
 import formModal from "@/Canvas/Modals/formModal.vue";
-import parameterisationForm from "@/Canvas/parameterisationForm.vue";
 import runExperimentForm from "@/Canvas/runExperimentForm.vue";
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta-section/index.js";
@@ -162,7 +142,6 @@ export default {
   components: {
     St4sdBestPracticesProgressIndicator,
     formModal,
-    parameterisationForm,
     runExperimentForm,
   },
   props: {
@@ -179,68 +158,20 @@ export default {
     return {
       modalActive: false,
       runModalActive: false,
-      parameterisation: null,
       runExperimentFormEmit: false,
-      parameterisationFormEmit: false,
       formDataCollected: false,
       runExperimentPayload: {},
-      modalVisibilities: {
-        parameterisationFormModal: false,
-        runExperimentFormModal: false,
-      },
-      parameterisationLoading: false,
+      runExperimentFormModal: false,
     };
-  },
-  watch: {
-    experiment: {
-      handler() {
-        if (this.experiment != undefined) {
-          this.executionOptions =
-            this.experiment.parameterisation.executionOptions;
-        }
-      },
-      deep: true,
-    },
-    parameterisationLoading() {},
   },
   methods: {
     checkVeInterfaceIsPresent,
     getDeploymentEndpoint,
     toggleModalVisibility(modal) {
-      this.modalVisibilities[modal] = !this.modalVisibilities[modal];
-    },
-    toggleParameterisationFormEmit() {
-      this.parameterisationFormEmit = !this.parameterisationFormEmit;
+      this[modal] = !this[modal];
     },
     toggleRunExperimentFormEmit() {
       this.runExperimentFormEmit = !this.runExperimentFormEmit;
-    },
-    postNewParameterisation(parameterisationPayload) {
-      this.parameterisationLoading = true;
-      let data = parameterisationPayload;
-      axios
-        .post(
-          window.location.origin +
-            `/registry-ui/backend/experiments/${this.id}`,
-          data,
-        )
-        .then((response) => {
-          if (response.status == 200) {
-            this.toggleParameterisationFormEmit();
-            this.toggleModalVisibility("parameterisationModal");
-            this.parameterisationLoading = false;
-            location.reload();
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 400) {
-            alert(`${error.response.data.message}`);
-          } else {
-            alert(
-              "Experiment not found or internal error while creating experiment",
-            );
-          }
-        });
     },
     setRunExperimentFormPayload(runExperimentPayload) {
       this.runExperimentPayload = runExperimentPayload;
@@ -290,11 +221,6 @@ export default {
       let endIndex = newStrArr.indexOf(".");
       return newStrArr.slice(0, endIndex).join("");
     },
-  },
-  mounted() {
-    this.parameterisation = {
-      ...this.experiment.parameterisation,
-    };
   },
 };
 </script>

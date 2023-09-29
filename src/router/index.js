@@ -13,6 +13,8 @@ import RunView from "@/views/RunView";
 import PropertiesView from "@/views/PropertiesView";
 import BuildCanvasView from "@/views/BuildCanvasView";
 import ViewCanvasView from "@/views/ViewCanvasView";
+import ParameterisationView from "@/views/ParameterisationView";
+
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -29,6 +31,11 @@ const routes = [
   {
     path: "/experiment/:id",
     component: ExperimentView,
+    props: true,
+  },
+  {
+    path: "/experiment/:id/parameterisation-options",
+    component: ParameterisationView,
     props: true,
   },
   {
