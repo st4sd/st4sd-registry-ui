@@ -1,7 +1,18 @@
 <template>
   <aside>
     <div id="controls">
-      <div class="title">Component Library</div>
+      <div id="title">Component Library</div>
+      <div id="buttons">
+        <bx-btn
+          title="Add Component"
+          icon-layout
+          @click="toggleAddModal"
+          size="sm"
+        >
+          <img width="16" heigth="16" src="../assets/plus.svg" />
+          New Component
+        </bx-btn>
+      </div>
       <bx-search
         placeholder="Search here"
         @keyup="updateList"
@@ -9,15 +20,6 @@
         :value="searchTerm"
         class="library-search-bar"
       />
-      <bx-btn
-        title="Add Component"
-        icon-layout
-        @click="toggleAddModal"
-        size="sm"
-      >
-        <!-- <img width="16" heigth="16" src="../assets/plus.svg" /> -->
-        Add component +
-      </bx-btn>
     </div>
     <div id="nodes-container">
       <div v-for="element in elements" :key="element.id" class="node">

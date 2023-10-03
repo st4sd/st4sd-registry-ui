@@ -140,9 +140,11 @@
   display: flex;
   height: 77vh;
 }
+
 aside {
   width: 300px;
   height: 100%;
+  padding: 2% 15px 0;
   font-weight: 700;
   font-size: 12px;
   background: black;
@@ -151,27 +153,42 @@ aside {
 }
 
 aside #controls {
-  margin: 2.5% 0;
+  height: 30%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 30%;
-  padding: 0 10px;
+}
+
+aside #title {
+  font-size: 18px;
+  color: white;
+}
+
+aside #controls #buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 aside #controls bx-btn {
-  margin-bottom: 10px;
+  width: fit-content;
+  margin: 1% 0;
+}
+
+aside #controls bx-btn::part(button) {
+  margin: 0;
 }
 
 aside #nodes-container {
   height: 65%;
   overflow-y: scroll;
-  padding: 0 10px;
 }
+
 aside .node > * {
-  width: 80%;
-  margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 2%;
   cursor: grab;
   font-weight: 500;
   -webkit-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.25);
@@ -189,51 +206,54 @@ aside .node > * {
   filter: invert(0.99);
 }
 
-.library-search-bar {
-  width: 90%;
-  margin: 10px;
-  border-radius: 5px;
-}
-aside .title {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: white;
-}
 .dndflow .vue-flow-wrapper {
   flex-grow: 1;
   height: 100%;
 }
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 672px) {
   .dndflow {
     flex-direction: column;
   }
   aside {
-    height: 400px;
     width: 100%;
+    height: 45%;
+    padding: 2%;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  aside #controls {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  aside #title {
+    font-size: 3vw;
+  }
+
+  aside #nodes-container {
+    width: 50%;
+    height: 100%;
+  }
+}
+@media screen and (max-height: 672px) and (min-width: 673px) {
+  aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   aside #controls {
-    height: 120px;
-  }
-  aside #nodes-container {
-    height: 180px;
+    height: 250px;
   }
 }
 
-@media screen and (max-height: 600px) and (min-width: 641px) {
+@media screen and (max-height: 672px) and (max-width: 672px) {
   aside #controls {
-    height: 40%;
-  }
-  aside #nodes-container {
-    height: 50%;
-  }
-}
-
-@media screen and (max-height: 450px) {
-  aside #controls {
-    height: 50%;
-  }
-  aside #nodes-container {
-    height: 40%;
+    height: 100%;
+    overflow-y: scroll;
   }
 }
 
