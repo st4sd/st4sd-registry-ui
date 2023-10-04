@@ -235,7 +235,7 @@ export default {
       tobeUpdatedNode.expandParent = false;
       this.$emit("stepDeleted", tobeUpdatedNode);
     },
-    addWorkflow() {
+    add() {
       if (!this.isError) {
         //Each workflow will generate a workflow node and an input node  for that workflow
         let { workflowNode, inputNode } = createWorkflowNode(

@@ -25,15 +25,12 @@ import workflowForm from "@/Canvas/workflowForm.vue";
 export default {
   components: { workflowForm },
   emits: ["added"],
-  props: {
-    title: String,
-  },
   data() {
     return {};
   },
   methods: {
     addWorkflow() {
-      this.$refs.workflowForm.addWorkflow();
+      this.$refs.workflowForm.add();
     },
     workflowAdded(workflowNode, inputNode) {
       this.$emit("added", workflowNode, inputNode);

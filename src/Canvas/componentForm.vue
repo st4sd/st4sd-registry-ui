@@ -1,21 +1,24 @@
 <template>
   <div>
     <bx-accordion>
-      <bx-accordion-item data-modal-primary-focus title-text="Overview" open>
+      <bx-accordion-item title-text="Overview" open>
         <bx-input
-          :value="definition.name"
-          @input="definition.name = $event.target.value"
+          data-modal-primary-focus
+          :value="component.signature.name"
+          @input="component.signature.name = $event.target.value"
+          @blur="onFocusLost($event, component.signature.name)"
           placeholder="name"
           required
+          validityMessage="Name cannot be empty"
           colorScheme="light"
         >
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Name:</span>
+          <span slot="label-text">Component name (Required)</span>
         </bx-input>
         <br />
         <bx-input
-          :value="definition.signature.description"
-          @input="definition.signature.description = $event.target.value"
+          :value="component.signature.description"
+          @input="component.signature.description = $event.target.value"
           placeholder="description"
           required
           colorScheme="light"
@@ -25,8 +28,8 @@
         </bx-input>
         <br />
         <bx-number-input
-          :value="definition.stage"
-          @input="definition.stage = $event.target.value"
+          :value="component.stage"
+          @input="component.stage = $event.target.value"
           placeholder="0"
           required
           colorScheme="light"
@@ -38,8 +41,8 @@
         <bx-input
           id="add-component-variables-input"
           type="text"
-          :value="definition.variables"
-          @input="definition.variables = $event.target.value"
+          :value="component.variables"
+          @input="component.variables = $event.target.value"
           placeholder="variables"
           colorScheme="light"
         >
@@ -48,63 +51,24 @@
         </bx-input>
         <br />
         <bx-input
-          v-if="props.parentNode != undefined"
+          v-if="parentNode != undefined"
           readonly
-          :value="parentNodeLabel + ' (ID: ' + parentNodeID + ')'"
-          @input="description = $event.target.value"
+          :value="parentNode.label + ' (ID: ' + parentNode.id + ')'"
           colorScheme="light"
         >
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
           <span slot="label-text">Parent Workflow:</span>
         </bx-input>
         <bx-btn
-          v-if="props.parentNode != undefined"
+          v-if="parentNode != undefined"
           kind="primary"
           @click="removeParentNode()"
           >Unnest</bx-btn
-        >
-      </bx-accordion-item>
-      <bx-accordion-item
-        :title-text="'References (' + componentNumReferences + ')'"
-      >
-        <bx-structured-list>
-          <bx-structured-list-body>
-            <bx-structured-list-row
-              v-for="n in parseInt(componentNumReferences)"
-              :key="n"
-            >
-              <bx-structured-list-cell class="updateModals">
-                <bx-input
-                  :value="definition.references[n - 1]"
-                  @input="definition.references[n - 1] = $event.target.value"
-                  placeholder="reference"
-                  colorScheme="light"
-                >
-                  <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text">Reference {{ n }}:</span>
-                </bx-input>
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="updateModals structured-list-delete-button-bottom"
-              >
-                <bx-btn
-                  class="button-inside-cell"
-                  kind="danger"
-                  v-if="componentNumReferences > 1"
-                  @click="decrementComponent('refs', n)"
-                >
-                  <img class="trash-can-icon" src="@/assets/trash-can.svg" />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
-          <bx-btn kind="primary" @click="incrementComponent('refs')">
-            Add
-          </bx-btn>
-        </bx-structured-list>
-      </bx-accordion-item>
-      <bx-accordion-item
-        :title-text="'Parameters (' + componentNumParams + ')'"
+        > </bx-accordion-item
+      ><bx-accordion-item
+        :title-text="
+          'Parameters (' + component.signature.parameters.length + ')'
+        "
       >
         <bx-structured-list>
           <bx-structured-list-head>
@@ -119,30 +83,24 @@
           </bx-structured-list-head>
           <bx-structured-list-body>
             <bx-structured-list-row
-              v-for="n in parseInt(componentNumParams)"
-              :key="n"
+              v-for="(parameter, index) in component.signature.parameters"
+              :key="index"
             >
               <bx-structured-list-cell class="updateModals">
                 <bx-input
-                  :value="definition.signature.parameters[n - 1].name"
-                  @input="
-                    definition.signature.parameters[n - 1].name =
-                      $event.target.value
-                  "
+                  :value="parameter.name"
+                  @input="parameter.name = $event.target.value"
                   placeholder="parameter name"
                   colorScheme="light"
                 >
                   <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text"> Parameter {{ n }} name:</span>
+                  <span slot="label-text"> Parameter {{ index }} name:</span>
                 </bx-input>
               </bx-structured-list-cell>
               <bx-structured-list-cell class="updateModals">
                 <bx-input
-                  :value="definition.signature.parameters[n - 1].default"
-                  @input="
-                    definition.signature.parameters[n - 1].default =
-                      $event.target.value
-                  "
+                  :value="parameter.default"
+                  @input="parameter.default = $event.target.value"
                   placeholder="parameter default"
                   colorScheme="light"
                 >
@@ -159,23 +117,23 @@
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="componentNumParams > 1"
-                  @click="decrementComponent('params', n)"
+                  v-if="component.signature.parameters.length > 1"
+                  @click="component.removeParameter(index)"
                 >
                   <img class="trash-can-icon" src="@/assets/trash-can.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
           </bx-structured-list-body>
-          <bx-btn kind="primary" @click="incrementComponent('params')">
+          <bx-btn kind="primary" @click="component.addParameter()">
             Add
           </bx-btn>
         </bx-structured-list>
       </bx-accordion-item>
       <bx-accordion-item title-text="Command">
         <bx-input
-          :value="definition.command.executable"
-          @input="definition.command.executable = $event.target.value"
+          :value="component.command.executable"
+          @input="component.command.executable = $event.target.value"
           placeholder="executable"
           colorScheme="light"
         >
@@ -184,8 +142,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.command.arguments"
-          @input="definition.command.arguments = $event.target.value"
+          :value="component.command.arguments"
+          @input="component.command.arguments = $event.target.value"
           placeholder="arguments"
           colorScheme="light"
         >
@@ -194,8 +152,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.command.expandArgument"
-          @input="definition.command.expandArgument = $event.target.value"
+          :value="component.command.expandArgument"
+          @input="component.command.expandArgument = $event.target.value"
           placeholder="expand argument"
           colorScheme="light"
         >
@@ -204,8 +162,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.command.environment"
-          @input="definition.command.environment = $event.target.value"
+          :value="component.command.environment"
+          @input="component.command.environment = $event.target.value"
           placeholder="environment"
           colorScheme="light"
         >
@@ -217,8 +175,8 @@
       </bx-accordion-item>
       <bx-accordion-item title-text="Workflow Attributes">
         <bx-input
-          :value="definition.workflowAttributes.replicate"
-          @input="definition.workflowAttributes.replicate = $event.target.value"
+          :value="component.workflowAttributes.replicate"
+          @input="component.workflowAttributes.replicate = $event.target.value"
           placeholder="replicate"
           colorScheme="light"
         >
@@ -227,17 +185,17 @@
         </bx-input>
         <br />
         <bx-toggle
-          checked
+          :checked="component.workflowAttributes.aggregate"
           checked-text="True"
           label-text="Aggregate:"
           unchecked-text="False"
-          @bx-toggle-changed="toggleIsAggregateTrue"
+          @bx-toggle-changed="!component.workflowAttributes.aggregate"
         ></bx-toggle>
         <br />
         <bx-input
-          :value="definition.workflowAttributes.restartHookFile"
+          :value="component.workflowAttributes.restartHookFile"
           @input="
-            definition.workflowAttributes.restartHookFile = $event.target.value
+            component.workflowAttributes.restartHookFile = $event.target.value
           "
           placeholder="retstart hook file"
           colorScheme="light"
@@ -252,23 +210,21 @@
             <bx-structured-list-header-row>
               <bx-structured-list-header-cell
                 >Restart Hooks: ({{
-                  componentNumRestart
+                  component.workflowAttributes.restartHookOn.length
                 }})</bx-structured-list-header-cell
               >
             </bx-structured-list-header-row>
           </bx-structured-list-head>
           <bx-structured-list-body>
             <bx-structured-list-row
-              v-for="n in parseInt(componentNumRestart)"
-              :key="n"
+              v-for="(restartHook, index) in component.workflowAttributes
+                .restartHookOn"
+              :key="index"
             >
               <bx-structured-list-cell>
                 <bx-input
-                  :value="definition.workflowAttributes.restartHookOn[n - 1]"
-                  @input="
-                    definition.workflowAttributes.restartHookOn[n - 1] =
-                      $event.target.value
-                  "
+                  :value="restartHook"
+                  @input="restartHook = $event.target.value"
                   placeholder="restart hook name"
                   colorScheme="light"
                 >
@@ -280,23 +236,23 @@
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="componentNumRestart > 1"
-                  @click="decrementComponent('restart', n)"
+                  v-if="component.workflowAttributes.restartHookOn.length > 1"
+                  @click="component.removeRestartHookOn(index)"
                 >
                   <img class="trash-can-icon" src="@/assets/trash-can.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
           </bx-structured-list-body>
-          <bx-btn kind="primary" @click="incrementComponent('restart')">
+          <bx-btn kind="primary" @click="component.addRestartHookOn()">
             Add
           </bx-btn>
         </bx-structured-list>
 
         <bx-input
-          :value="definition.workflowAttributes.repeatInterval"
+          :value="component.workflowAttributes.repeatInterval"
           @input="
-            definition.workflowAttributes.repeatInterval = $event.target.value
+            component.workflowAttributes.repeatInterval = $event.target.value
           "
           placeholder="repeat interval"
           colorScheme="light"
@@ -306,9 +262,9 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.workflowAttributes.repeatRetries"
+          :value="component.workflowAttributes.repeatRetries"
           @input="
-            definition.workflowAttributes.repeatRetries = $event.target.value
+            component.workflowAttributes.repeatRetries = $event.target.value
           "
           placeholder="repeat retries"
           colorScheme="light"
@@ -318,9 +274,9 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.workflowAttributes.maxRestarts"
+          :value="component.workflowAttributes.maxRestarts"
           @input="
-            definition.workflowAttributes.maxRestarts = $event.target.value
+            component.workflowAttributes.maxRestarts = $event.target.value
           "
           placeholder="max restarts"
           colorScheme="light"
@@ -334,23 +290,21 @@
             <bx-structured-list-header-row>
               <bx-structured-list-header-cell
                 >Shutdown Hooks: ({{
-                  componentNumShutdown
+                  component.workflowAttributes.shutdownOn.length
                 }})</bx-structured-list-header-cell
               >
             </bx-structured-list-header-row>
           </bx-structured-list-head>
           <bx-structured-list-body>
             <bx-structured-list-row
-              v-for="n in parseInt(componentNumShutdown)"
-              :key="n"
+              v-for="(shutdownOn, index) in component.workflowAttributes
+                .shutdownOn"
+              :key="index"
             >
               <bx-structured-list-cell>
                 <bx-input
-                  :value="definition.workflowAttributes.shutdownOn[n - 1]"
-                  @input="
-                    definition.workflowAttributes.shutdownOn[n - 1] =
-                      $event.target.value
-                  "
+                  :value="shutdownOn"
+                  @input="shutdownOn = $event.target.value"
                   placeholder="shutdown on"
                   colorScheme="light"
                 >
@@ -362,15 +316,15 @@
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="componentNumShutdown > 1"
-                  @click="decrementComponent('shutdown', n)"
+                  v-if="component.workflowAttributes.shutdownOn.length > 1"
+                  @click="component.removeShutdownOn(index)"
                 >
                   <img class="trash-can-icon" src="@/assets/trash-can.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
           </bx-structured-list-body>
-          <bx-btn kind="primary" @click="incrementComponent('shutdown')">
+          <bx-btn kind="primary" @click="component.addShutdownOn()">
             Add
           </bx-btn>
         </bx-structured-list>
@@ -394,8 +348,10 @@
         <template v-if="contentSwitcherSelection == 'config'">
           <br />
           <bx-input
-            :value="definition.config.backend"
-            @input="definition.config.backend = $event.target.value"
+            :value="component.resourceManager.config.backend"
+            @input="
+              component.resourceManager.config.backend = $event.target.value
+            "
             placeholder="backend"
             colorScheme="light"
           >
@@ -404,8 +360,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.config.walltime"
-            @input="definition.config.walltime = $event.target.value"
+            :value="component.resourceManager.config.walltime"
+            @input="
+              component.resourceManager.config.walltime = $event.target.value
+            "
             placeholder="walltime"
             colorScheme="light"
           >
@@ -416,8 +374,11 @@
         <template v-if="contentSwitcherSelection == 'lsf'">
           <br />
           <bx-input
-            :value="definition.lsf.statusRequestInterval"
-            @input="definition.lsf.statusRequestInterval = $event.target.value"
+            :value="component.resourceManager.lsf.statusRequestInterval"
+            @input="
+              component.resourceManager.lsf.statusRequestInterval =
+                $event.target.value
+            "
             placeholder="status request interval"
             colorScheme="light"
           >
@@ -426,8 +387,8 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.queue"
-            @input="definition.lsf.queue = $event.target.value"
+            :value="component.resourceManager.lsf.queue"
+            @input="component.resourceManager.lsf.queue = $event.target.value"
             placeholder="queue"
             colorScheme="light"
           >
@@ -436,8 +397,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.reservation"
-            @input="definition.lsf.reservation = $event.target.value"
+            :value="component.resourceManager.lsf.reservation"
+            @input="
+              component.resourceManager.lsf.reservation = $event.target.value
+            "
             placeholder="reservation"
             colorScheme="light"
           >
@@ -446,8 +409,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.resourceString"
-            @input="definition.lsf.resourceString = $event.target.value"
+            :value="component.resourceManager.lsf.resourceString"
+            @input="
+              component.resourceManager.lsf.resourceString = $event.target.value
+            "
             placeholder="resource string"
             colorScheme="light"
           >
@@ -456,8 +421,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.dockerImage"
-            @input="definition.lsf.dockerImage = $event.target.value"
+            :value="component.resourceManager.lsf.dockerImage"
+            @input="
+              component.resourceManager.lsf.dockerImage = $event.target.value
+            "
             placeholder="docker image"
             colorScheme="light"
           >
@@ -466,8 +433,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.dockerProfileApp"
-            @input="definition.lsf.dockerProfileApp = $event.target.value"
+            :value="component.resourceManager.lsf.dockerProfileApp"
+            @input="
+              component.resourceManager.lsf.dockerProfileApp =
+                $event.target.value
+            "
             placeholder="docker profile app"
             colorScheme="light"
           >
@@ -476,8 +446,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.lsf.dockerOption"
-            @input="definition.lsf.dockerOption = $event.target.value"
+            :value="component.resourceManager.lsf.dockerOption"
+            @input="
+              component.resourceManager.lsf.dockerOption = $event.target.value
+            "
             placeholder="docker option"
             colorScheme="light"
           >
@@ -488,8 +460,10 @@
         <template v-if="contentSwitcherSelection == 'kubernetes'">
           <br />
           <bx-input
-            :value="definition.kubernetes.image"
-            @input="definition.kubernetes.image = $event.target.value"
+            :value="component.resourceManager.kubernetes.image"
+            @input="
+              component.resourceManager.kubernetes.image = $event.target.value
+            "
             placeholder="image"
             colorScheme="light"
           >
@@ -498,8 +472,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.imagePullSecret"
-            @input="definition.kubernetes.imagePullSecret = $event.target.value"
+            :value="component.resourceManager.kubernetes.imagePullSecret"
+            @input="
+              component.resourceManager.kubernetes.imagePullSecret =
+                $event.target.value
+            "
             placeholder="image pull secret"
             colorScheme="light"
           >
@@ -508,8 +485,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.gracePeriod"
-            @input="definition.kubernetes.gracePeriod = $event.target.value"
+            :value="component.resourceManager.kubernetes.gracePeriod"
+            @input="
+              component.resourceManager.kubernetes.gracePeriod =
+                $event.target.value
+            "
             placeholder="grace period"
             colorScheme="light"
           >
@@ -518,8 +498,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.podSpec"
-            @input="definition.kubernetes.podSpec = $event.target.value"
+            :value="component.resourceManager.kubernetes.podSpec"
+            @input="
+              component.resourceManager.kubernetes.podSpec = $event.target.value
+            "
             placeholder="pod spec"
             colorScheme="light"
           >
@@ -528,8 +510,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.apiKeyVar"
-            @input="definition.kubernetes.apiKeyVar = $event.target.value"
+            :value="component.resourceManager.kubernetes.apiKeyVar"
+            @input="
+              component.resourceManager.kubernetes.apiKeyVar =
+                $event.target.value
+            "
             placeholder="api key var"
             colorScheme="light"
           >
@@ -538,8 +523,10 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.host"
-            @input="definition.kubernetes.host = $event.target.value"
+            :value="component.resourceManager.kubernetes.host"
+            @input="
+              component.resourceManager.kubernetes.host = $event.target.value
+            "
             placeholder="host"
             colorScheme="light"
           >
@@ -548,8 +535,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.namespace"
-            @input="definition.kubernetes.namespace = $event.target.value"
+            :value="component.resourceManager.kubernetes.namespace"
+            @input="
+              component.resourceManager.kubernetes.namespace =
+                $event.target.value
+            "
             placeholder="namespace"
             colorScheme="light"
           >
@@ -558,8 +548,11 @@
           </bx-input>
           <br />
           <bx-input
-            :value="definition.kubernetes.cpuUnitsPerCore"
-            @input="definition.kubernetes.cpuUnitsPerCore = $event.target.value"
+            :value="component.resourceManager.kubernetes.cpuUnitsPerCore"
+            @input="
+              component.resourceManager.kubernetes.cpuUnitsPerCore =
+                $event.target.value
+            "
             placeholder="cpu units per core"
             colorScheme="light"
           >
@@ -570,9 +563,9 @@
       </bx-accordion-item>
       <bx-accordion-item title-text="Resource Request">
         <bx-input
-          :value="definition.resourceRequest.numberProcesses"
+          :value="component.resourceRequest.numberProcesses"
           @input="
-            definition.resourceRequest.numberProcesses = $event.target.value
+            component.resourceRequest.numberProcesses = $event.target.value
           "
           placeholder="number of processes"
           colorScheme="light"
@@ -582,10 +575,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.resourceRequest.numberThreads"
-          @input="
-            definition.resourceRequest.numberThreads = $event.target.value
-          "
+          :value="component.resourceRequest.numberThreads"
+          @input="component.resourceRequest.numberThreads = $event.target.value"
           placeholder="number of threads"
           colorScheme="light"
         >
@@ -594,8 +585,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.resourceRequest.ranksPerNode"
-          @input="definition.resourceRequest.ranksPerNode = $event.target.value"
+          :value="component.resourceRequest.ranksPerNode"
+          @input="component.resourceRequest.ranksPerNode = $event.target.value"
           placeholder="ranks per node"
           colorScheme="light"
         >
@@ -604,9 +595,9 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.resourceRequest.threadsPerCore"
+          :value="component.resourceRequest.threadsPerCore"
           @input="
-            definition.resourceRequest.threadsPerCore = $event.target.value
+            component.resourceRequest.threadsPerCore = $event.target.value
           "
           placeholder="threads per core"
           colorScheme="light"
@@ -616,8 +607,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.resourceRequest.memory"
-          @input="definition.resourceRequest.memory = $event.target.value"
+          :value="component.resourceRequest.memory"
+          @input="component.resourceRequest.memory = $event.target.value"
           placeholder="memory"
           colorScheme="light"
         >
@@ -626,8 +617,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="definition.resourceRequest.gpus"
-          @input="definition.resourceRequest.gpus = $event.target.value"
+          :value="component.resourceRequest.gpus"
+          @input="component.resourceRequest.gpus = $event.target.value"
           placeholder="gpus"
           colorScheme="light"
         >
@@ -639,183 +630,57 @@
   </div>
 </template>
 
-<script setup>
-import { watch, ref, reactive } from "vue";
+<script>
+import { ref } from "vue";
 import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/toggle/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
+import St4sdComponent from "@/Canvas/Classes/St4sdComponent.js";
 
-const emits = defineEmits(["updateDefinition", "removeParent"]);
-const props = defineProps({
-  nodeDefinition: Object,
-  parentNode: Object,
-  formEmitted: Boolean,
-});
-
-let componentNumReferences = ref(1);
-let componentNumParams = ref(1);
-let componentNumShutdown = ref(1);
-let componentNumRestart = ref(1);
-let isAggregateTrue = ref(true);
-let parentNodeID = ref("");
-let parentNodeLabel = ref("");
-let contentSwitcherSelection = ref("config");
-
-let definition = reactive({
-  name: "",
-  command: {
-    executable: "",
-    arguments: "",
-    expandArgument: "",
-    environment: "",
+export default {
+  props: { node: Object, parentNode: Object },
+  emits: ["update", "removeParent"],
+  data() {
+    return {
+      contentSwitcherSelection: ref("config"),
+      component: new St4sdComponent(),
+      isError: false,
+    };
   },
-  stage: null,
-  variables: "",
-  references: [""],
-  workflowAttributes: {
-    replicate: "",
-    aggregate: isAggregateTrue,
-    restartHookFile: "",
-    restartHookOn: ["ResourceExhausted"],
-    repeatInterval: "",
-    repeatRetries: "",
-    maxRestarts: "",
-    shutdownOn: [""],
-  },
-  config: { backend: "", walltime: "" },
-  lsf: {
-    statusRequestInterval: "20",
-    queue: "",
-    reservation: "",
-    resourceString: "",
-    dockerImage: "",
-    dockerProfileApp: "",
-    dockerOption: "",
-  },
-  kubernetes: {
-    image: "",
-    imagePullSecret: "",
-    gracePeriod: "",
-    podSpec: "",
-    apiKeyVar: "",
-    host: "",
-    namespace: "",
-    cpuUnitsPerCore: "",
-  },
-  resourceRequest: {
-    numberProcesses: "",
-    numberThreads: "",
-    ranksPerNode: "",
-    threadsPerCore: "",
-    memory: "",
-    gpus: "",
-  },
-  signature: {
-    name: "",
-    description: "",
-    parameters: [{ name: "", default: "" }],
-  },
-});
-const incrementComponent = (variable) => {
-  if (variable == "refs") {
-    componentNumReferences.value++;
-  } else if (variable == "params") {
-    componentNumParams.value++;
-    definition.signature.parameters.push({});
-  } else if (variable == "restart") {
-    componentNumRestart.value++;
-  } else if (variable == "shutdown") {
-    componentNumShutdown.value++;
-  }
-};
-
-const decrementComponent = (variable, n) => {
-  if (variable == "refs") {
-    definition.references.splice(n - 1, 1);
-    componentNumReferences.value--;
-  } else if (variable == "params") {
-    definition.signature.parameters.splice(n - 1, 1);
-    componentNumParams.value--;
-  } else if (variable == "restart") {
-    definition.workflowAttributes.restartHookOn.splice(n - 1, 1);
-    componentNumRestart.value--;
-  } else if (variable == "shutdown") {
-    definition.workflowAttributes.shutdownOn.splice(n - 1, 1);
-    componentNumShutdown.value--;
-  }
-};
-
-const toggleIsAggregateTrue = () => {
-  isAggregateTrue.value = !isAggregateTrue.value;
-};
-
-// watch(componentNumParams, (newVal) => {
-//   for (let i = 1; i < newVal; i++) {
-//     definition.signature.parameters.push({ name: "", default: "" });
-//   }
-// });
-
-watch(
-  () => props.nodeDefinition,
-  () => {
-    definition.name = props.nodeDefinition.name;
-    definition.command = props.nodeDefinition.command;
-    definition.stage = props.nodeDefinition.stage;
-    definition.variables = props.nodeDefinition.variables;
-    definition.references = props.nodeDefinition.references;
-    componentNumReferences.value = props.nodeDefinition.references.length;
-    definition.workflowAttributes = props.nodeDefinition.workflowAttributes;
-    componentNumRestart.value =
-      props.nodeDefinition.workflowAttributes.restartHookOn.length;
-    componentNumShutdown.value =
-      props.nodeDefinition.workflowAttributes.shutdownOn.length;
-    definition.config = props.nodeDefinition.config;
-    definition.lsf = props.nodeDefinition.lsf;
-    definition.kubernetes = props.nodeDefinition.kubernetes;
-    definition.resourceRequest = props.nodeDefinition.resourceRequest;
-    definition.signature = props.nodeDefinition.signature;
-    componentNumParams.value = props.nodeDefinition.signature.parameters.length;
-    if (props.parentNode != undefined) {
-      parentNodeID.value = props.parentNode.id;
-      parentNodeLabel.value = props.parentNode.label;
+  mounted() {
+    if (this.node != undefined) {
+      this.component.setComponentDefintion(this.node.definition);
     }
   },
-);
-
-watch(
-  () => props.formEmitted,
-  () => {
-    if (props.formEmitted == true) {
-      submitComponentValues();
-    }
-  },
-);
-
-const submitComponentValues = () => {
-  let emitDefinition = {};
-  Object.defineProperties(emitDefinition, {
-    name: { value: definition.name, writable: true },
-    command: { value: definition.command, writable: true },
-    stage: { value: definition.stage, writable: true },
-    variables: { value: definition.variables, writable: true },
-    references: { value: definition.references, writable: true },
-    signature: { value: definition.signature, writable: true },
-    workflowAttributes: {
-      value: definition.workflowAttributes,
-      writable: true,
+  methods: {
+    update() {
+      if (!this.isError) {
+        let newComponentNode = { ...this.node };
+        newComponentNode.label = this.component.signature.name;
+        newComponentNode.definition = this.component.getComponentDefintion();
+        this.$emit("update", newComponentNode);
+      }
     },
-    resourceRequest: { value: definition.resourceRequest, writable: true },
-    config: { value: definition.config, writable: true },
-    lsf: { value: definition.lsf, writable: true },
-    kubernetes: { value: definition.kubernetes, writable: true },
-  });
-  emits("updateDefinition", emitDefinition);
-};
-
-const removeParentNode = () => {
-  emits("removeParent");
+    add() {
+      if (!this.isError) {
+        this.$emit("add", this.component.getComponentDefintion());
+      }
+    },
+    removeParentNode() {
+      this.$emit("removeParent");
+    },
+    onFocusLost(event, item) {
+      if (item == "") {
+        event.target.invalid = true;
+        this.isError = true;
+      } else {
+        this.isError = false;
+        event.target.invalid = false;
+      }
+    },
+  },
 };
 </script>
 <style lang="css" scoped>

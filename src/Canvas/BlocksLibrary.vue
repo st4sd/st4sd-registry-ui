@@ -44,11 +44,9 @@
       </div>
     </div>
     <createComponent
-      @bx-modal-closed="toggleAddModal"
-      @add="addNode(newNode)"
       v-if="modalAddActive"
-      title="Add Component"
-      @addedNode="addNode"
+      @componentAdded="addComponentNode"
+      @bx-modal-closed="toggleAddModal"
     />
     <readWorkflow
       v-if="modalWorkflowActive"
@@ -131,9 +129,9 @@ const toggleAddModal = () => {
   modalAddActive.value = !modalAddActive.value;
 };
 
-const addNode = (newNode) => {
-  newNode.id = getId();
-  fullElements.value.push(newNode);
+const addComponentNode = (newComponent) => {
+  newComponent.id = getId();
+  fullElements.value.push(newComponent);
   toggleAddModal();
 };
 

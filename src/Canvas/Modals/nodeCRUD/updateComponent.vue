@@ -8,11 +8,11 @@
     </bx-modal-header>
     <bx-modal-body>
       <componentForm
-        :nodeDefinition="nodeDefinition"
-        :parentNode="this.parentNode"
-        :formEmitted="this.formEmitted"
-        @updateDefinition="setComponentDefinition"
-        @removeParent="removeParentNode"
+        ref="componentForm"
+        :node="node"
+        :parentNode="parentNode"
+        @update="update"
+        @removeParent="removeParent"
       />
       <br />
       <bx-btn kind="danger" @click="emitDelete">
@@ -27,7 +27,7 @@
       <bx-modal-footer-button
         kind="primary"
         type="submit"
-        @click="this.formEmitted = true"
+        @click="getComponentDefinition"
       >
         Save
       </bx-modal-footer-button>
@@ -37,134 +37,25 @@
 
 <script>
 import componentForm from "@/Canvas/componentForm.vue";
-import * as valid from "@/Canvas/validation";
 
 export default {
   components: {
     componentForm,
   },
-  props: { title: String, node: Object, parentNode: Object },
+  props: { node: Object, parentNode: Object },
   emits: ["updated", "delete", "removeParent"],
-  data() {
-    return {
-      formEmitted: false,
-      stepID: "",
-      nodeDefinition: {
-        name: "",
-        command: {
-          executable: "",
-          arguments: "",
-          expandArgument: "",
-          environment: "",
-        },
-        stage: "",
-        variables: "",
-        references: [""],
-        workflowAttributes: {
-          replicate: "",
-          aggregate: true,
-          restartHookFile: "",
-          restartHookOn: ["ResourceExhausted"],
-          repeatInterval: "",
-          repeatRetries: "",
-          maxRestarts: "",
-          shutdownOn: [""],
-        },
-        config: { backend: "", walltime: "" },
-        lsf: {
-          statusRequestInterval: "20",
-          queue: "",
-          reservation: "",
-          resourceString: "",
-          dockerImage: "",
-          dockerProfileApp: "",
-          dockerOption: "",
-        },
-        kubernetes: {
-          image: "",
-          imagePullSecret: "",
-          gracePeriod: "",
-          podSpec: "",
-          apiKeyVar: "",
-          host: "",
-          namespace: "",
-          cpuUnitsPerCore: "",
-        },
-        resourceRequest: {
-          numberProcesses: "",
-          numberThreads: "",
-          ranksPerNode: "",
-          threadsPerCore: "",
-          memory: "",
-          gpus: "",
-        },
-        signature: {
-          name: "",
-          description: "",
-          parameters: [{ name: "", default: "" }],
-        },
-      },
-    };
-  },
-  mounted() {
-    this.setNodeDefinition(this.node);
-  },
   methods: {
     emitDelete() {
       this.$emit("delete");
     },
-    removeParentNode() {
+    removeParent() {
       this.$emit("removeParent");
     },
-    setComponentDefinition(definition) {
-      this.formEmitted = false;
-      this.nodeDefinition = definition;
-      this.update();
+    getComponentDefinition() {
+      this.$refs.componentForm.update();
     },
-    update() {
-      let selectedNode = { ...this.node };
-      selectedNode.label = this.nodeDefinition.name;
-      selectedNode.definition.command = this.nodeDefinition.command;
-      selectedNode.definition.stage = this.nodeDefinition.stage;
-      selectedNode.definition.variables = this.nodeDefinition.variables;
-      selectedNode.definition.references = this.nodeDefinition.references;
-      selectedNode.definition.workflowAttributes =
-        this.nodeDefinition.workflowAttributes;
-      selectedNode.definition.resourceManager = {};
-      Object.defineProperties(selectedNode.definition.resourceManager, {
-        config: {
-          value: this.nodeDefinition.config,
-        },
-        lsf: {
-          value: this.nodeDefinition.lsf,
-        },
-        kubernetes: {
-          value: this.nodeDefinition.kubernetes,
-        },
-      });
-      selectedNode.definition.resourceRequest =
-        this.nodeDefinition.resourceRequest;
-      selectedNode.definition.signature = this.nodeDefinition.signature;
-      this.$emit("updated", selectedNode);
-    },
-    setNodeDefinition(node) {
-      if (node == undefined) {
-        return "";
-      } else {
-        this.nodeDefinition = {
-          name: node.label,
-          command: valid.validateCommand(node),
-          stage: valid.validateStage(node),
-          variables: valid.validateVariables(node),
-          references: valid.validateReferences(node),
-          workflowAttributes: valid.validateWorkflowAttributes(node),
-          config: valid.validateConfig(node),
-          lsf: valid.validateLsf(node),
-          kubernetes: valid.validateKubernetes(node),
-          resourceRequest: valid.validateResourceRequest(node),
-          signature: valid.validateSignature(node),
-        };
-      }
+    update(newComponentNode) {
+      this.$emit("updated", newComponentNode);
     },
   },
 };
