@@ -4,7 +4,7 @@ export default function buildExperiment(nodes, edges, entryNode) {
   );
 
   let components = nodes.filter(
-    (node) => node.type == "" && typeof node.parentNode === "string",
+    (node) => node.type == "component" && typeof node.parentNode === "string",
   );
 
   let result = {};

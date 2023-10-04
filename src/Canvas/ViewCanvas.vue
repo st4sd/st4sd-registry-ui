@@ -41,6 +41,9 @@
           />
         </bx-btn>
       </Panel>
+      <template #node-component="{ label }">
+        <ComponentNode :label="label" />
+      </template>
       <template #node-workflow="nodeProps">
         <WorkflowNode
           :data="nodeProps.data"
@@ -102,6 +105,7 @@ import {
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { dagStore } from "@/Canvas/stores/dagStore";
 import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
+import ComponentNode from "@/Canvas/Nodes/ComponentNode.vue";
 import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
 import readEdgeModal from "@/Canvas/Modals/edgeCRUD/readEdge.vue";
 import readWorkflowModal from "@/Canvas/Modals/nodeCRUD/readWorkflow.vue";
@@ -188,7 +192,7 @@ onNodeDoubleClick(({ node }) => {
     //node type to change to component instead of empty string
     //there is an issue to track this
     //https://github.ibm.com/st4sd/overview/issues/517
-  } else if (node.type == "") {
+  } else if (node.type == "component") {
     toggleModalVisibility("readComponentModal");
   } else if (node.type == "input") {
     toggleModalVisibility("readInputModal");

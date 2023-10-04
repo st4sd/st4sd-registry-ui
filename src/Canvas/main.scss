@@ -9,6 +9,7 @@
 .vue-flow__node-input .vue-flow__handle,
 .vue-flow__node-output .vue-flow__handle,
 .vue-flow__node-workflow-input .vue-flow__handle,
+.vue-flow__node-component .vue-flow__handle,
 .vue-flow__node-workflow .vue-flow__handle {
   width: 3px;
   height: 3px;
@@ -22,6 +23,18 @@
   padding: 10px;
   border-radius: 3px;
   width: 150px;
+  font-size: 12px;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  color: #222;
+  border-color: var(--vf-node-color);
+}
+
+.vue-flow__node-component {
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  border-radius: 3px;
   font-size: 12px;
   text-align: center;
   border-width: 1px;

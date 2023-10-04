@@ -263,7 +263,7 @@ function addBlocks(graph, data, workflow, prevStepId) {
         workflowSteps[step],
         componentDefinition,
         prevStepId,
-        "",
+        "component",
         stepId,
       );
     }

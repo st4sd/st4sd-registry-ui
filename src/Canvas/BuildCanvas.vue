@@ -386,7 +386,7 @@ let parentNode;
 onNodeDoubleClick(({ node }) => {
   selectedNode = node;
   parentNode = findNode(node.parentNode);
-  if (node.type == "") {
+  if (node.type == "component") {
     nodeType = "component";
     toggleModalVisibility("updateComponentModal");
   } else {

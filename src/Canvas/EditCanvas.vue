@@ -209,7 +209,7 @@ onNodeDoubleClick(({ node }) => {
     //node type to change to component instead of empty string
     //there is an issue to track this
     //https://github.ibm.com/st4sd/overview/issues/517
-  } else if (node.type == "") {
+  } else if (node.type == "component") {
     inputingEdges = edges.value.filter((n) => n.target == node.id);
     toggleModalVisibility("readComponentModal");
   } else if (node.type == "input") {

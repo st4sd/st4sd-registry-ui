@@ -28,7 +28,7 @@ export default function getBlocks(data) {
   if (components != undefined) {
     for (let component of components) {
       let componentName = component.signature.name;
-      addNode(nodes, componentName, componentName, component, "", []);
+      addNode(nodes, componentName, componentName, component, "component", []);
     }
   }
   return nodes;

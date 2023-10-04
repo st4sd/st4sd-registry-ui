@@ -60,7 +60,7 @@ export function getEdgeSourceAndArguments(allNodes, edge) {
         value: getReferencedParameter(edge.definition[a]),
       });
     });
-  } else if (edge.sourceNode.type == "") {
+  } else if (edge.sourceNode.type == "component") {
     sourceType = "component";
     sourceNode = allNodes.find((node) => node.id == edge.sourceNode.id);
     //Transform arguments into array for ease of adding and removing

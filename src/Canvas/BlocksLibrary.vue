@@ -33,7 +33,7 @@
           {{ element.label }}
         </div>
         <div
-          class="vue-flow__node-default"
+          class="vue-flow__node-component"
           :draggable="true"
           @dragstart="onDragStart($event, element)"
           @dblclick="onDoubleClick(element)"
@@ -168,7 +168,7 @@ const onDoubleClick = (node) => {
   clickedNode = { ...node };
   if (node.type == "workflow") {
     toggleWorkflowModal();
-  } else if (node.type == "") {
+  } else if (node.type == "component") {
     toggleComponentModal();
   }
 };
