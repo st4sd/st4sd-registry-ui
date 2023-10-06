@@ -4,9 +4,9 @@
       <bx-input
         data-modal-primary-focus
         placeholder="Workflow name"
-        @blur="onFocusLost($event, name)"
-        @input="name = $event.target.value"
-        :value="name"
+        @blur="onFocusLost($event, workflow.getName())"
+        :value="workflow.getName()"
+        @input="workflow.setName($event.target.value)"
         validityMessage="Name cannot be empty"
         required
         colorScheme="light"
@@ -17,8 +17,8 @@
       <br />
       <bx-input
         placeholder="Description"
-        :value="description"
-        @input="description = $event.target.value"
+        :value="workflow.getDescription()"
+        @input="workflow.setDescription($event.target.value)"
         colorScheme="light"
       >
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
@@ -37,7 +37,7 @@
       <bx-input
         v-if="this.parentNode != undefined"
         readonly
-        :value="parentNodeLabel + ' (ID: ' + parentNodeID + ')'"
+        :value="parentNode.label + ' (ID: ' + parentNode.id + ')'"
         colorScheme="light"
       >
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
@@ -53,12 +53,12 @@
     </bx-accordion-item>
     <bx-accordion-item
       :open="node == undefined"
-      v-if="parameters != undefined"
-      :title-text="'Parameters (' + parameters.length + ')'"
+      v-if="workflow.getParameters() != undefined"
+      :title-text="'Parameters (' + workflow.getParameters().length + ')'"
     >
       <bx-table-toolbar>
         <bx-table-toolbar-content>
-          <bx-btn kind="primary" @click="addParameter()"
+          <bx-btn kind="primary" @click="workflow.addParameter()"
             >Add Parameter +</bx-btn
           >
         </bx-table-toolbar-content>
@@ -77,7 +77,7 @@
         </bx-structured-list-head>
         <bx-structured-list-body>
           <bx-structured-list-row
-            v-for="(parameter, index) in parameters"
+            v-for="(parameter, index) in workflow.getParameters()"
             :key="index"
           >
             <bx-structured-list-cell class="updateModals">
@@ -104,7 +104,7 @@
               <bx-btn
                 class="button-inside-cell"
                 kind="danger"
-                @click="removeParameter(index)"
+                @click="workflow.removeParameter(index)"
               >
                 <img class="trash-can-icon" src="@/assets/trash-can.svg" />
               </bx-btn>
@@ -115,7 +115,7 @@
     </bx-accordion-item>
     <bx-accordion-item
       v-if="node != undefined"
-      :title-text="'Steps (' + Object.keys(steps).length + ')'"
+      :title-text="'Steps (' + workflow.getNumberOfSteps() + ')'"
     >
       <bx-structured-list>
         <bx-structured-list-head>
@@ -124,20 +124,20 @@
               >Step</bx-structured-list-header-cell
             >
             <bx-structured-list-header-cell
-              >Definition</bx-structured-list-header-cell
+              >Reference</bx-structured-list-header-cell
             >
           </bx-structured-list-header-row>
         </bx-structured-list-head>
         <bx-structured-list-body>
           <bx-structured-list-row
-            v-for="(stepDefinition, step) in steps"
-            :key="step"
+            v-for="(step, index) in workflow.getStepsArray()"
+            :key="index"
           >
             <bx-structured-list-cell class="updateModals">
               <bx-input
                 placeholder="Step"
-                :value="step"
-                @input="stepsDictionary[step] = $event.target.value"
+                :value="step.step"
+                @input="workflow.setStep(index, $event.target.value)"
                 colorScheme="light"
               >
                 <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
@@ -147,8 +147,8 @@
             <bx-structured-list-cell class="updateModals">
               <bx-input
                 readonly
-                placeholder="Step definition"
-                :value="stepDefinition"
+                placeholder="Step reference"
+                :value="step.stepReference"
                 colorScheme="light"
               >
               </bx-input>
@@ -159,7 +159,7 @@
               <bx-btn
                 class="button-inside-cell"
                 kind="danger"
-                @click="removeStep(step)"
+                @click="removeStep(index)"
               >
                 <img class="trash-can-icon" src="@/assets/trash-can.svg" />
               </bx-btn>
@@ -175,6 +175,7 @@
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/input/index.js";
+import St4sdWorkflow from "@/Canvas/Classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/Canvas/canvasFunctions";
 
 export default {
@@ -182,34 +183,15 @@ export default {
   emits: ["update", "removeParent", "stepDeleted"],
   data() {
     return {
-      name: "",
-      description: "",
-      parameters: [],
-      steps: {},
-      //to store the original steps against the new steps set by the user
-      stepsDictionary: {},
-      parentNodeID: "",
-      parentNodeLabel: "",
-      siblingNodes: {},
+      workflow: new St4sdWorkflow(),
+      childrenNodes: {},
       isError: false,
     };
   },
   mounted() {
-    if (this.parentNode != undefined) {
-      this.parentNodeID = this.parentNode.id;
-      this.parentNodeLabel = this.parentNode.label;
-    }
     if (this.node != undefined) {
-      this.name = this.node.definition.signature.name;
-      this.description = this.node.definition.signature.description;
-      this.parameters = [...this.node.definition.signature.parameters];
-      this.steps = { ...this.node.definition.steps };
-      Object.keys(this.steps).forEach((s) => {
-        //have the original step as the object key and also the default value
-        //the object value will be changed later to reflect the user changes
-        this.stepsDictionary[s] = s;
-      });
-      this.siblingNodes = this.allNodes.filter(
+      this.workflow.setWorkflowDefinition(this.node.definition);
+      this.childrenNodes = this.allNodes.filter(
         (node) => node.parentNode == this.node.id,
       );
     }
@@ -218,17 +200,11 @@ export default {
     removeParent() {
       this.$emit("removeParent");
     },
-    addParameter() {
-      this.parameters.push({ name: "", default: "" });
-    },
-    removeParameter(index) {
-      this.parameters.splice(index, 1);
-    },
-    removeStep(step) {
-      delete this.steps[step];
-      delete this.stepsDictionary[step];
+    removeStep(index) {
+      let step = this.workflow.getStep(index).step;
+      this.workflow.removeStep(index);
       //remove this block from the parent workflow (Un nest it)
-      let tobeUpdatedNode = this.siblingNodes.find(
+      let tobeUpdatedNode = this.childrenNodes.find(
         (node) => node.stepId == step,
       );
       tobeUpdatedNode.parentNode = undefined;
@@ -239,52 +215,39 @@ export default {
       if (!this.isError) {
         //Each workflow will generate a workflow node and an input node  for that workflow
         let { workflowNode, inputNode } = createWorkflowNode(
-          this.name,
-          this.description,
-          this.parameters,
+          this.workflow.getName(),
+          this.workflow.getDescription(),
+          this.workflow.getParameters(),
         );
         this.$emit("workflowAdded", workflowNode, inputNode);
       }
     },
     update() {
       if (!this.isError) {
-        //make sure the steps are unique by adding them to
-        //a Set which can only contain unique values
-        let uniqueSteps = new Set(Object.values(this.stepsDictionary));
-        //to store the new user set steps
-        //We use a new object instead of updating the existing object to preserve order
-        //as updating an object key requires deleting the original key-value pair and adding a new one
-        //which changes the order of the steps in the original object
-        let newSteps = {};
-        if (Object.values(this.stepsDictionary).length != uniqueSteps.size) {
-          alert("Please make sure steps are unique");
-        } else {
-          Object.keys(this.stepsDictionary).forEach((oldStep) => {
-            let newStep = this.stepsDictionary[oldStep];
-            //Check if the step has changed
-            if (newStep != oldStep) {
-              //If it did then add a new key (the new step) and the original value
-              this.updateStepId(oldStep, newStep);
-              newSteps[newStep] = this.steps[oldStep];
-            } else {
-              //if it didn't then add the original key-value pain to the new object
-              newSteps[oldStep] = this.steps[oldStep];
-            }
-          });
+        if (this.workflow.areStepsUnique()) {
+          this.checkStepsChanges();
           //we copy over the props to avoid mutating
           let updatedWorkflow = { ...this.node };
-          updatedWorkflow.label = this.name;
-          updatedWorkflow.definition.signature.name = this.name;
-          //If name changed we have to update the input node name
-          updatedWorkflow.definition.signature.description = this.description;
-          updatedWorkflow.definition.signature.parameters = this.parameters;
-          updatedWorkflow.definition.steps = newSteps;
+          updatedWorkflow.label = this.workflow.getName();
+          updatedWorkflow.definition = this.workflow.getWorkflowDefinition();
           this.$emit("update", updatedWorkflow);
+        } else {
+          alert("Please make sure steps are unique");
         }
       }
     },
+    checkStepsChanges() {
+      this.workflow.getStepsArray().forEach((newStep) => {
+        let oldStep = Object.keys(this.node.definition.steps).find(
+          (key) => this.node.definition.steps[key] === newStep.stepReference,
+        );
+        if (newStep.step != oldStep) {
+          this.updateStepId(oldStep, newStep.step);
+        }
+      });
+    },
     updateStepId(oldStep, newStep) {
-      let tobeUpdatedNode = this.siblingNodes.find(
+      let tobeUpdatedNode = this.childrenNodes.find(
         (node) => node.stepId == oldStep,
       );
       tobeUpdatedNode.stepId = newStep;

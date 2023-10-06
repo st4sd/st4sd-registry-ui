@@ -39,6 +39,9 @@
           />
         </bx-btn>
       </Panel>
+      <template #node-component="{ label }">
+        <ComponentNode :label="label" />
+      </template>
       <template #node-workflow="nodeProps">
         <WorkflowNode
           :data="nodeProps.data"
@@ -104,6 +107,7 @@ import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { dagStore } from "@/Canvas/stores/dagStore";
 import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
 import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
+import ComponentNode from "@/Canvas/Nodes/ComponentNode.vue";
 import readWorkflowModal from "@/Canvas/Modals/nodeCRUD/readWorkflow.vue";
 import readComponentModal from "@/Canvas/Modals/nodeCRUD/readComponent.vue";
 import readInputModal from "@/Canvas/Modals/nodeCRUD/readInput.vue";

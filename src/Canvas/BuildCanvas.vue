@@ -60,6 +60,9 @@
           />
         </bx-btn>
       </Panel>
+      <template #node-component="{ label }">
+        <ComponentNode :label="label" />
+      </template>
       <template #node-workflow="nodeProps">
         <WorkflowNode
           :data="nodeProps.data"
@@ -181,6 +184,7 @@ import { expDAGStore } from "@/Canvas/stores/expDAGStore";
 import { nodeStore } from "@/Canvas/stores/nodeStore";
 
 //Node types
+import ComponentNode from "@/Canvas/Nodes/ComponentNode.vue";
 import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
 import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
 
