@@ -2,7 +2,7 @@
   <div class="cds--row tab" v-if="tabSelector == 'platforms'">
     <div
       class="cds--col-lg-14 cds--col-md-6"
-      v-if="parameterisation.presets.platform != undefined"
+      v-if="pvep.parameterisation.presets.platform != undefined"
     >
       <h3>Platform</h3>
       <dds-structured-list>
@@ -19,7 +19,7 @@
         <dds-structured-list-body>
           <dds-structured-list-row>
             <dds-structured-list-cell>{{
-              parameterisation.presets.platform
+              pvep.parameterisation.presets.platform
             }}</dds-structured-list-cell>
             <dds-structured-list-cell>Preset</dds-structured-list-cell>
           </dds-structured-list-row>
@@ -28,10 +28,10 @@
     </div>
     <div
       class="cds--col-lg-14 cds--col-md-6"
-      v-else-if="parameterisation.executionOptions.platform.length != 0"
+      v-else-if="pvep.parameterisation.executionOptions.platform.length != 0"
     >
       <h3>Platform</h3>
-      <p v-if="parameterisation.executionOptions.platform.length < 2">
+      <p v-if="pvep.parameterisation.executionOptions.platform.length < 2">
         When launching the workflow, the platform can be set to any value, with
         the default being:
       </p>
@@ -52,7 +52,7 @@
         </dds-structured-list-head>
         <dds-structured-list-body>
           <dds-structured-list-row
-            v-for="(platform, idx) in parameterisation.executionOptions
+            v-for="(platform, idx) in pvep.parameterisation.executionOptions
               .platform"
             :key="idx"
           >
@@ -298,8 +298,8 @@
       </div>
       <div v-else>
         <div class="cds--col-lg-16 cds--col-md-8">
-          <h3>Runtime Args</h3>
-          <p>No Runtime Args Set</p>
+          <h3 id="orchestrator-resources">Runtime Args</h3>
+          <p>No Runtime Args</p>
         </div>
       </div>
     </div>
@@ -354,35 +354,51 @@
 </template>
 
 <script>
+import {
+  setRuntimeArgs,
+  setVariables,
+  setOrchestratorResources,
+} from "@/functions/setup_parameterisation_variables";
+
 export default {
   name: "ReadParamterisationOptions",
   props: {
     tabSelector: String,
-    parameterisation: Object,
-    inputs: Array,
-    variables: Array,
-    dataOptionsProp: Array,
-    dataExecutionOptionsProp: Array,
-    runtimeArgs: Array,
-    orchestratorResources: Object,
-    executionOptionsDefaults: Object,
+    pvep: Object,
   },
   data() {
     return {
       presetData: null,
       executionOptionsData: null,
+      initialParameterisation: null,
+      initialParameterisationSet: false,
+      parameterisation: null,
+      inputs: null,
+      parameterisationOptionsLoading: true,
+      variables: null,
+      dataExecutionOptions: null,
+      dataOptions: null,
+      runtimeArgs: null,
+      runtimeArgsInvalid: [],
+      orchestratorResources: null,
+      orchestratorResourcesInvalid: [],
+      entry: null,
+      platformOptions: null,
+      executionOptionsDefaults: null,
     };
   },
   watch: {
-    dataExecutionOptionsProp: {
+    pvep: {
       // the callback will be called immediately after the start of the observation
       immediate: true,
-      handler() {
-        this.executionOptionsData = this.dataExecutionOptionsProp;
+      handler(val) {
+        this.executionOptionsData = val.parameterisation.executionOptions.data;
         if (this.executionOptionsData.length == 0) {
-          this.presetData = this.dataOptionsProp.map((option) => option.name);
+          this.presetData = val.metadata.registry.data.map(
+            (option) => option.name,
+          );
         } else {
-          let dataOptionNames = this.dataOptionsProp.map(
+          let dataOptionNames = val.metadata.registry.data.map(
             (option) => option.name,
           );
           let executionOptionsDataNames = this.executionOptionsData.map(
@@ -392,6 +408,17 @@ export default {
             (name) => executionOptionsDataNames.indexOf(name) == -1,
           );
         }
+        this.executionOptionsDefaults =
+          val.metadata.registry.executionOptionsDefaults;
+        this.platformOptions = val.metadata.registry.platforms;
+        this.dataOptions = val.metadata.registry.data;
+        this.dataExecutionOptions = val.parameterisation.executionOptions.data;
+        this.parameterisation = val.parameterisation;
+        this.inputs = val.metadata.registry.inputs;
+        this.parameterisationOptionsLoading = false;
+        this.variables = setVariables(val);
+        this.runtimeArgs = setRuntimeArgs(val);
+        this.orchestratorResources = setOrchestratorResources(val);
       },
     },
   },
@@ -402,7 +429,7 @@ export default {
       );
     },
     findPlatformValues(variable) {
-      return this.executionOptionsDefaults.variables.find(
+      return this.pvep.metadata.registry.executionOptionsDefaults.variables.find(
         (item) => item.name == variable.name,
       ).valueFrom;
     },

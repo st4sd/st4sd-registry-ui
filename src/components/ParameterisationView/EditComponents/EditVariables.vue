@@ -254,13 +254,7 @@ export default {
       // the callback will be called immediately after the start of the observation
       immediate: true,
       handler() {
-        if (this.invalidVariables.some((variable) => variable == true)) {
-          this.$emit("dataInvalid");
-        } else if (
-          this.invalidVariables.every((variable) => variable == false)
-        ) {
-          this.$emit("dataValid");
-        }
+        this.$emit("invalidPresetVariables", this.invalidVariables);
       },
       deep: true,
     },
@@ -306,6 +300,7 @@ export default {
         this.selectedValueId = this.defaultValueId;
         this.presetInputsVisible[this.valueIndex] = false;
         this.executionOptionInputsVisible[this.valueIndex] = false;
+        this.invalidVariables[this.valueIndex] = false;
         this.setDefaultType();
         this.$emit("enableSave");
       } else if (event.detail.value == `${this.variable.name}-preset`) {
@@ -318,6 +313,7 @@ export default {
         event.detail.value == `${this.variable.name}-executionOptions`
       ) {
         this.selectedValueId = this.executionOptionsValueId;
+        this.invalidVariables[this.valueIndex] = false;
         this.toggleExecutionOptionsInput();
         this.setExecutionOptionType();
         this.$emit("enableSave");
@@ -354,13 +350,25 @@ export default {
           this.index,
           1,
         );
-        this.parameterisationOptions.presets.variables.push({
-          name: this.variable.name,
-          value:
-            this.variableValues[this.valueIndex] != undefined
-              ? this.variableValues[this.valueIndex]
-              : "",
-        });
+        if (this.variableValues[this.valueIndex].constructor === Array) {
+          // Execution option with more than 2 values
+          this.parameterisationOptions.presets.variables.push({
+            name: this.variable.name,
+            value:
+              this.variableValues[this.valueIndex][0] != undefined
+                ? this.variableValues[this.valueIndex][0]
+                : "",
+          });
+        } else {
+          //Execution option with 0 or 1 value
+          this.parameterisationOptions.presets.variables.push({
+            name: this.variable.name,
+            value:
+              this.variableValues[this.valueIndex] != undefined
+                ? this.variableValues[this.valueIndex]
+                : "",
+          });
+        }
         this.variable.type = "presets";
         this.index = this.parameterisationOptions.presets.variables
           .map((variable) => variable.name)
@@ -446,7 +454,7 @@ export default {
         this.parameterisationOptions.executionOptions.variables[this.index][
           key
         ][idx] = { value: event.target.value };
-        this.variableValues[this.valueIndex] = event.target.value;
+        this.variableValues[this.valueIndex][idx] = event.target.value;
         this.checkExecutionOptionInvalid(idx);
       }
     },
@@ -457,12 +465,15 @@ export default {
       this.parameterisationOptions.executionOptions.variables[this.index][
         "valueFrom"
       ].splice(index, 1);
+      this.invalidExecutionOptions[this.valueIndex].splice(index, 1);
+      this.variableValues[this.valueIndex].splice(index, 1);
       if (
         this.parameterisationOptions.executionOptions.variables[this.index][
           "valueFrom"
         ].length == 1
       ) {
         this.renameValueKey("valueFrom", "value");
+        this.invalidExecutionOptions[this.valueIndex][0] = false;
       }
     },
     renameValueKey(oldKey, newKey) {
@@ -497,6 +508,8 @@ export default {
         this.parameterisationOptions.executionOptions.variables[this.index]
       ) {
         this.renameValueKey("value", "valueFrom");
+        let currentVariableValue = this.variableValues[this.valueIndex];
+        this.variableValues[this.valueIndex] = [currentVariableValue, ""];
       }
       this.checkExecutionOptionInvalid(
         this.parameterisationOptions.executionOptions.variables[this.index][
@@ -507,6 +520,7 @@ export default {
         "valueFrom"
       ].push({ value: "" });
       this.invalidExecutionOptions[this.valueIndex].push(true);
+      this.variableValues[this.valueIndex].push("");
     },
     emitNewOptions() {
       this.$emit("newOptions", this.parameterisationOptions);
