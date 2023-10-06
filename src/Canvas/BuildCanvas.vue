@@ -203,10 +203,54 @@ import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 
 import { createDAG } from "@/Canvas/createDAG";
+import axios from "axios";
 
-let elements = expDAGStore.exportedDAG;
-elements.elevateEdgesOnSelect = true;
-setUpCanvas(elements);
+const props = defineProps({
+  pvep: {
+    type: String,
+    default: "",
+  },
+});
+
+const emit = defineEmits(["updateLoading"]);
+
+const getGraph = async () => {
+  emit("updateLoading", true);
+  let graphData;
+  let inputsData;
+  await axios
+    .get(window.location.origin + "/registry-ui/backend/canvas/" + props.pvep)
+    .then((graphResponse) => {
+      if (graphResponse.data.length != 0) {
+        graphData = graphResponse.data;
+      }
+    });
+  await axios
+    .get(
+      window.location.origin + "/registry-ui/backend/experiments/" + props.pvep,
+    )
+    .then((inputsResponse) => {
+      if (inputsResponse.data.length != 0) {
+        inputsData = inputsResponse.data.entry;
+      }
+    });
+  emit("updateLoading", false);
+  nodes.value = [];
+  edges.value = [];
+  const uploadedGraph = createDAG(graphData, inputsData);
+
+  addNodes(uploadedGraph.nodes);
+  addEdges(uploadedGraph.edges);
+};
+
+let elements = {};
+if (props.pvep != "") {
+  getGraph();
+} else {
+  elements = expDAGStore.exportedDAG;
+  elements.elevateEdgesOnSelect = true;
+  setUpCanvas(elements);
+}
 
 const {
   onNodeDragStop,

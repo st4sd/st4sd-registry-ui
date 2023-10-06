@@ -71,6 +71,7 @@
         :isCanvasDisabled="isCanvasDisabled"
         :isRunExperimentEnabled="isRunExperimentEnabled"
         :isParameterisationEnabled="isParameterisationEnabled"
+        :isBuildCanvasEditingEnabled="isBuildCanvasEditingEnabled"
         :id="id"
         :getAvailablePlatforms="getAvailablePlatforms()"
       />
@@ -207,6 +208,7 @@ export default {
       isCanvasDisabled: false,
       isParameterisationEnabled: false,
       isRunExperimentEnabled: false,
+      isBuildCanvasEditingEnabled: false,
       errors: [],
       experimentError: {
         description: "Unable to load experiment",
@@ -333,6 +335,8 @@ export default {
     this.isRunExperimentEnabled = registryUISharedState.isRunExperimentEnabled;
     this.isCanvasDisabled = registryUISharedState.isCanvasDisabled;
     this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
+    this.isBuildCanvasEditingEnabled =
+      registryUISharedState.isBuildCanvasEditingEnabled;
     this.loading--;
   },
   methods: {

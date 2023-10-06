@@ -91,6 +91,18 @@
                   height="20"
                 />
               </dds-link-list-item>
+              <dds-link-list-item
+                v-if="isBuildCanvasEditingEnabled"
+                :href="`${getDeploymentEndpoint()}experiment/${id}/edit`"
+              >
+                Edit Experiment
+                <img
+                  slot="icon"
+                  src="@/assets/arrow--right.svg"
+                  width="20"
+                  height="20"
+                />
+              </dds-link-list-item>
             </dds-link-list>
           </dds-cta-block>
           <!-- eslint-enable -->
@@ -151,6 +163,7 @@ export default {
     isRunExperimentEnabled: Boolean,
     isCanvasDisabled: Boolean,
     isGlobalRegistry: Boolean,
+    isBuildCanvasEditingEnabled: Boolean,
     loading: Number,
     getAvailablePlatforms: Array,
   },

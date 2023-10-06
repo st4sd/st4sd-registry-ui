@@ -29,6 +29,12 @@ const routes = [
     component: BuildCanvasView,
   },
   {
+    path: "/experiment/:pvep/edit",
+    name: "edit experiment in canvas",
+    component: BuildCanvasView,
+    props: true,
+  },
+  {
     path: "/experiment/:id",
     component: ExperimentView,
     props: true,

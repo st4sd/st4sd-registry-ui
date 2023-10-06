@@ -5,9 +5,10 @@ export const registryUISharedState = reactive({
   settings: {},
   isGlobalRegistry: true,
   isCanvasDisabled: true,
-  isBuildCanvasEnabled: false,
   isParameterisationEnabled: false,
   isRunExperimentEnabled: false,
+  isBuildCanvasEnabled: false,
+  isBuildCanvasEditingEnabled: false,
 
   setSettings(obj) {
     this.settings = obj;
@@ -37,6 +38,12 @@ export const registryUISharedState = reactive({
           obj,
         ) == "yes",
     );
+    this.setIsBuildCanvasEditingEnabled(
+      getValueForEnvVar(
+        "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_BUILD_CANVAS_EDITING",
+        obj,
+      ) == "yes",
+    );
   },
   setIsGlobalRegistry(obj) {
     this.isGlobalRegistry = obj;
@@ -46,6 +53,9 @@ export const registryUISharedState = reactive({
   },
   setIsBuildCanvasEnabled(obj) {
     this.isBuildCanvasEnabled = obj;
+  },
+  setIsBuildCanvasEditingEnabled(obj) {
+    this.isBuildCanvasEditingEnabled = obj;
   },
   setIsParameterisationEnabled(obj) {
     this.isParameterisationEnabled = obj;
