@@ -63,6 +63,13 @@ export function setVariables(pvep) {
   return variables;
 }
 
+export function sortDataFiles(data) {
+  let sortedData = data.sort(function (a, b) {
+    return a.name.localeCompare(b.name);
+  });
+  return sortedData;
+}
+
 export function setRuntimeArgs(pvep) {
   return pvep.parameterisation.presets.runtime.args.concat(
     pvep.parameterisation.executionOptions.runtime.args,

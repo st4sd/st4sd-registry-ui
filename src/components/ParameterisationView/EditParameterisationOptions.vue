@@ -254,7 +254,7 @@
         <div class="cds--row">
           <div class="cds--col-lg-13 cds--col-md-7">
             <h3>Data</h3>
-            <div v-if="dataOptions.length != 0">
+            <div v-if="dataOptions != undefined && dataOptions.length != 0">
               <h4 class="padding">
                 Flag the files that should be execution options (the rest will
                 be preset)
@@ -282,7 +282,10 @@
             </div>
             <div v-else><p>No Data Available</p></div>
           </div>
-          <div class="cds--col-lg-3" v-if="dataOptions.length != 0">
+          <div
+            class="cds--col-lg-3"
+            v-if="dataOptions != undefined && dataOptions.length != 0"
+          >
             <p>Quick Links:</p>
             <bx-link class="link-list" href="#data">Data</bx-link>
             <bx-unordered-list class="link-list">
@@ -468,6 +471,7 @@ import EditData from "@/components/ParameterisationView/EditComponents/EditData.
 import {
   setRuntimeArgs,
   setVariables,
+  sortDataFiles,
   setRuntimeArgsInvalid,
   setOrchestratorResources,
   setOrchestratorResourcesInvalid,
@@ -547,6 +551,7 @@ export default {
           val.metadata.registry.executionOptionsDefaults;
 
         this.dataOptions = val.metadata.registry.data;
+        this.dataOptions = sortDataFiles(this.dataOptions);
         this.dataExecutionOptions = val.parameterisation.executionOptions.data;
 
         this.inputs = val.metadata.registry.inputs;
@@ -631,6 +636,9 @@ export default {
       }
       for (let variable in this.parameterisation.presets.variables) {
         delete this.parameterisation.presets.variables[variable].type;
+      }
+      for (let file in this.entry.metadata.registry.data) {
+        delete this.entry.metadata.registry.data[file].type;
       }
       let newPayload = this.entry;
       newPayload.parameterisation = this.parameterisation;

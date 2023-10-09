@@ -200,7 +200,7 @@
   <div v-if="tabSelector == 'data'" class="cds--row tab">
     <div
       class="cds--col-lg-14 cds--col-md-6"
-      v-if="executionOptionsData.length != 0 || presetData.length != 0"
+      v-if="dataOptions != undefined && dataOptions.length != 0"
     >
       <h3>Data Files</h3>
       <dds-structured-list>
@@ -215,20 +215,17 @@
           </dds-structured-list-header-row>
         </dds-structured-list-head>
         <dds-structured-list-body>
-          <dds-structured-list-row v-for="(file, idx) in presetData" :key="idx">
-            <dds-structured-list-cell class="list-spacing">{{
-              file
-            }}</dds-structured-list-cell>
-            <dds-structured-list-cell>Preset</dds-structured-list-cell>
-          </dds-structured-list-row>
           <dds-structured-list-row
-            v-for="(file, idx) in executionOptionsData"
+            v-for="(file, idx) in dataOptions"
             :key="idx"
           >
             <dds-structured-list-cell class="list-spacing">{{
               file.name
             }}</dds-structured-list-cell>
-            <dds-structured-list-cell
+            <dds-structured-list-cell v-if="file.type == 'presets'">
+              Preset
+            </dds-structured-list-cell>
+            <dds-structured-list-cell v-else
               >Execution Option</dds-structured-list-cell
             >
           </dds-structured-list-row>
@@ -358,6 +355,7 @@ import {
   setRuntimeArgs,
   setVariables,
   setOrchestratorResources,
+  sortDataFiles,
 } from "@/functions/setup_parameterisation_variables";
 
 export default {
@@ -368,7 +366,7 @@ export default {
   },
   data() {
     return {
-      presetData: null,
+      presetData: [],
       executionOptionsData: null,
       initialParameterisation: null,
       initialParameterisationSet: false,
@@ -394,25 +392,23 @@ export default {
       handler(val) {
         this.executionOptionsData = val.parameterisation.executionOptions.data;
         if (this.executionOptionsData.length == 0) {
-          this.presetData = val.metadata.registry.data.map(
-            (option) => option.name,
+          val.metadata.registry.data.forEach((option) =>
+            this.presetData.push({ name: option.name, type: "preset" }),
           );
         } else {
-          let dataOptionNames = val.metadata.registry.data.map(
-            (option) => option.name,
+          this.presetData = val.metadata.registry.data.filter(
+            (option) =>
+              this.executionOptionsData
+                .map((file) => file.name)
+                .indexOf(option.name) == -1,
           );
-          let executionOptionsDataNames = this.executionOptionsData.map(
-            (option) => option.name,
-          );
-          this.presetData = dataOptionNames.filter(
-            (name) => executionOptionsDataNames.indexOf(name) == -1,
-          );
+          this.presetData.forEach((option) => (option.type = "presets"));
         }
         this.executionOptionsDefaults =
           val.metadata.registry.executionOptionsDefaults;
         this.platformOptions = val.metadata.registry.platforms;
-        this.dataOptions = val.metadata.registry.data;
-        this.dataExecutionOptions = val.parameterisation.executionOptions.data;
+        this.dataOptions = this.presetData.concat(this.executionOptionsData);
+        this.dataOptions = sortDataFiles(this.dataOptions);
         this.parameterisation = val.parameterisation;
         this.inputs = val.metadata.registry.inputs;
         this.parameterisationOptionsLoading = false;
