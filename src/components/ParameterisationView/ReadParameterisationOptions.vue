@@ -393,7 +393,7 @@ export default {
         this.executionOptionsData = val.parameterisation.executionOptions.data;
         if (this.executionOptionsData.length == 0) {
           val.metadata.registry.data.forEach((option) =>
-            this.presetData.push({ name: option.name, type: "preset" }),
+            this.presetData.push({ name: option.name, type: "presets" }),
           );
         } else {
           this.presetData = val.metadata.registry.data.filter(

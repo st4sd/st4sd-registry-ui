@@ -17,7 +17,12 @@
   </div>
 
   <div v-else>
-    <ParameterisationContainer :pvep="pvep" @cancel="resetPvep" />
+    <ParameterisationContainer
+      :openInRead="true"
+      :pvep="pvep"
+      @cancel="resetPvep"
+      @save="postNewParameterisation"
+    />
   </div>
 </template>
 
@@ -63,6 +68,46 @@ export default {
             this.initialPvep = JSON.parse(JSON.stringify(response.data.entry));
           }
           this.initialPvepSet = true;
+        });
+    },
+    postNewParameterisation(pvep) {
+      for (let variable in pvep.parameterisation.executionOptions.variables) {
+        delete pvep.parameterisation.executionOptions.variables[variable].type;
+        if (
+          pvep.parameterisation.executionOptions.variables[variable].value == ""
+        ) {
+          delete pvep.parameterisation.executionOptions.variables[variable]
+            .value;
+        }
+      }
+      for (let variable in pvep.parameterisation.presets.variables) {
+        delete pvep.parameterisation.presets.variables[variable].type;
+      }
+      for (let file in pvep.metadata.registry.data) {
+        delete pvep.metadata.registry.data[file].type;
+      }
+      let newPayload = pvep;
+      this.parameterisationOptionsLoading = true;
+      axios
+        .post(
+          window.location.origin +
+            `/registry-ui/backend/experiments/${this.id}`,
+          newPayload,
+        )
+        .then((response) => {
+          if (response.status == 200) {
+            location.reload();
+            this.optionsLoading = false;
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 400) {
+            alert(`${error.response.data.message}`);
+          } else {
+            alert(
+              "Experiment not found or internal error while creating experiment",
+            );
+          }
         });
     },
     resetPvep() {

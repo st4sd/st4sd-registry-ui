@@ -4,7 +4,7 @@
       <h1>Parameterisation Options</h1>
     </div>
   </div>
-  <div class="cds--row background" id="padding-top" v-if="editOptions">
+  <div class="cds--row background" id="padding-top" v-if="!readView">
     <div class="cds--col">
       <h3>Editing {{ tabSelector }} properties</h3>
     </div>
@@ -18,11 +18,7 @@
         >
           Cancel
         </bx-btn>
-        <bx-btn
-          id="save-button"
-          @click="togglePostParameterisationPayload"
-          :disabled="saveDisabled"
-        >
+        <bx-btn id="save-button" @click="emitSave" :disabled="saveDisabled">
           Save
         </bx-btn>
       </div>
@@ -74,7 +70,7 @@
       <div
         id="margin-right"
         class="height"
-        :class="{ 'white-background': !editOptions }"
+        :class="{ 'white-background': readView }"
       >
         <div class="cds--col" id="padding-right">
           <bx-btn
@@ -82,14 +78,14 @@
             id="edit-button"
             iconLayout
             @click="toggleEditOptions"
-            v-if="!editOptions"
+            v-if="readView"
           >
             Edit
             <img width="16" heigth="16" src="@/assets/edit.svg" />
           </bx-btn>
         </div>
         <ReadParameterisationOptions
-          v-if="!editOptions"
+          v-if="readView"
           :tabSelector="tabSelector"
           :pvep="pvep"
         />
@@ -99,9 +95,9 @@
           :id="id"
           :tabSelector="tabSelector"
           :pvep="pvep"
-          :postParameterisationOptions="postParameterisationPayload"
           @dataInvalid="dataInvalid"
           @dataValid="dataValid"
+          @setNewParameterisationOptions="setNewParameterisationOptions"
           @postNewParameterisation="
             dataInvalid();
             disableCancel();
@@ -128,14 +124,14 @@ export default {
     EditParameterisationOptions,
   },
   props: {
+    openInRead: Boolean,
     pvep: Object,
   },
   data() {
     return {
       tabSelector: "platforms",
       platformTabSelector: null,
-      editOptions: false,
-      postParameterisationPayload: false,
+      readView: null,
       cancelNotificationOpen: false,
       cancelCounter: 0,
       invalidData: {
@@ -146,9 +142,13 @@ export default {
       },
       saveDisabled: false,
       cancelDisabled: false,
+      newPvep: null,
     };
   },
-  emits: ["cancel"],
+  emits: {
+    cancel: null,
+    save: null,
+  },
   watch: {
     invalidData: {
       // the callback will be called immediately after the start of the observation
@@ -164,16 +164,26 @@ export default {
       },
       deep: true,
     },
+    openInRead: {
+      // the callback will be called immediately after the start of the observation
+      immediate: true,
+      handler(val) {
+        this.readView = val;
+      },
+    },
   },
   methods: {
     setTabSelector(option) {
       this.tabSelector = option;
     },
     toggleEditOptions() {
-      this.editOptions = !this.editOptions;
+      this.readView = !this.readView;
     },
-    togglePostParameterisationPayload() {
-      this.postParameterisationPayload = !this.postParameterisationPayload;
+    setNewParameterisationOptions(pvep) {
+      this.newPvep = pvep;
+    },
+    emitSave() {
+      this.$emit("save", this.newPvep);
     },
     handleCancel() {
       let timer;

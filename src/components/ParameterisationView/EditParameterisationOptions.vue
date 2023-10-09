@@ -464,7 +464,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import EditVariables from "@/components/ParameterisationView/EditComponents/EditVariables.vue";
 import EditData from "@/components/ParameterisationView/EditComponents/EditData.vue";
 
@@ -581,13 +580,7 @@ export default {
           this.orchestratorResources,
         );
         this.setSinglePlatform();
-      },
-    },
-    postParameterisationOptions: {
-      handler(val) {
-        if (val == true) {
-          this.postNewParameterisation();
-        }
+        this.$emit("setNewParameterisationOptions", this.entry);
       },
     },
     runtimeArgsInvalid: {
@@ -624,48 +617,6 @@ export default {
     },
   },
   methods: {
-    postNewParameterisation() {
-      for (let variable in this.parameterisation.executionOptions.variables) {
-        delete this.parameterisation.executionOptions.variables[variable].type;
-        if (
-          this.parameterisation.executionOptions.variables[variable].value == ""
-        ) {
-          delete this.parameterisation.executionOptions.variables[variable]
-            .value;
-        }
-      }
-      for (let variable in this.parameterisation.presets.variables) {
-        delete this.parameterisation.presets.variables[variable].type;
-      }
-      for (let file in this.entry.metadata.registry.data) {
-        delete this.entry.metadata.registry.data[file].type;
-      }
-      let newPayload = this.entry;
-      newPayload.parameterisation = this.parameterisation;
-      this.optionsLoading = true;
-      this.$emit("postNewParameterisation");
-      axios
-        .post(
-          window.location.origin +
-            `/registry-ui/backend/experiments/${this.id}`,
-          newPayload,
-        )
-        .then((response) => {
-          if (response.status == 200) {
-            location.reload();
-            this.optionsLoading = false;
-          }
-        })
-        .catch((error) => {
-          if (error.response.status == 400) {
-            alert(`${error.response.data.message}`);
-          } else {
-            alert(
-              "Experiment not found or internal error while creating experiment",
-            );
-          }
-        });
-    },
     setSinglePlatform() {
       if (this.parameterisation.presets.platform == undefined) {
         this.singlePlatform = false;
@@ -678,11 +629,11 @@ export default {
     },
     setPlatformType() {
       if (this.singlePlatform) {
-        if (this.parameterisation.executionOptions.platform.length != 0) {
+        if (this.parameterisation.executionOptions.platform == undefined) {
+          this.selectedPlatform = this.platformOptions[0];
+        } else {
           this.selectedPlatform =
             this.parameterisation.executionOptions.platform[0];
-        } else {
-          this.selectedPlatform = this.platformOptions[0];
         }
         this.parameterisation.presets.platform = this.selectedPlatform;
         delete this.parameterisation.executionOptions.platform;

@@ -359,6 +359,8 @@ export default {
                 ? this.variableValues[this.valueIndex][0]
                 : "",
           });
+          this.variableValues[this.valueIndex] =
+            this.variableValues[this.valueIndex][0];
         } else {
           //Execution option with 0 or 1 value
           this.parameterisationOptions.presets.variables.push({
