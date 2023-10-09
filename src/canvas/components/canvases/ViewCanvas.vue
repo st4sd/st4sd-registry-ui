@@ -14,10 +14,12 @@
       <Controls />
 
       <Panel :position="PanelPosition.TopRight" class="controls">
+        <bx-btn title="Edit Experiment" @click="$emit('editButtonClicked')">
+          Edit Experiment
+        </bx-btn>
         <bx-btn
-          size="sm"
           v-if="doesOtherOrPresetsExist()"
-          title="Toggle inputs visibility"
+          title="toggle inputs visibility"
           @click="showHideInputNodes"
         >
           {{ showHideButtonTitle }}
@@ -27,7 +29,7 @@
             class="canvas-logo"
             width="16"
             heigth="16"
-            src="../assets/brightness-contrast.svg"
+            src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
         <bx-btn size="sm" title="Download as JSON" @click="downloadJSON">
@@ -35,7 +37,7 @@
             class="canvas-logo"
             width="16"
             heigth="16"
-            src="../assets/download.svg"
+            src="@/assets/download.svg"
           />
         </bx-btn>
       </Panel>
@@ -54,12 +56,11 @@
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
-    <TransformLibrary
-      v-if="!props.transformApplied"
-      :transforms="props.transforms"
-      @transform-selected="handleTransformSelected"
-    />
-
+    <!-- v-if is necessary
+      Modals need to only render once the props (clickedNode) 
+      are populated, if it's rendered on start and the modal 
+      is toggled with open/close then the prop data will not 
+      be passed to the modal and the modal will appear empty -->
     <readWorkflowModal
       v-if="modalVisibilities.readWorkflowModal.value"
       title="Workflow Details"
@@ -67,8 +68,7 @@
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
-    >
-    </readWorkflowModal>
+    />
     <readComponentModal
       v-if="modalVisibilities.readComponentModal.value"
       title="Component Details"
@@ -76,11 +76,10 @@
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
-    >
-    </readComponentModal>
-    <readInputModal
-      v-if="modalVisibilities.readInputModal.value"
-      @bx-modal-closed="toggleModalVisibility('readInputModal')"
+    />
+    <readExperimentInputsModal
+      v-if="modalVisibilities.readExperimentInputsModal.value"
+      @bx-modal-closed="toggleModalVisibility('readExperimentInputsModal')"
       :node="clickedNode"
       open="true"
     />
@@ -104,29 +103,41 @@ import {
   PanelPosition,
 } from "@vue-flow/additional-components";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
-import { dagStore } from "@/Canvas/stores/dagStore";
-import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
-import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
-import ComponentNode from "@/Canvas/Nodes/ComponentNode.vue";
-import readWorkflowModal from "@/Canvas/Modals/nodeCRUD/readWorkflow.vue";
-import readComponentModal from "@/Canvas/Modals/nodeCRUD/readComponent.vue";
-import readInputModal from "@/Canvas/Modals/nodeCRUD/readInput.vue";
-import readEdgeModal from "@/Canvas/Modals/edgeCRUD/readEdge.vue";
-import { toJSON } from "@/Canvas/downloadJSON";
+import { dagStore } from "@/canvas/stores/dagStore";
+//Node types
+import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
+import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
+import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
+//Modals
+import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
+import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
+import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
+import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
+//Functions
+import { toJSON } from "@/canvas/functions/downloadJSON";
 import {
   getWorkflowsDimensions,
   getWorkflowsEdges,
   hide,
-} from "@/Canvas/hideExpand";
-import TransformLibrary from "./TransformLibrary.vue";
+} from "@/canvas/functions/hideExpand";
 
 /**
  * useVueFlow provides all event handlers and store properties
  * You can pass the composable an object that has the same properties as the VueFlow component props
  */
 
-//Vue Flow setup
 const elements = ref(dagStore.DAG);
+
+let clickedNode;
+let clickedEdge;
+let inputingEdges;
+let modalVisibilities = {
+  readEdgeModal: ref(false),
+  readComponentModal: ref(false),
+  readWorkflowModal: ref(false),
+  readExperimentInputsModal: ref(false),
+};
+const dark = ref(false);
 
 const {
   onPaneReady,
@@ -139,53 +150,21 @@ const {
   edges,
 } = useVueFlow(elements.value);
 
-//Variable declaration
-let clickedNode;
-let clickedEdge;
-let inputingEdges;
-let modalVisibilities = {
-  readEdgeModal: ref(false),
-  readInputModal: ref(false),
-  readComponentModal: ref(false),
-  readWorkflowModal: ref(false),
-};
-const dark = ref(false);
-
-let showHideButtonTitle = ref("Show all inputs");
-let inputNodesVisibility = ref(false);
-
-const workflowsDims = getWorkflowsDimensions(nodes.value);
-const workflowsEdges = getWorkflowsEdges(nodes.value, edges.value);
-
-const props = defineProps({
-  id: {
-    type: String,
-    default: "",
-  },
-  // default: [] gives an error https://github.com/vuejs/vue/issues/1032
-  transforms: {
-    type: Array,
-    default: () => [],
-  },
-  transformApplied: {
-    type: Boolean,
-    default: false,
-  },
-});
-
 const doesOtherOrPresetsExist = () => {
   return nodes.value.some((node) => node.id == "other" || node.id == "presets");
 };
 
+let showHideButtonTitle = ref("Show all inputs");
+let inputNodesVisability = ref(false);
 const showHideInputNodes = () => {
-  inputNodesVisibility.value = !inputNodesVisibility.value;
-  let other = nodes.value.find((a) => a.id == "other");
-  if (other != undefined) {
-    other.hidden = !inputNodesVisibility.value;
+  inputNodesVisability.value = !inputNodesVisability.value;
+  let Other = nodes.value.find((a) => a.id == "other");
+  if (Other != undefined) {
+    Other.hidden = !inputNodesVisability.value;
   }
-  let presets = nodes.value.find((a) => a.id == "presets");
-  if (presets != undefined) {
-    presets.hidden = !inputNodesVisibility.value;
+  let Presets = nodes.value.find((a) => a.id == "presets");
+  if (Presets != undefined) {
+    Presets.hidden = !inputNodesVisability.value;
   }
   showHideButtonTitle.value =
     showHideButtonTitle.value == "Hide presets & other"
@@ -193,6 +172,8 @@ const showHideInputNodes = () => {
       : "Hide presets & other";
 };
 
+const workflowsDims = getWorkflowsDimensions(nodes.value);
+const workflowsEdges = getWorkflowsEdges(nodes.value, edges.value);
 /**
  * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
  *
@@ -205,6 +186,7 @@ onPaneReady(({ fitView }) => {
 const toggleModalVisibility = (modal) => {
   modalVisibilities[modal].value = !modalVisibilities[modal].value;
 };
+
 onNodeDoubleClick(({ node }) => {
   clickedNode = { ...node };
   inputingEdges = edges.value.filter((n) => n.target == node.id);
@@ -214,10 +196,9 @@ onNodeDoubleClick(({ node }) => {
     //there is an issue to track this
     //https://github.ibm.com/st4sd/overview/issues/517
   } else if (node.type == "component") {
-    inputingEdges = edges.value.filter((n) => n.target == node.id);
     toggleModalVisibility("readComponentModal");
   } else if (node.type == "input") {
-    toggleModalVisibility("readInputModal");
+    toggleModalVisibility("readExperimentInputsModal");
   }
 });
 
@@ -227,7 +208,7 @@ onEdgeDoubleClick(({ edge }) => {
 });
 
 /**
- * onConnect is called when a new connection is created.
+ * onConnect is called when a new connection/edge is created.
  * You can add additional properties to your new edge (like a type or label) or block the creation altogether
  */
 onConnect((params) => addEdges([params]));
@@ -247,13 +228,17 @@ const onChangeVisibility = (node, isHidden) => {
 };
 
 const downloadJSON = () => {
-  toJSON(nodes.value, edges.value, "experiment");
-};
-
-const emit = defineEmits(["transformSelected"]);
-
-const handleTransformSelected = (loading, transformId) => {
-  emit("transformSelected", loading, transformId);
+  let nodesToDownload = elements.value.nodes;
+  let entrypointNodeId = ref(
+    elements.value.nodes.find((node) => node.isEntry == true).id,
+  );
+  toJSON(nodesToDownload, entrypointNodeId);
 };
 </script>
-<style lang="scss" src="@/Canvas/main.scss"></style>
+<style lang="scss">
+@import "@/canvas/styles/main.scss";
+bx-btn::part(button) {
+  padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
+  margin: 0.2rem;
+}
+</style>

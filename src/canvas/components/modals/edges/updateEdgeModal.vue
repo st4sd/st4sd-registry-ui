@@ -189,7 +189,7 @@ import "@carbon/web-components/es/components/dropdown/index.js";
 import {
   getPossibleArgumentNames,
   getEdgeSourceAndArguments,
-} from "@/Canvas/modalFunctions";
+} from "@/canvas/functions/modalFunctions";
 export default {
   props: {
     edgeProp: Object,

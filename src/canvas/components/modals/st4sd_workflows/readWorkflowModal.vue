@@ -156,7 +156,6 @@
 
 <script>
 export default {
-  name: "readWorkflowModal",
   props: {
     title: String,
     node: Object,

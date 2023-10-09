@@ -1,4 +1,4 @@
-import buildExperiment from "./buildExperiment";
+import buildExperiment from "@/canvas/functions/buildExperiment";
 
 export function toJSON(nodes, edges, experimentName) {
   let entryNode = nodes.find((node) => node.isEntry == true);

@@ -32,7 +32,7 @@
             class="canvas-logo"
             width="16"
             heigth="16"
-            src="../assets/brightness-contrast.svg"
+            src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
         <bx-btn
@@ -44,7 +44,7 @@
             class="canvas-logo"
             width="16"
             heigth="16"
-            src="../assets/download.svg"
+            src="@/assets/download.svg"
           />
         </bx-btn>
         <bx-btn
@@ -56,7 +56,7 @@
             class="canvas-logo"
             width="16"
             heigth="16"
-            src="../assets/upload.svg"
+            src="@/assets/upload.svg"
           />
         </bx-btn>
       </Panel>
@@ -82,7 +82,7 @@
       @added="addWorkflow"
       @bx-modal-closed="toggleModalVisibility('createWorkflowModal')"
     />
-    <updateWorkflow
+    <updateWorkflowModal
       v-if="modalVisibilities.updateWorkflowModal.value"
       :node="selectedNode"
       :allNodes="allNodes"
@@ -93,7 +93,7 @@
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
     />
-    <updateComponent
+    <updateComponentModal
       v-if="modalVisibilities.updateComponentModal.value"
       :node="selectedNode"
       :parentNode="parentNode"
@@ -102,15 +102,15 @@
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
     />
-    <createEdge
+    <createEdgeModal
       v-if="modalVisibilities.createEdgeModal.value"
       :edgeProp="newEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
       @bx-modal-closed="toggleModalVisibility('createEdgeModal')"
-      @finished="addConnection"
+      @finished="addEdge"
     />
-    <updateEdge
+    <updateEdgeModal
       v-if="modalVisibilities.updateEdgeModal.value"
       :edgeProp="selectedEdge"
       :allNodes="allNodes"
@@ -136,7 +136,7 @@
       @done="addStep"
     />
     <!-- Experiment configuration -->
-    <configureExperiment
+    <configureExperimentModal
       v-if="modalVisibilities.configureExperimentModal.value"
       :allNodes="allNodes"
       @bx-modal-closed="toggleModalVisibility('configureExperimentModal')"
@@ -167,46 +167,46 @@ import {
 } from "@vue-flow/additional-components";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { ref } from "vue";
-import BlocksLibrary from "@/Canvas/BlocksLibrary";
+import BlocksLibrary from "@/canvas/components/BlocksLibrary";
 //Modals
-import createEdge from "@/Canvas/Modals/edgeCRUD/createEdge.vue";
-import updateEdge from "@/Canvas/Modals/edgeCRUD/updateEdge.vue";
-import createWorkflowModal from "@/Canvas/Modals/nodeCRUD/createWorkflow.vue";
-import updateWorkflow from "@/Canvas/Modals/nodeCRUD/updateWorkflow.vue";
-import updateComponent from "@/Canvas/Modals/nodeCRUD/updateComponent.vue";
-import nestNodeModal from "@/Canvas/Modals/nestNodeModal";
-import configureExperiment from "@/Canvas/Modals/configureExperiment.vue";
-import deleteModal from "@/Canvas/Modals/deleteModal.vue";
-import fileUploadModal from "@/Canvas/Modals/fileUploadModal.vue";
+import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
+import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
+import createWorkflowModal from "@/canvas/components/modals/st4sd_workflows/createWorkflowModal.vue";
+import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
+import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal";
+import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
+import configureExperimentModal from "@/canvas/components/modals/experiment/configureExperimentModal.vue";
+import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
+import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 
 //Stores
-import { expDAGStore } from "@/Canvas/stores/expDAGStore";
-import { nodeStore } from "@/Canvas/stores/nodeStore";
+import { expDAGStore } from "@/canvas/stores/expDAGStore";
+import { nodeStore } from "@/canvas/stores/nodeStore";
 
 //Node types
-import ComponentNode from "@/Canvas/Nodes/ComponentNode.vue";
-import WorkflowNode from "@/Canvas/Nodes/WorkflowNode";
-import WorkflowInputNode from "@/Canvas/Nodes/WorkflowInputNode.vue";
+import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
+import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
+import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 
 //Functions
-import { toJSON } from "@/Canvas/downloadJSON";
-import { hide, getWorkflowsEdges } from "@/Canvas/hideExpand";
+import { toJSON } from "@/canvas/functions/downloadJSON";
+import { hide, getWorkflowsEdges } from "@/canvas/functions/hideExpand";
 import {
   setUpCanvas,
   addWorkflowNode,
   addWorkflowNodesToCanvas,
   isConnectionValid,
-} from "@/Canvas/canvasFunctions";
+} from "@/canvas/functions/canvasFunctions";
 import {
   isNestingValid,
   removeStep,
   removeNodeAndNestedNodes,
-} from "@/Canvas/stepFunctions";
+} from "@/canvas/functions/stepFunctions";
 
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 
-import { createDAG } from "@/Canvas/createDAG";
+import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";
 
 const props = defineProps({
@@ -413,7 +413,7 @@ onEdgeDoubleClick(({ edge }) => {
   toggleModalVisibility("updateEdgeModal");
 });
 
-const addConnection = (newEdge) => {
+const addEdge = (newEdge) => {
   addEdges([newEdge]);
   toggleModalVisibility("createEdgeModal");
 };
@@ -528,4 +528,4 @@ const addStep = () => {
 };
 </script>
 
-<style lang="scss" src="@/Canvas/main.scss"></style>
+<style lang="scss" src="@/canvas/styles/main.scss"></style>

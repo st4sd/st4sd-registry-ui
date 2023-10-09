@@ -11,7 +11,7 @@
 
 <script>
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
-import BuildCanvas from "@/Canvas/BuildCanvas";
+import BuildCanvas from "@/canvas/components/canvases/BuildCanvas";
 
 export default {
   components: { St4sdBreadcrumb, BuildCanvas },

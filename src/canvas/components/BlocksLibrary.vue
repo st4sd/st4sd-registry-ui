@@ -4,12 +4,12 @@
       <div id="title">Component Library</div>
       <div id="buttons">
         <bx-btn
-          title="Add Component"
+          title="Create Component"
           icon-layout
-          @click="toggleAddModal"
+          @click="toggleModalVisibility('createComponentModal')"
           size="sm"
         >
-          <img width="16" heigth="16" src="../assets/plus.svg" />
+          <img width="16" heigth="16" src="@/assets/plus.svg" />
           New Component
         </bx-btn>
       </div>
@@ -43,22 +43,22 @@
         </div>
       </div>
     </div>
-    <createComponent
-      v-if="modalAddActive"
+    <createComponentModal
+      v-if="modalVisibilities.createComponentModal.value"
       @componentAdded="addComponentNode"
-      @bx-modal-closed="toggleAddModal"
+      @bx-modal-closed="toggleModalVisibility('createComponentModal')"
     />
-    <readWorkflow
-      v-if="modalWorkflowActive"
+    <readWorkflowModal
+      v-if="modalVisibilities.readWorkflowModal.value"
       title="Workflow Details"
-      @bx-modal-closed="toggleWorkflowModal"
+      @bx-modal-closed="toggleModalVisibility('readWorkflowModal')"
       :node="clickedNode"
       :inputingEdges="[]"
     />
-    <readComponent
-      v-if="modalComponentActive"
+    <readComponentModal
+      v-if="modalVisibilities.readComponentModal.value"
       title="Component Details"
-      @bx-modal-closed="toggleComponentModal"
+      @bx-modal-closed="toggleModalVisibility('readComponentModal')"
       :node="clickedNode"
       :inputingEdges="[]"
     />
@@ -68,11 +68,11 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
-import getBlocks from "@/Canvas/getBlocks";
-import { nodeStore } from "@/Canvas/stores/nodeStore";
-import readWorkflow from "@/Canvas/Modals/nodeCRUD/readWorkflow.vue";
-import readComponent from "@/Canvas/Modals/nodeCRUD/readComponent.vue";
-import createComponent from "@/Canvas/Modals/nodeCRUD/createComponent.vue";
+import getBlocks from "@/canvas/functions/getBlocks";
+import { nodeStore } from "@/canvas/stores/nodeStore";
+import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
+import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
+import createComponentModal from "@/canvas/components/modals/st4sd_components/createComponentModal.vue";
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
@@ -112,6 +112,16 @@ async function getNodesFromUrls() {
   return nodes;
 }
 
+let modalVisibilities = {
+  readComponentModal: ref(false),
+  readWorkflowModal: ref(false),
+  createComponentModal: ref(false),
+};
+
+const toggleModalVisibility = (modal) => {
+  modalVisibilities[modal].value = !modalVisibilities[modal].value;
+};
+
 const onDragStart = (event, element) => {
   nodeStore.setExportedNode(element);
 };
@@ -124,15 +134,10 @@ const fullElements = ref(
   }),
 );
 
-const modalAddActive = ref(false);
-const toggleAddModal = () => {
-  modalAddActive.value = !modalAddActive.value;
-};
-
 const addComponentNode = (newComponent) => {
   newComponent.id = getId();
   fullElements.value.push(newComponent);
-  toggleAddModal();
+  toggleModalVisibility("createComponentModal");
 };
 
 //Search bar function
@@ -151,23 +156,13 @@ const updateList = () => {
   }
 };
 
-const modalWorkflowActive = ref(false);
-const toggleWorkflowModal = () => {
-  modalWorkflowActive.value = !modalWorkflowActive.value;
-};
-
-const modalComponentActive = ref(false);
-const toggleComponentModal = () => {
-  modalComponentActive.value = !modalComponentActive.value;
-};
-
 let clickedNode;
 const onDoubleClick = (node) => {
   clickedNode = { ...node };
   if (node.type == "workflow") {
-    toggleWorkflowModal();
+    toggleModalVisibility("readWorkflowModal");
   } else if (node.type == "component") {
-    toggleComponentModal();
+    toggleModalVisibility("readComponentModal");
   }
 };
 </script>

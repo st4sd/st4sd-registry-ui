@@ -1,4 +1,4 @@
-import { createWorkflowDAG } from "@/Canvas/createDAG";
+import { createWorkflowDAG } from "@/canvas/functions/createDAG";
 import { MarkerType } from "@vue-flow/core";
 import { ref } from "vue";
 

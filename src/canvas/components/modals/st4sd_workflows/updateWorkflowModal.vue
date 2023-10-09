@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import workflowForm from "@/Canvas/workflowForm.vue";
+import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 export default {
   components: { workflowForm },
   props: { node: Object, parentNode: Object, allNodes: Object },

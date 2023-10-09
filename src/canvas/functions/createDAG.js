@@ -1,5 +1,5 @@
 import { MarkerType } from "@vue-flow/core";
-import { drawGraph } from "./drawGraph";
+import { drawGraph } from "@/canvas/functions/drawGraph";
 
 const executionOptionsNodeType = "input_ExecutionOptionsType";
 const presetsNodeType = "input_PresetsType";
@@ -20,7 +20,7 @@ export function createDAG(dslData, experimentData) {
     //add all workflows/components inside the entry workflow
     addBlocks(graph, dslData, entryWorkflow, entryWorkflowName);
     //add edges/connections between the blocks
-    addConnection(graph, dslData, entryWorkflow, entryWorkflowName);
+    addEdges(graph, dslData, entryWorkflow, entryWorkflowName);
     graph = { ...drawGraph(graph) };
   }
 
@@ -71,7 +71,7 @@ export function createWorkflowDAG(experimentData) {
     //add all workflows/components inside the entry workflow
     addBlocks(graph, experimentData, entryWorkflow, entryWorkflowName);
     //add edges/connections between the blocks
-    addConnection(graph, experimentData, entryWorkflow, entryWorkflowName);
+    addEdges(graph, experimentData, entryWorkflow, entryWorkflowName);
     graph = { ...drawGraph(graph) };
   }
   return graph;
@@ -271,7 +271,7 @@ function addBlocks(graph, data, workflow, prevStepId) {
 }
 
 //This function adds edges to the DAG based on the execute part of a given workflow
-function addConnection(graph, data, workflow, workflowName) {
+function addEdges(graph, data, workflow, workflowName) {
   let workflowExecution = workflow.execute;
   let inputNodes = graph.nodes.filter((n) => n.type == "input");
   for (var step in workflowExecution) {
@@ -314,12 +314,12 @@ function addConnection(graph, data, workflow, workflowName) {
       addEdge(graph, source, target, arg, edgeDefinition);
     }
     //CHECK IF THE STEP IS REFERENCING A WORKFLOW
-    //IF IT IS A WORKFLOW - DRAW ITS CONNECTIONS.
+    //IF IT IS A WORKFLOW - DRAW ITS CONNECTIONS/EDGES.
     let innerWorkflow = data.workflows.find(
       (o) => o.signature.name === workflow.steps[targetStep],
     );
     if (innerWorkflow != undefined) {
-      addConnection(graph, data, innerWorkflow, target);
+      addEdges(graph, data, innerWorkflow, target);
     }
   }
 }

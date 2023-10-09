@@ -20,7 +20,7 @@
 
 <script>
 import "@carbon/web-components/es/components/modal/index.js";
-import workflowForm from "@/Canvas/workflowForm.vue";
+import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 
 export default {
   components: { workflowForm },

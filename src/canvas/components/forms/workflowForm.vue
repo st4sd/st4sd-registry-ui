@@ -175,8 +175,8 @@
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/input/index.js";
-import St4sdWorkflow from "@/Canvas/Classes/St4sdWorkflow.js";
-import { createWorkflowNode } from "@/Canvas/canvasFunctions";
+import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
+import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },

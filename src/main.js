@@ -7,7 +7,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import "./Canvas/main.scss";
+import "@/canvas/styles/main.scss";
 import getSettings from "@/functions/registry_ui_settings";
 import { registryUISharedState } from "@/stores/registryUISharedState";
 

@@ -117,7 +117,7 @@
           :experiment="experiment"
         />
       </div>
-      <formModal
+      <runExperimentFormModal
         v-if="runExperimentFormModal"
         @submit="toggleRunExperimentFormEmit"
         @bx-modal-closed="toggleModalVisibility('runExperimentFormModal')"
@@ -128,7 +128,7 @@
           :formEmit="runExperimentFormEmit"
           @post-experiment-run="setRunExperimentFormPayload"
         />
-      </formModal>
+      </runExperimentFormModal>
     </div>
   </div>
 </template>
@@ -137,8 +137,8 @@
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
-import formModal from "@/Canvas/Modals/formModal.vue";
-import runExperimentForm from "@/Canvas/runExperimentForm.vue";
+import runExperimentFormModal from "@/canvas/components/modals/experiment/runExperimentFormModal.vue";
+import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta-section/index.js";
 import "@carbon/web-components/es/components/input/index.js";
@@ -153,7 +153,7 @@ export default {
   name: "PageHero",
   components: {
     St4sdBestPracticesProgressIndicator,
-    formModal,
+    runExperimentFormModal,
     runExperimentForm,
   },
   props: {

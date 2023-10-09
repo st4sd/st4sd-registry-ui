@@ -36,7 +36,6 @@
 import "@carbon/web-components/es/components/structured-list/index.js";
 
 export default {
-  name: "readEdgeModal",
   props: {
     title: String,
     edge: Object,

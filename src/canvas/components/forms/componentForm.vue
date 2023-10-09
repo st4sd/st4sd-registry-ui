@@ -637,7 +637,7 @@ import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/toggle/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
-import St4sdComponent from "@/Canvas/Classes/St4sdComponent.js";
+import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 
 export default {
   props: { node: Object, parentNode: Object },

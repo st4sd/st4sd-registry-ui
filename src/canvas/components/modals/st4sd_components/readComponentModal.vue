@@ -766,7 +766,6 @@
 
 <script>
 export default {
-  name: "readComponentModal",
   props: {
     title: String,
     node: Object,

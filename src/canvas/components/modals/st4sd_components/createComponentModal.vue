@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import componentForm from "@/Canvas/componentForm.vue";
+import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {
   components: { componentForm },

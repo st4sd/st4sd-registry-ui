@@ -35,7 +35,6 @@
 
 <script>
 export default {
-  name: "readInputModal",
   props: {
     node: Object,
   },

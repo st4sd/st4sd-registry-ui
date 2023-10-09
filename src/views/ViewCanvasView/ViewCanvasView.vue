@@ -80,13 +80,13 @@
 
 <script setup>
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
-import ViewCanvas from "@/Canvas/ViewCanvas.vue";
-import EditCanvas from "@/Canvas/EditCanvas.vue";
-import submitExperimentModal from "@/Canvas/Modals/submitExperimentModal.vue";
+import ViewCanvas from "@/canvas/components/canvases/ViewCanvas.vue";
+import EditCanvas from "@/canvas/components/canvases/EditCanvas.vue";
+import submitExperimentModal from "@/canvas/components/modals/experiment/submitExperimentModal.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import { ref, defineProps, onMounted } from "vue";
-import { dagStore } from "@/Canvas/stores/dagStore";
-import { createDAG } from "@/Canvas/createDAG";
+import { dagStore } from "@/canvas/stores/dagStore";
+import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
