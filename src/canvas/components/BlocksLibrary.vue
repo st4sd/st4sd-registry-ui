@@ -175,4 +175,11 @@ const onDoubleClick = (node) => {
 #controls {
   margin-bottom: 1rem;
 }
+#nodes-container {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.node {
+  margin-bottom: 0.5rem;
+}
 </style>

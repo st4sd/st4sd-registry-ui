@@ -180,7 +180,7 @@ import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 
 //Stores
-import { expDAGStore } from "@/canvas/stores/expDAGStore";
+// import { expDAGStore } from "@/canvas/stores/expDAGStore";
 import { nodeStore } from "@/canvas/stores/nodeStore";
 
 //Node types
@@ -195,6 +195,7 @@ import {
   setUpCanvas,
   addWorkflowNode,
   addWorkflowNodesToCanvas,
+  convertToBuildCanvasSystem,
   isConnectionValid,
 } from "@/canvas/functions/canvasFunctions";
 import {
@@ -242,7 +243,13 @@ const getGraph = async () => {
   nodes.value = [];
   edges.value = [];
   const uploadedGraph = createDAG(graphData, inputsData);
-
+  //Change ID system and add workflow dimensions
+  convertToBuildCanvasSystem(
+    uploadedGraph.nodes,
+    uploadedGraph.edges,
+    workflowDimensions,
+    getId,
+  );
   addNodes(uploadedGraph.nodes);
   addEdges(uploadedGraph.edges);
 };
@@ -251,7 +258,7 @@ let elements = {};
 if (props.pvep != "") {
   getGraph();
 } else {
-  elements = expDAGStore.exportedDAG;
+  // elements = expDAGStore.exportedDAG;
   elements.elevateEdgesOnSelect = true;
   setUpCanvas(elements);
 }
@@ -344,7 +351,6 @@ const onDrop = (event) => {
     x: event.clientX - left,
     y: event.clientY - top,
   });
-  newNode.id = getId();
   if (newNode.type == "workflow") {
     addWorkflowNodesToCanvas(
       newNode,
@@ -354,6 +360,7 @@ const onDrop = (event) => {
       addEdges,
     );
   } else {
+    newNode.id = getId();
     addNodes([newNode]);
   }
 

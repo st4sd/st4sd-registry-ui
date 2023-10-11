@@ -169,7 +169,6 @@ export function addWorkflowNodesToCanvas(
   addNodes,
   addEdges,
 ) {
-  const idsDict = ref({});
   //Create an experiment definition to pass it to createWorkflowDAG function
   let WFexp = {
     entrypoint: {
@@ -192,54 +191,57 @@ export function addWorkflowNodesToCanvas(
   let entryNode = experimentGraph.nodes.find(
     (node) => node.id == workflowNode.label,
   );
-  //replace IDs to the canvas ID system
-  idsDict[entryNode.id] = workflowNode.id;
+  workflowNode.id = entryNode.id;
   workflowNode.definition = entryNode.definition;
   workflowNode.style = { ...entryNode.style };
-  addNodes([workflowNode]);
-  for (var experimentNode of experimentGraph.nodes) {
-    if (experimentNode.id != entryNode.id) {
-      let ID = getId();
-      idsDict[experimentNode.id] = ID;
-      experimentNode.id = ID;
-      experimentNode.parentNode = idsDict[experimentNode.parentNode];
-      addNodes([experimentNode]);
-      if (experimentNode.type == "workflow") {
-        workflowDimensions[experimentNode.id] = {
-          width: experimentNode.style.width,
-          height: experimentNode.style.height,
-        };
-      }
-    }
-  }
-  for (var experimentEdge of experimentGraph.edges) {
-    experimentEdge.source = idsDict[experimentEdge.source];
-    experimentEdge.target = idsDict[experimentEdge.target];
-    experimentEdge.id = experimentEdge.id + "[" + getId() + "]";
-    //fix the edges
-    let edgeSourceNode = experimentGraph.nodes.find(
-      (node) => node.id == experimentEdge.source,
-    );
-    if (edgeSourceNode.type != "workflow-input") {
-      Object.keys(experimentEdge.definition).forEach((argument) => {
-        let sourceReference = experimentEdge.definition[argument]
-          .split(">:")[0]
-          .split("<")[1]
-          .split("/")[0];
-        experimentEdge.definition[argument] = experimentEdge.definition[
-          argument
-        ].replace(sourceReference, experimentEdge.source);
-      });
-    }
-    addEdges([experimentEdge]);
-  }
-  //add to the array used for the collapse/expand functionality
-  workflowDimensions[workflowNode.id] = {
-    width: workflowNode.style.width,
-    height: workflowNode.style.height,
-  };
+  //remove entryNode
+  experimentGraph.nodes = experimentGraph.nodes.filter(
+    (node) => node.id != entryNode.id,
+  );
+  //replace it with workflowNode
+  experimentGraph.nodes.push(workflowNode);
+  convertToBuildCanvasSystem(
+    experimentGraph.nodes,
+    experimentGraph.edges,
+    workflowDimensions,
+    getId,
+  );
+  addNodes(experimentGraph.nodes);
+  addEdges(experimentGraph.edges);
 }
-
+export function convertToBuildCanvasSystem(
+  nodes,
+  edges,
+  workflowDimensions,
+  getId,
+) {
+  const idsDict = ref({});
+  //Change nodes ids
+  for (var node of nodes) {
+    let nodeId = getId();
+    idsDict[node.id] = nodeId;
+    node.id = nodeId;
+    if (node.type == "workflow") {
+      workflowDimensions[node.id] = {
+        width: node.style.width,
+        height: node.style.height,
+      };
+    }
+  }
+  //apply the change to parentNode
+  for (var n of nodes) {
+    if (n.parentNode != undefined) {
+      n.parentNode = idsDict[n.parentNode];
+    }
+  }
+  //apply the change to edge's sources and targets
+  for (var edge of edges) {
+    edge.source = idsDict[edge.source];
+    edge.target = idsDict[edge.target];
+    //to make sure the ids stay unique within the build canvas system
+    edge.id = edge.id + "[" + getId() + "]";
+  }
+}
 //This functions checks if an attempt to connect two nodes in valid
 //according to experiment DSL rules
 export function isConnectionValid(newEdge, findNode) {
