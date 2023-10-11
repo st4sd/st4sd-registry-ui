@@ -5,7 +5,7 @@
     </div>
 
     <div v-else class="cds--row">
-      <div v-if="data.length != 0">
+      <div>
         <bx-dropdown
           label="Y-Axis Data Selector"
           :value="graphHeader"
@@ -18,9 +18,6 @@
             >{{ header }}</bx-dropdown-item
           >
         </bx-dropdown>
-      </div>
-      <div id="no-results-message" v-else>
-        <p>No Graphs Available</p>
       </div>
     </div>
   </div>
@@ -132,16 +129,6 @@ export default {
 </script>
 
 <style scoped>
-#no-results-message {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  text-decoration: underline 1px;
-  text-underline-offset: 5px;
-  text-align: center;
-}
-
 #experimentLoadingContainer {
   width: 100%;
   height: 300px;

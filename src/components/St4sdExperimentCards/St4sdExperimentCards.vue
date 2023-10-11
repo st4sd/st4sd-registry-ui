@@ -6,6 +6,15 @@
       </div>
     </template>
     <template v-else>
+      <NoDataEmptyState
+        class="full-height-empty-state"
+        v-if="experiments.length == 0"
+        message="Add some virtual experiments to see them here"
+      />
+      <NoSearchResultsEmptyState
+        class="full-height-empty-state"
+        v-else-if="experimentsToShow.length == 0"
+      />
       <div
         class="card-row"
         v-for="experiment in getPageSlice"
@@ -66,10 +75,6 @@
           <dds-card-footer> </dds-card-footer>
         </dds-card>
       </div>
-      <NoSearchResultsEmptyState
-        class="full-height-empty-state"
-        v-if="experimentsToShow.length == 0"
-      />
 
       <div>
         <bx-pagination
@@ -96,11 +101,13 @@
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
 
 export default {
   components: {
     NoSearchResultsEmptyState,
+    NoDataEmptyState,
   },
   props: {
     searchedExperiments: Array,
@@ -211,15 +218,6 @@ export default {
   .bx--link {
     overflow-wrap: anywhere;
   }
-}
-
-#no-results-message {
-  display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  text-decoration: underline 1px;
-  text-underline-offset: 5px;
-  text-align: center;
 }
 
 #experimentLoadingContainer {

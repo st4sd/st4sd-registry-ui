@@ -32,15 +32,18 @@
       </bx-pagination>
     </template>
 
-    <HttpErrorEmptyState
-      errorDescription="Unable to fetch components"
-      :errorStatusText="errorStatusText"
-      :errorCode="errorCode"
-      v-if="isError"
-    />
-
-    <template v-if="!isError && !loading">
-      <div class="tableOverflowContainer">
+    <template v-if="!loading">
+      <HttpErrorEmptyState
+        errorDescription="Unable to fetch components"
+        :errorStatusText="errorStatusText"
+        :errorCode="errorCode"
+        v-if="isError"
+      />
+      <NoDataEmptyState
+        v-else-if="data.length == 0"
+        message="This run has no properties available"
+      />
+      <div v-else class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
             <bx-table-header-row>
@@ -95,6 +98,7 @@
 
 <script>
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import { get_sorted_elements } from "@/functions/table_sort";
@@ -104,6 +108,7 @@ export default {
   name: "RunComponentsTable",
   components: {
     HttpErrorEmptyState,
+    NoDataEmptyState,
   },
   props: {
     experiment_id: {

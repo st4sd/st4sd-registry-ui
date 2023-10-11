@@ -33,9 +33,10 @@
     </template>
 
     <template v-else>
-      <div id="no-results-message" v-if="noDataAvailable">
-        <p>No Properties Avaiblable</p>
-      </div>
+      <NoDataEmptyState
+        v-if="propertiesArray.length == 0"
+        message="This experiment did not produce any property or does not have a virtual experiment interface"
+      />
       <div v-else>
         <bx-table-toolbar @focusout="setExpandedOnFocusOut">
           <bx-table-toolbar-content>
@@ -58,7 +59,9 @@
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
-        <div class="tableOverflowContainer">
+
+        <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
+        <div v-else class="tableOverflowContainer">
           <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
             <bx-table-head>
               <bx-table-header-row>
@@ -79,7 +82,6 @@
               </bx-table-row>
             </bx-table-body>
           </bx-table>
-          <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
           <bx-pagination
             :page-size="elementsToShow"
             :start="firstElement"
@@ -104,11 +106,13 @@
 
 <script>
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 export default {
   name: "VEPropertiesTables",
   components: {
     NoSearchResultsEmptyState,
+    NoDataEmptyState,
   },
   data() {
     return {
@@ -282,15 +286,6 @@ bx-table-header-cell {
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
-}
-
-#no-results-message {
-  display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  text-decoration: underline 1px;
-  text-underline-offset: 5px;
-  text-align: center;
 }
 
 .download-icon {

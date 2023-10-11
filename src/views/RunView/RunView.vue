@@ -108,11 +108,7 @@
             @bx-search-input="searchTable"
           ></bx-table-toolbar-search>
         </bx-table-toolbar>
-        <div v-if="noDataAvailable">
-          <div id="no-results-message">
-            <p>No Runs Available</p>
-          </div>
-        </div>
+
         <HttpErrorEmptyState
           :errorDescription="errorDescription"
           :errorStatusText="errorStatusText"
@@ -195,9 +191,11 @@
               </bx-table-row>
             </bx-table-body>
           </bx-table>
-          <NoSearchResultsEmptyState
-            v-if="dataToDisplay.length == 0 && !isError"
+          <NoDataEmptyState
+            v-if="data.length == 0"
+            message="Run this virtual experiment to see instances here"
           />
+          <NoSearchResultsEmptyState v-else-if="dataToDisplay.length == 0" />
           <bx-pagination
             :page-size="elementsToShow"
             :start="firstElement"
@@ -233,6 +231,7 @@ import St4sdStatusIndicator from "@/components/St4sdStatusIndicator/St4sdStatusI
 import St4sdDateFilter from "@/components/St4sdDateFilter/St4sdDateFilter.vue";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 import axios from "axios";
 
@@ -244,6 +243,7 @@ export default {
     St4sdDateFilter,
     NoSearchResultsEmptyState,
     HttpErrorEmptyState,
+    NoDataEmptyState,
   },
   props: {
     id: {
@@ -405,15 +405,6 @@ dds-content-block-heading {
 dds-text-cta {
   padding-top: 1rem;
   padding-bottom: 2rem;
-}
-
-#no-results-message {
-  display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  text-decoration: underline 1px;
-  text-underline-offset: 5px;
-  text-align: center;
 }
 
 .overlay-error {

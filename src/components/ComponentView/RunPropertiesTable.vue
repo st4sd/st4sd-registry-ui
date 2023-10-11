@@ -67,12 +67,12 @@
           :errorCode="errorCode"
           v-if="isError"
         />
-        <div
-          id="no-results-message"
+
+        <NoDataEmptyState
           v-else-if="propertiesToDisplay.length == 0"
-        >
-          <p>No Properties Available</p>
-        </div>
+          message="This run has no properties available"
+        />
+
         <div class="tableOverflowContainer" v-else>
           <bx-table>
             <bx-table-head>
@@ -119,11 +119,13 @@
 import axios from "axios";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 export default {
   name: "RunPropertiesTable",
   components: {
     HttpErrorEmptyState,
+    NoDataEmptyState,
   },
   props: {
     experiment_id: String,
@@ -286,15 +288,6 @@ export default {
 
 bx-table-cell,
 bx-table-header-cell {
-  text-align: center;
-}
-
-#no-results-message {
-  display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  text-decoration: underline 1px;
-  text-underline-offset: 5px;
   text-align: center;
 }
 
