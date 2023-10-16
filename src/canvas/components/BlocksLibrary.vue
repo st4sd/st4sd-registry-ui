@@ -69,7 +69,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import getBlocks from "@/canvas/functions/getBlocks";
-import { nodeStore } from "@/canvas/stores/nodeStore";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
 import createComponentModal from "@/canvas/components/modals/st4sd_components/createComponentModal.vue";
@@ -123,7 +123,7 @@ const toggleModalVisibility = (modal) => {
 };
 
 const onDragStart = (event, element) => {
-  nodeStore.setExportedNode(element);
+  canvasStore.setNode(element);
 };
 
 const elements = ref();

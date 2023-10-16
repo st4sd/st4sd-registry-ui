@@ -180,8 +180,7 @@ import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 
 //Stores
-// import { expDAGStore } from "@/canvas/stores/expDAGStore";
-import { nodeStore } from "@/canvas/stores/nodeStore";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 
 //Node types
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
@@ -258,7 +257,6 @@ let elements = {};
 if (props.pvep != "") {
   getGraph();
 } else {
-  // elements = expDAGStore.exportedDAG;
   elements.elevateEdgesOnSelect = true;
   setUpCanvas(elements);
 }
@@ -344,7 +342,7 @@ const toggleModalVisibility = (modal) => {
 
 const onDrop = (event) => {
   //copy the element so we do not change the source
-  const newNode = JSON.parse(JSON.stringify(nodeStore.exportedNode));
+  const newNode = JSON.parse(JSON.stringify(canvasStore.node));
   const { left, top } = vueFlowRef.value.getBoundingClientRect();
 
   newNode.position = project({

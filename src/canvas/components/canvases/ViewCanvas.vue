@@ -103,7 +103,7 @@ import {
   PanelPosition,
 } from "@vue-flow/additional-components";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
-import { dagStore } from "@/canvas/stores/dagStore";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 //Node types
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
@@ -126,7 +126,7 @@ import {
  * You can pass the composable an object that has the same properties as the VueFlow component props
  */
 
-const elements = ref(dagStore.DAG);
+const elements = ref(canvasStore.DAG);
 
 let clickedNode;
 let clickedEdge;

@@ -85,7 +85,7 @@ import EditCanvas from "@/canvas/components/canvases/EditCanvas.vue";
 import submitExperimentModal from "@/canvas/components/modals/experiment/submitExperimentModal.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import { ref, defineProps, onMounted } from "vue";
-import { dagStore } from "@/canvas/stores/dagStore";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -188,7 +188,7 @@ const getGraph = async () => {
   if (!fatalGraphError.isError) {
     const elements = ref(createDAG(graphData, inputsData));
     response.value = elements.value;
-    dagStore.setDAG(elements);
+    canvasStore.setDAG(elements);
   }
   graphLoading.value = false;
 };
@@ -257,7 +257,7 @@ const getPreviewGraph = async () => {
   if (!previewError) {
     const elements = ref(createDAG(graphData, inputsData));
     response.value = elements.value;
-    dagStore.setDAG(elements);
+    canvasStore.setDAG(elements);
 
     isPreview.value = true;
   }

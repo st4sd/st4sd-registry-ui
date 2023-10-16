@@ -104,7 +104,7 @@ import {
   PanelPosition,
 } from "@vue-flow/additional-components";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
-import { dagStore } from "@/canvas/stores/dagStore";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 //Node types
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
@@ -128,7 +128,7 @@ import TransformLibrary from "@/canvas/components/TransformLibrary.vue";
  */
 
 //Vue Flow setup
-const elements = ref(dagStore.DAG);
+const elements = ref(canvasStore.DAG);
 
 const {
   onPaneReady,
