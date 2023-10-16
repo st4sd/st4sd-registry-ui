@@ -94,7 +94,7 @@ export function createWorkflowNode(
   parameters,
 ) {
   //We calculate the workflow's width based on it's name so we are sure the name/label doesn't overflow
-  let workflowWidth = `${workflowName} inputs`.length * 11;
+  let workflowWidth = `${workflowName} inputs`.length * 10;
   //Create the workflow node
   let workflowNode = {
     id: "",
@@ -151,6 +151,7 @@ export function addWorkflowNode(
   workflow.id = getId();
   input.id = getId();
   input.parentNode = workflow.id;
+  input.expandParent = true;
   addNodes([workflow, input]);
   //add details to the array used for the collapse/expand feature of a workflow
   workflowDimensions[workflow.id] = {
@@ -191,15 +192,7 @@ export function addWorkflowNodesToCanvas(
   let entryNode = experimentGraph.nodes.find(
     (node) => node.id == workflowNode.label,
   );
-  workflowNode.id = entryNode.id;
-  workflowNode.definition = entryNode.definition;
-  workflowNode.style = { ...entryNode.style };
-  //remove entryNode
-  experimentGraph.nodes = experimentGraph.nodes.filter(
-    (node) => node.id != entryNode.id,
-  );
-  //replace it with workflowNode
-  experimentGraph.nodes.push(workflowNode);
+  entryNode.position = workflowNode.position;
   convertToBuildCanvasSystem(
     experimentGraph.nodes,
     experimentGraph.edges,
@@ -208,7 +201,9 @@ export function addWorkflowNodesToCanvas(
   );
   addNodes(experimentGraph.nodes);
   addEdges(experimentGraph.edges);
+  return entryNode.id;
 }
+
 export function convertToBuildCanvasSystem(
   nodes,
   edges,

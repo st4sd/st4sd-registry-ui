@@ -9,7 +9,7 @@
         {{ isHidden ? "Expand" : "Collapse" }}
       </bx-btn>
     </NodeToolbar>
-    <NodeResizer min-width="100" min-height="30" />
+    <NodeResizer />
     <Handle type="target" :position="Position.Top" />
     <slot name="node-workflow">{{ props.label }}</slot>
     <!-- <Handle type="source" :position="Position.Bottom" /> -->

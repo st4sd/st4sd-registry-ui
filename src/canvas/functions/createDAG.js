@@ -51,7 +51,6 @@ export function createWorkflowDAG(experimentData) {
       parentNode: "",
       position: { x: 1, y: 100 },
       style: {
-        backgroundColor: "rgba(16, 185, 129, 0.5)",
         width: entryWorkflowName.length * 11 + "px",
         height: "1px",
       },
@@ -201,7 +200,6 @@ function addEntries(graph, dslData, experimentData) {
     parentNode: "",
     position: { x: 1, y: 100 },
     style: {
-      backgroundColor: "rgba(16, 185, 129, 0.5)",
       width: entryWorkflowName.length * 11 + "px",
       height: "1px",
     },
@@ -342,7 +340,6 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
   if (type == "workflow") {
     node.position = { x: 1, y: 100 };
     node.style = {
-      backgroundColor: "rgba(16, 185, 129, 0.5)",
       width: label.length * 11 + "px",
       height: "1px",
     };

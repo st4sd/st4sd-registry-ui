@@ -349,8 +349,13 @@ const onDrop = (event) => {
     x: event.clientX - left,
     y: event.clientY - top,
   });
+  let id;
   if (newNode.type == "workflow") {
-    addWorkflowNodesToCanvas(
+    // In a workflow newNode is used to generate the whole workflow and thus
+    // newNode itself will not be used in the workflow and will be replaced with
+    // the workflow's entry point node, so we manually return the new id to be used
+    // in the nextTick() function
+    id = addWorkflowNodesToCanvas(
       newNode,
       workflowDimensions,
       getId,
@@ -359,22 +364,31 @@ const onDrop = (event) => {
     );
   } else {
     newNode.id = getId();
+    id = newNode.id;
     addNodes([newNode]);
   }
 
   // align node position after drop, so it's centered to the mouse
   nextTick(() => {
-    const node = findNode(newNode.id);
+    const node = findNode(id);
     const stop = watch(
       () => node.dimensions,
       (dimensions) => {
         if (dimensions.width > 0 && dimensions.height > 0) {
-          node.position = {
-            x: node.position.x - node.dimensions.width / 2,
-            y: node.position.y - node.dimensions.height / 2,
-          };
+          //For workflows we want the mouse to be in the top centre
+          if (node.type == "workflow") {
+            node.position = {
+              x: node.position.x - node.dimensions.width / 2,
+              y: node.position.y - node.dimensions.height / 6,
+            };
+          } else {
+            node.position = {
+              x: node.position.x - node.dimensions.width / 2,
+              y: node.position.y - node.dimensions.height / 2,
+            };
+          }
+
           stop();
-          //resetTransform();
         }
       },
       { deep: true, flush: "post" },

@@ -180,7 +180,7 @@ import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
-  emits: ["update", "removeParent", "stepDeleted"],
+  emits: ["update", "removeParent", "stepDeleted", "workflowAdded"],
   data() {
     return {
       workflow: new St4sdWorkflow(),

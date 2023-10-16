@@ -19,7 +19,7 @@
 }
 
 .vue-flow__node-workflow {
-  background-color: rgba(16, 185, 129);
+  background-color: rgba(16, 185, 129, 0.5);
   padding: 10px;
   border-radius: 3px;
   width: 150px;
@@ -152,6 +152,9 @@
   flex-direction: row;
   display: flex;
   height: 77vh;
+}
+aside .vue-flow__node-workflow {
+  background-color: rgba(16, 185, 129);
 }
 
 aside {
