@@ -1,4 +1,5 @@
 import { createWorkflowDAG } from "@/canvas/functions/createDAG";
+import { getTextWidth } from "@/canvas/functions/getTextWidth";
 import { MarkerType } from "@vue-flow/core";
 import { ref } from "vue";
 
@@ -48,7 +49,7 @@ function addExecutionOptionsInputNode(graph) {
       borderColor: "green",
     },
     position: { x: 0, y: 0 },
-    width: "executionOptions".length * 11,
+    width: getTextWidth("executionOptions"),
   });
 }
 
@@ -65,7 +66,7 @@ function addPresetsInputNode(graph) {
       borderColor: "red",
     },
     position: { x: 200, y: 0 },
-    width: "presets".length * 11,
+    width: getTextWidth("presets"),
   });
 }
 
@@ -82,7 +83,7 @@ function addOtherInputNode(graph) {
       borderColor: "grey",
     },
     position: { x: 290, y: 0 },
-    width: "other".length * 11,
+    width: getTextWidth("other"),
   });
 }
 
@@ -94,7 +95,7 @@ export function createWorkflowNode(
   parameters,
 ) {
   //We calculate the workflow's width based on it's name so we are sure the name/label doesn't overflow
-  let workflowWidth = `${workflowName} inputs`.length * 10;
+  let workflowWidth = getTextWidth(`${workflowName} inputs`);
   //Create the workflow node
   let workflowNode = {
     id: "",

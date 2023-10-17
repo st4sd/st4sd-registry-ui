@@ -1,5 +1,6 @@
 import { MarkerType } from "@vue-flow/core";
 import { drawGraph } from "@/canvas/functions/drawGraph";
+import { getTextWidth } from "@/canvas/functions/getTextWidth";
 
 const executionOptionsNodeType = "input_ExecutionOptionsType";
 const presetsNodeType = "input_PresetsType";
@@ -51,7 +52,7 @@ export function createWorkflowDAG(experimentData) {
       parentNode: "",
       position: { x: 1, y: 100 },
       style: {
-        width: entryWorkflowName.length * 11 + "px",
+        width: getTextWidth(entryWorkflowName) + "px",
         height: "1px",
       },
       isEntry: true,
@@ -200,7 +201,7 @@ function addEntries(graph, dslData, experimentData) {
     parentNode: "",
     position: { x: 1, y: 100 },
     style: {
-      width: entryWorkflowName.length * 11 + "px",
+      width: getTextWidth(entryWorkflowName) + "px",
       height: "1px",
     },
     isEntry: true,
@@ -340,7 +341,7 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
   if (type == "workflow") {
     node.position = { x: 1, y: 100 };
     node.style = {
-      width: label.length * 11 + "px",
+      width: getTextWidth(label) + "px",
       height: "1px",
     };
   } else {
@@ -372,7 +373,7 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
     }
     // end of styles
     node.position = { x: X, y: Y };
-    node.width = label.length * 11;
+    node.width = getTextWidth(label);
   }
   graph.nodes.push(node);
 }

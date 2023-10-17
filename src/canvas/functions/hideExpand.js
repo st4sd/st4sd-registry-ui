@@ -1,3 +1,5 @@
+import { getTextWidth } from "@/canvas/functions/getTextWidth";
+
 export const getWorkflowsDimensions = (nodes) => {
   let workflowDimensionsDictionary = {};
   for (var node of nodes) {
@@ -51,7 +53,13 @@ export const hide = (
   let workflow = nodes.find((n) => n.id == node.id);
   let toDelete = [];
   if (isHidden) {
-    workflow.style.width = workflow.label.length * 20 + "px";
+    workFlowsDimensions[workflow.id].width = workflow.style.width;
+    workFlowsDimensions[workflow.id].height = workflow.style.height;
+    let width = getTextWidth(workflow.label);
+    workflow.style.width = width + "px";
+    if (width < 100) {
+      workflow.style.width = "100px";
+    }
     workflow.style.height = "50px";
     for (var edge of workFlowsEdges[workflow.id].edges) {
       let existingEdge = edges.find((e) => e.id == edge.id);
