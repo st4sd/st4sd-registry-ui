@@ -20,4 +20,4 @@ export default {
   name: "NoSearchResultsEmptyState",
 };
 </script>
-<style lang="css" scoped src="../../styles/empty_state_styles.css"></style>
+<style lang="scss" scoped src="../../styles/empty_state_styles.scss"></style>

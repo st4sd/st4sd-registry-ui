@@ -192,13 +192,11 @@ export default {
 <style lang="scss">
 @use "@carbon/grid";
 @use "@carbon/layout";
+
+@import "@/styles/empty_state_styles.scss";
+
 .card-row {
   margin-top: layout.$spacing-05;
-}
-.full-height-empty-state {
-  margin-top: layout.$spacing-05;
-  padding-top: layout.$spacing-11;
-  height: 75vh;
 }
 
 .card-proportions {
