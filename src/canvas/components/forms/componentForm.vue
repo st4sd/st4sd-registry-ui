@@ -658,7 +658,7 @@ export default {
     update() {
       if (!this.isError) {
         let newComponentNode = { ...this.node };
-        newComponentNode.label = this.component.signature.name;
+        //newComponentNode.label = this.component.signature.name;
         newComponentNode.definition = this.component.getComponentDefintion();
         this.$emit("update", newComponentNode);
       }

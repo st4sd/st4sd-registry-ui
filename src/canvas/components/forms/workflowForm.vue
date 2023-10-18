@@ -177,6 +177,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/input/index.js";
 import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
+import { getTextWidth } from "@/canvas/functions/getTextWidth";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
@@ -228,7 +229,7 @@ export default {
           this.checkStepsChanges();
           //we copy over the props to avoid mutating
           let updatedWorkflow = { ...this.node };
-          updatedWorkflow.label = this.workflow.getName();
+          //updatedWorkflow.label = this.workflow.getName();
           updatedWorkflow.definition = this.workflow.getWorkflowDefinition();
           this.$emit("update", updatedWorkflow);
         } else {
@@ -251,6 +252,12 @@ export default {
         (node) => node.stepId == oldStep,
       );
       tobeUpdatedNode.stepId = newStep;
+      tobeUpdatedNode.label = newStep;
+      if (tobeUpdatedNode.type == "workflow") {
+        getTextWidth(tobeUpdatedNode.label) + "px";
+      } else {
+        getTextWidth(tobeUpdatedNode.label);
+      }
     },
     onFocusLost(event, item) {
       if (item == "") {

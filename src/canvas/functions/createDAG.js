@@ -339,6 +339,7 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
   }
 
   if (type == "workflow") {
+    node.label = stepId;
     node.position = { x: 1, y: 100 };
     node.style = {
       width: getTextWidth(label) + "px",
@@ -370,6 +371,8 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
       X = 290;
     } else if (type == "workflow-input") {
       Y = 40;
+    } else if (type == "component") {
+      node.label = stepId;
     }
     // end of styles
     node.position = { x: X, y: Y };
