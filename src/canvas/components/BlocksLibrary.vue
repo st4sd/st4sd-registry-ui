@@ -12,6 +12,16 @@
           <img width="16" heigth="16" src="@/assets/plus.svg" />
           New Component
         </bx-btn>
+        <bx-btn
+          v-if="isGlobalRegistryLibraryEnabled"
+          title="Add Global Registry Component"
+          icon-layout
+          @click="navigateToGlobalRegistryLibrary"
+          size="sm"
+        >
+          <img width="16" heigth="16" src="@/assets/embed.svg" />
+          Import Component
+        </bx-btn>
       </div>
       <bx-search
         placeholder="Search here"
@@ -77,6 +87,12 @@ import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/search/index.js";
+import router from "@/router";
+import { registryUISharedState } from "@/stores/registryUISharedState";
+
+let isGlobalRegistryLibraryEnabled = ref(
+  registryUISharedState.isGlobalRegistryLibraryEnabled,
+);
 
 const urls = ["analysis", "simulation", "parent", "parent2", "BandGapDFT"];
 let id = 0;
@@ -133,6 +149,10 @@ const fullElements = ref(
     elements.value = data;
   }),
 );
+
+function navigateToGlobalRegistryLibrary() {
+  router.push({ path: "/build-canvas/global-registry-library" });
+}
 
 const addComponentNode = (newComponent) => {
   newComponent.id = getId();

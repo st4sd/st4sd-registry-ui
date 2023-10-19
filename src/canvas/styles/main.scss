@@ -193,6 +193,10 @@ aside #controls bx-btn {
   margin: 1% 0;
 }
 
+aside #controls bx-btn img {
+  margin-right: 5px;
+}
+
 aside #controls bx-btn::part(button) {
   margin: 0;
 }

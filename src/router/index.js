@@ -14,6 +14,7 @@ import PropertiesView from "@/views/PropertiesView";
 import BuildCanvasView from "@/views/BuildCanvasView";
 import ViewCanvasView from "@/views/ViewCanvasView";
 import ParameterisationView from "@/views/ParameterisationView";
+import GlobalRegistryLibraryView from "@/views/GlobalRegistryLibraryView";
 
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -27,6 +28,11 @@ const routes = [
     path: "/build-canvas",
     name: "build canvas",
     component: BuildCanvasView,
+  },
+  {
+    path: "/build-canvas/global-registry-library",
+    name: "global registry library",
+    component: GlobalRegistryLibraryView,
   },
   {
     path: "/experiment/:pvep/edit",

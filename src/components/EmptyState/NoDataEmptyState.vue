@@ -8,7 +8,7 @@
             src="@/assets/empty-state-bright-box.svg"
           />
           <div>
-            <h3>No data available</h3>
+            <h3>{{ title }}</h3>
             <br />
             <p>{{ message }}</p>
           </div>
@@ -21,6 +21,10 @@
 export default {
   name: "NoSearchResultsEmptyState",
   props: {
+    title: {
+      type: String,
+      default: "No data available",
+    },
     message: String,
   },
 };
