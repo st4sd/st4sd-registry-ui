@@ -15,16 +15,16 @@
       <Panel :position="PanelPosition.TopRight" class="controls">
         <bx-btn
           title="Configure Experiment"
-          @click="toggleModalVisibility('configureExperimentModal')"
+          @click="toggleModalVisibility('selectEntryPointModal')"
         >
-          Configure Experiment
+          Select Entrypoint
         </bx-btn>
         <bx-btn
           size="sm"
           title="Add Workflow"
           @click="toggleModalVisibility('createWorkflowModal')"
         >
-          Add workflow +
+          + Add workflow
         </bx-btn>
 
         <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
@@ -136,11 +136,11 @@
       @done="addStep"
     />
     <!-- Experiment configuration -->
-    <configureExperimentModal
-      v-if="modalVisibilities.configureExperimentModal.value"
+    <selectEntryPointModal
+      v-if="modalVisibilities.selectEntryPointModal.value"
       :allNodes="allNodes"
-      @bx-modal-closed="toggleModalVisibility('configureExperimentModal')"
-      @update="toggleModalVisibility('configureExperimentModal')"
+      @bx-modal-closed="toggleModalVisibility('selectEntryPointModal')"
+      @update="toggleModalVisibility('selectEntryPointModal')"
     />
     <fileUploadModal
       @upload="displayUploadedElements"
@@ -175,7 +175,7 @@ import createWorkflowModal from "@/canvas/components/modals/st4sd_workflows/crea
 import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal";
 import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
-import configureExperimentModal from "@/canvas/components/modals/experiment/configureExperimentModal.vue";
+import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 
@@ -296,7 +296,7 @@ let modalVisibilities = {
   updateEdgeModal: ref(false),
   updateWorkflowModal: ref(false),
   updateComponentModal: ref(false),
-  configureExperimentModal: ref(false),
+  selectEntryPointModal: ref(false),
   nestingModal: ref(false),
   stepExecuteModal: ref(false),
   deleteModal: ref(false),
