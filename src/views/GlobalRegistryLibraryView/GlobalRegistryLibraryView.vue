@@ -276,6 +276,7 @@ export default {
 @media screen and (max-width: 672px) {
   #basket {
     max-width: 300px;
+    margin-left: 1rem;
   }
 }
 
