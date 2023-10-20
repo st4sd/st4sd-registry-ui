@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="experimentsLoading">
+    <template v-if="loading">
       <div class="card-row" id="experimentLoadingContainer">
         <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
       </div>
@@ -113,7 +113,7 @@ export default {
     searchedExperiments: Array,
     selectedFilters: Object,
     experiments: Array,
-    experimentsLoading: Boolean,
+    loading: Boolean,
   },
   data() {
     return {

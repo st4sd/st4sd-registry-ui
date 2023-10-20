@@ -46,29 +46,24 @@
   </dds-content-block>
 
   <div class="cds--row">
-    <div
-      class="cds--col-lg-13 cds--col-md-5"
-      v-if="loadingError.statusText != ''"
-    >
+    <div class="cds--col-lg-13 cds--col-md-5">
+      <div id="loadingContainer" v-if="loading">
+        <bx-loading id="loadingWheel" type="overlay"></bx-loading>
+      </div>
       <HttpErrorEmptyState
+        v-else-if="loadingError.statusText != ''"
         class="full-height-empty-state"
         :errorDescription="loadingError.description"
         :errorStatusText="loadingError.statusText"
         :errorCode="loadingError.statusCode"
       />
-    </div>
-    <div
-      class="cds--col-lg-13 cds--col-md-5"
-      v-else-if="components.length == 0"
-    >
       <NoDataEmptyState
+        v-else-if="components.length == 0"
         class="full-height-empty-state"
         :title="NoDataEmptyStateText.title"
         :message="NoDataEmptyStateText.message"
       />
-    </div>
-    <div class="cds--col-lg-13 cds--col-md-5" v-else>
-      <div class="cds--row">
+      <div class="cds--row" v-else>
         <div
           class="cds--col-lg-5 cds--col-md-8"
           id="card-container"
@@ -173,6 +168,7 @@ export default {
         title: "That's it",
         message: "You have added all the components",
       },
+      loading: true,
     };
   },
   mounted() {
@@ -190,6 +186,9 @@ export default {
       .catch((error) => {
         this.loadingError.statusText = error.response.statusText;
         this.loadingError.statusCode = error.response.status;
+      })
+      .finally(() => {
+        this.loading = false;
       });
   },
   methods: {
@@ -324,5 +323,18 @@ bx-clickable-tile {
   display: grid;
   place-content: center;
   padding: 1rem 0;
+}
+
+#loadingContainer {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loadingWheel {
+  display: inline-block;
+  animation: none;
 }
 </style>

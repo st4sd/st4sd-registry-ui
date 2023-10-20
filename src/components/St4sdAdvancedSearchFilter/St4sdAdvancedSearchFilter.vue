@@ -52,6 +52,7 @@ export default {
       searchSelector: "",
       clearButtonToggle: true,
       debounceDelay: 1000,
+      initialExperimentsSet: false,
     };
   },
   watch: {
@@ -81,26 +82,36 @@ export default {
       if (this.searchQuery == "") {
         this.searchedExperiments = this.experiments;
         this.$emit("updateSearchedExperiments", this.searchedExperiments);
-        this.$emit("LoadingWheelStatusChanged", false);
+        this.$emit("loadingStatusChanged", false);
       } else {
         this.getSearchedExperiments();
       }
     },
     startLoadingWheel() {
-      this.$emit("LoadingWheelStatusChanged", true);
+      this.$emit("loadingStatusChanged", true);
     },
     async getSearchedExperiments() {
-      let response = await axios
+      axios
         .get(
           window.location.origin +
             `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`,
         )
+        .then((response) => {
+          this.searchedExperiments = response.data.entries;
+        })
         .catch((error) => {
           this.updateErrorHandling(error);
+          this.isError = true;
+        })
+        .finally(() => {
+          if (!this.initialExperimentsSet) {
+            this.$emit("setInitialExperiments", this.searchedExperiments);
+            this.initialExperimentsSet = true;
+          }
+
+          this.$emit("updateSearchedExperiments", this.searchedExperiments);
+          this.$emit("loadingStatusChanged", false);
         });
-      this.searchedExperiments = response.data.entries;
-      this.$emit("updateSearchedExperiments", this.searchedExperiments);
-      this.$emit("LoadingWheelStatusChanged", false);
     },
     updateErrorHandling(error) {
       this.$emit("updateErrorHandling", error);

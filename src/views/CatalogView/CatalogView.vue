@@ -24,7 +24,8 @@
       <St4sdAdvancedSearchFilter
         :experiments="this.experiments"
         @updateSearchedExperiments="updateSearchedExperiments"
-        @LoadingWheelStatusChanged="updateLoadingWheelStatus"
+        @loadingStatusChanged="updateloading"
+        @setInitialExperiments="setExperiments"
         @updateErrorHandling="updateErrorHandling"
       />
 
@@ -50,7 +51,7 @@
             :searchedExperiments="this.searchedExperiments"
             :selectedFilters="this.selectedFilters"
             :experiments="this.experiments"
-            :experimentsLoading="this.experimentsLoading"
+            :loading="loading"
             v-else
           />
         </div>
@@ -73,7 +74,6 @@ import "@carbon/web-components/es/components/breadcrumb/index.js";
 import "@carbon/web-components/es/components/loading/index.js";
 
 //
-import axios from "axios";
 
 import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.vue";
 import St4sdAdvancedSearchFilter from "@/components/St4sdAdvancedSearchFilter/St4sdAdvancedSearchFilter.vue";
@@ -96,25 +96,12 @@ export default {
       searchedExperiments: [],
       experiments: [],
       breadcrumbs: [{ name: "Virtual Experiments", path: "/" }],
-      experimentsLoading: false,
+      loading: false,
       isError: false,
       errorStatusText: "",
       errorCode: 0,
       errorDescription: "Unable to load experiments",
     };
-  },
-  mounted() {
-    axios
-      .get(window.location.origin + "/registry-ui/backend/experiments/")
-      .then((response) => {
-        this.experiments = response.data.entries;
-        this.searchedExperiments = response.data.entries;
-      })
-      .catch((error) => {
-        this.errorStatusText = error.response.statusText;
-        this.errorCode = error.response.status;
-        this.isError = true;
-      });
   },
   methods: {
     updateSelectedFilters(selectedFilters) {
@@ -123,13 +110,16 @@ export default {
     updateSearchedExperiments(searchedExperiments) {
       this.searchedExperiments = searchedExperiments;
     },
-    updateLoadingWheelStatus(loadingWheelStatus) {
-      this.experimentsLoading = loadingWheelStatus;
+    updateloading(loading) {
+      this.loading = loading;
     },
     updateErrorHandling(error) {
       this.errorStatusText = error.response.statusText;
       this.errorCode = error.response.status;
       this.isError = true;
+    },
+    setExperiments(experiments) {
+      this.experiments = experiments;
     },
   },
 };
