@@ -24,14 +24,21 @@
       </template>
       <template v-else>
         <br />
-        <h5>Please drop nodes into the canvas before making a selection</h5>
+        <h5>
+          Selecting an entrypoint is only possible if a workflow is present on
+          the canvas
+        </h5>
       </template>
     </bx-modal-body>
     <bx-modal-footer>
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
-      <bx-modal-footer-button kind="primary" type="submit" @click="update"
+      <bx-modal-footer-button
+        kind="primary"
+        type="submit"
+        @click="update"
+        :disabled="selectedNodeId == ''"
         >Save changes</bx-modal-footer-button
       >
     </bx-modal-footer>

@@ -218,6 +218,10 @@ export function convertToBuildCanvasSystem(
     idsDict[node.id] = nodeId;
     node.id = nodeId;
     if (node.type == "workflow") {
+      //To make sure that there are no workflows marked as entry point by default
+      if (node.isEntry) {
+        node.isEntry = false;
+      }
       workflowDimensions[node.id] = {
         width: node.style.width,
         height: node.style.height,
