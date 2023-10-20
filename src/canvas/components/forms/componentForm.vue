@@ -641,7 +641,7 @@ import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 
 export default {
   props: { node: Object, parentNode: Object },
-  emits: ["update", "removeParent"],
+  emits: ["update", "removeParentNode", "add"],
   data() {
     return {
       contentSwitcherSelection: ref("config"),

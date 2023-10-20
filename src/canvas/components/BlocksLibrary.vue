@@ -142,13 +142,12 @@ const onDragStart = (event, element) => {
   canvasStore.setNode(element);
 };
 
-const elements = ref();
-const fullElements = ref(
-  getNodesFromUrls().then((data) => {
-    fullElements.value = data;
-    elements.value = data;
-  }),
-);
+const elements = ref([]);
+const fullElements = ref([]);
+getNodesFromUrls().then((data) => {
+  fullElements.value = [...fullElements.value, ...data];
+  elements.value = [...elements.value, ...data];
+});
 
 function navigateToGlobalRegistryLibrary() {
   router.push({ path: "/build-canvas/global-registry-library" });
@@ -157,6 +156,7 @@ function navigateToGlobalRegistryLibrary() {
 const addComponentNode = (newComponent) => {
   newComponent.id = getId();
   fullElements.value.push(newComponent);
+  elements.value.push(newComponent);
   toggleModalVisibility("createComponentModal");
 };
 
@@ -170,9 +170,9 @@ const updateList = () => {
         searchResult.push(item);
       }
     });
-    elements.value = searchResult;
+    elements.value = [...searchResult];
   } else {
-    elements.value = fullElements.value;
+    elements.value = [...fullElements.value];
   }
 };
 

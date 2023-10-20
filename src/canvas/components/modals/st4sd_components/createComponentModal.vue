@@ -28,7 +28,7 @@ import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {
   components: { componentForm },
-  emits: ["addedNode"],
+  emits: ["componentAdded"],
   methods: {
     removeEmptyString(obj) {
       Object.keys(obj).forEach((k) => obj[k] === "" && delete obj[k]);
@@ -42,7 +42,7 @@ export default {
       let componentNode = {
         id: "1",
         label: definition.signature.name,
-        type: "",
+        type: "component",
         definition: definition,
       };
       this.$emit("componentAdded", componentNode);
