@@ -31,6 +31,7 @@
           :value="component.stage"
           @input="component.stage = $event.target.value"
           placeholder="0"
+          min="0"
           required
           colorScheme="light"
         >
