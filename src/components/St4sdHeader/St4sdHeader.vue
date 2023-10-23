@@ -9,6 +9,9 @@
     <bx-header-name :href="getDeploymentEndpoint()" prefix="IBM"
       >ST4SD Virtual Experiments Registry</bx-header-name
     >
+    <bx-header-nav-item :href="`${getDeploymentEndpoint()}build-canvas`"
+      >Build an experiment</bx-header-nav-item
+    >
     <bx-link @click="openModal('login')" v-if="!isGlobalRegistry">
       Login on stp
       <img class="cmd-login-icon" src="@/assets/terminal.svg" />
