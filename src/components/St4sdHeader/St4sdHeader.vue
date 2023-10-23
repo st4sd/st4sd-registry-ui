@@ -9,7 +9,9 @@
     <bx-header-name :href="getDeploymentEndpoint()" prefix="IBM"
       >ST4SD Virtual Experiments Registry</bx-header-name
     >
-    <bx-header-nav-item :href="`${getDeploymentEndpoint()}build-canvas`"
+    <bx-header-nav-item
+      :href="`${getDeploymentEndpoint()}build-canvas`"
+      v-if="isBuildCanvasEnabled"
       >Build an experiment</bx-header-nav-item
     >
     <bx-link @click="openModal('login')" v-if="!isGlobalRegistry">
@@ -34,6 +36,7 @@ export default {
       url: "",
       contextName: "",
       isGlobalRegistry: false,
+      isBuildCanvasEnabled: false,
     };
   },
   components: {
@@ -49,6 +52,7 @@ export default {
     this.url = window.location.origin;
     this.contextName = window.location.host.split(".")[0];
     this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
+    this.isBuildCanvasEnabled = registryUISharedState.isBuildCanvasEnabled;
   },
 };
 </script>
