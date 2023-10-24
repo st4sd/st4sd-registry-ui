@@ -1,11 +1,7 @@
 export default function buildExperiment(nodes, edges, entryNode) {
-  let workflows = nodes.filter(
-    (node) => node.type == "workflow" && typeof node.parentNode == "string",
-  );
+  let workflows = nodes.filter((node) => node.type == "workflow");
 
-  let components = nodes.filter(
-    (node) => node.type == "component" && typeof node.parentNode === "string",
-  );
+  let components = nodes.filter((node) => node.type == "component");
 
   let result = {};
   if (entryNode != undefined) {
