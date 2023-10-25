@@ -28,11 +28,11 @@ before_install:
   - export BUILDKIT_PROGRESS=plain
   - set -e
 after_success:
-  - wget --no-check-certificate https://w3twistlock.sos.ibm.com/download/tt_latest.zip
+  - curl -H "Authorization:Bearer $ARTIFACTORY_TOKEN" $TWISTLOCK_DL_ENDPOINT --output tt_latest.zip
   - unzip tt_latest.zip
   - cd tt_*/linux_x86_64
   - chmod +x tt
-  - ./tt image pull-and-scan --user $TT_USER:$TT_API_KEY --url "https://w3twistlock.sos.ibm.com" --control-group $TT_CONTROL_GROUP --output-format json $FULL_IMAGE_ID
+  - ./tt image pull-and-scan --user $TT_USER:$TT_API_KEY --url $TWISTLOCK_ENDPOINT --control-group $TT_CONTROL_GROUP --output-format json $FULL_IMAGE_ID || travis_terminate 1
 
 jobs:
   include:
