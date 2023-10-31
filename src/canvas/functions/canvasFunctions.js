@@ -95,7 +95,8 @@ export function createWorkflowNode(
   parameters,
 ) {
   //We calculate the workflow's width based on it's name so we are sure the name/label doesn't overflow
-  let workflowWidth = getTextWidth(`${workflowName} inputs`);
+  // + 30 to account for the x position of the workflow input node to make it close to centred inside the workflow
+  let workflowWidth = getTextWidth(`${workflowName} inputs`) + 30;
   //Create the workflow node
   let workflowNode = {
     id: "",
