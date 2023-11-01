@@ -13,30 +13,49 @@
           Drag and drop file here or click to upload
         </bx-file-drop-container>
       </bx-file-uploader> -->
-      <label for="dslFile">Upload a DSL file</label>
-      <input
-        @change="updateDSLFile"
-        type="file"
-        accept="application/JSON"
-        name="dslFile"
-        id="dslFile"
-      />
-      <hr />
-      <label for="inputFile">Upload an input file</label>
-      <input
-        @change="updateInputFile"
-        type="file"
-        accept="application/JSON"
-        name="inputFile"
-        id="inputFile"
-      />
+      <bx-toggle
+        checked="true"
+        checked-text="Canvas project files"
+        label-text="Choose file type (Canvas project files or DSL)"
+        unchecked-text="DSL"
+        @bx-toggle-changed="toggleGraphUpload"
+      ></bx-toggle>
+      <div v-if="graphUpload">
+        <label for="graphFile">Upload a Canvas project file</label>
+        <input
+          @change="updateGraphFile"
+          type="file"
+          accept="application/JSON"
+          name="graphFile"
+          id="graphFile"
+        />
+      </div>
+      <div v-else>
+        <label for="dslFile">Upload a DSL file</label>
+        <input
+          @change="updateDSLFile"
+          type="file"
+          accept="application/JSON"
+          name="dslFile"
+          id="dslFile"
+        />
+        <hr />
+        <label for="inputFile">Upload an input file</label>
+        <input
+          @change="updateInputFile"
+          type="file"
+          accept="application/JSON"
+          name="inputFile"
+          id="inputFile"
+        />
+      </div>
     </bx-modal-body>
     <bx-modal-footer>
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
       <bx-modal-footer-button
-        :disabled="dslFile == null || inputFile == null || submitted"
+        :disabled="disabled()"
         kind="primary"
         type="submit"
         @click="upload"
@@ -48,12 +67,15 @@
 
 <script>
 // import "@carbon/web-components/es/components/file-uploader/index.js";
+import "@carbon/web-components/es/components/toggle/index.js";
 
 export default {
   props: { title: String },
   emits: ["upload"],
   data() {
     return {
+      graphUpload: true,
+      graphFile: null,
       dslFile: null,
       inputFile: null,
       submitted: false,
@@ -62,7 +84,24 @@ export default {
   methods: {
     upload() {
       this.submitted = true;
-      this.$emit("upload", [this.dslFile, this.inputFile]);
+      if (this.graphFile != null) {
+        this.$emit("upload", this.graphFile);
+      } else {
+        this.$emit("upload", [this.dslFile, this.inputFile]);
+      }
+    },
+    toggleGraphUpload() {
+      this.graphUpload = !this.graphUpload;
+    },
+    disabled() {
+      if (this.graphUpload == true) {
+        return this.graphFile == null || this.submitted;
+      } else {
+        return this.dslFile == null || this.inputFile == null || this.submitted;
+      }
+    },
+    updateGraphFile(event) {
+      this.graphFile = event.target.files[0];
     },
     updateDSLFile(event) {
       this.dslFile = event.target.files[0];

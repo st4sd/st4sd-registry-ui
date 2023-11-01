@@ -53,7 +53,7 @@
         </bx-btn>
         <bx-btn
           size="sm"
-          title="Upload canvas project files"
+          title="Load canvas from file"
           @click="toggleModalVisibility('fileUploadModal')"
         >
           <img
@@ -308,24 +308,35 @@ let modalVisibilities = {
 };
 
 const displayUploadedElements = (files) => {
-  let dslFileContents = "";
-  let inputFileContents = "";
+  if (Array.isArray(files)) {
+    let dslFileContents = "";
+    let inputFileContents = "";
 
-  readFile(files[0]).then(function (dslResult) {
-    dslFileContents = dslResult;
+    readFile(files[0]).then(function (dslResult) {
+      dslFileContents = dslResult;
 
-    readFile(files[1]).then(function (inputResult) {
-      inputFileContents = inputResult;
-      nodes.value = [];
-      edges.value = [];
-      const uploadedGraph = createDAG(dslFileContents, inputFileContents);
+      readFile(files[1]).then(function (inputResult) {
+        inputFileContents = inputResult;
+        nodes.value = [];
+        edges.value = [];
+        const uploadedGraph = createDAG(dslFileContents, inputFileContents);
 
-      addNodes(uploadedGraph.nodes);
-      addEdges(uploadedGraph.edges);
+        addNodes(uploadedGraph.nodes);
+        addEdges(uploadedGraph.edges);
 
+        toggleModalVisibility("fileUploadModal");
+      });
+    });
+  } else {
+    let graphFileContents = "";
+    readFile(files).then(function (graphResult) {
+      graphFileContents = graphResult;
+
+      addNodes(graphFileContents.nodes);
+      addEdges(graphFileContents.edges);
       toggleModalVisibility("fileUploadModal");
     });
-  });
+  }
 };
 
 function readFile(file) {
