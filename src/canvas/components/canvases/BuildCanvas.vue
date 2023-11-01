@@ -35,11 +35,15 @@
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
-        <bx-btn
-          size="sm"
-          title="Download canvas project files"
-          @click="downloadJSON"
-        >
+        <bx-btn size="sm" title="Save canvas project" @click="saveGraph">
+          <img
+            class="canvas-logo"
+            width="16"
+            heigth="16"
+            src="@/assets/save.svg"
+          />
+        </bx-btn>
+        <bx-btn size="sm" title="Download experiment DSL" @click="downloadJSON">
           <img
             class="canvas-logo"
             width="16"
@@ -188,7 +192,7 @@ import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 
 //Functions
-import { toJSON } from "@/canvas/functions/downloadJSON";
+import { toJSON, download } from "@/canvas/functions/downloadJSON";
 import { hide, getWorkflowsEdges } from "@/canvas/functions/hideExpand";
 import {
   setUpCanvas,
@@ -528,6 +532,14 @@ const removeConnectingEdges = (node) => {
 
 const downloadJSON = () => {
   toJSON(nodes.value, edges.value, "experiment");
+};
+
+const saveGraph = () => {
+  let d = new Date();
+  download(`build-canvas-${d.toISOString()}.json`, {
+    nodes: nodes._object.nodes,
+    edges: edges._object.edges,
+  });
 };
 
 const onChangeVisibility = (node, isHidden) => {

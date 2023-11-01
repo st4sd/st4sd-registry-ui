@@ -22,7 +22,7 @@ const duplicateLabelsExist = (elements) => {
   return elements.length != labels.size;
 };
 
-const download = (filename, exp) => {
+export const download = (filename, exp) => {
   var hiddenElement = document.createElement("a");
   hiddenElement.setAttribute(
     "href",
