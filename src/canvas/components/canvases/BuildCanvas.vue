@@ -209,7 +209,7 @@ import {
 
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
-
+import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";
 
@@ -482,15 +482,11 @@ onNodeDoubleClick(({ node }) => {
 });
 
 const updateNode = (updatedNode) => {
-  selectedNode.label = updatedNode.label;
-  selectedNode.definition = updatedNode.definition;
   if (updatedNode.type == "workflow") {
-    nodes.value.find(
-      (node) =>
-        node.type == "workflow-input" && node.parentNode == updatedNode.id,
-    ).label = `${updatedNode.label} inputs`;
     toggleModalVisibility("updateWorkflowModal");
   } else {
+    selectedNode.label = updatedNode.label;
+    selectedNode.definition = updatedNode.definition;
     toggleModalVisibility("updateComponentModal");
   }
 };
@@ -528,6 +524,9 @@ const deleteNode = () => {
 const removeParentNode = () => {
   selectedNode.parentNode = undefined;
   selectedNode.expandParent = false;
+  //since the node is no longer a step
+  delete selectedNode.stepId;
+  updateNodeLabel(selectedNode);
   //Remove it as a step from parent WF
   removeStep(parentNode, selectedNode);
   removeConnectingEdges(selectedNode);

@@ -639,10 +639,11 @@ import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/toggle/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
+import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
   props: { node: Object, parentNode: Object },
-  emits: ["update", "removeParentNode", "add"],
+  emits: ["update", "removeParent", "add"],
   data() {
     return {
       contentSwitcherSelection: ref("config"),
@@ -659,7 +660,7 @@ export default {
     update() {
       if (!this.isError) {
         let newComponentNode = { ...this.node };
-        //newComponentNode.label = this.component.signature.name;
+        updateNodeLabel(newComponentNode);
         newComponentNode.definition = this.component.getComponentDefintion();
         this.$emit("update", newComponentNode);
       }

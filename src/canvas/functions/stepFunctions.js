@@ -129,15 +129,6 @@ export function removeStep(workflow, removedNode) {
     }
   }
   delete workflow.definition.steps[stepName];
-
-  //Remove it's associated execute part
-  let stepExecution = workflow.definition.execute.find(
-    (e) => e.target == `<${stepName}>`,
-  );
-  const index = workflow.definition.execute.indexOf(stepExecution);
-  if (index > -1) {
-    workflow.definition.execute.splice(index, 1);
-  }
 }
 
 //Function that deletes a node from the canvas and if it is a workflow will also

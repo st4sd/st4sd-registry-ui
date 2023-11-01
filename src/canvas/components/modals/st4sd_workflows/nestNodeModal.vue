@@ -73,6 +73,7 @@
 
 <script>
 import "@carbon/web-components/es/components/radio-button/index.js";
+import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
   props: {
@@ -118,8 +119,17 @@ export default {
             nestedNode.expandParent = true;
             nestedNode.position = { x: 0, y: 0 };
             nestedNode.stepId = this.stepName;
+            updateNodeLabel(nestedNode);
+            if (nestedNode.type == "workflow") {
+              //change workflow input node name
+              this.allNodes.find(
+                (node) =>
+                  node.type == "workflow-input" &&
+                  node.parentNode == nestedNode.id,
+              ).label = `${nestedNode.label} inputs`;
+            }
             this.selectedWorkflow.definition.steps[this.stepName] =
-              nestedNode.label;
+              nestedNode.definition.signature.name;
             this.$emit("done");
           } else {
             alert("Please choose a unique step name");

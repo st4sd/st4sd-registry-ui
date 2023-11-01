@@ -177,7 +177,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/input/index.js";
 import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
-import { getTextWidth } from "@/canvas/functions/getTextWidth";
+import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
@@ -228,9 +228,17 @@ export default {
         if (this.workflow.areStepsUnique()) {
           this.checkStepsChanges();
           //we copy over the props to avoid mutating
-          let updatedWorkflow = { ...this.node };
-          //updatedWorkflow.label = this.workflow.getName();
+          let updatedWorkflow = this.allNodes.find(
+            (node) => node.id == this.node.id,
+          );
           updatedWorkflow.definition = this.workflow.getWorkflowDefinition();
+          updateNodeLabel(updatedWorkflow);
+          //change workflow input node name
+          this.allNodes.find(
+            (node) =>
+              node.type == "workflow-input" &&
+              node.parentNode == updatedWorkflow.id,
+          ).label = `${updatedWorkflow.label} inputs`;
           this.$emit("update", updatedWorkflow);
         } else {
           alert("Please make sure steps are unique");
@@ -252,11 +260,14 @@ export default {
         (node) => node.stepId == oldStep,
       );
       tobeUpdatedNode.stepId = newStep;
-      tobeUpdatedNode.label = newStep;
+      updateNodeLabel(tobeUpdatedNode);
       if (tobeUpdatedNode.type == "workflow") {
-        getTextWidth(tobeUpdatedNode.label) + "px";
-      } else {
-        getTextWidth(tobeUpdatedNode.label);
+        //change workflow input node name
+        this.allNodes.find(
+          (node) =>
+            node.type == "workflow-input" &&
+            node.parentNode == tobeUpdatedNode.id,
+        ).label = `${tobeUpdatedNode.label} inputs`;
       }
     },
     onFocusLost(event, item) {
