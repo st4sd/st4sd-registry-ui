@@ -4,7 +4,8 @@ export const canvasStore = reactive({
   node: {},
   DAG: {},
   PVEP: {},
-  graph: {},
+  graph: JSON.parse(window.localStorage.getItem("graph")) || {},
+  dsl: JSON.parse(window.localStorage.getItem("dsl")) || {},
 
   setNode(obj) {
     this.node = obj;
@@ -16,6 +17,11 @@ export const canvasStore = reactive({
     this.PVEP = obj;
   },
   setGraph(obj) {
-    this.graph = obj;
+    window.localStorage.setItem("graph", JSON.stringify(obj));
+    this.graph = JSON.parse(window.localStorage.getItem("graph"));
+  },
+  setDsl(obj) {
+    window.localStorage.setItem("dsl", JSON.stringify(obj));
+    this.dsl = JSON.parse(window.localStorage.getItem("dsl"));
   },
 });

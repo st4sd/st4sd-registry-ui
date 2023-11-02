@@ -25,6 +25,25 @@
                 in this page.
               </p>
             </div>
+            <div v-else-if="errorCode == 400">
+              <img
+                class="empty-state-icon"
+                src="@/assets/empty-state-bright-error.svg"
+              />
+              <h3>Something's wrong.</h3>
+              <br />
+              <p>
+                The request was rejected.
+                {{ errorDescription }}. {{ errorStatusText }}
+              </p>
+              <br />
+              <p>Click the button to go back</p>
+              <bx-btn
+                style="margin-top: 1rem; min-width: 150px"
+                @click="$router.go(-1)"
+                >Back
+              </bx-btn>
+            </div>
             <div v-else>
               <img
                 class="empty-state-icon"

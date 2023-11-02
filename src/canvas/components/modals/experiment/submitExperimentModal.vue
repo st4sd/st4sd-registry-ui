@@ -39,6 +39,9 @@
 <script>
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/inline-loading/index.js";
+
+import { validateExperimentName } from "@/canvas/functions/validateExperimentName";
+
 export default {
   name: "submitExperimentModal",
   props: {
@@ -54,9 +57,7 @@ export default {
   methods: {
     validateExperimentName(event) {
       this.experimentName = event.target.value;
-      let pattern =
-        /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/g;
-      this.invalid = pattern.exec(this.experimentName) === null ? true : false;
+      this.invalid = validateExperimentName(this.experimentName);
     },
     submit() {
       this.$emit("submit", this.experimentName);

@@ -4,6 +4,7 @@
 
     Author: Alessandro Pomponio
 */
+
 import CatalogView from "@/views/CatalogView";
 import ComponentView from "@/views/ComponentView";
 import ExperimentView from "@/views/ExperimentView";
@@ -12,6 +13,7 @@ import ComponentLogView from "@/views/ComponentLogView";
 import RunView from "@/views/RunView";
 import PropertiesView from "@/views/PropertiesView";
 import BuildCanvasView from "@/views/BuildCanvasView";
+import RegisterExperimentView from "@/views/RegisterExperimentView";
 import ViewCanvasView from "@/views/ViewCanvasView";
 import ParameterisationView from "@/views/ParameterisationView";
 import GlobalRegistryLibraryView from "@/views/GlobalRegistryLibraryView";
@@ -30,6 +32,12 @@ const routes = [
     component: BuildCanvasView,
   },
   {
+    path: "/build-canvas/register-experiment/:name",
+    name: "register experiment",
+    component: RegisterExperimentView,
+    props: true,
+  },
+  {
     path: "/build-canvas/global-registry-library",
     name: "global registry library",
     component: GlobalRegistryLibraryView,
@@ -43,6 +51,7 @@ const routes = [
   {
     path: "/experiment/:id",
     component: ExperimentView,
+    name: "view experiment",
     props: true,
   },
   {

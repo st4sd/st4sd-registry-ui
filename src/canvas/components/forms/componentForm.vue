@@ -27,18 +27,6 @@
           <span slot="label-text">Description:</span>
         </bx-input>
         <br />
-        <bx-number-input
-          :value="component.stage"
-          @input="component.stage = $event.target.value"
-          placeholder="0"
-          min="0"
-          required
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Stage:</span>
-        </bx-number-input>
-        <br />
         <bx-input
           id="add-component-variables-input"
           type="text"
@@ -153,8 +141,8 @@
         </bx-input>
         <br />
         <bx-input
-          :value="component.command.expandArgument"
-          @input="component.command.expandArgument = $event.target.value"
+          :value="component.command.expandArguments"
+          @input="component.command.expandArguments = $event.target.value"
           placeholder="expand argument"
           colorScheme="light"
         >

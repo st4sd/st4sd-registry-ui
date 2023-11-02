@@ -5,10 +5,10 @@ export const registryUISharedState = reactive({
   settings: {},
   isGlobalRegistry: true,
   isCanvasDisabled: true,
+  isBuildCanvasEnabled: false,
   isParameterisationEnabled: false,
   isRunExperimentEnabled: false,
   isGlobalRegistryLibraryEnabled: false,
-  isBuildCanvasEnabled: false,
   isBuildCanvasEditingEnabled: false,
 
   setSettings(obj) {

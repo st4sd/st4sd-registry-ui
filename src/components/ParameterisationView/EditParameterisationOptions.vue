@@ -537,50 +537,53 @@ export default {
       // the callback will be called immediately after the start of the observation
       immediate: true,
       handler(val) {
-        this.entry = val;
-        this.parameterisation = val.parameterisation;
-        this.platformOptions = val.metadata.registry.platforms;
-        if (this.parameterisation.presets.platform != undefined) {
-          this.selectedPlatform = this.parameterisation.presets.platform;
-        } else {
-          this.selectedPlatform =
-            this.parameterisation.executionOptions.platform[0];
-        }
-        this.executionOptionsDefaults =
-          val.metadata.registry.executionOptionsDefaults;
-
-        this.dataOptions = val.metadata.registry.data;
-        this.dataOptions = sortDataFiles(this.dataOptions);
-        this.dataExecutionOptions = val.parameterisation.executionOptions.data;
-
-        this.inputs = val.metadata.registry.inputs;
-        this.parameterisationOptionsLoading = false;
-        this.variables = setVariables(val);
-        this.variables.forEach((variable) => {
-          if ("valueFrom" in variable) {
-            this.variableValues.push(
-              variable.valueFrom.map((value) => value.value),
-            );
-          } else if ("value" in variable) {
-            this.variableValues.push(variable.value);
+        if (val != null) {
+          this.entry = val;
+          this.parameterisation = val.parameterisation;
+          this.platformOptions = val.metadata.registry.platforms;
+          if (this.parameterisation.presets.platform != undefined) {
+            this.selectedPlatform = this.parameterisation.presets.platform;
+          } else {
+            this.selectedPlatform =
+              this.parameterisation.executionOptions.platform[0];
           }
-        });
-        // Loop sets up the boolean arrays for variable input visibility, accordians open and invalidity
-        for (let i = 0; i < this.variables.length; i++) {
-          this.presetVariableInputsVisible.push(false);
-          this.executionOptionInputsVisible.push(false);
-          this.variableAccordionOpen.push(false);
-          this.invalidVariables.push(false);
-          this.invalidVariableExecutionOptions.push([false]);
+          this.executionOptionsDefaults =
+            val.metadata.registry.executionOptionsDefaults;
+
+          this.dataOptions = val.metadata.registry.data;
+          this.dataOptions = sortDataFiles(this.dataOptions);
+          this.dataExecutionOptions =
+            val.parameterisation.executionOptions.data;
+
+          this.inputs = val.metadata.registry.inputs;
+          this.parameterisationOptionsLoading = false;
+          this.variables = setVariables(val);
+          this.variables.forEach((variable) => {
+            if ("valueFrom" in variable) {
+              this.variableValues.push(
+                variable.valueFrom.map((value) => value.value),
+              );
+            } else if ("value" in variable) {
+              this.variableValues.push(variable.value);
+            }
+          });
+          // Loop sets up the boolean arrays for variable input visibility, accordians open and invalidity
+          for (let i = 0; i < this.variables.length; i++) {
+            this.presetVariableInputsVisible.push(false);
+            this.executionOptionInputsVisible.push(false);
+            this.variableAccordionOpen.push(false);
+            this.invalidVariables.push(false);
+            this.invalidVariableExecutionOptions.push([false]);
+          }
+          this.runtimeArgs = setRuntimeArgs(val);
+          this.runtimeArgsInvalid = setRuntimeArgsInvalid(this.runtimeArgs);
+          this.orchestratorResources = setOrchestratorResources(val);
+          this.orchestratorResourcesInvalid = setOrchestratorResourcesInvalid(
+            this.orchestratorResources,
+          );
+          this.setSinglePlatform();
+          this.$emit("setNewParameterisationOptions", this.entry);
         }
-        this.runtimeArgs = setRuntimeArgs(val);
-        this.runtimeArgsInvalid = setRuntimeArgsInvalid(this.runtimeArgs);
-        this.orchestratorResources = setOrchestratorResources(val);
-        this.orchestratorResourcesInvalid = setOrchestratorResourcesInvalid(
-          this.orchestratorResources,
-        );
-        this.setSinglePlatform();
-        this.$emit("setNewParameterisationOptions", this.entry);
       },
     },
     runtimeArgsInvalid: {

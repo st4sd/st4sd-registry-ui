@@ -10,10 +10,10 @@ export const validateCommand = (node) => {
         node.definition.command.arguments == undefined
           ? ""
           : node.definition.command.arguments,
-      expandArgument:
-        node.definition.command.expandArgument == undefined
+      expandArguments:
+        node.definition.command.expandArguments == undefined
           ? ""
-          : node.definition.command.expandArgument,
+          : node.definition.command.expandArguments,
       environment:
         node.definition.command.environment == undefined
           ? ""
@@ -23,7 +23,7 @@ export const validateCommand = (node) => {
     nodeCommand = {
       executable: "",
       arguments: "",
-      expandArgument: "",
+      expandArguments: "",
       environment: "",
     };
   }

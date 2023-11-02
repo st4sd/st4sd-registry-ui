@@ -1,18 +1,37 @@
 import buildExperiment from "@/canvas/functions/buildExperiment";
 
-export function toJSON(nodes, edges, experimentName) {
-  let entryNode = nodes.find((node) => node.isEntry == true);
+export function validateExperiment(nodes, entryNode) {
   if (duplicateLabelsExist(nodes)) {
-    alert(
-      "2 or more WF/Components have the same name, experiment elements names has to be unique",
-    );
+    return {
+      isValid: false,
+      payload:
+        "2 or more WF/Components have the same name, experiment elements names has to be unique",
+    };
   } else if (entryNode == undefined) {
-    alert("Entry point is not selected, an experiment needs an entry point");
+    return {
+      isValid: false,
+      payload:
+        "Entry point is not selected, an experiment needs an entry point",
+    };
   } else {
-    download(
-      experimentName + ".json",
-      buildExperiment(nodes, edges, entryNode),
-    );
+    return { isValid: true, payload: entryNode };
+  }
+}
+
+export function getDsl(nodes, edges) {
+  let entryNode = nodes.find((node) => node.isEntry == true);
+  let validationResult = validateExperiment(nodes, entryNode);
+  if (validationResult.isValid) {
+    return buildExperiment(nodes, edges, entryNode);
+  } else {
+    throw new Error(validationResult.payload);
+  }
+}
+
+export function downloadExperiment(nodes, edges, fileName) {
+  let dsl = getDsl(nodes, edges);
+  if (dsl != undefined) {
+    download(fileName + ".json", dsl);
   }
 }
 

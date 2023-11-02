@@ -2,15 +2,14 @@ export default class St4sdComponent {
   signature = {
     name: "",
     description: "",
-    parameters: [{ name: "", default: "" }],
+    parameters: [],
   };
   command = {
     executable: "",
     arguments: "",
-    expandArgument: "",
+    expandArguments: "",
     environment: "",
   };
-  stage = "";
   variables = "";
   workflowAttributes = {
     replicate: "",
@@ -57,7 +56,6 @@ export default class St4sdComponent {
     return {
       signature: this.signature,
       command: this.command,
-      stage: this.stage,
       variables: this.variables,
       workflowAttributes: this.workflowAttributes,
       resourceRequest: this.resourceRequest,
@@ -70,9 +68,6 @@ export default class St4sdComponent {
     }
     if (definition.command != undefined) {
       this.setCommand(definition.command);
-    }
-    if (definition.stage != undefined) {
-      this.setStage(definition.stage);
     }
     if (definition.variables != undefined) {
       this.setVariables(definition.variables);
@@ -101,14 +96,6 @@ export default class St4sdComponent {
   setCommand(command) {
     if (typeof command === "object" && command !== null) {
       this.command = command;
-    }
-  }
-  getStage() {
-    return this.stage;
-  }
-  setStage(stage) {
-    if (typeof stage === "string" || stage instanceof String) {
-      this.stage = stage;
     }
   }
   getVariables() {

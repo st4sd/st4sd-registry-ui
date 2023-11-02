@@ -1,3 +1,5 @@
+import getDSLComponentDefinition from "@/canvas/functions/removeEmptyValues";
+
 export default function buildExperiment(nodes, edges, entryNode) {
   let workflows = nodes.filter((node) => node.type == "workflow");
 
@@ -27,9 +29,10 @@ export default function buildExperiment(nodes, edges, entryNode) {
       result.workflows.push(workflow.definition);
     });
     //Component
-    components.forEach((component) =>
-      result.components.push(component.definition),
-    );
+    components.forEach((component) => {
+      let defintion = getDSLComponentDefinition(component.definition);
+      result.components.push(defintion);
+    });
   }
 
   return result;
@@ -69,18 +72,18 @@ function createExecutionConfig(workflow, nodes, edges) {
           if (edge.sourceNode.stepId == "") {
             execution.args[argument] = edge.definition[argument];
           } else {
-            execution.args[argument] = edge.definition[argument].replace(
-              edge.source,
-              edge.sourceNode.stepReference,
-            );
+            //adding .toString() to account for any non string values like numbers
+            execution.args[argument] = edge.definition[argument]
+              .toString()
+              .replace(edge.source, edge.sourceNode.stepReference);
           }
         });
       } else {
         Object.keys(edge.definition).forEach((argument) => {
-          execution.args[argument] = edge.definition[argument].replace(
-            edge.sourceNode.id,
-            edge.sourceNode.stepReference,
-          );
+          //adding .toString() to account for any non string values like numbers
+          execution.args[argument] = edge.definition[argument]
+            .toString()
+            .replace(edge.sourceNode.id, edge.sourceNode.stepReference);
         });
       }
     });

@@ -16,6 +16,10 @@
         <bx-btn
           title="Configure Experiment"
           @click="toggleModalVisibility('selectEntryPointModal')"
+          kind="primary"
+          :disabled="
+            allNodes.filter((node) => node.type == 'workflow').length < 1
+          "
         >
           Select Entrypoint
         </bx-btn>
@@ -35,20 +39,24 @@
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
+        <bx-btn
+          size="sm"
+          title="Download canvas project files"
+          @click="downloadExperimentFiles"
+        >
+          <img
+            class="canvas-logo"
+            width="16"
+            heigth="16"
+            src="@/assets/download.svg"
+          />
+        </bx-btn>
         <bx-btn size="sm" title="Save canvas project" @click="saveGraph">
           <img
             class="canvas-logo"
             width="16"
             heigth="16"
             src="@/assets/save.svg"
-          />
-        </bx-btn>
-        <bx-btn size="sm" title="Download experiment DSL" @click="downloadJSON">
-          <img
-            class="canvas-logo"
-            width="16"
-            heigth="16"
-            src="@/assets/download.svg"
           />
         </bx-btn>
         <bx-btn
@@ -62,6 +70,15 @@
             heigth="16"
             src="@/assets/upload.svg"
           />
+        </bx-btn>
+        <bx-btn
+          size="sm"
+          title="Register experiment"
+          @click="toggleModalVisibility('registerExperimentModal')"
+          kind="secondary"
+          :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
+        >
+          Register Experiment
         </bx-btn>
       </Panel>
       <template #node-component="{ label }">
@@ -153,6 +170,14 @@
       title="Upload Files"
       open="true"
     />
+    <registerExperiment
+      v-if="modalVisibilities.registerExperimentModal.value"
+      @bx-modal-closed="toggleModalVisibility('registerExperimentModal')"
+      open="true"
+      name=""
+      :allNodes="allNodes"
+      :allEdges="allEdges"
+    />
   </div>
 </template>
 
@@ -170,7 +195,8 @@ import {
   PanelPosition,
 } from "@vue-flow/additional-components";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import BlocksLibrary from "@/canvas/components/BlocksLibrary";
 //Modals
 import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
@@ -182,6 +208,7 @@ import updateComponentModal from "@/canvas/components/modals/st4sd_components/up
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
+import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
 
 //Stores
 import { canvasStore } from "@/canvas/stores/canvasStore";
@@ -192,7 +219,7 @@ import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 
 //Functions
-import { toJSON, download } from "@/canvas/functions/downloadJSON";
+import { downloadExperiment, download } from "@/canvas/functions/downloadJSON";
 import { hide, getWorkflowsEdges } from "@/canvas/functions/hideExpand";
 import {
   setUpCanvas,
@@ -305,6 +332,7 @@ let modalVisibilities = {
   stepExecuteModal: ref(false),
   deleteModal: ref(false),
   fileUploadModal: ref(false),
+  registerExperimentModal: ref(false),
 };
 
 const displayUploadedElements = (files) => {
@@ -540,8 +568,8 @@ const removeConnectingEdges = (node) => {
   removeEdges(connectingEdges);
 };
 
-const downloadJSON = () => {
-  toJSON(nodes.value, edges.value, "experiment");
+const downloadExperimentFiles = () => {
+  downloadExperiment(nodes.value, edges.value, "experiment");
 };
 
 const saveGraph = () => {
@@ -567,6 +595,16 @@ const onChangeVisibility = (node, isHidden) => {
 const addStep = () => {
   toggleModalVisibility("nestingModal");
 };
+
+onMounted(() => {
+  const route = useRoute();
+  if (route.query.registrationCancelled == "true") {
+    let graph = canvasStore.graph;
+    addNodes(graph.nodes);
+    addEdges(graph.edges);
+    canvasStore.setGraph({});
+  }
+});
 </script>
 
 <style lang="scss" src="@/canvas/styles/main.scss"></style>

@@ -30,7 +30,11 @@
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
-        <bx-btn size="sm" title="Download as JSON" @click="downloadJSON">
+        <bx-btn
+          size="sm"
+          title="Download as JSON"
+          @click="downloadExperimentFiles"
+        >
           <img
             class="canvas-logo"
             width="16"
@@ -114,7 +118,7 @@ import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWo
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
 import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
 import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
-import { toJSON } from "@/canvas/functions/downloadJSON";
+import { downloadExperiment } from "@/canvas/functions/downloadJSON";
 import {
   getWorkflowsDimensions,
   getWorkflowsEdges,
@@ -250,8 +254,8 @@ const onChangeVisibility = (node, isHidden) => {
   removeEdges(result.toDelete);
 };
 
-const downloadJSON = () => {
-  toJSON(nodes.value, edges.value, "experiment");
+const downloadExperimentFiles = () => {
+  downloadExperiment(nodes.value, edges.value, "experiment");
 };
 
 const emit = defineEmits(["transformSelected"]);
