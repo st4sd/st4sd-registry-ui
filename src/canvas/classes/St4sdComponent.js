@@ -13,7 +13,7 @@ export default class St4sdComponent {
   variables = "";
   workflowAttributes = {
     replicate: "",
-    aggregate: true,
+    aggregate: false,
     restartHookFile: "",
     restartHookOn: ["ResourceExhausted"],
     repeatInterval: "",
