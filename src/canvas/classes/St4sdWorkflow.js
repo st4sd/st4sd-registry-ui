@@ -81,14 +81,16 @@ export default class St4sdWorkflow {
   getStep(index) {
     return this.steps[index];
   }
-  getStepByReference(reference) {
-    return this.steps.find((step) => step.stepReference == reference);
-  }
   setStep(index, newStep) {
     this.steps[index].step = newStep;
   }
   setStepReference(index, newStepReference) {
     this.steps[index].stepReference = newStepReference;
+  }
+  setStepsNodeIDs(childrenNodes) {
+    childrenNodes.forEach((node) => {
+      this.steps.find((step) => step.step == node.stepId).nodeId = node.id;
+    });
   }
   addStep(name, reference) {
     this.steps.push({ step: name, stepReference: reference });

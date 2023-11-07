@@ -185,7 +185,7 @@ export default {
   data() {
     return {
       workflow: new St4sdWorkflow(),
-      childrenNodes: {},
+      childrenNodes: [],
       isError: false,
     };
   },
@@ -193,8 +193,10 @@ export default {
     if (this.node != undefined) {
       this.workflow.setWorkflowDefinition(this.node.definition);
       this.childrenNodes = this.allNodes.filter(
-        (node) => node.parentNode == this.node.id,
+        (node) =>
+          node.parentNode == this.node.id && node.type != "workflow-input",
       );
+      this.workflow.setStepsNodeIDs(this.childrenNodes);
     }
   },
   methods: {
@@ -210,6 +212,8 @@ export default {
       );
       tobeUpdatedNode.parentNode = undefined;
       tobeUpdatedNode.expandParent = false;
+      delete tobeUpdatedNode.stepId;
+      this.updateNodeLabel(tobeUpdatedNode);
       this.$emit("stepDeleted", tobeUpdatedNode);
     },
     add() {
@@ -232,13 +236,7 @@ export default {
             (node) => node.id == this.node.id,
           );
           updatedWorkflow.definition = this.workflow.getWorkflowDefinition();
-          updateNodeLabel(updatedWorkflow);
-          //change workflow input node name
-          this.allNodes.find(
-            (node) =>
-              node.type == "workflow-input" &&
-              node.parentNode == updatedWorkflow.id,
-          ).label = `${updatedWorkflow.label} inputs`;
+          this.updateNodeLabel(updatedWorkflow);
           this.$emit("update", updatedWorkflow);
         } else {
           alert("Please make sure steps are unique");
@@ -247,19 +245,19 @@ export default {
     },
     checkStepsChanges() {
       this.workflow.getStepsArray().forEach((newStep) => {
-        let oldStep = Object.keys(this.node.definition.steps).find(
-          (key) => this.node.definition.steps[key] === newStep.stepReference,
+        let tobeUpdatedNode = this.childrenNodes.find(
+          (node) => node.id == newStep.nodeId,
         );
-        if (newStep.step != oldStep) {
-          this.updateStepId(oldStep, newStep.step);
+        if (newStep.step != tobeUpdatedNode.stepId) {
+          this.updateStepId(tobeUpdatedNode, newStep.step);
         }
       });
     },
-    updateStepId(oldStep, newStep) {
-      let tobeUpdatedNode = this.childrenNodes.find(
-        (node) => node.stepId == oldStep,
-      );
+    updateStepId(tobeUpdatedNode, newStep) {
       tobeUpdatedNode.stepId = newStep;
+      this.updateNodeLabel(tobeUpdatedNode);
+    },
+    updateNodeLabel(tobeUpdatedNode) {
       updateNodeLabel(tobeUpdatedNode);
       if (tobeUpdatedNode.type == "workflow") {
         //change workflow input node name
