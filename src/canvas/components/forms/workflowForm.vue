@@ -187,11 +187,13 @@ export default {
       workflow: new St4sdWorkflow(),
       childrenNodes: [],
       isError: false,
+      oldName: "",
     };
   },
   mounted() {
     if (this.node != undefined) {
       this.workflow.setWorkflowDefinition(this.node.definition);
+      this.oldName = this.workflow.getName();
       this.childrenNodes = this.allNodes.filter(
         (node) =>
           node.parentNode == this.node.id && node.type != "workflow-input",
@@ -231,10 +233,21 @@ export default {
       if (!this.isError) {
         if (this.workflow.areStepsUnique()) {
           this.checkStepsChanges();
-          //we copy over the props to avoid mutating
           let updatedWorkflow = this.allNodes.find(
             (node) => node.id == this.node.id,
           );
+          //if the workflow name has changed we need to change step references
+          //check if the workflow is a step in another workflow
+          if (
+            this.oldName != this.workflow.getName() &&
+            updatedWorkflow.stepId != undefined
+          ) {
+            let parentNode = this.allNodes.find(
+              (node) => node.id == updatedWorkflow.parentNode,
+            );
+            parentNode.definition.steps[updatedWorkflow.stepId] =
+              this.workflow.getName();
+          }
           updatedWorkflow.definition = this.workflow.getWorkflowDefinition();
           this.updateNodeLabel(updatedWorkflow);
           this.$emit("update", updatedWorkflow);

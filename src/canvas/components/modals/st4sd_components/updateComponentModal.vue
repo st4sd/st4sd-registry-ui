@@ -10,6 +10,7 @@
       <componentForm
         ref="componentForm"
         :node="node"
+        :allNodes="allNodes"
         :parentNode="parentNode"
         @update="update"
         @removeParent="removeParent"
@@ -42,7 +43,7 @@ export default {
   components: {
     componentForm,
   },
-  props: { node: Object, parentNode: Object },
+  props: { node: Object, parentNode: Object, allNodes: Object },
   emits: ["updated", "delete", "removeParent"],
   methods: {
     emitDelete() {

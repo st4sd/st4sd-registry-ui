@@ -117,6 +117,7 @@
     <updateComponentModal
       v-if="modalVisibilities.updateComponentModal.value"
       :node="selectedNode"
+      :allNodes="allNodes"
       :parentNode="parentNode"
       @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
       @updated="updateNode"

@@ -630,18 +630,20 @@ import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
-  props: { node: Object, parentNode: Object },
+  props: { node: Object, parentNode: Object, allNodes: Object },
   emits: ["update", "removeParent", "add"],
   data() {
     return {
       contentSwitcherSelection: ref("config"),
       component: new St4sdComponent(),
       isError: false,
+      oldName: "",
     };
   },
   mounted() {
     if (this.node != undefined) {
       this.component.setComponentDefintion(this.node.definition);
+      this.oldName = this.component.getName();
     }
   },
   methods: {
@@ -650,6 +652,18 @@ export default {
         let newComponentNode = { ...this.node };
         updateNodeLabel(newComponentNode);
         newComponentNode.definition = this.component.getComponentDefintion();
+        //if the workflow name has changed we need to change step references
+        //check if the workflow is a step in another workflow
+        if (
+          this.oldName != this.component.getName() &&
+          newComponentNode.stepId != undefined
+        ) {
+          let parentNode = this.allNodes.find(
+            (node) => node.id == newComponentNode.parentNode,
+          );
+          parentNode.definition.steps[newComponentNode.stepId] =
+            this.component.getName();
+        }
         this.$emit("update", newComponentNode);
       }
     },

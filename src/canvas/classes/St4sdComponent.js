@@ -133,6 +133,9 @@ export default class St4sdComponent {
   setName(name) {
     this.signature.name = name;
   }
+  getName() {
+    return this.signature.name;
+  }
   setDescription(description) {
     this.signature.description = description;
   }
