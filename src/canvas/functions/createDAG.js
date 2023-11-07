@@ -15,7 +15,7 @@ export function createDAG(dslData, experimentData) {
   //Check if the entry point section exists in the file
   //If it doesn't  exist - it means this file is not an experiment
   //and just a collection of workflows and components
-  if (dslData["entrypoint"] != undefined) {
+  if (dslData.entrypoint != undefined) {
     let entryWorkflow = addEntries(graph, dslData, experimentData);
     let entryWorkflowName = entryWorkflow.signature.name;
     //add all workflows/components inside the entry workflow
@@ -37,42 +37,48 @@ export function createWorkflowDAG(experimentData) {
   //Check if the entry point section exists in the file
   //If it doesn't  exist - it means this file is not an experiment
   //and just a collection of workflows and components
-  if (experimentData["entrypoint"] != undefined) {
-    let entryWorkflowName = experimentData["entrypoint"]["entry-instance"];
+  if (
+    experimentData.entrypoint != undefined &&
+    experimentData["entrypoint"]["entry-instance"] != undefined
+  ) {
     //get the definition of the entry workflow
     let entryWorkflow = experimentData.workflows.find(
-      (o) => o.signature.name === entryWorkflowName,
+      (o) =>
+        o.signature.name === experimentData["entrypoint"]["entry-instance"],
     );
+    if (entryWorkflow != undefined) {
+      let entryWorkflowName = entryWorkflow.signature.name;
 
-    var node = {
-      id: entryWorkflowName,
-      label: entryWorkflowName,
-      type: "workflow",
-      definition: entryWorkflow,
-      parentNode: "",
-      position: { x: 1, y: 100 },
-      style: {
-        width: getTextWidth(entryWorkflowName) + "px",
-        height: "1px",
-      },
-      isEntry: true,
-    };
-    graph.nodes.push(node);
-    let workflowInput = `${entryWorkflowName}/input`;
-    addNode(
-      graph,
-      workflowInput,
-      `${entryWorkflowName} inputs`,
-      workflowInput,
-      entryWorkflowName,
-      "workflow-input",
-      "",
-    );
-    //add all workflows/components inside the entry workflow
-    addBlocks(graph, experimentData, entryWorkflow, entryWorkflowName);
-    //add edges/connections between the blocks
-    addEdges(graph, experimentData, entryWorkflow, entryWorkflowName);
-    graph = { ...drawGraph(graph) };
+      var node = {
+        id: entryWorkflowName,
+        label: entryWorkflowName,
+        type: "workflow",
+        definition: entryWorkflow,
+        parentNode: "",
+        position: { x: 1, y: 100 },
+        style: {
+          width: getTextWidth(entryWorkflowName) + "px",
+          height: "1px",
+        },
+        isEntry: true,
+      };
+      graph.nodes.push(node);
+      let workflowInput = `${entryWorkflowName}/input`;
+      addNode(
+        graph,
+        workflowInput,
+        `${entryWorkflowName} inputs`,
+        workflowInput,
+        entryWorkflowName,
+        "workflow-input",
+        "",
+      );
+      //add all workflows/components inside the entry workflow
+      addBlocks(graph, experimentData, entryWorkflow, entryWorkflowName);
+      //add edges/connections between the blocks
+      addEdges(graph, experimentData, entryWorkflow, entryWorkflowName);
+      graph = { ...drawGraph(graph) };
+    }
   }
   return graph;
 }
@@ -86,7 +92,23 @@ function addEntries(graph, dslData, experimentData) {
   );
 
   //Get the inputs of the entry workflow
-  let inputs = dslData["entrypoint"]["execute"][0].args;
+  let entrypointArguments = {};
+  if (
+    dslData.entrypoint !== undefined &&
+    dslData.entrypoint.execute !== undefined &&
+    dslData.entrypoint.execute.length == 1 &&
+    dslData.entrypoint.execute[0].args !== undefined
+  ) {
+    entrypointArguments = dslData.entrypoint.execute[0].args;
+  }
+
+  let inputs = [];
+  if (
+    entryWorkflow.signature.parameters !== undefined &&
+    entryWorkflow.signature.parameters.length > 0
+  ) {
+    inputs = entryWorkflow.signature.parameters;
+  }
 
   // According to https://github.ibm.com/st4sd/overview/issues/485#issuecomment-57924085:
   // executionOptions are contents of:
@@ -124,31 +146,40 @@ function addEntries(graph, dslData, experimentData) {
   let executionOptionsDefinition = {};
   let presetsDefinition = {};
   let otherDefinition = {};
+  for (var input of inputs) {
+    if (input.name != undefined) {
+      let defaultDefinition = entrypointArguments[input.name];
+      let match = executionOptions.find((a) => a.name == input.name);
+      if (
+        defaultDefinition == undefined &&
+        input.default != undefined &&
+        input.default != null
+      ) {
+        defaultDefinition = input.default;
+      }
+      if (match != undefined) {
+        let definition = getExecutionOptionsDefaults(
+          defaultDefinition,
+          input.name,
+          experimentData,
+          entryWorkflow,
+        );
+        executionOptionsDefinition[input.name] = definition;
+        continue;
+      }
 
-  for (var input in inputs) {
-    let match = executionOptions.find((a) => a.name == input);
-    if (match != undefined) {
-      let definition = getExecutionOptionsDefaults(
-        inputs,
-        input,
-        experimentData,
-        entryWorkflow,
-      );
-      executionOptionsDefinition[input] = definition;
-      continue;
-    }
-
-    match = presets.find((a) => a.name == input);
-    if (match != undefined || input.startsWith("data.")) {
-      let definition = getPresetsDefaults(
-        inputs,
-        input,
-        experimentData,
-        entryWorkflow,
-      );
-      presetsDefinition[input] = definition;
-    } else {
-      otherDefinition[input] = inputs[input];
+      match = presets.find((a) => a.name == input.name);
+      if (match != undefined || input.name.startsWith("data.")) {
+        let definition = getPresetsDefaults(
+          defaultDefinition,
+          input.name,
+          experimentData,
+          entryWorkflow,
+        );
+        presetsDefinition[input.name] = definition;
+      } else {
+        otherDefinition[input.name] = defaultDefinition;
+      }
     }
   }
 
@@ -445,12 +476,12 @@ function removeSymbolCharacters(stringWithSymbols) {
 }
 
 function getExecutionOptionsDefaults(
-  inputs,
+  defaultDefinition,
   input,
   inputClassificationData,
   entryWorkflow,
 ) {
-  let definition = inputs[input];
+  let definition = defaultDefinition;
   if (input.startsWith("data.") || input.startsWith("input.")) {
     return definition;
   } else {
@@ -479,12 +510,12 @@ function getExecutionOptionsDefaults(
 }
 
 function getPresetsDefaults(
-  inputs,
+  defaultDefinition,
   input,
   inputClassificationData,
   entryWorkflow,
 ) {
-  let definition = inputs[input];
+  let definition = defaultDefinition;
   if (!input.startsWith("data.")) {
     definition =
       inputClassificationData.parameterisation.presets.variables.find(
