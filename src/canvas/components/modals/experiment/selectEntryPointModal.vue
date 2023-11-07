@@ -16,7 +16,7 @@
         >
           <template v-for="(node, i) in entryPointSelectionNodes" :key="i">
             <bx-radio-button
-              :label-text="node.label + ' (' + node.id + ')'"
+              :label-text="node.label"
               :value="node.id"
             ></bx-radio-button>
           </template>
