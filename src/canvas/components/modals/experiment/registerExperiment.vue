@@ -89,7 +89,12 @@ export default {
   mounted() {
     this.entryNode = this.allNodes.find((node) => node.isEntry == true);
     this.validateDsl();
-    this.experimentName = this.name;
+    if (this.name.trim().length == 0) {
+      this.experimentName = this.dsl.entrypoint["entry-instance"];
+    } else {
+      this.experimentName = this.name;
+    }
+    this.nameInvalid = validateExperimentName(this.experimentName);
   },
   methods: {
     validateDsl() {
