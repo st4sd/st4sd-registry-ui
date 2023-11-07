@@ -22,11 +22,14 @@
     <div>
       <!-- Advanced Search Filter -->
       <St4sdAdvancedSearchFilter
-        :experiments="this.experiments"
-        @updateSearchedExperiments="updateSearchedExperiments"
-        @loadingStatusChanged="updateloading"
-        @setInitialExperiments="setExperiments"
-        @updateErrorHandling="updateErrorHandling"
+        :searchSelectorArray="[
+          { Id: 'name', Name: 'Experiment Name' },
+          { Id: 'description', Name: 'Experiment Description' },
+          { Id: 'maintainer', Name: 'Experiment Maintainer' },
+          { Id: 'property_name', Name: 'Property Name' },
+        ]"
+        @st4sd-search-query-changed="updateSearchQuery"
+        @st4sd-search-selector-changed="updateSearchSelector"
       />
 
       <!-- Filter column -->
@@ -61,7 +64,11 @@
 </template>
 
 <script>
+import axios from "axios";
+import debounce from "lodash.debounce";
+
 //
+
 import "@carbon/ibmdotcom-web-components/es/components/card/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/carousel/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/filter-panel/index.js";
@@ -81,6 +88,10 @@ import St4sdExperimentCards from "@/components/St4sdExperimentCards/St4sdExperim
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
+//
+
+import { getDeploymentEndpoint } from "@/functions/public_path";
+
 export default {
   name: "CatalogView",
   components: {
@@ -96,30 +107,80 @@ export default {
       searchedExperiments: [],
       experiments: [],
       breadcrumbs: [{ name: "Virtual Experiments", path: "/" }],
-      loading: false,
+      loading: true,
       isError: false,
       errorStatusText: "",
       errorCode: 0,
       errorDescription: "Unable to load experiments",
+      initalLoad: true,
+      searchQuery: "",
+      searchSelector: "name",
+      debounceDelay: 1000,
+      callsMade: 0,
     };
   },
+  created() {
+    this.loading = true;
+    this.getSearchedData();
+
+    this.debouncedHandler = debounce(() => {
+      this.callsMade++;
+      this.getSearchedData(this.callsMade);
+    }, this.debounceDelay);
+  },
+  beforeUnmount() {
+    this.debouncedHandler.cancel();
+  },
+  watch: {
+    searchQuery() {
+      this.handleSearch();
+    },
+    searchSelector() {
+      this.handleSearch();
+    },
+  },
   methods: {
+    handleSearch(...args) {
+      this.loading = true;
+      this.debouncedHandler(...args);
+    },
+    updateSearchQuery(searchQuery) {
+      this.searchQuery = searchQuery;
+    },
+    updateSearchSelector(searchSelector) {
+      this.searchSelector = searchSelector;
+    },
+    async getSearchedData(callID) {
+      axios
+        .get(
+          `${getDeploymentEndpoint()}registry-ui/backend/experiments/?searchSelector=${
+            this.searchSelector
+          }&searchQuery=${this.searchQuery}`,
+        )
+        .then((response) => {
+          if (this.initalLoad) {
+            this.experiments = response.data.entries;
+            this.searchedExperiments = response.data.entries;
+          } else if (callID == this.callsMade) {
+            this.searchedExperiments = response.data.entries;
+          }
+        })
+        .catch((error) => {
+          this.errorStatusText = error.response.statusText;
+          this.errorCode = error.response.status;
+          this.isError = true;
+        })
+        .finally(() => {
+          if (this.initalLoad) {
+            this.loading = false;
+            this.initalLoad = false;
+          } else if (callID == this.callsMade) {
+            this.loading = false;
+          }
+        });
+    },
     updateSelectedFilters(selectedFilters) {
       this.selectedFilters = selectedFilters;
-    },
-    updateSearchedExperiments(searchedExperiments) {
-      this.searchedExperiments = searchedExperiments;
-    },
-    updateloading(loading) {
-      this.loading = loading;
-    },
-    updateErrorHandling(error) {
-      this.errorStatusText = error.response.statusText;
-      this.errorCode = error.response.status;
-      this.isError = true;
-    },
-    setExperiments(experiments) {
-      this.experiments = experiments;
     },
   },
 };

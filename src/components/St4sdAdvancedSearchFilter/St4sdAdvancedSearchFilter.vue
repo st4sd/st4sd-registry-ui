@@ -6,7 +6,7 @@
       <bx-dropdown
         size="xl"
         :value="searchSelector"
-        @bx-dropdown-selected="searchSelector = $event.target.value"
+        @bx-dropdown-selected="updateSearchSelector"
       >
         <bx-dropdown-item
           v-for="(searchSelector, idx) in searchSelectorArray"
@@ -22,99 +22,36 @@
       <bx-search
         size="xl"
         id="advancedSearchBar"
-        @bx-search-input="handleSearchQueryChanges"
+        @bx-search-input="updateSearchQuery"
       ></bx-search>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/search/index.js";
-import debounce from "lodash.debounce";
 
 export default {
   name: "AdvancedSearchFilter",
   props: {
-    experiments: Array,
+    searchSelectorArray: Array,
   },
   data() {
     return {
-      searchQuery: "",
-      searchedExperiments: [],
-      searchSelectorArray: [
-        { Id: "name", Name: "Experiment Name" },
-        { Id: "description", Name: "Experiment Description" },
-        { Id: "maintainer", Name: "Experiment Maintainer" },
-        { Id: "property_name", Name: "Property Name" },
-      ],
       searchSelector: "",
       clearButtonToggle: true,
-      debounceDelay: 1000,
-      initialExperimentsSet: false,
     };
-  },
-  watch: {
-    searchSelector() {
-      this.startLoadingWheel();
-      this.getSearchedExperiments();
-    },
-  },
-  created() {
-    this.debouncedHandler = debounce(() => {
-      this.updateSearchedExperiments();
-    }, this.debounceDelay);
   },
   mounted() {
     this.searchSelector = this.searchSelectorArray[0].Id;
   },
-  beforeUnmount() {
-    this.debouncedHandler.cancel();
-  },
   methods: {
-    handleSearchQueryChanges(event, ...args) {
-      this.searchQuery = event.detail.value;
-      this.startLoadingWheel();
-      this.debouncedHandler(...args);
+    updateSearchQuery(event) {
+      this.$emit("st4sd-search-query-changed", event.detail.value);
     },
-    updateSearchedExperiments() {
-      if (this.searchQuery == "") {
-        this.searchedExperiments = this.experiments;
-        this.$emit("updateSearchedExperiments", this.searchedExperiments);
-        this.$emit("loadingStatusChanged", false);
-      } else {
-        this.getSearchedExperiments();
-      }
-    },
-    startLoadingWheel() {
-      this.$emit("loadingStatusChanged", true);
-    },
-    async getSearchedExperiments() {
-      axios
-        .get(
-          window.location.origin +
-            `/registry-ui/backend/experiments/?searchSelector=${this.searchSelector}&searchQuery=${this.searchQuery}`,
-        )
-        .then((response) => {
-          this.searchedExperiments = response.data.entries;
-        })
-        .catch((error) => {
-          this.updateErrorHandling(error);
-          this.isError = true;
-        })
-        .finally(() => {
-          if (!this.initialExperimentsSet) {
-            this.$emit("setInitialExperiments", this.searchedExperiments);
-            this.initialExperimentsSet = true;
-          }
-
-          this.$emit("updateSearchedExperiments", this.searchedExperiments);
-          this.$emit("loadingStatusChanged", false);
-        });
-    },
-    updateErrorHandling(error) {
-      this.$emit("updateErrorHandling", error);
+    updateSearchSelector(event) {
+      this.$emit("st4sd-search-selector-changed", event.target.value);
     },
   },
 };
