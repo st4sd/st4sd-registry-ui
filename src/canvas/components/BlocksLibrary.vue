@@ -94,37 +94,34 @@ let isGlobalRegistryLibraryEnabled = ref(
   registryUISharedState.isGlobalRegistryLibraryEnabled,
 );
 
-const urls = ["analysis", "simulation", "parent", "parent2", "BandGapDFT"];
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 async function getNodesFromUrls() {
   let nodes = [];
-  let data = {};
-  for (const url of urls) {
-    await axios
-      .get(
-        window.location.origin +
-          "/registry-ui/backend/canvas/hardcodeddsl/" +
-          url,
-      )
-      .then((graphResponse) => {
-        data = graphResponse.data;
-      });
 
-    const newArray = getBlocks(data);
-    newArray.forEach((element) => {
-      //Needs clarifying on the conditions of identifying a duplicate
-      let n = nodes.find((o) => JSON.stringify(o) === JSON.stringify(element));
-      if (n == undefined) {
-        if (element.parentNode == undefined) {
-          element.parentNode = "";
-          element.id = getId();
-        }
-        nodes.push(element);
+  await axios
+    .get(window.location.origin + "/registry-ui/backend/canvas/graphs")
+    .then((response) => {
+      for (let entryIndex in response.data.entries) {
+        let graph = response.data.entries[entryIndex].graph;
+        const newArray = getBlocks(graph);
+
+        newArray.forEach((element) => {
+          //Needs clarifying on the conditions of identifying a duplicate
+          let n = nodes.find(
+            (o) => JSON.stringify(o) === JSON.stringify(element),
+          );
+          if (n == undefined) {
+            if (element.parentNode == undefined) {
+              element.parentNode = "";
+              element.id = getId();
+            }
+            nodes.push(element);
+          }
+        });
       }
     });
-  }
   return nodes;
 }
 
