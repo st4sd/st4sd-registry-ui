@@ -463,7 +463,16 @@ onNodeDragStop((event) => {
 let newEdge;
 onConnect((edgeInProgress) => {
   newEdge = edgeInProgress;
-  if (isConnectionValid(newEdge, findNode)) {
+  let existingEdge = edges.value.find(
+    (edge) =>
+      edge.source == edgeInProgress.source &&
+      edge.target == edgeInProgress.target,
+  );
+  if (existingEdge != undefined) {
+    selectedEdge = existingEdge;
+    nodeType = "edge";
+    toggleModalVisibility("updateEdgeModal");
+  } else if (isConnectionValid(newEdge, findNode)) {
     toggleModalVisibility("createEdgeModal");
   }
 });
@@ -477,7 +486,9 @@ onEdgeDoubleClick(({ edge }) => {
 });
 
 const addEdge = (newEdge) => {
-  addEdges([newEdge]);
+  if (Object.keys(newEdge.definition).length > 0) {
+    addEdges([newEdge]);
+  }
   toggleModalVisibility("createEdgeModal");
 };
 

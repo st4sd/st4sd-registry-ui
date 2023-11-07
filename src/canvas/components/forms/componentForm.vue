@@ -42,7 +42,7 @@
         <bx-input
           v-if="parentNode != undefined"
           readonly
-          :value="parentNode.label + ' (ID: ' + parentNode.id + ')'"
+          :value="parentNode.label"
           colorScheme="light"
         >
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->

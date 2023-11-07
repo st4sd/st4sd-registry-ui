@@ -3,7 +3,8 @@
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading data-modal-primary-focus
-        >Update connection details</bx-modal-heading
+        >Configure how &lt;{{ targetNode.label }}&gt; consumes the outputs of
+        &lt;{{ sourceNode.label }}&gt;</bx-modal-heading
       >
     </bx-modal-header>
     <bx-modal-body>
@@ -19,46 +20,47 @@
         <span slot="helper-text">optional</span>
       </bx-input>
       <br />
-      <bx-input
-        placeholder="Source node"
-        colorScheme="light"
-        readonly
-        :value="sourceNode.label + '(' + sourceNode.id + ')'"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <span slot="label-text">Source {{ sourceType }}: </span>
-      </bx-input>
-      <br />
-      <h5 v-if="edge.definition != undefined">
-        Arguments ({{ Object.keys(edge.definition).length }})
-      </h5>
-
-      <bx-structured-list v-if="sourceType == 'workflow'">
+      <h5 v-if="edge.definition != undefined">Arguments:</h5>
+      <bx-structured-list>
         <bx-structured-list-head>
           <bx-structured-list-header-row>
             <bx-structured-list-header-cell
-              >Name (must be unique)</bx-structured-list-header-cell
+              >Target</bx-structured-list-header-cell
             >
             <bx-structured-list-header-cell
-              >Value</bx-structured-list-header-cell
+              >Source</bx-structured-list-header-cell
+            >
+            <bx-structured-list-header-cell
+              >Suffix</bx-structured-list-header-cell
             >
           </bx-structured-list-header-row>
         </bx-structured-list-head>
-        <bx-structured-list-body>
+        <bx-structured-list-body v-if="sourceType == 'workflow'">
           <bx-structured-list-row
             v-for="(argument, index) in argumentsArray"
             :key="index"
           >
-            <bx-structured-list-cell>
+            <bx-structured-list-cell
+              class="structured-list-delete-button-bottom"
+            >
+              <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
               <bx-dropdown
-                trigger-content="Select an argument"
+                class="updatedChoices"
+                helper-text=" "
+                trigger-content="Select target"
                 required
                 colorScheme="light"
                 :value="argument.name"
-                @bx-dropdown-selected="argument.name = $event.target.value"
+                @bx-dropdown-selected="
+                  argument.name = $event.target.value;
+                  updateSelectedArguments();
+                "
               >
                 <bx-dropdown-item
-                  v-for="(possibleArgument, key) in possibleArguments"
+                  v-for="(possibleArgument, key) in possibleArguments.filter(
+                    (arg) =>
+                      !selectedArguments.includes(arg) || arg == argument.name,
+                  )"
                   :key="key"
                   :value="possibleArgument"
                   >{{ possibleArgument }}</bx-dropdown-item
@@ -71,7 +73,7 @@
               <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
               <bx-dropdown
                 helper-text=" "
-                trigger-content="Select a value"
+                trigger-content="Select source"
                 required
                 colorScheme="light"
                 :value="argument.value"
@@ -84,6 +86,16 @@
                   >{{ possibleValue.name }}</bx-dropdown-item
                 >
               </bx-dropdown>
+            </bx-structured-list-cell>
+            <bx-structured-list-cell>
+              <bx-input
+                label-text="optional"
+                colorScheme="light"
+                :value="argument.extra"
+                @input="argument.extra = $event.target.value"
+                placeholder="e.g. :ref or /path:ref, etc"
+              >
+              </bx-input>
             </bx-structured-list-cell>
             <bx-structured-list-cell
               class="structured-list-delete-button-bottom"
@@ -99,21 +111,8 @@
             </bx-structured-list-cell>
           </bx-structured-list-row>
         </bx-structured-list-body>
-        <bx-btn kind="primary" @click="addArgument()"> Add </bx-btn>
-      </bx-structured-list>
 
-      <bx-structured-list v-if="sourceType == 'component'">
-        <bx-structured-list-head>
-          <bx-structured-list-header-row>
-            <bx-structured-list-header-cell
-              >Name</bx-structured-list-header-cell
-            >
-            <bx-structured-list-header-cell
-              >Value</bx-structured-list-header-cell
-            >
-          </bx-structured-list-header-row>
-        </bx-structured-list-head>
-        <bx-structured-list-body>
+        <bx-structured-list-body v-if="sourceType == 'component'">
           <bx-structured-list-row
             v-for="(argument, index) in argumentsArray"
             :key="index"
@@ -123,30 +122,43 @@
             >
               <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
               <bx-dropdown
+                class="updatedChoices"
                 helper-text=" "
                 trigger-content="Select an argument"
                 required
                 colorScheme="light"
                 :value="argument.name"
-                @bx-dropdown-selected="argument.name = $event.target.value"
+                @bx-dropdown-selected="
+                  argument.name = $event.target.value;
+                  updateSelectedArguments();
+                "
               >
                 <bx-dropdown-item
-                  v-for="(possibleArgument, key) in possibleArguments"
+                  v-for="(possibleArgument, key) in possibleArguments.filter(
+                    (arg) =>
+                      !selectedArguments.includes(arg) || arg == argument.name,
+                  )"
                   :key="key"
                   :value="possibleArgument"
                   >{{ possibleArgument }}</bx-dropdown-item
                 >
               </bx-dropdown>
             </bx-structured-list-cell>
+            <bx-structured-list-cell
+              class="structured-list-delete-button-middle"
+            >
+              <h5 class="padding-top">
+                {{ "<" + sourceNode.stepId + ">" }}
+              </h5>
+            </bx-structured-list-cell>
             <bx-structured-list-cell>
               <bx-input
+                label-text="optional"
                 colorScheme="light"
                 :value="argument.value"
                 @input="argument.value = $event.target.value"
-                required
-                placeholder="Argument value"
-              >
-              </bx-input>
+                placeholder="e.g. /path:ref"
+              />
             </bx-structured-list-cell>
             <bx-structured-list-cell
               class="structured-list-delete-button-bottom"
@@ -202,17 +214,16 @@ export default {
       edge: "",
       sourceType: "",
       sourceNode: {},
+      targetNode: {},
       argumentsArray: [],
       possibleArguments: [],
+      selectedArguments: [],
       possibleArgumentValues: [],
-      //argNumber: 0,
-      //methodTypes: ["output", "ref", "copy", "link"],
     };
   },
   mounted() {
     this.edge = this.edgeProp;
-    //this.argNumber = Object.keys(this.edge.definition).length;
-    //Get the all arguments possible values
+    //Get the arguments possible values
     this.initialiseSourceNodeAndArguments();
     this.possibleArguments = getPossibleArgumentNames(
       this.edgeProp,
@@ -222,6 +233,7 @@ export default {
     this.possibleArgumentValues = [
       ...this.sourceNode.definition.signature.parameters,
     ];
+    this.selectedArguments = [...this.argumentsArray.map((arg) => arg.name)];
   },
   methods: {
     update() {
@@ -233,21 +245,29 @@ export default {
         alert("Please make sure argument names are unique");
       } else {
         if (this.sourceType == "workflow") {
-          this.argumentsArray.map(
-            (x) => (newEdgeDefinition[x.name] = `%(${x.value})s`),
-          );
+          this.argumentsArray.map((x) => {
+            x.name = x.name.trim();
+            x.value = x.value.trim();
+            if (x.name != "" && x.value != "") {
+              newEdgeDefinition[x.name] = `%(${x.value})s`;
+              x.extra = x.extra.trim();
+              if (x.extra != "") {
+                newEdgeDefinition[x.name] =
+                  newEdgeDefinition[x.name] + `:${x.extra}`;
+              }
+            }
+          });
         } else {
           this.argumentsArray.map((x) => {
-            newEdgeDefinition[x.name] = x.value;
-            // newEdgeDefinition[x.name] = `<${this.sourceNode.id}>:${x.method}`;
-            // if (x.fileName != undefined) {
-            //   x.fileName = x.fileName.trim();
-            //   if (x.fileName != "") {
-            //     newEdgeDefinition[
-            //       x.name
-            //     ] = `<${this.sourceNode.id}/${x.fileName}>:${x.method}`;
-            //   }
-            // }
+            x.name = x.name.trim();
+            if (x.name != "") {
+              x.value = x.value.trim();
+              let value = "<" + this.sourceNode.stepId + ">";
+              if (x.value != "") {
+                value = value + x.value;
+              }
+              newEdgeDefinition[x.name] = value;
+            }
           });
         }
         this.edge.definition = newEdgeDefinition;
@@ -260,26 +280,36 @@ export default {
     initialiseSourceNodeAndArguments() {
       let result = getEdgeSourceAndArguments(this.allNodes, this.edge);
       this.sourceNode = result.sourceNode;
+      this.targetNode = result.targetNode;
       this.sourceType = result.sourceType;
       this.argumentsArray = result.argumentsArray;
     },
     addArgument() {
-      if (this.sourceType == "workflow") {
-        this.argumentsArray.push({
-          name: "",
-          //set a default value so this can never be saved empty
-          //work around untill we can enforce a choice in the dropdown
-          value: this.possibleArgumentValues[0].name,
-        });
-      } else {
-        this.argumentsArray.push({
-          name: "",
-          value: "",
-        });
-      }
+      this.updateSelectedArguments();
+      this.argumentsArray.push({
+        name: "",
+        value: "",
+        extra: "",
+      });
     },
     removeArgument(index) {
+      let name = this.argumentsArray[index].name;
       this.argumentsArray.splice(index, 1);
+      //we update selectedArguments this way instead of calling updateSelectedArguments()
+      //because getElementsByClassName("updatedChoices") in that function will not pick up
+      //the removal of that element and the deletion of that argument row will not change selectedArguments
+      if (name != undefined) {
+        this.selectedArguments = this.selectedArguments.filter(
+          (arg) => arg != name,
+        );
+      }
+    },
+    updateSelectedArguments() {
+      this.selectedArguments = [];
+      var elements = document.getElementsByClassName("updatedChoices");
+      for (var element of elements) {
+        this.selectedArguments.push(element.value);
+      }
     },
   },
 };
@@ -290,4 +320,8 @@ export default {
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
+
+.padding-top {
+  padding-top: 1.5rem;
+}
 </style>

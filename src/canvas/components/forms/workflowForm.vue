@@ -24,20 +24,11 @@
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
         <span slot="label-text">Workflow description</span>
       </bx-input>
-      <bx-input
-        v-if="node != undefined"
-        readonly
-        :value="node.id"
-        colorScheme="light"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-        <span slot="label-text">Workflow ID</span>
-      </bx-input>
       <br />
       <bx-input
         v-if="this.parentNode != undefined"
         readonly
-        :value="parentNode.label + ' (ID: ' + parentNode.id + ')'"
+        :value="parentNode.label"
         colorScheme="light"
       >
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
