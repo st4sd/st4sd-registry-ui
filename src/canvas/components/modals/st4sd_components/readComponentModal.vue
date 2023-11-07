@@ -45,7 +45,7 @@
               </bx-structured-list-row>
 
               <bx-structured-list-row
-                v-if="componentSignature.parameters[0]['name'] != undefined"
+                v-if="componentSignature.parameters.length > 0"
               >
                 <bx-structured-list-cell>Parameters</bx-structured-list-cell>
 
