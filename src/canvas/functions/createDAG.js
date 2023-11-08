@@ -185,6 +185,7 @@ function addEntries(graph, dslData, experimentData) {
 
   // Execution Options
   if (Object.keys(executionOptionsDefinition).length != 0) {
+    executionOptionsDefinition = sortObjectKeys(executionOptionsDefinition);
     addNode(
       graph,
       "executionOptions",
@@ -205,6 +206,7 @@ function addEntries(graph, dslData, experimentData) {
 
   //Presets
   if (Object.keys(presetsDefinition).length != 0) {
+    presetsDefinition = sortObjectKeys(presetsDefinition);
     addNode(
       graph,
       "presets",
@@ -219,6 +221,7 @@ function addEntries(graph, dslData, experimentData) {
 
   //Other Parameters
   if (Object.keys(otherDefinition).length != 0) {
+    otherDefinition = sortObjectKeys(otherDefinition);
     addNode(graph, "other", "Other", otherDefinition, "", otherNodeType, "");
     addEdge(graph, "other", entryWorkflowName, "other", otherDefinition);
   }
@@ -542,4 +545,14 @@ function getEdgeParameterValueFromInputNodes(parameterName, inputNodes) {
       continue;
     }
   }
+}
+
+function sortObjectKeys(obj) {
+  let sortedObject = {};
+  Object.keys(obj)
+    .sort()
+    .forEach((item) => {
+      sortedObject[item] = obj[item];
+    });
+  return sortedObject;
 }
