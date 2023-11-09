@@ -1,14 +1,23 @@
 //Modals functions
-//This function takes a string in the form of %(referencedParameter)s
-//and returns the referencedParameter
-function getReferencedParameter(stringWithSymbols) {
-  let referencedParameter = stringWithSymbols;
-  let extra = "";
+//This function takes a string in the form of %(parameter)sSuffix
+//and returns the parameter
+function getParameterAndSuffix(stringWithSymbols) {
+  let parameter = stringWithSymbols;
+  let suffix = "";
   if (stringWithSymbols.startsWith("%(") && stringWithSymbols.includes(")s")) {
-    referencedParameter = stringWithSymbols.substring(2).split(")s")[0];
-    extra = stringWithSymbols.replace("%(" + referencedParameter + ")s", "");
+    parameter = stringWithSymbols.substring(2).split(")s")[0];
+    suffix = stringWithSymbols.replace("%(" + parameter + ")s", "");
   }
-  return { argument: referencedParameter, extra: extra };
+  return { parameter: parameter, suffix: suffix };
+}
+
+// This function takes a string in the form of <stepName>Suffix
+// and extracts/returns the path and method strings
+function getStepNameAndSuffix(fullString) {
+  let splitArray = fullString.split(">");
+  let suffix = splitArray[1];
+  let stepName = splitArray[0].split("<")[1];
+  return { stepName: stepName, suffix: suffix };
 }
 
 export function getPossibleArgumentNames(edge, allNodes, allEdges) {
@@ -29,60 +38,52 @@ export function getPossibleArgumentNames(edge, allNodes, allEdges) {
   return targetParameters;
 }
 
-// This function takes a string in the form of <source>extra
-// and extracts/returns the path and method strings
-function getSuffix(fullString) {
-  let suffix = fullString.split(">")[1];
-  return suffix;
-}
-
-//This function gets the source node and arguments for an existing edge/connection
-export function getEdgeSourceAndArguments(allNodes, edge) {
-  let sourceNode = {};
-  let targetNode = allNodes.find((node) => node.id == edge.targetNode.id);
-  let sourceType = "";
-  let argumentsArray = [];
-  //Depending on the source node type the edge arguments will be in a certain format
-  //either %(referencedParameter)s or <source.path/filename>:method
-  if (edge.sourceNode.type == "workflow-input") {
-    sourceType = "workflow";
-    sourceNode = allNodes.find((node) => node.id == edge.sourceNode.parentNode);
-    //Transform arguments into array for ease of adding and removing
-    //it's hard to change object keys
-    Object.keys(edge.definition).forEach((a) => {
-      let result = getReferencedParameter(edge.definition[a]);
-      argumentsArray.push({
-        name: a,
-        value: result.argument,
-        extra: result.extra,
-      });
-    });
-  } else if (edge.sourceNode.type == "component") {
-    sourceType = "component";
-    sourceNode = allNodes.find((node) => node.id == edge.sourceNode.id);
-    //Transform arguments into array for ease of adding and removing
-    //it's hard to change object keys
-    Object.keys(edge.definition).forEach((a) => {
-      argumentsArray.push({
-        name: a,
-        value: getSuffix(edge.definition[a]),
-        extra: "",
-      });
-    });
-  }
-  return { sourceNode, targetNode, sourceType, argumentsArray };
-}
-
-//This function gets the source node and arguments for an edge/connection in progress
-//so, will initialise the arguments array based on the source node type
-export function getEdgeSourceAndInitialiseArguments(allNodes, edge) {
+//This function returns the source node and target node for any edge
+//If the source node is a workflow input - the source node will then become the workflow itself
+export function getSourceAndTargetNodes(allNodes, edge) {
   let sourceNode = allNodes.find((node) => node.id == edge.source);
   let targetNode = allNodes.find((node) => node.id == edge.target);
-  let sourceType = "component";
-  let argumentsArray = [{ name: "", value: "", extra: "" }];
   if (sourceNode.type == "workflow-input") {
-    sourceType = "workflow";
     sourceNode = allNodes.find((node) => node.id == sourceNode.parentNode);
   }
-  return { sourceNode, targetNode, sourceType, argumentsArray };
+  return { sourceNode, targetNode };
+}
+
+export function getArguments(sourceNode, edge) {
+  let argumentsArray = [];
+  //Check if we are dealing with a new edge in progress (to be created)
+  //or an existing edge that's being updated
+  if (edge.definition != undefined) {
+    if (sourceNode.type == "workflow") {
+      //Transform arguments into array for ease of adding and removing
+      //it's hard to change object keys
+      argumentsArray = [];
+      Object.keys(edge.definition).forEach((a) => {
+        let result = getParameterAndSuffix(edge.definition[a]);
+        argumentsArray.push({
+          name: a,
+          value: result.parameter,
+          suffix: result.suffix,
+        });
+      });
+    } else if (edge.sourceNode.type == "component") {
+      //Transform arguments into array for ease of adding and removing
+      //it's hard to change object keys
+      argumentsArray = [];
+      Object.keys(edge.definition).forEach((a) => {
+        let result = getStepNameAndSuffix(edge.definition[a]);
+        argumentsArray.push({
+          name: a,
+          value: result.stepName,
+          suffix: result.suffix,
+        });
+      });
+    }
+  }
+  //If the edge has no definition it means it's a new edge to be created
+  //we initialise the argument array then.
+  else {
+    argumentsArray = [{ name: "", value: "", suffix: "" }];
+  }
+  return argumentsArray;
 }

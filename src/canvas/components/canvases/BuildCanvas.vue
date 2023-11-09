@@ -130,7 +130,7 @@
       :allNodes="allNodes"
       :allEdges="allEdges"
       @bx-modal-closed="toggleModalVisibility('createEdgeModal')"
-      @finished="addEdge"
+      @created="addEdge"
     />
     <updateEdgeModal
       v-if="modalVisibilities.updateEdgeModal.value"
