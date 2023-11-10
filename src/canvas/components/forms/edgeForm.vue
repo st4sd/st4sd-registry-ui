@@ -256,10 +256,10 @@ export default {
           this.argumentsArray.map((x) => {
             x.name = x.name.trim();
             if (x.name != "") {
-              x.value = x.value.trim();
+              x.suffix = x.suffix.trim();
               let value = "<" + this.sourceNode.stepId + ">";
-              if (x.value != "") {
-                value = value + x.value;
+              if (x.suffix != "") {
+                value = value + x.suffix;
               }
               newEdgeDefinition[x.name] = value;
             }
