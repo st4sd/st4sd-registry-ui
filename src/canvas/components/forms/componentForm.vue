@@ -27,17 +27,68 @@
           <span slot="label-text">Description:</span>
         </bx-input>
         <br />
-        <bx-input
-          id="add-component-variables-input"
-          type="text"
-          :value="component.variables"
-          @input="component.variables = $event.target.value"
-          placeholder="variables"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Variables:</span>
-        </bx-input>
+        <p>Variables</p>
+        <bx-table-toolbar>
+          <bx-table-toolbar-content>
+            <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
+          </bx-table-toolbar-content>
+        </bx-table-toolbar>
+
+        <bx-structured-list v-if="variableKeys.length != 0">
+          <bx-structured-list-head>
+            <bx-structured-list-header-row>
+              <bx-structured-list-header-cell
+                >Name</bx-structured-list-header-cell
+              >
+              <bx-structured-list-header-cell
+                >Value</bx-structured-list-header-cell
+              >
+              <bx-structured-list-header-cell></bx-structured-list-header-cell>
+            </bx-structured-list-header-row>
+          </bx-structured-list-head>
+          <bx-structured-list-body>
+            <bx-structured-list-row
+              v-for="(key, idx) in variableKeys"
+              :key="idx"
+            >
+              <bx-structured-list-cell class="updateModals">
+                <bx-input
+                  id="add-component-variables-input"
+                  type="text"
+                  :value="key"
+                  @input="setVariableKey(idx)"
+                  :invalid="checkKeyIsDuplicate(idx, key)"
+                  validity-message="Variable names must be unique"
+                  placeholder="variable name"
+                  colorScheme="light"
+                >
+                </bx-input>
+              </bx-structured-list-cell>
+              <bx-structured-list-cell class="updateModals">
+                <bx-input
+                  id="add-component-variables-input"
+                  type="text"
+                  :value="variableValues[idx]"
+                  @input="setVariableValue(idx)"
+                  placeholder="variable value"
+                  colorScheme="light"
+                >
+                </bx-input>
+              </bx-structured-list-cell>
+              <bx-structured-list-cell
+                class="updateModals structured-list-delete-button-bottom"
+              >
+                <bx-btn
+                  class="button-inside-cell"
+                  kind="danger"
+                  @click="removeVariable(idx)"
+                >
+                  <img src="@/assets/remove.svg" />
+                </bx-btn>
+              </bx-structured-list-cell>
+            </bx-structured-list-row>
+          </bx-structured-list-body>
+        </bx-structured-list>
         <br />
         <bx-input
           v-if="parentNode != undefined"
@@ -638,17 +689,22 @@ export default {
       component: new St4sdComponent(),
       isError: false,
       oldName: "",
+      variableKeys: [],
+      variableValues: [],
     };
   },
   mounted() {
     if (this.node != undefined) {
       this.component.setComponentDefintion(this.node.definition);
       this.oldName = this.component.getName();
+      this.variableKeys = Object.keys(this.node.definition.variables);
+      this.variableValues = Object.values(this.node.definition.variables);
     }
   },
   methods: {
     update() {
       if (!this.isError) {
+        this.setVariables();
         let newComponentNode = { ...this.node };
         updateNodeLabel(newComponentNode);
         newComponentNode.definition = this.component.getComponentDefintion();
@@ -669,6 +725,7 @@ export default {
     },
     add() {
       if (!this.isError) {
+        this.setVariables();
         this.$emit("add", this.component.getComponentDefintion());
       }
     },
@@ -683,6 +740,37 @@ export default {
         this.isError = false;
         event.target.invalid = false;
       }
+    },
+    addVariables() {
+      this.variableKeys.push("");
+      this.variableValues.push("");
+    },
+    removeVariable(idx) {
+      this.variableKeys.splice(idx, 1);
+      this.variableValues.splice(idx, 1);
+    },
+    setVariableKey(idx) {
+      this.variableKeys[idx] = event.target.value;
+    },
+    setVariableValue(idx) {
+      this.variableValues[idx] = event.target.value;
+    },
+    setVariables() {
+      for (let i = 0; i < this.variableKeys.length; i++) {
+        if (
+          this.variableKeys[i].trim() != "" &&
+          this.variableValues[i].trim() != ""
+        )
+          this.component.addVariables(
+            this.variableKeys[i],
+            this.variableValues[i],
+          );
+      }
+    },
+    checkKeyIsDuplicate(idx, key) {
+      let invalid = this.variableKeys.toSpliced(idx, 1).includes(key);
+      this.$emit("invalid", invalid);
+      return invalid;
     },
   },
 };

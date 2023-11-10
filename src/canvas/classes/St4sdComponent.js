@@ -10,7 +10,7 @@ export default class St4sdComponent {
     expandArguments: "",
     environment: "",
   };
-  variables = "";
+  variables = {};
   workflowAttributes = {
     replicate: "",
     aggregate: false,
@@ -104,6 +104,11 @@ export default class St4sdComponent {
   setVariables(variables) {
     if (typeof variables === "string" || variables instanceof String) {
       this.variables = variables;
+    }
+  }
+  addVariables(name, value) {
+    if (typeof name === "string" || name instanceof String) {
+      this.variables[name] = value;
     }
   }
   getWorkflowAttributes() {

@@ -14,6 +14,7 @@
         :parentNode="parentNode"
         @update="update"
         @removeParent="removeParent"
+        @invalid="submitDisabled"
       />
       <br />
       <bx-btn kind="danger" @click="emitDelete">
@@ -29,6 +30,7 @@
         kind="primary"
         type="submit"
         @click="getComponentDefinition"
+        :disabled="disabled"
       >
         Save
       </bx-modal-footer-button>
@@ -45,6 +47,11 @@ export default {
   },
   props: { node: Object, parentNode: Object, allNodes: Object },
   emits: ["updated", "delete", "removeParent"],
+  data() {
+    return {
+      disabled: false,
+    };
+  },
   methods: {
     emitDelete() {
       this.$emit("delete");
@@ -57,6 +64,9 @@ export default {
     },
     update(newComponentNode) {
       this.$emit("updated", newComponentNode);
+    },
+    submitDisabled(disabled) {
+      this.disabled = disabled;
     },
   },
 };

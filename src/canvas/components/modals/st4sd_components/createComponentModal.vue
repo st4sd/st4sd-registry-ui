@@ -6,7 +6,11 @@
     </bx-modal-header>
     <bx-modal-body>
       <div>
-        <componentForm ref="componentForm" @add="addComponent" />
+        <componentForm
+          ref="componentForm"
+          @add="addComponent"
+          @invalid="submitDisabled"
+        />
       </div>
     </bx-modal-body>
     <bx-modal-footer>
@@ -17,6 +21,7 @@
         kind="primary"
         type="submit"
         @click="getNewComponentDefinition"
+        :disabled="disabled"
         >Submit</bx-modal-footer-button
       >
     </bx-modal-footer>
@@ -29,6 +34,11 @@ import componentForm from "@/canvas/components/forms/componentForm.vue";
 export default {
   components: { componentForm },
   emits: ["componentAdded"],
+  data() {
+    return {
+      disabled: false,
+    };
+  },
   methods: {
     removeEmptyString(obj) {
       Object.keys(obj).forEach((k) => obj[k] === "" && delete obj[k]);
@@ -46,6 +56,9 @@ export default {
         definition: definition,
       };
       this.$emit("componentAdded", componentNode);
+    },
+    submitDisabled(disabled) {
+      this.disabled = disabled;
     },
   },
 };

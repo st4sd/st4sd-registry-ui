@@ -24,9 +24,33 @@
 
               <bx-structured-list-row v-if="componentVariables != undefined">
                 <bx-structured-list-cell>Variables</bx-structured-list-cell>
-                <bx-structured-list-cell>{{
-                  componentVariables
-                }}</bx-structured-list-cell>
+                <bx-structured-list-cell>
+                  <bx-structured-list>
+                    <bx-structured-list-head>
+                      <bx-structured-list-header-row>
+                        <bx-structured-list-header-cell
+                          >Name</bx-structured-list-header-cell
+                        >
+                        <bx-structured-list-header-cell
+                          >Value</bx-structured-list-header-cell
+                        >
+                      </bx-structured-list-header-row>
+                    </bx-structured-list-head>
+                    <bx-structured-list-body>
+                      <bx-structured-list-row
+                        v-for="(key, idx) in Object.keys(componentVariables)"
+                        :key="idx"
+                      >
+                        <bx-structured-list-cell>{{
+                          key
+                        }}</bx-structured-list-cell>
+                        <bx-structured-list-cell>{{
+                          Object.values(componentVariables)[idx]
+                        }}</bx-structured-list-cell>
+                      </bx-structured-list-row>
+                    </bx-structured-list-body>
+                  </bx-structured-list>
+                </bx-structured-list-cell>
               </bx-structured-list-row>
 
               <bx-structured-list-row
