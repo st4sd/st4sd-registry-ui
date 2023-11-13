@@ -553,12 +553,15 @@ const deleteNode = () => {
 const removeParentNode = () => {
   selectedNode.parentNode = undefined;
   selectedNode.expandParent = false;
-  //since the node is no longer a step
-  delete selectedNode.stepId;
   updateNodeLabel(selectedNode);
   //Remove it as a step from parent WF
   removeStep(parentNode, selectedNode);
   removeConnectingEdges(selectedNode);
+  if (nodeType == "workflow") {
+    toggleModalVisibility("updateWorkflowModal");
+  } else if (nodeType == "component") {
+    toggleModalVisibility("updateComponentModal");
+  }
 };
 
 const removeConnectingEdges = (node) => {

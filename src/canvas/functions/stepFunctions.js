@@ -128,6 +128,8 @@ export function removeStep(workflow, removedNode) {
       stepName = a;
     }
   }
+  //since the node is no longer a step
+  delete removedNode.stepId;
   delete workflow.definition.steps[stepName];
 }
 
