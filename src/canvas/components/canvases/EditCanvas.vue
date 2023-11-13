@@ -2,8 +2,9 @@
   <!--  https://vueflow.dev/examples/dnd.html -->
   <div class="dndflow">
     <VueFlow
-      :class="{ dark }"
       class="basicflow"
+      :delete-key-code="false"
+      :class="{ dark }"
       :default-zoom="1"
       :min-zoom="0.2"
       :max-zoom="4"

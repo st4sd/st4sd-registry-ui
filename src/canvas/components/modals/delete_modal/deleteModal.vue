@@ -2,8 +2,12 @@
   <bx-modal open size="sm">
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-label data-modal-primary-focus>{{ title }}</bx-modal-label>
-      <bx-modal-heading>{{ warningMessage }}</bx-modal-heading>
+      <bx-modal-label data-modal-primary-focus
+        >Delete {{ nodeType }}</bx-modal-label
+      >
+      <bx-modal-heading
+        >Are you sure you want to delete this {{ nodeType }}?</bx-modal-heading
+      >
     </bx-modal-header>
     <bx-modal-footer>
       <bx-modal-footer-button kind="secondary" data-modal-close
@@ -21,8 +25,7 @@ import "@carbon/web-components/es/components/button/index.js";
 
 export default {
   props: {
-    title: String,
-    warningMessage: String,
+    nodeType: String,
   },
   emits: ["delete"],
   methods: {

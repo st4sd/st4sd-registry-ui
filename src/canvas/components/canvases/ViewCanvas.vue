@@ -4,6 +4,7 @@
     <VueFlow
       :class="{ dark }"
       class="basicflow"
+      :delete-key-code="false"
       :default-zoom="1"
       :min-zoom="0.2"
       :max-zoom="4"

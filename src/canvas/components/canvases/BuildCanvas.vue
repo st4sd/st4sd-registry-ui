@@ -1,13 +1,15 @@
 <template>
   <div class="dndflow" @drop="onDrop">
     <VueFlow
-      @dragover="onDragOver"
       :class="{ dark }"
-      class="basicflow"
       :default-zoom="1"
+      :elevate-edges-on-select="true"
+      :delete-key-code="false"
       :min-zoom="0.2"
       :max-zoom="4"
+      class="basicflow"
       fit-view-on-init
+      @dragover="onDragOver"
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
@@ -143,8 +145,7 @@
     />
     <deleteModal
       v-if="modalVisibilities.deleteModal.value"
-      :title="deleteModalTitle"
-      :warningMessage="deleteWarningMessage"
+      :nodeType="nodeType"
       @delete="deleteNode"
       @bx-modal-closed="toggleModalVisibility('deleteModal')"
     />
@@ -232,7 +233,7 @@ import {
 import {
   isNestingValid,
   removeStep,
-  removeNodeAndNestedNodes,
+  removeNodeAndStepReference,
 } from "@/canvas/functions/stepFunctions";
 
 import "@carbon/web-components/es/components/input/index.js";
@@ -289,7 +290,6 @@ let elements = {};
 if (props.pvep != "") {
   getGraph();
 } else {
-  elements.elevateEdgesOnSelect = true;
   setUpCanvas(elements);
 }
 
@@ -297,13 +297,12 @@ const {
   onNodeDragStop,
   onConnect,
   addEdges,
-  //setTransform,
+  addNodes,
   onEdgeDoubleClick,
   onNodeDoubleClick,
   removeEdges,
   removeNodes,
   findNode,
-  addNodes,
   project,
   vueFlowRef,
   nodes,
@@ -321,7 +320,6 @@ const onDragOver = (event) => {
     event.dataTransfer.dropEffect = "move";
   }
 };
-
 let modalVisibilities = {
   createWorkflowModal: ref(false),
   createEdgeModal: ref(false),
@@ -470,7 +468,7 @@ onConnect((edgeInProgress) => {
   );
   if (existingEdge != undefined) {
     selectedEdge = existingEdge;
-    nodeType = "edge";
+    nodeType = "connection";
     toggleModalVisibility("updateEdgeModal");
   } else if (isConnectionValid(newEdge, findNode)) {
     toggleModalVisibility("createEdgeModal");
@@ -481,7 +479,7 @@ let nodeType;
 let selectedEdge;
 onEdgeDoubleClick(({ edge }) => {
   selectedEdge = edge;
-  nodeType = "edge";
+  nodeType = "connection";
   toggleModalVisibility("updateEdgeModal");
 });
 
@@ -531,32 +529,23 @@ const updateNode = (updatedNode) => {
   }
 };
 
-let deleteModalTitle;
-let deleteWarningMessage;
 const openDeleteModal = () => {
-  if (nodeType == "workflow") {
-    deleteModalTitle = "Delete workflow";
-    deleteWarningMessage = "Are you sure you want to delete this workflow?";
-  } else if (nodeType == "component") {
-    deleteModalTitle = "Delete component";
-    deleteWarningMessage = "Are you sure you want to delete this component?";
-  } else {
-    deleteModalTitle = "Delete connection";
-    deleteWarningMessage = "Are you sure you want to delete this connection?";
-  }
   toggleModalVisibility("deleteModal");
+  //close update modals
+  if (nodeType == "workflow") {
+    toggleModalVisibility("updateWorkflowModal");
+  } else if (nodeType == "component") {
+    toggleModalVisibility("updateComponentModal");
+  } else if (nodeType == "connection") {
+    toggleModalVisibility("updateEdgeModal");
+  }
 };
 
 const deleteNode = () => {
-  if (nodeType == "workflow") {
-    removeNodeAndNestedNodes(selectedNode, nodes, findNode, removeNodes);
-    toggleModalVisibility("updateWorkflowModal");
-  } else if (nodeType == "component") {
-    removeNodeAndNestedNodes(selectedNode, nodes, findNode, removeNodes);
-    toggleModalVisibility("updateComponentModal");
-  } else {
+  if (nodeType == "connection") {
     removeEdges([selectedEdge]);
-    toggleModalVisibility("updateEdgeModal");
+  } else {
+    removeNodeAndStepReference(selectedNode, findNode, removeNodes);
   }
   toggleModalVisibility("deleteModal");
 };

@@ -124,7 +124,7 @@ export function isEnclosed(node, parent) {
 export function removeStep(workflow, removedNode) {
   let stepName;
   for (var a in workflow.definition.steps) {
-    if (workflow.definition.steps[a] == removedNode.label) {
+    if (a == removedNode.stepId) {
       stepName = a;
     }
   }
@@ -133,37 +133,19 @@ export function removeStep(workflow, removedNode) {
 
 //Function that deletes a node from the canvas and if it is a workflow will also
 //remove it's children nodes (nodes nested inside it)
-export function removeNodeAndNestedNodes(
+export function removeNodeAndStepReference(
   selectedNode,
-  allNodes,
   findNode,
   removeNodes,
 ) {
-  if (selectedNode.type == "workflow") {
-    removeNestedNodes(selectedNode, allNodes, findNode, removeNodes);
-  }
   //remove the node from the step definition of it's parent node if any
-  if (selectedNode.parentNode != "" || selectedNode.parentNode != undefined) {
+  if (selectedNode.parentNode != undefined || selectedNode.parentNode != "") {
     let parent = findNode(selectedNode.parentNode);
     if (parent != undefined && parent.type == "workflow") {
       removeStep(parent, selectedNode);
     }
   }
-  removeNodes([selectedNode]);
-}
-
-//Function that loops through all nesting levels of a workflow and deletes all nested nodes
-function removeNestedNodes(node, nodes, findNode, removeNodes) {
-  const allNodes = nodes.value;
-  let children = allNodes.filter(
-    (childNode) => childNode.parentNode == node.id,
-  );
-  if (children.length > 0) {
-    for (var child of children) {
-      if (child.type == "workflow") {
-        removeNestedNodes(child, nodes, findNode, removeNodes);
-      }
-      removeNodes([findNode(child.id)]);
-    }
-  }
+  //1st true for deleting all edges
+  //2nd true for recursively deleting all child nodes
+  removeNodes([selectedNode], true, true);
 }
