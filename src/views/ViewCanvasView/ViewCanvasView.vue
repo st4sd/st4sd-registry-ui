@@ -48,7 +48,7 @@
       <ViewCanvas
         v-if="!editButtonClicked"
         :id="props.id"
-        @edit-button-clicked="toggleEditButtonClicked"
+        @transform-button-clicked="toggleEditButtonClicked"
       />
       <EditCanvas
         v-else

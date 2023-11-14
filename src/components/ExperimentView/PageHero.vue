@@ -94,9 +94,12 @@
               <dds-link-list-item
                 v-if="isBuildCanvasEditingEnabled"
                 :href="`${getDeploymentEndpoint()}experiment/${id}/edit`"
+                :disabled="!experiment.metadata.package.keywords.includes('internal-experiment')"
+                :title="!experiment.metadata.package.keywords.includes('internal-experiment') ? 'This experiment was created outside the canvas and therefore it cannot be edited' : ''"
               >
                 Edit Experiment
                 <img
+                  v-if="experiment.metadata.package.keywords.includes('internal-experiment')"
                   slot="icon"
                   src="@/assets/arrow--right.svg"
                   width="20"

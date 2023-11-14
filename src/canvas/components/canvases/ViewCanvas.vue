@@ -15,8 +15,11 @@
       <Controls />
 
       <Panel :position="PanelPosition.TopRight" class="controls">
-        <bx-btn title="Edit Experiment" @click="$emit('editButtonClicked')">
-          Edit Experiment
+        <bx-btn
+          title="Transform Experiment"
+          @click="$emit('transformButtonClicked')"
+        >
+          Transform Experiment
         </bx-btn>
         <bx-btn
           v-if="doesOtherOrPresetsExist()"
