@@ -1,7 +1,7 @@
 import buildExperiment from "@/canvas/functions/buildExperiment";
 
 export function validateExperiment(nodes, entryNode) {
-  if (duplicateLabelsExist(nodes)) {
+  if (duplicateNamesExist(nodes)) {
     return {
       isValid: false,
       payload:
@@ -35,10 +35,17 @@ export function downloadExperiment(nodes, edges, fileName) {
   }
 }
 
-const duplicateLabelsExist = (elements) => {
-  let labels = new Set();
-  elements.forEach((element) => labels.add(element.label));
-  return elements.length != labels.size;
+const duplicateNamesExist = (elements) => {
+  let namesSet = new Set();
+  elements = elements.filter(
+    (element) => element.type == "workflow" || element.type == "component",
+  );
+  elements.forEach((element) => {
+    if (element.definition.signature.name) {
+      namesSet.add(element.definition.signature.name);
+    }
+  });
+  return elements.length != namesSet.size;
 };
 
 export const download = (filename, exp) => {

@@ -553,9 +553,11 @@ const deleteNode = () => {
 const removeParentNode = () => {
   selectedNode.parentNode = undefined;
   selectedNode.expandParent = false;
-  updateNodeLabel(selectedNode);
   //Remove it as a step from parent WF
   removeStep(parentNode, selectedNode);
+  //We call this function after removeStep as removeStep deletes the stepId and then
+  //updateNodeLabel tests if the stepId exists or not
+  updateNodeLabel(selectedNode);
   removeConnectingEdges(selectedNode);
   if (nodeType == "workflow") {
     toggleModalVisibility("updateWorkflowModal");
