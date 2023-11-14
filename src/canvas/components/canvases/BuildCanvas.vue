@@ -176,7 +176,7 @@
       v-if="modalVisibilities.registerExperimentModal.value"
       @bx-modal-closed="toggleModalVisibility('registerExperimentModal')"
       open="true"
-      name=""
+      :name="props.pvep"
       :allNodes="allNodes"
       :allEdges="allEdges"
     />
