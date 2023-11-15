@@ -73,14 +73,21 @@
           <dds-card color-scheme="light" border id="card">
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
             <dds-card-eyebrow slot="eyebrow" id="card-eyebrow">{{
-              component.label
+              component["graph"]["entrypoint"]["entry-instance"]
             }}</dds-card-eyebrow>
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <p id="card-description">{{ component.description }}</p>
+            <p id="card-description">
+              {{
+                component["graph"]["workflows"][
+                  component["workflowEntryIndex"]
+                ]["signature"]["description"]
+              }}
+            </p>
             <dds-tag-group>
               <bx-tag
-                v-for="(parameter, idx) in component.definition.signature
-                  .parameters"
+                v-for="(parameter, idx) in component['graph']['workflows'][
+                  component['workflowEntryIndex']
+                ]['signature']['parameters']"
                 :key="idx"
                 type="gray"
               >
@@ -116,7 +123,7 @@
           :key="idx"
         >
           <div id="item-content">
-            {{ component.label }}
+            {{ component["graph"]["entrypoint"]["entry-instance"] }}
             <img
               id="remove-icon"
               width="16"
@@ -147,6 +154,8 @@ import "@carbon/web-components/es/components/tile/index.js";
 
 import axios from "axios";
 
+import { getDeploymentEndpoint } from "@/functions/public_path";
+
 export default {
   name: "GlobalRegistryLibraryView",
   components: {
@@ -173,10 +182,11 @@ export default {
   },
   mounted() {
     axios
-      .get(window.location.origin + "/registry-ui/backend/canvas/components")
+      .get(
+        `${getDeploymentEndpoint()}registry-ui/backend/canvas/graphs-library`,
+      )
       .then((response) => {
-        this.components = response.data;
-        this.searchedComponents = response.data;
+        this.components = response.data.entries;
         if (this.components.length == 0) {
           this.NoDataEmptyStateText.title = "No data available";
           this.NoDataEmptyStateText.message =
