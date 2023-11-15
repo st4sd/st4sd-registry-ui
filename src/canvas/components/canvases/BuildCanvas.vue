@@ -224,10 +224,8 @@ import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.
 import { downloadExperiment, download } from "@/canvas/functions/downloadJSON";
 import { hide, getWorkflowsEdges } from "@/canvas/functions/hideExpand";
 import {
-  setUpCanvas,
   addWorkflowNode,
   addWorkflowNodesToCanvas,
-  convertToBuildCanvasSystem,
   isConnectionValid,
 } from "@/canvas/functions/canvasFunctions";
 import {
@@ -239,8 +237,8 @@ import {
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
-import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";
+import { getEntryWorkflowBlock } from "@/canvas/functions/getBlocks";
 
 const props = defineProps({
   pvep: {
@@ -250,48 +248,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["updateLoading"]);
-
-const getGraph = async () => {
-  emit("updateLoading", true);
-  let graphData;
-  let inputsData;
-  await axios
-    .get(window.location.origin + "/registry-ui/backend/canvas/" + props.pvep)
-    .then((graphResponse) => {
-      if (graphResponse.data.length != 0) {
-        graphData = graphResponse.data;
-      }
-    });
-  await axios
-    .get(
-      window.location.origin + "/registry-ui/backend/experiments/" + props.pvep,
-    )
-    .then((inputsResponse) => {
-      if (inputsResponse.data.length != 0) {
-        inputsData = inputsResponse.data.entry;
-      }
-    });
-  emit("updateLoading", false);
-  nodes.value = [];
-  edges.value = [];
-  const uploadedGraph = createDAG(graphData, inputsData);
-  //Change ID system and add workflow dimensions
-  convertToBuildCanvasSystem(
-    uploadedGraph.nodes,
-    uploadedGraph.edges,
-    workflowDimensions,
-    getId,
-  );
-  addNodes(uploadedGraph.nodes);
-  addEdges(uploadedGraph.edges);
-};
-
+const localPVEP = ref();
 let elements = {};
-if (props.pvep != "") {
-  getGraph();
-} else {
-  setUpCanvas(elements);
-}
 
 const {
   onNodeDragStop,
@@ -308,6 +266,35 @@ const {
   nodes,
   edges,
 } = useVueFlow(elements);
+
+const getGraph = async () => {
+  emit("updateLoading", true);
+  let graphData;
+  await axios
+    .get(window.location.origin + "/registry-ui/backend/canvas/" + props.pvep)
+    .then((graphResponse) => {
+      if (graphResponse.data.length != 0) {
+        graphData = graphResponse.data;
+      }
+    });
+  emit("updateLoading", false);
+  nodes.value = [];
+  edges.value = [];
+  const uploadedGraph = getEntryWorkflowBlock(graphData);
+  //Change ID system and add workflow dimensions
+  addWorkflowNodesToCanvas(
+    uploadedGraph,
+    workflowDimensions,
+    getId,
+    addNodes,
+    addEdges,
+  );
+};
+
+if (props.pvep != "") {
+  localPVEP.value = { ...props.pvep };
+  getGraph();
+}
 
 let allNodes = nodes;
 let allEdges = edges;
@@ -337,20 +324,23 @@ let modalVisibilities = {
 const displayUploadedElements = (files) => {
   if (Array.isArray(files)) {
     let dslFileContents = "";
-    let inputFileContents = "";
 
     readFile(files[0]).then(function (dslResult) {
       dslFileContents = dslResult;
 
       readFile(files[1]).then(function (inputResult) {
-        inputFileContents = inputResult;
+        localPVEP.value = inputResult;
         nodes.value = [];
         edges.value = [];
-        const uploadedGraph = createDAG(dslFileContents, inputFileContents);
-
-        addNodes(uploadedGraph.nodes);
-        addEdges(uploadedGraph.edges);
-
+        const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
+        //Change ID system and add workflow dimensions
+        addWorkflowNodesToCanvas(
+          uploadedGraph,
+          workflowDimensions,
+          getId,
+          addNodes,
+          addEdges,
+        );
         toggleModalVisibility("fileUploadModal");
       });
     });

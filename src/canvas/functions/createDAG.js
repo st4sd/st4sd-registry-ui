@@ -116,31 +116,41 @@ function addEntries(graph, dslData, experimentData) {
   // - parameterisation.executionOptions.data
   // - metadata.registry.inputs
   let executionOptions = [];
-  executionOptions.push(
-    ...experimentData.parameterisation.executionOptions.variables,
-  );
-  let executionOptionsData =
-    experimentData.parameterisation.executionOptions.data;
-  executionOptionsData.map((n) => {
-    n.name = "data." + n.name;
-  });
-  executionOptions.push(...executionOptionsData);
-  let metadataInputs = experimentData.metadata.registry.inputs;
-  metadataInputs.map((n) => {
-    n.name = "input." + n.name;
-  });
-  executionOptions.push(...metadataInputs);
+  if (experimentData.parameterisation.executionOptions.variables) {
+    executionOptions.push(
+      ...experimentData.parameterisation.executionOptions.variables,
+    );
+  }
 
+  if (experimentData.parameterisation.executionOptions.data) {
+    let executionOptionsData =
+      experimentData.parameterisation.executionOptions.data;
+    executionOptionsData.map((n) => {
+      n.name = "data." + n.name;
+    });
+    executionOptions.push(...executionOptionsData);
+  }
+  if (experimentData.metadata.registry.inputs) {
+    let metadataInputs = experimentData.metadata.registry.inputs;
+    metadataInputs.map((n) => {
+      n.name = "input." + n.name;
+    });
+    executionOptions.push(...metadataInputs);
+  }
   // presets are contents of:
   // - parameterisation.presets.variables
   // - parameterisation.presets.data
   let presets = [];
-  presets.push(...experimentData.parameterisation.presets.variables);
-  let presetsData = experimentData.parameterisation.presets.data;
-  presetsData.map((n) => {
-    n.name = "data." + n.name;
-  });
-  presets.push(...presetsData);
+  if (experimentData.parameterisation.presets.variables) {
+    presets.push(...experimentData.parameterisation.presets.variables);
+  }
+  if (experimentData.parameterisation.presets.data) {
+    let presetsData = experimentData.parameterisation.presets.data;
+    presetsData.map((n) => {
+      n.name = "data." + n.name;
+    });
+    presets.push(...presetsData);
+  }
 
   //Start compiling the node definitions
   let executionOptionsDefinition = {};
@@ -316,6 +326,7 @@ function addEdges(graph, data, workflow, workflowName) {
 
     for (var arg in args) {
       let fullSourcePath = args[arg];
+      fullSourcePath = fullSourcePath.toString();
       let edgeDefinition = { [arg]: args[arg] };
       let fullSource = removeSymbolCharacters(fullSourcePath);
       let source = workflowName;

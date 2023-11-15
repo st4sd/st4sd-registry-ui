@@ -63,7 +63,6 @@ export default {
     );
     let entryNode = this.allNodes.find((node) => node.isEntry == true);
     if (entryNode != undefined) {
-      console.log(entryNode);
       this.selectedNodeId = entryNode.id;
     }
   },

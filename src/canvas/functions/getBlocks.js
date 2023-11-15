@@ -1,10 +1,10 @@
 //This file functionality is to be replaced once a way
 //to get all experiment blocks from the runtime service
 //is established
-export default function getBlocks(data) {
+export function getBlocks(dsl) {
   let nodes = [];
-  let workflows = data.workflows;
-  let components = data.components;
+  let workflows = dsl.workflows;
+  let components = dsl.components;
 
   if (workflows != undefined) {
     for (let workflow of workflows) {
@@ -14,7 +14,7 @@ export default function getBlocks(data) {
         components: [],
       };
       //This works because dependencies is a pointer that will get updated during recursion
-      populateDependencies(workflow, data, dependencies);
+      populateDependencies(workflow, dsl, dependencies);
       addNode(
         nodes,
         workflowName,
@@ -33,28 +33,54 @@ export default function getBlocks(data) {
   }
   return nodes;
 }
-
+export function getEntryWorkflowBlock(dsl) {
+  let nodes = [];
+  let workflows = dsl.workflows;
+  if (workflows != undefined) {
+    let entryWorkflow = workflows.find(
+      (o) => o.signature.name === dsl["entrypoint"]["entry-instance"],
+    );
+    if (entryWorkflow != undefined) {
+      let workflowName = entryWorkflow.signature.name;
+      let dependencies = {
+        workflows: [],
+        components: [],
+      };
+      //This works because dependencies is a pointer that will get updated during recursion
+      populateDependencies(entryWorkflow, dsl, dependencies);
+      addNode(
+        nodes,
+        workflowName,
+        workflowName,
+        entryWorkflow,
+        "workflow",
+        dependencies,
+      );
+    }
+  }
+  return nodes[0];
+}
 //Function to get the definitions of all nested components/workflows
 //inside a workflow, which are necessary to draw it
-function populateDependencies(workflow, data, dependencies) {
+function populateDependencies(workflow, dsl, dependencies) {
   let steps = workflow.steps;
   for (var step in steps) {
     //Check if the step is referencing a component
 
-    let componentMatch = data.components.find(
+    let componentMatch = dsl.components.find(
       (component) => component.signature.name == steps[step],
     );
     if (componentMatch != undefined) {
       dependencies.components.push(componentMatch);
     } else {
       //see if the step is a workflow
-      let workflowMatch = data.workflows.find(
+      let workflowMatch = dsl.workflows.find(
         (workflow) => workflow.signature.name == steps[step],
       );
       if (workflowMatch != undefined) {
         dependencies.workflows.push(workflowMatch);
         //if it is a workflow then get it's dependancies
-        populateDependencies(workflowMatch, data, dependencies);
+        populateDependencies(workflowMatch, dsl, dependencies);
       }
     }
   }

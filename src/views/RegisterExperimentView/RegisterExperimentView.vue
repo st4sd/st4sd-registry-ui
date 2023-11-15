@@ -107,7 +107,6 @@ export default {
             .map((problem) => problem.problem)
             .toString();
           this.errorCode = error.response.status;
-          console.log(this.errorCode);
           this.isPvepError = true;
         });
     },
