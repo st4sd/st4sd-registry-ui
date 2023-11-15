@@ -91,7 +91,6 @@
     />
     <readEdgeModal
       v-if="modalVisibilities.readEdgeModal.value"
-      title="Edge Parameters"
       @bx-modal-closed="toggleModalVisibility('readEdgeModal')"
       :edge="clickedEdge"
       open="true"
@@ -150,6 +149,7 @@ const {
 let clickedNode;
 let clickedEdge;
 let inputingEdges;
+
 let modalVisibilities = {
   readEdgeModal: ref(false),
   readExperimentInputsModal: ref(false),

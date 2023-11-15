@@ -93,7 +93,6 @@
     />
     <readEdgeModal
       v-if="modalVisibilities.readEdgeModal.value"
-      title="Edge Parameters"
       @bx-modal-closed="toggleModalVisibility('readEdgeModal')"
       :edge="clickedEdge"
       open="true"

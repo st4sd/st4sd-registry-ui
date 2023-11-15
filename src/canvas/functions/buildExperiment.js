@@ -2,8 +2,8 @@ import getDSLComponentDefinition from "@/canvas/functions/removeEmptyValues";
 
 export default function buildExperiment(nodes, edges, entryNode) {
   let workflows = nodes.filter((node) => node.type == "workflow");
-
   let components = nodes.filter((node) => node.type == "component");
+  let inputs = nodes.filter((node) => node.type == "input");
 
   let result = {};
   if (entryNode != undefined) {
@@ -20,7 +20,9 @@ export default function buildExperiment(nodes, edges, entryNode) {
       workflows: [],
       components: [],
     };
-    //initialiseEntrypoint(result, nodes);
+    if (inputs.length > 0) {
+      initialiseEntrypoint(result, inputs);
+    }
     workflows.forEach((workflow) => {
       //before adding the workflows to the experiment dsl, the definition needs
       //to be updated to reflect the edges
@@ -38,17 +40,15 @@ export default function buildExperiment(nodes, edges, entryNode) {
   return result;
 }
 
-//To be revised now that how we handle experiment inputs have changed
-// function initialiseEntrypoint(result, nodes) {
-//   let inputs = nodes.filter((node) => node.type === "input");
-//   if (inputs != undefined) {
-//     for (var input in inputs) {
-//       result.entrypoint.execute[0].args[inputs[input].label] =
-//         inputs[input].definition;
-//     }
-//   }
-//   return result;
-// }
+function initialiseEntrypoint(result, inputNodes) {
+  for (var inputNode of inputNodes) {
+    result.entrypoint.execute[0].args = {
+      ...result.entrypoint.execute[0].args,
+      ...inputNode.definition,
+    };
+  }
+  return result;
+}
 
 function createExecutionConfig(workflow, nodes, edges) {
   let newExecute = [];

@@ -211,6 +211,7 @@ function addEntries(graph, dslData, experimentData) {
       entryWorkflowName,
       "executionOptions",
       executionOptionsDefinition,
+      {},
     );
   }
 
@@ -226,14 +227,21 @@ function addEntries(graph, dslData, experimentData) {
       presetsNodeType,
       "",
     );
-    addEdge(graph, "presets", entryWorkflowName, "presets", presetsDefinition);
+    addEdge(
+      graph,
+      "presets",
+      entryWorkflowName,
+      "presets",
+      presetsDefinition,
+      {},
+    );
   }
 
   //Other Parameters
   if (Object.keys(otherDefinition).length != 0) {
     otherDefinition = sortObjectKeys(otherDefinition);
     addNode(graph, "other", "Other", otherDefinition, "", otherNodeType, "");
-    addEdge(graph, "other", entryWorkflowName, "other", otherDefinition);
+    addEdge(graph, "other", entryWorkflowName, "other", otherDefinition, {});
   }
 
   //after adding all inputs, we add the entry workflow
@@ -328,6 +336,7 @@ function addEdges(graph, data, workflow, workflowName) {
       let fullSourcePath = args[arg];
       fullSourcePath = fullSourcePath.toString();
       let edgeDefinition = { [arg]: args[arg] };
+      let actualValue = {};
       let fullSource = removeSymbolCharacters(fullSourcePath);
       let source = workflowName;
       // if the arg is in the form of %() then it is referencing a parameter input
@@ -335,7 +344,7 @@ function addEdges(graph, data, workflow, workflowName) {
         source = `${workflowName}/input`;
         let value = getEdgeParameterValueFromInputNodes(fullSource, inputNodes);
         if (value != undefined) {
-          edgeDefinition = { [arg]: value };
+          actualValue = { [arg]: value };
         }
       }
       //if it's in the form on <> then its referencing a step or a step inside step .. etc
@@ -355,7 +364,7 @@ function addEdges(graph, data, workflow, workflowName) {
         );
         source = `${workflowName}.${arg}`;
       }
-      addEdge(graph, source, target, arg, edgeDefinition);
+      addEdge(graph, source, target, arg, edgeDefinition, actualValue);
     }
     //CHECK IF THE STEP IS REFERENCING A WORKFLOW
     //IF IT IS A WORKFLOW - DRAW ITS CONNECTIONS/EDGES.
@@ -426,7 +435,7 @@ function addNode(graph, id, label, definition, parent, type, stepId) {
   graph.nodes.push(node);
 }
 
-function addEdge(graph, source, target, label, definition) {
+function addEdge(graph, source, target, label, definition, actualValue) {
   //Check if there is already another edge that starts and ends at
   //the same points. if there is we just add on that same edge instead of drawing a new one
   //Drawing two edges starting and ending at the same point will not be visible enough for the users - they will only see one
@@ -437,6 +446,11 @@ function addEdge(graph, source, target, label, definition) {
     let argName = Object.keys(definition)[0];
     siblingEdge.argName.push(argName);
     siblingEdge.definition[argName] = definition[argName];
+    if (siblingEdge.actualValue) {
+      siblingEdge.actualValue[argName] = actualValue[argName];
+    } else {
+      siblingEdge.actualValue = actualValue;
+    }
   } else {
     var edge = {
       id: `edge:${source}>${target}::${label}`,
@@ -461,11 +475,15 @@ function addEdge(graph, source, target, label, definition) {
     } else if (source == "other") {
       edge.style = { stroke: "grey" };
     }
+
+    if (Object.keys(actualValue).length > 0) {
+      edge.actualValue = actualValue;
+    }
     graph.edges.push(edge);
   }
 }
 
-function removeSymbolCharacters(stringWithSymbols) {
+export function removeSymbolCharacters(stringWithSymbols) {
   let cleanedString = "";
   if (stringWithSymbols.includes("%")) {
     if (
@@ -549,11 +567,8 @@ function getPresetsDefaults(
 
 function getEdgeParameterValueFromInputNodes(parameterName, inputNodes) {
   for (var iNode of inputNodes) {
-    let match = iNode.definition[parameterName];
-    if (match != undefined) {
-      return match;
-    } else {
-      continue;
+    if (parameterName in iNode.definition) {
+      return iNode.definition[parameterName];
     }
   }
 }
