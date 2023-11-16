@@ -699,8 +699,10 @@ export default {
     if (this.node != undefined) {
       this.component.setComponentDefintion(this.node.definition);
       this.oldName = this.component.getName();
-      this.variableKeys = Object.keys(this.node.definition.variables);
-      this.variableValues = Object.values(this.node.definition.variables);
+      if (this.node.definition.variables) {
+        this.variableKeys = Object.keys(this.node.definition.variables);
+        this.variableValues = Object.values(this.node.definition.variables);
+      }
     }
   },
   methods: {
