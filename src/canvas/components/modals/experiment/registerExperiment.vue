@@ -101,11 +101,16 @@ export default {
     validateDsl() {
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);
+        this.postDslForValidation();
+        return true;
       } catch (error) {
         this.dslBeingValidated = "finished";
         this.dslInvalid = true;
         this.dslInvalidTitle = error.message;
+        return false;
       }
+    },
+    postDslForValidation() {
       if (this.dsl != null) {
         axios
           .post(
