@@ -230,6 +230,7 @@ import {
   addWorkflowNode,
   addWorkflowNodesToCanvas,
   isConnectionValid,
+  setUpCanvas,
 } from "@/canvas/functions/canvasFunctions";
 import {
   isNestingValid,
@@ -332,6 +333,8 @@ function setupCanvas() {
     emit("updateLoading", false);
   }
 }
+
+setUpCanvas(elements);
 
 let allNodes = nodes;
 let allEdges = edges;

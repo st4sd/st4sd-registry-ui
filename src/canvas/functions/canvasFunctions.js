@@ -22,14 +22,20 @@ export function setUpCanvas(graph) {
       let match = graph.nodes.find((a) => a.id == "executionOptions");
       if (match == undefined) {
         addExecutionOptionsInputNode(graph);
+      } else {
+        match.hidden = true;
       }
       match = graph.nodes.find((a) => a.id == "presets");
       if (match == undefined) {
         addPresetsInputNode(graph);
+      } else {
+        match.hidden = true;
       }
       match = graph.nodes.find((a) => a.id == "other");
       if (match == undefined) {
         addOtherInputNode(graph);
+      } else {
+        match.hidden = true;
       }
     }
   }
