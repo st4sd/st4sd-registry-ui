@@ -27,13 +27,30 @@
           <span slot="label-text">Description:</span>
         </bx-input>
         <br />
-        <p>Variables</p>
+        <bx-input
+          v-if="parentNode != undefined"
+          readonly
+          :value="parentNode.label"
+          colorScheme="light"
+        >
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
+          <span slot="label-text">Parent Workflow:</span>
+        </bx-input>
+        <bx-btn
+          v-if="parentNode != undefined"
+          kind="primary"
+          @click="removeParentNode()"
+          >Unnest</bx-btn
+        >
+      </bx-accordion-item>
+      <bx-accordion-item
+        :title-text="'Variables (' + variableKeys.length + ')'"
+      >
         <bx-table-toolbar>
           <bx-table-toolbar-content>
             <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
-
         <bx-structured-list v-if="variableKeys.length != 0">
           <bx-structured-list-head>
             <bx-structured-list-header-row>
@@ -89,23 +106,8 @@
             </bx-structured-list-row>
           </bx-structured-list-body>
         </bx-structured-list>
-        <br />
-        <bx-input
-          v-if="parentNode != undefined"
-          readonly
-          :value="parentNode.label"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Parent Workflow:</span>
-        </bx-input>
-        <bx-btn
-          v-if="parentNode != undefined"
-          kind="primary"
-          @click="removeParentNode()"
-          >Unnest</bx-btn
-        > </bx-accordion-item
-      ><bx-accordion-item
+      </bx-accordion-item>
+      <bx-accordion-item
         :title-text="
           'Parameters (' + component.signature.parameters.length + ')'
         "
