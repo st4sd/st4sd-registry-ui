@@ -97,6 +97,8 @@ let isGlobalRegistryLibraryEnabled = ref(
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
+const emit = defineEmits(["updateLibraryError", "libraryLoaded"]);
+
 async function getNodesFromUrls() {
   let nodes = [];
 
@@ -121,6 +123,12 @@ async function getNodesFromUrls() {
           }
         });
       }
+    })
+    .catch((error) => {
+      emit("updateLibraryError", error);
+    })
+    .finally(() => {
+      emit("libraryLoaded");
     });
   return nodes;
 }

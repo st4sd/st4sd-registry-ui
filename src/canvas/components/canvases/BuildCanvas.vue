@@ -98,7 +98,10 @@
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
-    <BlocksLibrary />
+    <BlocksLibrary
+      @updateLibraryError="updateLibraryError"
+      @libraryLoaded="setupCanvas"
+    />
     <!-- CRUD operations -->
     <createWorkflowModal
       v-if="modalVisibilities.createWorkflowModal.value"
@@ -240,6 +243,8 @@ import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getBlocks";
 
+import { getDeploymentEndpoint } from "@/functions/public_path";
+
 const props = defineProps({
   pvep: {
     type: String,
@@ -247,7 +252,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["updateLoading"]);
+const emit = defineEmits([
+  "updateLoading",
+  "updateLibraryError",
+  "updateGraphError",
+]);
 const localPVEP = ref();
 let elements = {};
 
@@ -267,33 +276,61 @@ const {
   edges,
 } = useVueFlow(elements);
 
-const getGraph = async () => {
-  emit("updateLoading", true);
+async function getGraph() {
   let graphData;
+
   await axios
-    .get(window.location.origin + "/registry-ui/backend/canvas/" + props.pvep)
+    .get(`${getDeploymentEndpoint()}registry-ui/backend/canvas/${props.pvep}`)
     .then((graphResponse) => {
       if (graphResponse.data.length != 0) {
         graphData = graphResponse.data;
       }
-    });
-  emit("updateLoading", false);
-  nodes.value = [];
-  edges.value = [];
-  const uploadedGraph = getEntryWorkflowBlock(graphData);
-  //Change ID system and add workflow dimensions
-  addWorkflowNodesToCanvas(
-    uploadedGraph,
-    workflowDimensions,
-    getId,
-    addNodes,
-    addEdges,
-  );
-};
 
-if (props.pvep != "") {
-  localPVEP.value = { ...props.pvep };
-  getGraph();
+      nodes.value = [];
+      edges.value = [];
+      const uploadedGraph = getEntryWorkflowBlock(graphData);
+      //Change ID system and add workflow dimensions
+      addWorkflowNodesToCanvas(
+        uploadedGraph,
+        workflowDimensions,
+        getId,
+        addNodes,
+        addEdges,
+      );
+    })
+    .catch((error) => {
+      emit("updateGraphError", error);
+    })
+    .finally(() => {
+      emit("updateLoading", false);
+    });
+}
+
+//The 405 error code is being used to deny access to functionalities
+//If the backend returns 405 then that functionality has not been enabled by the administrator.
+
+let is405 = false;
+
+function updateLibraryError(error) {
+  emit("updateLibraryError", error);
+  if (error.response.status == 405) {
+    is405 = true;
+  }
+}
+
+function setupCanvas() {
+  if (is405) {
+    emit("updateLoading", false);
+    return;
+  }
+
+  if (props.pvep != "") {
+    localPVEP.value = { ...props.pvep };
+    getGraph();
+  } else {
+    elements.elevateEdgesOnSelect = true;
+    emit("updateLoading", false);
+  }
 }
 
 let allNodes = nodes;
