@@ -103,6 +103,8 @@ export default {
           name: this.pvep,
           path: `/experiment/${this.pvep}`,
         });
+        breadcrumbs[2].name = "Edit";
+        breadcrumbs[2].path = `/experiment/${this.pvep}/edit`;
       }
 
       return breadcrumbs;
