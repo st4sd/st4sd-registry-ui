@@ -43,8 +43,13 @@
         </bx-btn>
         <bx-btn
           size="sm"
-          title="Download canvas project files"
+          :title="
+            allNodes.find((node) => node.isEntry == true) == undefined
+              ? 'Select an entrypoint to download the DSL'
+              : 'Download DSL'
+          "
           @click="downloadExperimentFiles"
+          :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
           <img
             class="canvas-logo"
