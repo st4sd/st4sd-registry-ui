@@ -1,7 +1,7 @@
 <template>
   <aside>
     <div id="controls">
-      <div id="title">Component Library</div>
+      <div id="title">Template Library</div>
       <div id="buttons">
         <bx-btn
           title="Create Component"
