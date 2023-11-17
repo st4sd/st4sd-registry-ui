@@ -280,7 +280,7 @@ function addBlocks(graph, data, workflow, prevStepId) {
       (o) => o.signature.name === workflowSteps[step],
     );
     let stepId = step;
-    let id = `${prevStepId}.${step}`;
+    let id = `${prevStepId}/${step}`;
 
     //if the step is a workflow
     if (stepWorkflow != undefined) {
@@ -330,7 +330,7 @@ function addEdges(graph, data, workflow, workflowName) {
     let targetStep = workflowExecution[step].target
       .replace("<", "")
       .replace(">", "");
-    let target = `${workflowName}.${targetStep}`;
+    let target = `${workflowName}/${targetStep}`;
 
     for (var arg in args) {
       let fullSourcePath = args[arg];
@@ -346,25 +346,25 @@ function addEdges(graph, data, workflow, workflowName) {
         if (value != undefined) {
           actualValue = { [arg]: value };
         }
+        addEdge(graph, source, target, arg, edgeDefinition, actualValue);
       }
       //if it's in the form on <> then its referencing a step or a step inside step .. etc
       else if (fullSourcePath.includes("<")) {
-        source = `${workflowName}.${fullSource}`;
+        source = `${workflowName}/${fullSource}`;
+        addEdge(graph, source, target, arg, edgeDefinition, actualValue);
       }
       // otherwise it's a static input and not referencing anything
       else {
-        addNode(
-          graph,
-          `${workflowName}.${arg}`,
-          arg,
-          edgeDefinition,
-          source,
-          "workflow-input",
-          "",
-        );
-        source = `${workflowName}.${arg}`;
+        let targetNode = graph.nodes.find((n) => n.id == target);
+        if (targetNode != undefined) {
+          let targetParameter = targetNode.definition.signature.parameters.find(
+            (parameter) => parameter.name == arg,
+          );
+          if (targetParameter != undefined) {
+            targetParameter.default = args[arg];
+          }
+        }
       }
-      addEdge(graph, source, target, arg, edgeDefinition, actualValue);
     }
     //CHECK IF THE STEP IS REFERENCING A WORKFLOW
     //IF IT IS A WORKFLOW - DRAW ITS CONNECTIONS/EDGES.
@@ -500,7 +500,7 @@ export function removeSymbolCharacters(stringWithSymbols) {
       );
     }
   } else if (stringWithSymbols.includes("<")) {
-    cleanedString = stringWithSymbols.split("<")[1].split(">")[0].split("/")[0];
+    cleanedString = stringWithSymbols.split("<")[1].split(">")[0];
   } else {
     cleanedString = stringWithSymbols;
   }

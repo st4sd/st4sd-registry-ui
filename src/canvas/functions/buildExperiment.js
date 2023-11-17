@@ -100,7 +100,7 @@ function setStepReferences(workflow, stepReference, nodes) {
     if (stepReference == "") {
       node.stepReference = node.stepId;
     } else {
-      node.stepReference = `${stepReference}.${node.stepId}`;
+      node.stepReference = `${stepReference}/${node.stepId}`;
     }
     if (node.type == "workflow") {
       setStepReferences(node, node.stepReference, nodes);
