@@ -84,9 +84,9 @@ export default {
   methods: {
     upload() {
       this.submitted = true;
-      if (this.graphFile != null) {
+      if (this.graphUpload && this.graphFile != null) {
         this.$emit("upload", this.graphFile);
-      } else {
+      } else if (!this.graphUpload && this.dslFile != null) {
         this.$emit("upload", [this.dslFile, this.inputFile]);
       }
     },

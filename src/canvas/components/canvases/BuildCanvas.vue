@@ -107,6 +107,18 @@
       @updateLibraryError="updateLibraryError"
       @libraryLoaded="setupCanvas"
     />
+    <!-- Error Notification -->
+    <div id="toast-notification-container">
+      <bx-toast-notification
+        v-for="(notification, notifIdx) in toastNotifications"
+        :key="notifIdx"
+        timeout="10000"
+        :kind="notification.kind"
+        :title="notification.title"
+        :subtitle="notification.subtitle"
+        :caption="notification.caption"
+      />
+    </div>
     <!-- CRUD operations -->
     <createWorkflowModal
       v-if="modalVisibilities.createWorkflowModal.value"
@@ -192,6 +204,7 @@
 </template>
 
 <script setup>
+import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
@@ -365,7 +378,7 @@ let modalVisibilities = {
   fileUploadModal: ref(false),
   registerExperimentModal: ref(false),
 };
-
+let toastNotifications = [];
 const displayUploadedElements = (files) => {
   if (Array.isArray(files)) {
     let dslFileContents = "";
@@ -378,14 +391,24 @@ const displayUploadedElements = (files) => {
         nodes.value = [];
         edges.value = [];
         const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
-        //Change ID system and add workflow dimensions
-        addWorkflowNodesToCanvas(
-          uploadedGraph,
-          workflowDimensions,
-          getId,
-          addNodes,
-          addEdges,
-        );
+        if (uploadedGraph != undefined) {
+          //Change ID system and add workflow dimensions
+          addWorkflowNodesToCanvas(
+            uploadedGraph,
+            workflowDimensions,
+            getId,
+            addNodes,
+            addEdges,
+          );
+        } else {
+          let dslFileUploadError = {
+            kind: "error",
+            title: "Unable to load DSL files",
+            subtitle: "The uploaded file is not in the expected format.",
+            caption: "Did you choose the correct file type?",
+          };
+          toastNotifications.push(dslFileUploadError);
+        }
         toggleModalVisibility("fileUploadModal");
       });
     });
@@ -393,14 +416,22 @@ const displayUploadedElements = (files) => {
     let graphFileContents = "";
     readFile(files).then(function (graphResult) {
       graphFileContents = graphResult;
-
-      addNodes(graphFileContents.nodes);
-      addEdges(graphFileContents.edges);
+      if (graphFileContents.nodes) {
+        addNodes(graphFileContents.nodes);
+        addEdges(graphFileContents.edges);
+      } else {
+        let canvasProjectFileUploadError = {
+          kind: "error",
+          title: "Unable to load project files",
+          subtitle: "The uploaded file is not in the expected format.",
+          caption: "Did you choose the correct file type?",
+        };
+        toastNotifications.push(canvasProjectFileUploadError);
+      }
       toggleModalVisibility("fileUploadModal");
     });
   }
 };
-
 function readFile(file) {
   return new Promise((resolve, reject) => {
     var fileReader = new FileReader();
@@ -648,4 +679,6 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" src="@/canvas/styles/main.scss"></style>
+<style lang="scss" src="@/canvas/styles/main.scss">
+@import "@/styles/toast-notification-styles.scss";
+</style>
