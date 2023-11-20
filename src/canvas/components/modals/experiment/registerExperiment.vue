@@ -13,13 +13,15 @@
       <bx-inline-notification
         id="dsl-valid"
         kind="success"
-        :open="!dslInvalid"
+        :open="dslBeingValidated != 'active' && !dslInvalid"
+        hide-close-button
         title="DSL Valid"
       />
       <bx-inline-notification
         id="dsl-invalid-notification"
         kind="error"
         :open="dslInvalid"
+        hide-close-button
         :title="dslInvalidTitle"
         :subtitle="dslMessage"
       />
@@ -46,7 +48,7 @@
         kind="primary"
         type="submit"
         @click="registerExperiment()"
-        :disabled="nameInvalid || dslInvalid"
+        :disabled="dslBeingValidated == 'active' || nameInvalid || dslInvalid"
         >Register Experiment</bx-modal-footer-button
       >
     </bx-modal-footer>
