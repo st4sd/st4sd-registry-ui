@@ -589,8 +589,6 @@ const updateNode = (updatedNode) => {
   if (updatedNode.type == "workflow") {
     toggleModalVisibility("updateWorkflowModal");
   } else {
-    selectedNode.label = updatedNode.label;
-    selectedNode.definition = updatedNode.definition;
     toggleModalVisibility("updateComponentModal");
   }
 };

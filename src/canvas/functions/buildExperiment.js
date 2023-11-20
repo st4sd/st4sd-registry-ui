@@ -1,4 +1,4 @@
-import getDSLComponentDefinition from "@/canvas/functions/removeEmptyValues";
+import getDSLDefinition from "@/canvas/functions/removeEmptyValues";
 
 export default function buildExperiment(nodes, edges, entryNode) {
   let workflows = nodes.filter((node) => node.type == "workflow");
@@ -28,12 +28,11 @@ export default function buildExperiment(nodes, edges, entryNode) {
       //to be updated to reflect the edges
       //information in edges will form the execute part of a workflow definition
       createExecutionConfig(workflow, nodes, edges);
-      result.workflows.push(workflow.definition);
+      result.workflows.push(getDSLDefinition(workflow.definition));
     });
     //Component
     components.forEach((component) => {
-      let defintion = getDSLComponentDefinition(component.definition);
-      result.components.push(defintion);
+      result.components.push(getDSLDefinition(component.definition));
     });
   }
 

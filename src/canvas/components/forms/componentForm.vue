@@ -73,7 +73,7 @@
                   id="add-component-variables-input"
                   type="text"
                   :value="key"
-                  @input="setVariableKey(idx)"
+                  @input="setVariableKey(idx, $event.target.value)"
                   :invalid="checkKeyIsDuplicate(idx, key)"
                   validity-message="Variable names must be unique"
                   placeholder="variable name"
@@ -86,7 +86,7 @@
                   id="add-component-variables-input"
                   type="text"
                   :value="variableValues[idx]"
-                  @input="setVariableValue(idx)"
+                  @input="setVariableValue(idx, $event.target.value)"
                   placeholder="variable value"
                   colorScheme="light"
                 >
@@ -119,7 +119,8 @@
                 >Name</bx-structured-list-header-cell
               >
               <bx-structured-list-header-cell
-                >Default</bx-structured-list-header-cell
+                >Default: Could be string, int, number or object (currenly only
+                handles string)</bx-structured-list-header-cell
               >
             </bx-structured-list-header-row>
           </bx-structured-list-head>
@@ -134,10 +135,7 @@
                   @input="parameter.name = $event.target.value"
                   placeholder="parameter name"
                   colorScheme="light"
-                >
-                  <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text"> Parameter {{ index }} name:</span>
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell class="updateModals">
                 <bx-input
@@ -145,13 +143,7 @@
                   @input="parameter.default = $event.target.value"
                   placeholder="parameter default"
                   colorScheme="light"
-                >
-                  <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text">
-                    Default: Could be string, int, number or object (currenly
-                    only handles string)</span
-                  >
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell
                 class="updateModals structured-list-delete-button-bottom"
@@ -168,7 +160,7 @@
             </bx-structured-list-row>
           </bx-structured-list-body>
           <bx-btn kind="primary" @click="component.addParameter()">
-            Add
+            Add Parameter +
           </bx-btn>
         </bx-structured-list>
       </bx-accordion-item>
@@ -689,7 +681,7 @@ let invalidVariables = {};
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
-  emits: ["update", "removeParent", "add"],
+  emits: ["update", "removeParent", "add", "invalid"],
   data() {
     return {
       contentSwitcherSelection: ref("config"),
@@ -714,8 +706,9 @@ export default {
     update() {
       if (!this.isError) {
         this.setVariables();
-        let newComponentNode = { ...this.node };
-        updateNodeLabel(newComponentNode);
+        let newComponentNode = this.allNodes.find(
+          (node) => node.id == this.node.id,
+        );
         newComponentNode.definition = this.component.getComponentDefintion();
         //if the workflow name has changed we need to change step references
         //check if the workflow is a step in another workflow
@@ -729,6 +722,7 @@ export default {
           parentNode.definition.steps[newComponentNode.stepId] =
             this.component.getName();
         }
+        updateNodeLabel(newComponentNode);
         this.$emit("update", newComponentNode);
       }
     },
@@ -749,6 +743,7 @@ export default {
         this.isError = false;
         event.target.invalid = false;
       }
+      this.$emit("invalid", this.isError);
     },
     addVariables() {
       this.variableKeys.push("");
@@ -758,11 +753,11 @@ export default {
       this.variableKeys.splice(idx, 1);
       this.variableValues.splice(idx, 1);
     },
-    setVariableKey(idx) {
-      this.variableKeys[idx] = event.target.value;
+    setVariableKey(idx, value) {
+      this.variableKeys[idx] = value;
     },
-    setVariableValue(idx) {
-      this.variableValues[idx] = event.target.value;
+    setVariableValue(idx, value) {
+      this.variableValues[idx] = value;
     },
     setVariables() {
       for (let i = 0; i < this.variableKeys.length; i++) {

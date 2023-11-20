@@ -1,4 +1,7 @@
-export default function getDSLComponentDefinition(definition) {
+export default function getDSLDefinition(definition) {
+  if (definition.signature.parameters) {
+    removeEmptyDefaultsFromParameters(definition.signature.parameters);
+  }
   let dslDefinition = removeEmptyValues(definition);
   return dslDefinition;
 }
@@ -33,4 +36,17 @@ function removeEmptyValues(object) {
     }
   });
   return output;
+}
+export function removeEmptyDefaultsFromParameters(parameters) {
+  parameters = parameters.filter((parameter) => parameter.name.trim() != "");
+  parameters.map((parameter) => {
+    //Make sure the key exists
+    if (parameter.default) {
+      if (parameter.default.trim() == "") {
+        delete parameter.default;
+      }
+    } else {
+      delete parameter.default;
+    }
+  });
 }

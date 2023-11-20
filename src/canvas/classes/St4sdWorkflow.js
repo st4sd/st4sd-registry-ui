@@ -2,7 +2,7 @@ export default class St4sdWorkflow {
   signature = {
     name: "",
     description: "",
-    parameters: [{ name: "", default: "" }],
+    parameters: [],
   };
   steps = [];
 
@@ -53,6 +53,9 @@ export default class St4sdWorkflow {
   setParameters(parameters) {
     if (Array.isArray(parameters)) {
       this.signature.parameters = parameters;
+      this.signature.parameters = this.signature.parameters.filter(
+        (parameter) => parameter.name.trim() != "",
+      );
     }
   }
   addParameter() {

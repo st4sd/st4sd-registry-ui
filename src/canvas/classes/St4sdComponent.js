@@ -62,6 +62,7 @@ export default class St4sdComponent {
       resourceManager: this.resourceManager,
     };
   }
+
   setComponentDefintion(definition) {
     if (definition.signature != undefined) {
       this.setSignature(definition.signature);
@@ -87,7 +88,15 @@ export default class St4sdComponent {
   }
   setSignature(signature) {
     if (typeof signature === "object" && signature !== null) {
-      this.signature = signature;
+      if (signature.name != undefined) {
+        this.setName(signature.name);
+      }
+      if (signature.description != undefined) {
+        this.setDescription(signature.description);
+      }
+      if (signature.parameters != undefined) {
+        this.setParameters(signature.parameters);
+      }
     }
   }
   getCommand() {
@@ -144,11 +153,22 @@ export default class St4sdComponent {
   setDescription(description) {
     this.signature.description = description;
   }
+  getParameters() {
+    return this.signature.parameters;
+  }
   setParameterName(index, parameterName) {
     this.signature.parameters[index].name = parameterName;
   }
   setParameterDefault(index, parameterDefault) {
     this.signature.parameters[index].default = parameterDefault;
+  }
+  setParameters(parameters) {
+    if (Array.isArray(parameters)) {
+      this.signature.parameters = parameters;
+      this.signature.parameters = this.signature.parameters.filter(
+        (parameter) => parameter.name.trim() != "",
+      );
+    }
   }
   addParameter() {
     this.signature.parameters.push({ name: "", default: "" });

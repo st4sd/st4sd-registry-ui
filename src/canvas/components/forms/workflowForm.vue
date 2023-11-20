@@ -47,13 +47,6 @@
       v-if="workflow.getParameters() != undefined"
       :title-text="'Parameters (' + workflow.getParameters().length + ')'"
     >
-      <bx-table-toolbar>
-        <bx-table-toolbar-content>
-          <bx-btn kind="primary" @click="workflow.addParameter()"
-            >Add Parameter +</bx-btn
-          >
-        </bx-table-toolbar-content>
-      </bx-table-toolbar>
       <bx-structured-list>
         <bx-structured-list-head>
           <bx-structured-list-header-row>
@@ -61,7 +54,8 @@
               >Name</bx-structured-list-header-cell
             >
             <bx-structured-list-header-cell
-              >Default</bx-structured-list-header-cell
+              >Default: Could be string, int, number or object (currenly only
+              handles string)</bx-structured-list-header-cell
             >
             <bx-structured-list-header-cell></bx-structured-list-header-cell>
           </bx-structured-list-header-row>
@@ -102,6 +96,9 @@
             </bx-structured-list-cell>
           </bx-structured-list-row>
         </bx-structured-list-body>
+        <bx-btn kind="primary" @click="workflow.addParameter()">
+          Add Parameter +
+        </bx-btn>
       </bx-structured-list>
     </bx-accordion-item>
     <bx-accordion-item
