@@ -639,7 +639,10 @@ const removeConnectingEdges = (node) => {
 };
 
 const downloadExperimentFiles = () => {
-  downloadExperiment(nodes.value, edges.value, "experiment");
+  // this should never be undefined at this stage but better to be safe
+  let entrypoint = nodes.value.find((node) => node.isEntry == true);
+  let dslFileName = entrypoint == undefined ? "experiment" : entrypoint.label;
+  downloadExperiment(nodes.value, edges.value, dslFileName + "-dsl");
 };
 
 const saveGraph = () => {
