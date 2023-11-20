@@ -379,7 +379,7 @@ let modalVisibilities = {
   registerExperimentModal: ref(false),
 };
 
-let toastNotifications = [];
+let toastNotifications = ref([]);
 const displayUploadedElements = async (files) => {
   if (files.length == 2) {
     let dslFileContents = await readFile(files[0]);
@@ -405,7 +405,7 @@ const displayUploadedElements = async (files) => {
         subtitle: "The uploaded file is not in the expected format.",
         caption: "Did you choose the correct file type?",
       };
-      toastNotifications.push(dslFileUploadError);
+      toastNotifications.value.push(dslFileUploadError);
     }
     addNodes(uploadedGraph.nodes);
     addEdges(uploadedGraph.edges);
@@ -423,7 +423,7 @@ const displayUploadedElements = async (files) => {
         subtitle: "The uploaded file is not in the expected format.",
         caption: "Did you choose the correct file type?",
       };
-      toastNotifications.push(canvasProjectFileUploadError);
+      toastNotifications.value.push(canvasProjectFileUploadError);
     }
     toggleModalVisibility("fileUploadModal");
   }
@@ -642,7 +642,17 @@ const downloadExperimentFiles = () => {
   // this should never be undefined at this stage but better to be safe
   let entrypoint = nodes.value.find((node) => node.isEntry == true);
   let dslFileName = entrypoint == undefined ? "experiment" : entrypoint.label;
-  downloadExperiment(nodes.value, edges.value, dslFileName + "-dsl");
+  try {
+    downloadExperiment(nodes.value, edges.value, dslFileName + "-dsl");
+  } catch (error) {
+    let dslDownloadError = {
+      kind: "error",
+      title: "Unable to download DSL file",
+      subtitle: "",
+      caption: error.message,
+    };
+    toastNotifications.value.push(dslDownloadError);
+  }
 };
 
 const saveGraph = () => {

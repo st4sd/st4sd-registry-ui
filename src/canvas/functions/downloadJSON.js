@@ -5,7 +5,7 @@ export function validateExperiment(nodes, entryNode) {
     return {
       isValid: false,
       payload:
-        "2 or more WF/Components have the same name, experiment elements names has to be unique",
+        "2+ components or workflows have the same name. Template names must be unique.",
     };
   } else if (entryNode == undefined) {
     return {
