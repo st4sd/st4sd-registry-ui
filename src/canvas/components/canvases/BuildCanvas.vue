@@ -260,7 +260,7 @@ import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";
-import { getEntryWorkflowBlock } from "@/canvas/functions/getBlocks";
+import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 

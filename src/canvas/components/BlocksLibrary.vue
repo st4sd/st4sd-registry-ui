@@ -78,7 +78,7 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
-import { getBlocks } from "@/canvas/functions/getBlocks";
+import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
 import { canvasStore } from "@/canvas/stores/canvasStore";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
@@ -107,21 +107,13 @@ async function getNodesFromUrls() {
     .then((response) => {
       for (let entryIndex in response.data.entries) {
         let graph = response.data.entries[entryIndex].graph;
-        const newArray = getBlocks(graph);
+        const entryWorkflowBlock = getEntryWorkflowBlock(graph);
 
-        newArray.forEach((element) => {
-          //Needs clarifying on the conditions of identifying a duplicate
-          let n = nodes.find(
-            (o) => JSON.stringify(o) === JSON.stringify(element),
-          );
-          if (n == undefined) {
-            if (element.parentNode == undefined) {
-              element.parentNode = "";
-              element.id = getId();
-            }
-            nodes.push(element);
-          }
-        });
+        if (entryWorkflowBlock.parentNode == undefined) {
+          entryWorkflowBlock.parentNode = "";
+          entryWorkflowBlock.id = getId();
+        }
+        nodes.push(entryWorkflowBlock);
       }
     })
     .catch((error) => {

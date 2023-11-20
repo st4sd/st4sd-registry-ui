@@ -1,38 +1,6 @@
 //This file functionality is to be replaced once a way
 //to get all experiment blocks from the runtime service
 //is established
-export function getBlocks(dsl) {
-  let nodes = [];
-  let workflows = dsl.workflows;
-  let components = dsl.components;
-
-  if (workflows != undefined) {
-    for (let workflow of workflows) {
-      let workflowName = workflow.signature.name;
-      let dependencies = {
-        workflows: [],
-        components: [],
-      };
-      //This works because dependencies is a pointer that will get updated during recursion
-      populateDependencies(workflow, dsl, dependencies);
-      addNode(
-        nodes,
-        workflowName,
-        workflowName,
-        workflow,
-        "workflow",
-        dependencies,
-      );
-    }
-  }
-  if (components != undefined) {
-    for (let component of components) {
-      let componentName = component.signature.name;
-      addNode(nodes, componentName, componentName, component, "component", []);
-    }
-  }
-  return nodes;
-}
 export function getEntryWorkflowBlock(dsl) {
   let nodes = [];
   let workflows = dsl.workflows;
