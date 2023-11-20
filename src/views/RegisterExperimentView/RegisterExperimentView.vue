@@ -1,17 +1,5 @@
 <template>
-  <St4sdBreadcrumb
-    :breadcrumbs="[
-      { name: 'Virtual Experiments', path: '/' },
-      {
-        name: 'Build Canvas',
-        path: '/build-canvas',
-      },
-      {
-        name: 'Register Experiment',
-        path: `/build-canvas/register-experiment/${this.name}`,
-      },
-    ]"
-  />
+  <St4sdBreadcrumb :breadcrumbs="getBreadcumbs()" />
   <div v-if="loading" id="loading-container">
     <bx-loading type="overlay"></bx-loading>
   </div>
@@ -92,9 +80,13 @@ export default {
       axios
         .post(
           `${getDeploymentEndpoint()}registry-ui/backend/canvas/pvep/generate`,
-          { dsl: this.dsl },
+          {
+            dsl: this.dsl,
+            pvep: canvasStore.PVEP,
+          },
         )
         .then((response) => {
+          canvasStore.clearPVEP();
           if (response.status == 200) {
             this.pvep = response.data.pvep;
             this.loading = false;
@@ -128,7 +120,7 @@ export default {
               },
             });
           }
-          canvasStore.setDsl({});
+          canvasStore.clearDsl();
         })
         .catch((error) => {
           this.pvep = {};
@@ -142,11 +134,44 @@ export default {
         });
     },
     cancel() {
-      this.$router.push({
-        name: "build canvas",
-        query: { registrationCancelled: true },
-      });
-      canvasStore.setDsl({});
+      if (this.$route.query.edit == "false") {
+        this.$router.push({
+          name: "build canvas",
+          query: { registrationCancelled: true },
+        });
+        canvasStore.clearDsl();
+      } else {
+        this.$router.push({
+          name: "edit experiment in canvas",
+          params: { pvep: this.name },
+          query: { registrationCancelled: true },
+        });
+        canvasStore.setDsl({});
+      }
+    },
+    getBreadcumbs() {
+      let breadcrumbs = [
+        { name: "Virtual Experiments", path: "/" },
+        {
+          name: "Build Canvas",
+          path: "/build-canvas",
+        },
+        {
+          name: "Register Experiment",
+          path: `/build-canvas/register-experiment/${this.name}`,
+        },
+      ];
+
+      if (this.$route.query.edit == "true") {
+        breadcrumbs.splice(1, 0, {
+          name: this.name,
+          path: `/experiment/${this.pvep}`,
+        });
+        breadcrumbs[2].name = "Edit";
+        breadcrumbs[2].path = `/experiment/${this.pvep}/edit`;
+      }
+
+      return breadcrumbs;
     },
   },
 };

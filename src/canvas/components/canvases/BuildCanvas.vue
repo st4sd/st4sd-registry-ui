@@ -685,7 +685,7 @@ onMounted(() => {
     let graph = canvasStore.graph;
     addNodes(graph.nodes);
     addEdges(graph.edges);
-    canvasStore.setGraph({});
+    canvasStore.clearGraph();
   }
 });
 </script>

@@ -86,6 +86,7 @@ export default {
       dslInvalidTitle: null,
       dslMessage: null,
       dslBeingValidated: "active",
+      edit: null,
     };
   },
   mounted() {
@@ -93,8 +94,10 @@ export default {
     if (this.validateDsl()) {
       if (this.name.trim().length == 0) {
         this.experimentName = this.dsl.entrypoint["entry-instance"];
+        this.edit = false;
       } else {
         this.experimentName = this.name;
+        this.edit = true;
       }
       this.nameInvalid = validateExperimentName(this.experimentName);
     }
@@ -150,6 +153,9 @@ export default {
       if (!this.dslInvalid) {
         this.$router.push({
           name: "register experiment",
+          query: {
+            edit: this.edit,
+          },
           params: {
             name: this.experimentName,
           },

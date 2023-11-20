@@ -93,7 +93,7 @@
               </dds-link-list-item>
               <dds-link-list-item
                 v-if="isBuildCanvasEditingEnabled"
-                :href="`${getDeploymentEndpoint()}experiment/${id}/edit`"
+                :href="setPvepToLocalStorage()"
                 :disabled="!experiment.metadata.package.keywords.includes('internal-experiment')"
                 :title="!experiment.metadata.package.keywords.includes('internal-experiment') ? 'This experiment was created outside the canvas and therefore it cannot be edited' : ''"
               >
@@ -139,9 +139,13 @@
 <script>
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getDeploymentEndpoint } from "@/functions/public_path";
+
+import { canvasStore } from "@/canvas/stores/canvasStore.js";
+
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
 import runExperimentFormModal from "@/canvas/components/modals/experiment/runExperimentFormModal.vue";
 import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
+
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta-section/index.js";
 import "@carbon/web-components/es/components/input/index.js";
@@ -236,6 +240,10 @@ export default {
       let newStrArr = strArr.slice(startIndex);
       let endIndex = newStrArr.indexOf(".");
       return newStrArr.slice(0, endIndex).join("");
+    },
+    setPvepToLocalStorage() {
+      canvasStore.setPVEP(this.experiment);
+      return `${getDeploymentEndpoint()}experiment/${this.id}/edit`;
     },
   },
 };
