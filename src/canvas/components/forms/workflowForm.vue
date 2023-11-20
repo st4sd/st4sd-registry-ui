@@ -91,7 +91,7 @@
                 kind="danger"
                 @click="workflow.removeParameter(index)"
               >
-                <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+                <img src="@/assets/remove.svg" />
               </bx-btn>
             </bx-structured-list-cell>
           </bx-structured-list-row>
@@ -149,7 +149,7 @@
                 kind="danger"
                 @click="removeStep(index)"
               >
-                <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+                <img src="@/assets/remove.svg" />
               </bx-btn>
             </bx-structured-list-cell>
           </bx-structured-list-row>

@@ -44,70 +44,6 @@
         >
       </bx-accordion-item>
       <bx-accordion-item
-        :title-text="'Variables (' + variableKeys.length + ')'"
-      >
-        <bx-table-toolbar>
-          <bx-table-toolbar-content>
-            <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
-          </bx-table-toolbar-content>
-        </bx-table-toolbar>
-        <bx-structured-list v-if="variableKeys.length != 0">
-          <bx-structured-list-head>
-            <bx-structured-list-header-row>
-              <bx-structured-list-header-cell
-                >Name</bx-structured-list-header-cell
-              >
-              <bx-structured-list-header-cell
-                >Value</bx-structured-list-header-cell
-              >
-              <bx-structured-list-header-cell></bx-structured-list-header-cell>
-            </bx-structured-list-header-row>
-          </bx-structured-list-head>
-          <bx-structured-list-body>
-            <bx-structured-list-row
-              v-for="(key, idx) in variableKeys"
-              :key="idx"
-            >
-              <bx-structured-list-cell class="updateModals">
-                <bx-input
-                  id="add-component-variables-input"
-                  type="text"
-                  :value="key"
-                  @input="setVariableKey(idx, $event.target.value)"
-                  :invalid="checkKeyIsDuplicate(idx, key)"
-                  validity-message="Variable names must be unique"
-                  placeholder="variable name"
-                  colorScheme="light"
-                >
-                </bx-input>
-              </bx-structured-list-cell>
-              <bx-structured-list-cell class="updateModals">
-                <bx-input
-                  id="add-component-variables-input"
-                  type="text"
-                  :value="variableValues[idx]"
-                  @input="setVariableValue(idx, $event.target.value)"
-                  placeholder="variable value"
-                  colorScheme="light"
-                >
-                </bx-input>
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="updateModals structured-list-delete-button-bottom"
-              >
-                <bx-btn
-                  class="button-inside-cell"
-                  kind="danger"
-                  @click="removeVariable(idx)"
-                >
-                  <img src="@/assets/remove.svg" />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
-        </bx-structured-list>
-      </bx-accordion-item>
-      <bx-accordion-item
         :title-text="
           'Parameters (' + component.signature.parameters.length + ')'
         "
@@ -151,10 +87,9 @@
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="component.signature.parameters.length > 1"
                   @click="component.removeParameter(index)"
                 >
-                  <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+                  <img src="@/assets/remove.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -266,14 +201,15 @@
                   <span slot="label-text">Restart Hook On:</span>
                 </bx-input>
               </bx-structured-list-cell>
-              <bx-structured-list-cell class="structured-list-delete-button">
+              <bx-structured-list-cell
+                class="structured-list-delete-button structured-list-delete-button-bottom"
+              >
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="component.workflowAttributes.restartHookOn.length > 1"
                   @click="component.removeRestartHookOn(index)"
                 >
-                  <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+                  <img src="@/assets/remove.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -349,14 +285,15 @@
                   <span slot="label-text">Shutdown On:</span>
                 </bx-input>
               </bx-structured-list-cell>
-              <bx-structured-list-cell class="structured-list-delete-button">
+              <bx-structured-list-cell
+                class="structured-list-delete-button structured-list-delete-button-bottom"
+              >
                 <bx-btn
                   class="button-inside-cell"
                   kind="danger"
-                  v-if="component.workflowAttributes.shutdownOn.length > 1"
                   @click="component.removeShutdownOn(index)"
                 >
-                  <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+                  <img src="@/assets/remove.svg" />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -662,6 +599,70 @@
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
           <span slot="label-text">GPUs:</span>
         </bx-input>
+      </bx-accordion-item>
+      <bx-accordion-item
+        :title-text="'Variables (' + variableKeys.length + ')'"
+      >
+        <bx-table-toolbar>
+          <bx-table-toolbar-content>
+            <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
+          </bx-table-toolbar-content>
+        </bx-table-toolbar>
+        <bx-structured-list v-if="variableKeys.length != 0">
+          <bx-structured-list-head>
+            <bx-structured-list-header-row>
+              <bx-structured-list-header-cell
+                >Name</bx-structured-list-header-cell
+              >
+              <bx-structured-list-header-cell
+                >Value</bx-structured-list-header-cell
+              >
+              <bx-structured-list-header-cell></bx-structured-list-header-cell>
+            </bx-structured-list-header-row>
+          </bx-structured-list-head>
+          <bx-structured-list-body>
+            <bx-structured-list-row
+              v-for="(key, idx) in variableKeys"
+              :key="idx"
+            >
+              <bx-structured-list-cell class="updateModals">
+                <bx-input
+                  id="add-component-variables-input"
+                  type="text"
+                  :value="key"
+                  @input="setVariableKey(idx, $event.target.value)"
+                  :invalid="checkKeyIsDuplicate(idx, key)"
+                  validity-message="Variable names must be unique"
+                  placeholder="variable name"
+                  colorScheme="light"
+                >
+                </bx-input>
+              </bx-structured-list-cell>
+              <bx-structured-list-cell class="updateModals">
+                <bx-input
+                  id="add-component-variables-input"
+                  type="text"
+                  :value="variableValues[idx]"
+                  @input="setVariableValue(idx, $event.target.value)"
+                  placeholder="variable value"
+                  colorScheme="light"
+                >
+                </bx-input>
+              </bx-structured-list-cell>
+              <bx-structured-list-cell
+                class="updateModals structured-list-delete-button-bottom"
+              >
+                <bx-btn
+                  class="button-inside-cell"
+                  kind="danger"
+                  @click="removeVariable(idx)"
+                >
+                  <img src="@/assets/remove.svg" />
+                </bx-btn>
+              </bx-structured-list-cell>
+            </bx-structured-list-row>
+          </bx-structured-list-body>
+        </bx-structured-list>
       </bx-accordion-item>
     </bx-accordion>
   </div>

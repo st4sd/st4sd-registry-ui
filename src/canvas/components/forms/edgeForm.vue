@@ -84,7 +84,7 @@
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
-            <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+            <img src="@/assets/remove.svg" />
           </bx-btn>
         </bx-structured-list-cell>
       </bx-structured-list-row>
@@ -142,7 +142,7 @@
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
-            <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+            <img src="@/assets/remove.svg" />
           </bx-btn>
         </bx-structured-list-cell>
       </bx-structured-list-row>
