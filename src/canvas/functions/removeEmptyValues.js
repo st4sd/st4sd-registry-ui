@@ -42,7 +42,7 @@ export function removeEmptyDefaultsFromParameters(parameters) {
   parameters.map((parameter) => {
     //Make sure the key exists
     if (parameter.default) {
-      if (parameter.default.trim() == "") {
+      if (parameter.default.toString().trim() == "") {
         delete parameter.default;
       }
     } else {
