@@ -322,12 +322,13 @@
           "
           placeholder="max restarts"
           colorScheme="light"
+          label="Max Restarts:"
         >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Max Restarts:</span>
         </bx-input>
 
-        <bx-structured-list>
+        <bx-structured-list
+          v-if="component.workflowAttributes.shutdownOn != undefined"
+        >
           <bx-structured-list-head>
             <bx-structured-list-header-row>
               <bx-structured-list-header-cell
@@ -337,7 +338,9 @@
               >
             </bx-structured-list-header-row>
           </bx-structured-list-head>
-          <bx-structured-list-body>
+          <bx-structured-list-body
+            v-if="component.workflowAttributes.shutdownOn != undefined"
+          >
             <bx-structured-list-row
               v-for="(shutdownOn, index) in component.workflowAttributes
                 .shutdownOn"

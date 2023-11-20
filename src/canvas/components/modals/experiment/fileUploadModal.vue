@@ -14,13 +14,14 @@
         </bx-file-drop-container>
       </bx-file-uploader> -->
       <bx-toggle
+        id="fileToggle"
         checked="true"
         checked-text="Canvas project files"
         label-text="Choose file type (Canvas project files or DSL)"
         unchecked-text="DSL"
         @bx-toggle-changed="toggleGraphUpload"
       ></bx-toggle>
-      <div v-if="graphUpload">
+      <div v-if="graphUpload" class="fileUpload">
         <label for="graphFile">Upload a Canvas project file</label>
         <input
           @change="updateGraphFile"
@@ -31,23 +32,28 @@
         />
       </div>
       <div v-else>
-        <label for="dslFile">Upload a DSL file</label>
-        <input
-          @change="updateDSLFile"
-          type="file"
-          accept="application/JSON"
-          name="dslFile"
-          id="dslFile"
-        />
-        <hr />
-        <label for="inputFile">Upload an input file</label>
-        <input
-          @change="updateInputFile"
-          type="file"
-          accept="application/JSON"
-          name="inputFile"
-          id="inputFile"
-        />
+        <div class="fileUpload">
+          <label for="dslFile">Upload a DSL file</label>
+          <input
+            @change="updateDSLFile"
+            type="file"
+            accept="application/JSON"
+            name="dslFile"
+            id="dslFile"
+          />
+        </div>
+        <bx-accordion>
+          <bx-accordion-item title-text="PVEP file to add inputs (optional)">
+            <label for="inputFile">Upload PVEP file</label>
+            <input
+              @change="updateInputFile"
+              type="file"
+              accept="application/JSON"
+              name="inputFile"
+              id="inputFile"
+            />
+          </bx-accordion-item>
+        </bx-accordion>
       </div>
     </bx-modal-body>
     <bx-modal-footer>
@@ -97,7 +103,7 @@ export default {
       if (this.graphUpload == true) {
         return this.graphFile == null || this.submitted;
       } else {
-        return this.dslFile == null || this.inputFile == null || this.submitted;
+        return this.dslFile == null || this.submitted;
       }
     },
     updateGraphFile(event) {
@@ -136,7 +142,11 @@ label {
   margin-top: 1rem;
 }
 
-hr {
+br {
   margin: 1rem 0;
+}
+
+.fileUpload {
+  padding: 0 1rem 1rem;
 }
 </style>

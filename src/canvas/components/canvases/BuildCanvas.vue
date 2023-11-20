@@ -378,69 +378,69 @@ let modalVisibilities = {
   fileUploadModal: ref(false),
   registerExperimentModal: ref(false),
 };
+
 let toastNotifications = [];
-const displayUploadedElements = (files) => {
-  if (Array.isArray(files)) {
-    let dslFileContents = "";
+const displayUploadedElements = async (files) => {
+  if (files.length == 2) {
+    let dslFileContents = await readFile(files[0]);
+    if (files[1] != null) {
+      localPVEP.value = await readFile(files[1]);
+    }
+    nodes.value = [];
+    edges.value = [];
+    const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
+    //Change ID system and add workflow dimensions
+    if (uploadedGraph != undefined) {
+      addWorkflowNodesToCanvas(
+        uploadedGraph,
+        workflowDimensions,
+        getId,
+        addNodes,
+        addEdges,
+      );
+    } else {
+      let dslFileUploadError = {
+        kind: "error",
+        title: "Unable to load DSL files",
+        subtitle: "The uploaded file is not in the expected format.",
+        caption: "Did you choose the correct file type?",
+      };
+      toastNotifications.push(dslFileUploadError);
+    }
+    addNodes(uploadedGraph.nodes);
+    addEdges(uploadedGraph.edges);
 
-    readFile(files[0]).then(function (dslResult) {
-      dslFileContents = dslResult;
-
-      readFile(files[1]).then(function (inputResult) {
-        localPVEP.value = inputResult;
-        nodes.value = [];
-        edges.value = [];
-        const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
-        if (uploadedGraph != undefined) {
-          //Change ID system and add workflow dimensions
-          addWorkflowNodesToCanvas(
-            uploadedGraph,
-            workflowDimensions,
-            getId,
-            addNodes,
-            addEdges,
-          );
-        } else {
-          let dslFileUploadError = {
-            kind: "error",
-            title: "Unable to load DSL files",
-            subtitle: "The uploaded file is not in the expected format.",
-            caption: "Did you choose the correct file type?",
-          };
-          toastNotifications.push(dslFileUploadError);
-        }
-        toggleModalVisibility("fileUploadModal");
-      });
-    });
+    toggleModalVisibility("fileUploadModal");
   } else {
-    let graphFileContents = "";
-    readFile(files).then(function (graphResult) {
-      graphFileContents = graphResult;
-      if (graphFileContents.nodes) {
-        addNodes(graphFileContents.nodes);
-        addEdges(graphFileContents.edges);
-      } else {
-        let canvasProjectFileUploadError = {
-          kind: "error",
-          title: "Unable to load project files",
-          subtitle: "The uploaded file is not in the expected format.",
-          caption: "Did you choose the correct file type?",
-        };
-        toastNotifications.push(canvasProjectFileUploadError);
-      }
-      toggleModalVisibility("fileUploadModal");
-    });
+    let graphFileContents = await readFile(files);
+    if (graphFileContents.nodes) {
+      addNodes(graphFileContents.nodes);
+      addEdges(graphFileContents.edges);
+    } else {
+      let canvasProjectFileUploadError = {
+        kind: "error",
+        title: "Unable to load project files",
+        subtitle: "The uploaded file is not in the expected format.",
+        caption: "Did you choose the correct file type?",
+      };
+      toastNotifications.push(canvasProjectFileUploadError);
+    }
+    toggleModalVisibility("fileUploadModal");
   }
 };
+
 function readFile(file) {
   return new Promise((resolve, reject) => {
-    var fileReader = new FileReader();
-    fileReader.onload = (f) => {
-      const contence = JSON.parse(f.target.result);
-      resolve(contence);
-    };
-    fileReader.onerror = reject;
-    fileReader.readAsText(file);
+    try {
+      var fileReader = new FileReader();
+      fileReader.onload = (f) => {
+        const contents = JSON.parse(f.target.result);
+        resolve(contents);
+      };
+      fileReader.readAsText(file);
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
