@@ -682,6 +682,8 @@ import "@carbon/web-components/es/components/accordion/index.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
+let invalidVariables = {};
+
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
   emits: ["update", "removeParent", "add"],
@@ -773,7 +775,16 @@ export default {
     },
     checkKeyIsDuplicate(idx, key) {
       let invalid = this.variableKeys.toSpliced(idx, 1).includes(key);
-      this.$emit("invalid", invalid);
+      if (invalid) {
+        invalidVariables[idx] = invalid;
+        this.$emit("invalid", invalid);
+      } else if (idx in invalidVariables) {
+        delete invalidVariables[idx];
+        // Only emit an invalidity event with "false"
+        // if the invalidVariables dictionary has no keys
+        if (Object.keys(invalidVariables).length == 0)
+          this.$emit("invalid", invalid);
+      }
       return invalid;
     },
   },
