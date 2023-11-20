@@ -23,6 +23,9 @@ export default function buildExperiment(nodes, edges, entryNode) {
     if (inputs.length > 0) {
       initialiseEntrypoint(result, inputs);
     }
+    if (Object.keys(result.entrypoint.execute[0].args).length == 0) {
+      delete result.entrypoint.execute[0].args;
+    }
     workflows.forEach((workflow) => {
       //before adding the workflows to the experiment dsl, the definition needs
       //to be updated to reflect the edges
@@ -86,6 +89,9 @@ function createExecutionConfig(workflow, nodes, edges) {
         });
       }
     });
+    if (Object.keys(execution.args).length == 0) {
+      delete execution.args;
+    }
     newExecute.push(execution);
   });
   workflow.definition.execute = newExecute;
