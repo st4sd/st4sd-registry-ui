@@ -16,6 +16,7 @@
 
       <Panel :position="PanelPosition.TopRight" class="controls">
         <bx-btn
+          v-if="!registryUISharedState.isGlobalRegistry"
           title="Transform Experiment"
           @click="$emit('transformButtonClicked')"
         >
@@ -127,6 +128,8 @@ import {
   getWorkflowsEdges,
   hide,
 } from "@/canvas/functions/hideExpand";
+
+import { registryUISharedState } from "@/stores/registryUISharedState";
 
 /**
  * useVueFlow provides all event handlers and store properties
