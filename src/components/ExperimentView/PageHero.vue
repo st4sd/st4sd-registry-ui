@@ -70,6 +70,7 @@
               </dds-link-list-item>
               <dds-link-list-item
                 :href="`${getDeploymentEndpoint()}experiment/${id}/parameterisation-options`"
+                v-if="isParameterisationEnabled"
               >
                 Parameterisation Options
                 <img
@@ -94,12 +95,26 @@
               <dds-link-list-item
                 v-if="isBuildCanvasEditingEnabled"
                 :href="setPvepToLocalStorage()"
-                :disabled="!experiment.metadata.package.keywords.includes('internal-experiment')"
-                :title="!experiment.metadata.package.keywords.includes('internal-experiment') ? 'This experiment was created outside the canvas and therefore it cannot be edited' : ''"
+                :disabled="
+                  !experiment.metadata.package.keywords.includes(
+                    'internal-experiment',
+                  )
+                "
+                :title="
+                  !experiment.metadata.package.keywords.includes(
+                    'internal-experiment',
+                  )
+                    ? 'This experiment was created outside the canvas and therefore it cannot be edited'
+                    : ''
+                "
               >
                 Edit Experiment
                 <img
-                  v-if="experiment.metadata.package.keywords.includes('internal-experiment')"
+                  v-if="
+                    experiment.metadata.package.keywords.includes(
+                      'internal-experiment',
+                    )
+                  "
                   slot="icon"
                   src="@/assets/arrow--right.svg"
                   width="20"
