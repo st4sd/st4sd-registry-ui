@@ -12,8 +12,26 @@
       },
     ]"
   />
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="error in errors"
+      :key="error.description"
+      kind="error"
+      :title="error.description"
+      :caption="error.statusText + ' (error ' + error.code + ')'"
+      timeout="10000"
+    >
+    </bx-toast-notification>
+  </div>
   <div v-if="parameterisationOptionsLoading" id="loading-container">
     <bx-loading type="overlay"></bx-loading>
+  </div>
+  <div v-else-if="fullPageHttpError.isError">
+    <HttpErrorEmptyState
+      class="full-height-empty-state"
+      :errorStatusText="fullPageHttpError.statusText"
+      :errorCode="fullPageHttpError.status"
+    />
   </div>
 
   <div v-else>
@@ -29,6 +47,7 @@
 <script>
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import ParameterisationContainer from "@/components/ParameterisationView/ParameterisationContainer.vue";
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 import axios from "axios";
 
@@ -37,6 +56,7 @@ export default {
   components: {
     St4sdBreadcrumb,
     ParameterisationContainer,
+    HttpErrorEmptyState,
   },
   props: {
     id: {
@@ -47,6 +67,8 @@ export default {
   data() {
     return {
       parameterisationOptionsLoading: true,
+      fullPageHttpError: { isError: false },
+      errors: [],
       pvep: null,
       initialPvepSet: false,
       initialPvep: null,
@@ -62,12 +84,26 @@ export default {
             "/parameterisation",
         )
         .then((response) => {
-          this.parameterisationOptionsLoading = false;
           this.pvep = response.data.entry;
           if (this.initialPvepSet != true) {
             this.initialPvep = JSON.parse(JSON.stringify(response.data.entry));
           }
           this.initialPvepSet = true;
+        })
+        .catch((error) => {
+          this.errors.push({
+            description: "Unable to fetch parameterisation",
+            statusText: error.response.statusText,
+            code: error.response.status,
+          });
+          this.fullPageHttpError = {
+            statusText: error.response.statusText,
+            status: error.response.status,
+            isError: true,
+          };
+        })
+        .finally(() => {
+          this.parameterisationOptionsLoading = false;
         });
     },
     postNewParameterisation(pvep) {
@@ -101,13 +137,11 @@ export default {
           }
         })
         .catch((error) => {
-          if (error.response.status == 400) {
-            alert(`${error.response.data.message}`);
-          } else {
-            alert(
-              "Experiment not found or internal error while creating experiment",
-            );
-          }
+          this.errors.push({
+            description: error.response.data.message,
+            statusText: error.response.statusText,
+            code: error.response.status,
+          });
         });
     },
     resetPvep() {
@@ -121,6 +155,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/empty_state_styles.scss";
+@import "@/styles/toast-notification-styles.scss";
+
 #loading-container {
   display: flex;
   align-items: center;
