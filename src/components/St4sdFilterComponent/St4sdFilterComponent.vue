@@ -89,6 +89,10 @@ const domainFilters = [
         name: "surrogate",
         displayName: "Surrogate",
       },
+      {
+        name: "internal-experiment",
+        displayName: "Internal Experiment",
+      },
     ],
   },
 ];
