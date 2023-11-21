@@ -95,6 +95,7 @@ import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/search/index.js";
 import router from "@/router";
 import { registryUISharedState } from "@/stores/registryUISharedState";
+import { getDeploymentEndpoint } from "@/functions/public_path";
 
 let isGlobalRegistryLibraryEnabled = ref(
   registryUISharedState.isGlobalRegistryLibraryEnabled,
@@ -109,7 +110,9 @@ async function getNodesFromUrls() {
   let nodes = [];
 
   await axios
-    .get(window.location.origin + "/registry-ui/backend/canvas/graphs")
+    .get(
+      `${getDeploymentEndpoint()}registry-ui/backend/canvas/graphs-library/internal`,
+    )
     .then((response) => {
       for (let entryIndex in response.data.entries) {
         let graph = response.data.entries[entryIndex].graph;
