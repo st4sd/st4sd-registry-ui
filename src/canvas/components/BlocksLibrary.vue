@@ -32,7 +32,13 @@
       />
     </div>
     <div id="nodes-container">
-      <div v-for="element in elements" :key="element.id" class="node">
+      <div
+        v-for="element in elements.sort((a, b) =>
+          a.label.localeCompare(b.label),
+        )"
+        :key="element.id"
+        class="node"
+      >
         <div
           class="vue-flow__node-workflow"
           :draggable="true"
