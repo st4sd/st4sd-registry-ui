@@ -12,7 +12,7 @@
     <NodeResizer />
     <Handle type="target" :position="Position.Top" />
     <slot name="node-workflow">{{ props.label }}</slot>
-    <!-- <Handle type="source" :position="Position.Bottom" /> -->
+    <Handle type="source" :position="Position.Bottom" />
   </div>
 </template>
 

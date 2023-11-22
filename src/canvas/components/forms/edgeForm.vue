@@ -20,7 +20,7 @@
         <bx-structured-list-header-cell>Suffix</bx-structured-list-header-cell>
       </bx-structured-list-header-row>
     </bx-structured-list-head>
-    <bx-structured-list-body v-if="sourceNode.type == 'workflow'">
+    <bx-structured-list-body v-if="sourceNodeType == 'workflow-input'">
       <bx-structured-list-row
         v-for="(argument, index) in argumentsArray"
         :key="index"
@@ -89,7 +89,7 @@
         </bx-structured-list-cell>
       </bx-structured-list-row>
     </bx-structured-list-body>
-    <bx-structured-list-body v-if="sourceNode.type == 'component'">
+    <bx-structured-list-body v-else>
       <bx-structured-list-row
         v-for="(argument, index) in argumentsArray"
         :key="index"
@@ -167,6 +167,7 @@ export default {
     allEdges: Object,
     sourceNode: Object,
     targetNode: Object,
+    sourceNodeType: String,
   },
   emits: ["created", "updated"],
   data() {
@@ -181,7 +182,7 @@ export default {
   mounted() {
     this.edge = this.edgeProp;
     //Get source node target node and arguments
-    this.argumentsArray = getArguments(this.sourceNode, this.edgeProp);
+    this.argumentsArray = getArguments(this.sourceNodeType, this.edgeProp);
     //Get all possible arguments that have not been used in other connections
     this.possibleArguments = getPossibleArgumentNames(
       this.edgeProp,
@@ -200,7 +201,7 @@ export default {
       if (this.argumentsArray.length != uniqueArguments.size) {
         alert("Please make sure argument names are unique");
       } else {
-        if (this.sourceNode.type == "workflow") {
+        if (this.sourceNodeType == "workflow-input") {
           this.argumentsArray.map((x) => {
             x.name = x.name.trim();
             x.value = x.value.trim();
@@ -239,7 +240,7 @@ export default {
       if (this.argumentsArray.length != uniqueArguments.size) {
         alert("Please make sure argument names are unique");
       } else {
-        if (this.sourceNode.type == "workflow") {
+        if (this.sourceNodeType == "workflow-input") {
           this.argumentsArray.map((x) => {
             x.name = x.name.trim();
             x.value = x.value.trim();

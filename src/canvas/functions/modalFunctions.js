@@ -43,18 +43,19 @@ export function getPossibleArgumentNames(edge, allNodes, allEdges) {
 export function getSourceAndTargetNodes(allNodes, edge) {
   let sourceNode = allNodes.find((node) => node.id == edge.source);
   let targetNode = allNodes.find((node) => node.id == edge.target);
+  let sourceNodeType = sourceNode.type;
   if (sourceNode.type == "workflow-input") {
     sourceNode = allNodes.find((node) => node.id == sourceNode.parentNode);
   }
-  return { sourceNode, targetNode };
+  return { sourceNode, targetNode, sourceNodeType };
 }
 
-export function getArguments(sourceNode, edge) {
+export function getArguments(sourceNodeType, edge) {
   let argumentsArray = [];
   //Check if we are dealing with a new edge in progress (to be created)
   //or an existing edge that's being updated
   if (edge.definition != undefined) {
-    if (sourceNode.type == "workflow") {
+    if (sourceNodeType == "workflow-input") {
       //Transform arguments into array for ease of adding and removing
       //it's hard to change object keys
       argumentsArray = [];
@@ -66,7 +67,7 @@ export function getArguments(sourceNode, edge) {
           suffix: result.suffix,
         });
       });
-    } else if (edge.sourceNode.type == "component") {
+    } else {
       //Transform arguments into array for ease of adding and removing
       //it's hard to change object keys
       argumentsArray = [];

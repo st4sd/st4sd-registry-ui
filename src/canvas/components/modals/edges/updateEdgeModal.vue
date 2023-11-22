@@ -16,6 +16,7 @@
         :allEdges="allEdges"
         :sourceNode="sourceNode"
         :targetNode="targetNode"
+        :sourceNodeType="sourceNodeType"
         @updated="updated"
       />
       <br />
@@ -53,6 +54,7 @@ export default {
     return {
       sourceNode: {},
       targetNode: {},
+      sourceNodeType: "",
       loaded: false,
     };
   },
@@ -60,6 +62,7 @@ export default {
     let result = getSourceAndTargetNodes(this.allNodes, this.edgeProp);
     this.sourceNode = result.sourceNode;
     this.targetNode = result.targetNode;
+    this.sourceNodeType = result.sourceNodeType;
     if (this.sourceNode != {} && this.targetNode != {}) {
       this.loaded = true;
     }
