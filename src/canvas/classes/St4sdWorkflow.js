@@ -52,10 +52,11 @@ export default class St4sdWorkflow {
   }
   setParameters(parameters) {
     if (Array.isArray(parameters)) {
-      this.signature.parameters = parameters;
-      this.signature.parameters = this.signature.parameters.filter(
-        (parameter) => parameter.name.trim() != "",
-      );
+      parameters.forEach((parameter) => {
+        if (parameter.name.trim() != "") {
+          this.signature.parameters.push({ ...parameter });
+        }
+      });
     }
   }
   addParameter() {

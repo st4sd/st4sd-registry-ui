@@ -131,7 +131,7 @@
       :allNodes="allNodes"
       :parentNode="parentNode"
       @bx-modal-closed="toggleModalVisibility('updateWorkflowModal')"
-      @update="updateNode"
+      @update="nodeUpdated"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
@@ -142,7 +142,7 @@
       :allNodes="allNodes"
       :parentNode="parentNode"
       @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
-      @updated="updateNode"
+      @updated="nodeUpdated"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
     />
@@ -585,8 +585,8 @@ onNodeDoubleClick(({ node }) => {
   }
 });
 
-const updateNode = (updatedNode) => {
-  if (updatedNode.type == "workflow") {
+const nodeUpdated = () => {
+  if (selectedNode.type == "workflow") {
     toggleModalVisibility("updateWorkflowModal");
   } else {
     toggleModalVisibility("updateComponentModal");

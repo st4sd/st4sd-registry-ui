@@ -29,7 +29,7 @@
       <bx-modal-footer-button
         kind="primary"
         type="submit"
-        @click="getComponentDefinition"
+        @click="updateComponentDefinition"
         :disabled="disabled"
       >
         Save
@@ -59,11 +59,11 @@ export default {
     removeParent() {
       this.$emit("removeParent");
     },
-    getComponentDefinition() {
+    updateComponentDefinition() {
       this.$refs.componentForm.update();
     },
-    update(newComponentNode) {
-      this.$emit("updated", newComponentNode);
+    update() {
+      this.$emit("updated");
     },
     submitDisabled(disabled) {
       this.disabled = disabled;
