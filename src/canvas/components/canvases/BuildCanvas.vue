@@ -130,8 +130,9 @@
       :node="selectedNode"
       :allNodes="allNodes"
       :parentNode="parentNode"
+      :dslValidationErrorProp="dslValidationErrors"
       @bx-modal-closed="toggleModalVisibility('updateWorkflowModal')"
-      @update="nodeUpdated"
+      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
@@ -141,8 +142,9 @@
       :node="selectedNode"
       :allNodes="allNodes"
       :parentNode="parentNode"
+      :dslValidationErrorProp="dslValidationErrors"
       @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
-      @updated="nodeUpdated"
+      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
     />
@@ -195,8 +197,19 @@
     <registerExperiment
       v-if="modalVisibilities.registerExperimentModal.value"
       @bx-modal-closed="toggleModalVisibility('registerExperimentModal')"
+      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
+      @dslValidationError="setDslValidationError"
       open="true"
       :name="props.pvep"
+      :allNodes="allNodes"
+      :allEdges="allEdges"
+    />
+    <ShowDslValidationErrors
+      v-if="modalVisibilities.showDslErrors.value"
+      @bx-modal-closed="toggleModalVisibility('showDslErrors')"
+      @dslValidationError="setDslValidationError"
+      open="true"
+      :dslErrorsProp="dslValidationErrors"
       :allNodes="allNodes"
       :allEdges="allEdges"
     />
@@ -232,6 +245,7 @@ import selectEntryPointModal from "@/canvas/components/modals/experiment/selectE
 import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
+import ShowDslValidationErrors from "@/canvas/components/modals/experiment/showDslValidationErrors.vue";
 
 //Stores
 import { canvasStore } from "@/canvas/stores/canvasStore";
@@ -377,6 +391,7 @@ let modalVisibilities = {
   deleteModal: ref(false),
   fileUploadModal: ref(false),
   registerExperimentModal: ref(false),
+  showDslErrors: ref(false),
 };
 
 let toastNotifications = ref([]);
@@ -585,14 +600,6 @@ onNodeDoubleClick(({ node }) => {
   }
 });
 
-const nodeUpdated = () => {
-  if (selectedNode.type == "workflow") {
-    toggleModalVisibility("updateWorkflowModal");
-  } else {
-    toggleModalVisibility("updateComponentModal");
-  }
-};
-
 const openDeleteModal = () => {
   toggleModalVisibility("deleteModal");
   //close update modals
@@ -688,6 +695,11 @@ onMounted(() => {
     canvasStore.clearGraph();
   }
 });
+
+let dslValidationErrors = ref([]);
+const setDslValidationError = (dslError) => {
+  dslValidationErrors.value = dslError;
+};
 </script>
 
 <style lang="scss" src="@/canvas/styles/main.scss">

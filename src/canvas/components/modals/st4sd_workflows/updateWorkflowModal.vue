@@ -1,10 +1,29 @@
 <template>
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      id="dsl-valid"
+      kind="success"
+      timeout="10000"
+      @bx-notification-closed="workflowUpdated = false"
+      :open="workflowUpdated"
+      title="Workflow successfully updated"
+    />
+  </div>
   <bx-modal open>
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading>Update workflow details</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
+      <bx-inline-notification
+        id="dsl-invalid-notification"
+        kind="error"
+        :open="dslValidationErrorProp.length != 0 ? true : false"
+        hide-close-button
+        title="DSL Validation Errors"
+        subtitle="There are errors in the DSL validation, click the show errors button to see them"
+      />
+
       <workflowForm
         ref="workflowForm"
         :node="node"
@@ -21,6 +40,12 @@
       </bx-btn>
     </bx-modal-body>
     <bx-modal-footer>
+      <bx-modal-footer-button
+        v-if="dslValidationErrorProp.length != 0"
+        kind="tertiary"
+        @click="$emit('openShowDslErrors')"
+        >Show Errors</bx-modal-footer-button
+      >
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
@@ -35,11 +60,24 @@
 import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 export default {
   components: { workflowForm },
-  props: { node: Object, parentNode: Object, allNodes: Object },
-  emits: ["update", "delete", "removeParent", "stepDeleted"],
-  data() {
-    return {};
+  props: {
+    node: Object,
+    parentNode: Object,
+    allNodes: Object,
+    dslValidationErrorProp: Array,
   },
+  data() {
+    return {
+      workflowUpdated: false,
+    };
+  },
+  emits: [
+    "update",
+    "delete",
+    "removeParent",
+    "stepDeleted",
+    "openShowDslErrors",
+  ],
   methods: {
     emitDelete() {
       this.$emit("delete");
@@ -53,8 +91,8 @@ export default {
     save() {
       this.$refs.workflowForm.update();
     },
-    update(updatedWorkflow) {
-      this.$emit("update", updatedWorkflow);
+    update() {
+      this.workflowUpdated = true;
     },
   },
 };
@@ -64,4 +102,5 @@ export default {
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
+@import "@/styles/toast-notification-styles.scss";
 </style>

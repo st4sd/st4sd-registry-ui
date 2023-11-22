@@ -1,5 +1,5 @@
 <template>
-  <bx-modal open class="no-transform">
+  <bx-modal open>
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
       <bx-modal-heading>Register experiment</bx-modal-heading>
@@ -41,6 +41,13 @@
       <br />
     </bx-modal-body>
     <bx-modal-footer>
+      <bx-modal-footer-button
+        data-modal-close
+        kind="tertiary"
+        @click="$emit('openShowDslErrors')"
+        :disabled="!dslInvalid"
+        >Show Errors</bx-modal-footer-button
+      >
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
@@ -76,7 +83,7 @@ export default {
     allNodes: Object,
     allEdges: Object,
   },
-  emits: ["finished"],
+  emits: ["openShowDslErrors", "dslValidationError"],
   data() {
     return {
       experimentName: null,
@@ -84,8 +91,9 @@ export default {
       nameInvalid: true,
       dslInvalid: null,
       dslInvalidTitle: null,
-      dslMessage: null,
+      dslMessage: "",
       dslBeingValidated: "active",
+      dslErrors: null,
       edit: null,
     };
   },
@@ -132,16 +140,16 @@ export default {
                 edges: this.allEdges,
               });
             }
+            this.$emit("dslValidationError", []);
           })
           .catch((error) => {
             this.dslBeingValidated = "error";
             this.dslInvalid = true;
             this.dslInvalidTitle = error.response.data.message;
-            this.dslMessage = `Message: ${error.response.data.problems.map(
-              (problem) => problem.msg,
-            )}\nType: ${error.response.data.problems.map(
-              (problem) => problem.type,
-            )}`;
+            this.dslMessage =
+              "There are errors in the DSL validation, click the show errors button to see them";
+            this.dslErrors = error.response.data.problems;
+            this.$emit("dslValidationError", this.dslErrors);
           });
       }
     },
