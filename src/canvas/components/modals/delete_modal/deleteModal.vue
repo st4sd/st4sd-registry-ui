@@ -9,6 +9,7 @@
         >Are you sure you want to delete this {{ nodeType }}?</bx-modal-heading
       >
     </bx-modal-header>
+    <br />
     <bx-modal-footer>
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button

@@ -16,6 +16,19 @@
       <Controls />
       <Panel :position="PanelPosition.TopRight" class="controls">
         <bx-btn
+          size="sm"
+          title="Reset canvas"
+          @click="toggleModalVisibility('resetConfirmModal')"
+          :disabled="!allNodes.some((node) => node.type != 'input')"
+        >
+          <img
+            class="canvas-logo"
+            width="16"
+            heigth="16"
+            src="@/assets/reset.svg"
+          />
+        </bx-btn>
+        <bx-btn
           title="Configure Experiment"
           @click="toggleModalVisibility('selectEntryPointModal')"
           kind="primary"
@@ -171,6 +184,11 @@
       @delete="deleteNode"
       @bx-modal-closed="toggleModalVisibility('deleteModal')"
     />
+    <canvasResetConfirmModal
+      v-if="modalVisibilities.resetConfirmModal.value"
+      @reset="resetCanvas"
+      @dds-expressive-modal-closed="toggleModalVisibility('resetConfirmModal')"
+    />
     <!-- Nesting -->
     <nestNodeModal
       v-if="modalVisibilities.nestingModal.value"
@@ -243,6 +261,7 @@ import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeMo
 import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
+import canvasResetConfirmModal from "@/canvas/components/modals/canvas-reset-modal/canvasResetConfirmModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
 import ShowDslValidationErrors from "@/canvas/components/modals/experiment/showDslValidationErrors.vue";
@@ -262,7 +281,7 @@ import {
   addWorkflowNode,
   addWorkflowNodesToCanvas,
   isConnectionValid,
-  setUpCanvas,
+  setupInputs,
 } from "@/canvas/functions/canvasFunctions";
 import {
   isNestingValid,
@@ -308,6 +327,7 @@ const {
   nodes,
   edges,
 } = useVueFlow(elements);
+setupInputs(elements);
 
 async function getGraph() {
   let graphData;
@@ -318,9 +338,7 @@ async function getGraph() {
       if (graphResponse.data.length != 0) {
         graphData = graphResponse.data;
       }
-
-      nodes.value = [];
-      edges.value = [];
+      resetCanvas();
       const uploadedGraph = getEntryWorkflowBlock(graphData);
       //Change ID system and add workflow dimensions
       addWorkflowNodesToCanvas(
@@ -366,8 +384,6 @@ function setupCanvas() {
   }
 }
 
-setUpCanvas(elements);
-
 let allNodes = nodes;
 let allEdges = edges;
 let workflowDimensions = {};
@@ -379,6 +395,7 @@ const onDragOver = (event) => {
     event.dataTransfer.dropEffect = "move";
   }
 };
+
 let modalVisibilities = {
   createWorkflowModal: ref(false),
   createEdgeModal: ref(false),
@@ -391,6 +408,7 @@ let modalVisibilities = {
   deleteModal: ref(false),
   fileUploadModal: ref(false),
   registerExperimentModal: ref(false),
+  resetConfirmModal: ref(false),
   showDslErrors: ref(false),
 };
 
@@ -401,8 +419,7 @@ const displayUploadedElements = async (files) => {
     if (files[1] != null) {
       localPVEP.value = await readFile(files[1]);
     }
-    nodes.value = [];
-    edges.value = [];
+    resetCanvas();
     const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
     //Change ID system and add workflow dimensions
     if (uploadedGraph != undefined) {
@@ -443,6 +460,15 @@ const displayUploadedElements = async (files) => {
     toggleModalVisibility("fileUploadModal");
   }
 };
+
+function resetCanvas() {
+  nodes.value = [];
+  edges.value = [];
+  setupInputs(elements);
+  if (modalVisibilities.resetConfirmModal.value) {
+    toggleModalVisibility("resetConfirmModal");
+  }
+}
 
 function readFile(file) {
   return new Promise((resolve, reject) => {

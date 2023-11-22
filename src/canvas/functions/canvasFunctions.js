@@ -6,7 +6,7 @@ import { ref } from "vue";
 //This function will make sure the canvas always starts with 3 input Nodes
 //The nodes will be hidden by default and can be accessed/updated using
 //the "config experiment" button
-export function setUpCanvas(graph) {
+export function setupInputs(graph) {
   //Make sure the graph exists
   if (graph != undefined) {
     //If canvas nodes do not exist or the canvas has no nodes we initilise it
