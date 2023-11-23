@@ -178,17 +178,6 @@
       @update="toggleModalVisibility('updateEdgeModal')"
       @delete="openDeleteModal"
     />
-    <deleteModal
-      v-if="modalVisibilities.deleteModal.value"
-      :nodeType="nodeType"
-      @delete="deleteNode"
-      @bx-modal-closed="toggleModalVisibility('deleteModal')"
-    />
-    <canvasResetConfirmModal
-      v-if="modalVisibilities.resetConfirmModal.value"
-      @reset="resetCanvas"
-      @dds-expressive-modal-closed="toggleModalVisibility('resetConfirmModal')"
-    />
     <!-- Nesting -->
     <nestNodeModal
       v-if="modalVisibilities.nestingModal.value"
@@ -206,30 +195,66 @@
       @update="toggleModalVisibility('selectEntryPointModal')"
     />
     <fileUploadModal
-      @upload="displayUploadedElements"
+      open
+      title="Upload Files"
+      @upload="uploadFiles"
       v-if="modalVisibilities.fileUploadModal.value"
       @bx-modal-closed="toggleModalVisibility('fileUploadModal')"
-      title="Upload Files"
-      open="true"
     />
     <registerExperiment
+      open
       v-if="modalVisibilities.registerExperimentModal.value"
       @bx-modal-closed="toggleModalVisibility('registerExperimentModal')"
       @openShowDslErrors="toggleModalVisibility('showDslErrors')"
       @dslValidationError="setDslValidationError"
-      open="true"
       :name="props.pvep"
       :allNodes="allNodes"
       :allEdges="allEdges"
     />
     <ShowDslValidationErrors
+      open
       v-if="modalVisibilities.showDslErrors.value"
       @bx-modal-closed="toggleModalVisibility('showDslErrors')"
       @dslValidationError="setDslValidationError"
-      open="true"
       :dslErrorsProp="dslValidationErrors"
       :allNodes="allNodes"
       :allEdges="allEdges"
+    />
+    <!-- Confirm Modals -->
+    <!-- Confirm upload files-->
+    <confirmModal
+      open
+      v-if="modalVisibilities.confirmUploadModal.value"
+      title="Upload file?"
+      paragraph1="Performing this action will replace all the templates and connections
+        on the canvas with the contents of the uploaded file."
+      paragraph2="This action cannot be undone. Do you still want to proceed?"
+      buttonText="Yes, upload the file"
+      @dds-expressive-modal-closed="toggleModalVisibility('confirmUploadModal')"
+      @confirm-button-clicked="applyUploadedFiles"
+    />
+    <!-- Confirm delete node -->
+    <confirmModal
+      open
+      v-if="modalVisibilities.deleteModal.value"
+      :title="`Delete ${nodeType}?`"
+      :paragraph1="`Are you sure you want to delete this ${nodeType}?`"
+      paragraph2="This action cannot be undone."
+      :buttonText="`Yes, delete ${nodeType}`"
+      @dds-expressive-modal-closed="toggleModalVisibility('deleteModal')"
+      @confirm-button-clicked="deleteNode"
+    />
+    <!-- Confirm reset canvas -->
+    <confirmModal
+      open
+      v-if="modalVisibilities.resetConfirmModal.value"
+      title="Reset the canvas?"
+      paragraph1="Performing this action will remove all the templates and connections
+        from the canvas."
+      paragraph2="This action cannot be undone. Do you still want to proceed?"
+      buttonText="Yes, reset the canvas"
+      @dds-expressive-modal-closed="toggleModalVisibility('resetConfirmModal')"
+      @confirm-button-clicked="resetCanvas"
     />
   </div>
 </template>
@@ -260,11 +285,12 @@ import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/upda
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal";
 import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
-import deleteModal from "@/canvas/components/modals/delete_modal/deleteModal.vue";
-import canvasResetConfirmModal from "@/canvas/components/modals/canvas-reset-modal/canvasResetConfirmModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
 import ShowDslValidationErrors from "@/canvas/components/modals/experiment/showDslValidationErrors.vue";
+
+//Confirm Modal
+import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
 
 //Stores
 import { canvasStore } from "@/canvas/stores/canvasStore";
@@ -408,21 +434,43 @@ let modalVisibilities = {
   deleteModal: ref(false),
   fileUploadModal: ref(false),
   registerExperimentModal: ref(false),
+  confirmUploadModal: ref(false),
   resetConfirmModal: ref(false),
   showDslErrors: ref(false),
 };
 
 let toastNotifications = ref([]);
-const displayUploadedElements = async (files) => {
+let uploadedFilesConents;
+const uploadFiles = async (files) => {
+  //set the object here to avoid saved files from prev uploads
+  uploadedFilesConents = { dsl: "", graph: "" };
   if (files.length == 2) {
-    let dslFileContents = await readFile(files[0]);
+    uploadedFilesConents.dsl = await readFile(files[0]);
     if (files[1] != null) {
       localPVEP.value = await readFile(files[1]);
     }
-    resetCanvas();
-    const uploadedGraph = getEntryWorkflowBlock(dslFileContents);
+  } else {
+    uploadedFilesConents.graph = await readFile(files);
+  }
+  toggleModalVisibility("fileUploadModal");
+
+  //Check if any nodes are in the current canvas, if so ask the user to confirm
+  //that he wants to erase the current state
+  if (nodes.value.some((node) => node.type != "input")) {
+    toggleModalVisibility("confirmUploadModal");
+  } else {
+    applyUploadedFiles();
+  }
+};
+
+function applyUploadedFiles() {
+  if (uploadedFilesConents.dsl != "") {
+    const uploadedGraph = getEntryWorkflowBlock(uploadedFilesConents.dsl);
     //Change ID system and add workflow dimensions
     if (uploadedGraph != undefined) {
+      //Canvas is wiped clean
+      nodes.value = [];
+      edges.value = [];
       addWorkflowNodesToCanvas(
         uploadedGraph,
         workflowDimensions,
@@ -439,15 +487,16 @@ const displayUploadedElements = async (files) => {
       };
       toastNotifications.value.push(dslFileUploadError);
     }
-    addNodes(uploadedGraph.nodes);
-    addEdges(uploadedGraph.edges);
 
-    toggleModalVisibility("fileUploadModal");
-  } else {
-    let graphFileContents = await readFile(files);
-    if (graphFileContents.nodes) {
-      addNodes(graphFileContents.nodes);
-      addEdges(graphFileContents.edges);
+    // addNodes(uploadedGraph.nodes);
+    // addEdges(uploadedGraph.edges);
+  } else if (uploadedFilesConents.graph != "") {
+    if (uploadedFilesConents.graph.nodes) {
+      //Canvas is wiped clean
+      nodes.value = [];
+      edges.value = [];
+      addNodes(uploadedFilesConents.graph.nodes);
+      addEdges(uploadedFilesConents.graph.edges);
     } else {
       let canvasProjectFileUploadError = {
         kind: "error",
@@ -457,9 +506,10 @@ const displayUploadedElements = async (files) => {
       };
       toastNotifications.value.push(canvasProjectFileUploadError);
     }
-    toggleModalVisibility("fileUploadModal");
   }
-};
+  // Ensure the confirmUploadModal is hidden
+  modalVisibilities["confirmUploadModal"].value = false;
+}
 
 function resetCanvas() {
   nodes.value = [];
