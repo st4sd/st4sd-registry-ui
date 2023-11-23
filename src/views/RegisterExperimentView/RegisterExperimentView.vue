@@ -165,7 +165,7 @@ export default {
       if (this.$route.query.edit == "true") {
         breadcrumbs.splice(1, 0, {
           name: this.name,
-          path: `/experiment/${this.pvep}`,
+          path: `/experiment/${this.name}`,
         });
         breadcrumbs[2].name = "Edit";
         breadcrumbs[2].path = `/experiment/${this.pvep}/edit`;
