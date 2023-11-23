@@ -1,4 +1,16 @@
 <template>
+  <!-- Error Notification -->
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="(notification, notifIdx) in toastNotifications"
+      :key="notifIdx"
+      timeout="10000"
+      :kind="notification.kind"
+      :title="notification.title"
+      :subtitle="notification.subtitle"
+      :caption="notification.caption"
+    />
+  </div>
   <!--  https://vueflow.dev/examples/dnd.html -->
   <div class="dndflow">
     <VueFlow
@@ -31,11 +43,7 @@
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
-        <bx-btn
-          size="sm"
-          title="Download as JSON"
-          @click="downloadExperimentFiles"
-        >
+        <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
           <img
             class="canvas-logo"
             width="16"
@@ -125,6 +133,7 @@ import {
   hide,
 } from "@/canvas/functions/hideExpand";
 import TransformLibrary from "@/canvas/components/TransformLibrary.vue";
+import "@carbon/web-components/es/components/notification/index.js";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -160,7 +169,7 @@ let modalVisibilities = {
 const toggleModalVisibility = (modal) => {
   modalVisibilities[modal].value = !modalVisibilities[modal].value;
 };
-
+let toastNotifications = ref([]);
 const dark = ref(false);
 
 let showHideButtonTitle = ref("Show all inputs");
@@ -255,8 +264,19 @@ const onChangeVisibility = (node, isHidden) => {
   removeEdges(result.toDelete);
 };
 
+// AP: FIXME: Copied from ViewCanvas
 const downloadExperimentFiles = () => {
-  downloadExperiment(nodes.value, edges.value, "experiment");
+  try {
+    downloadExperiment(nodes.value, edges.value, props.id + "-transformed-dsl");
+  } catch (error) {
+    let dslDownloadError = {
+      kind: "error",
+      title: "Unable to download DSL file",
+      subtitle: "",
+      caption: error.message,
+    };
+    toastNotifications.value.push(dslDownloadError);
+  }
 };
 
 const emit = defineEmits(["transformSelected"]);
@@ -265,4 +285,6 @@ const handleTransformSelected = (loading, transformId) => {
   emit("transformSelected", loading, transformId);
 };
 </script>
-<style lang="scss" src="@/canvas/styles/main.scss"></style>
+<style lang="scss" src="@/canvas/styles/main.scss">
+@import "@/styles/toast-notification-styles.scss";
+</style>

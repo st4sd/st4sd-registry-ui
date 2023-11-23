@@ -722,9 +722,12 @@ const removeConnectingEdges = (node) => {
 };
 
 const downloadExperimentFiles = () => {
-  // this should never be undefined at this stage but better to be safe
-  let entrypoint = nodes.value.find((node) => node.isEntry == true);
-  let dslFileName = entrypoint == undefined ? "experiment" : entrypoint.label;
+  let dslFileName = props.pvep;
+  if (dslFileName.trim() == "") {
+    // this should never be undefined at this stage but better to be safe
+    let entrypoint = nodes.value.find((node) => node.isEntry == true);
+    dslFileName = entrypoint == undefined ? "experiment" : entrypoint.label;
+  }
   try {
     downloadExperiment(nodes.value, edges.value, dslFileName + "-dsl");
   } catch (error) {

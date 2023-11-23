@@ -1,4 +1,16 @@
 <template>
+  <!-- Error Notification -->
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="(notification, notifIdx) in toastNotifications"
+      :key="notifIdx"
+      timeout="10000"
+      :kind="notification.kind"
+      :title="notification.title"
+      :subtitle="notification.subtitle"
+      :caption="notification.caption"
+    />
+  </div>
   <!--  https://vueflow.dev/examples/dnd.html -->
   <div class="dndflow">
     <VueFlow
@@ -37,11 +49,7 @@
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
-        <bx-btn
-          size="sm"
-          title="Download as JSON"
-          @click="downloadExperimentFiles"
-        >
+        <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
           <img
             class="canvas-logo"
             width="16"
@@ -129,6 +137,8 @@ import {
   hide,
 } from "@/canvas/functions/hideExpand";
 
+import "@carbon/web-components/es/components/notification/index.js";
+
 import { registryUISharedState } from "@/stores/registryUISharedState";
 
 /**
@@ -148,6 +158,14 @@ let modalVisibilities = {
   readExperimentInputsModal: ref(false),
 };
 const dark = ref(false);
+let toastNotifications = ref([]);
+
+const props = defineProps({
+  id: {
+    type: String,
+    default: "",
+  },
+});
 
 const {
   onPaneReady,
@@ -238,11 +256,22 @@ const onChangeVisibility = (node, isHidden) => {
 };
 
 const downloadExperimentFiles = () => {
-  downloadExperiment(nodes.value, edges.value, "experiment");
+  try {
+    downloadExperiment(nodes.value, edges.value, props.id + "-dsl");
+  } catch (error) {
+    let dslDownloadError = {
+      kind: "error",
+      title: "Unable to download DSL file",
+      subtitle: "",
+      caption: error.message,
+    };
+    toastNotifications.value.push(dslDownloadError);
+  }
 };
 </script>
 <style lang="scss">
 @import "@/canvas/styles/main.scss";
+@import "@/styles/toast-notification-styles.scss";
 bx-btn::part(button) {
   padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
   margin: 0.2rem;
