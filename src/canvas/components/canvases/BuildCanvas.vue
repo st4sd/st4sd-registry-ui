@@ -561,6 +561,18 @@ const onDrop = (event) => {
       addNodes,
       addEdges,
     );
+
+    if (allNodes.value.filter((node) => node.type == "workflow").length == 1) {
+      newNode.isEntry = true;
+      let entrypointAddedNotification = {
+        kind: "info",
+        title: "Entrypoint auto-populated",
+        subtitle: `Workflow ${newNode.label} is now the entrypoint of your experiment.`,
+        caption:
+          "You can change this by clicking on the Select Entrypoint button",
+      };
+      toastNotifications.value.push(entrypointAddedNotification);
+    }
   } else {
     newNode.id = getId();
     id = newNode.id;
@@ -597,6 +609,18 @@ const onDrop = (event) => {
 
 const addWorkflow = (workflow, input) => {
   addWorkflowNode(workflow, input, workflowDimensions, getId, addNodes);
+  if (allNodes.value.filter((node) => node.type == "workflow").length == 1) {
+    let node = allNodes.value.find((node) => node.type == "workflow");
+    node.isEntry = true;
+    let entrypointAddedNotification = {
+      kind: "info",
+      title: "Entrypoint auto-populated",
+      subtitle: `Workflow ${node.label} is now the entrypoint of your experiment.`,
+      caption:
+        "You can change this by clicking on the Select Entrypoint button",
+    };
+    toastNotifications.value.push(entrypointAddedNotification);
+  }
   toggleModalVisibility("createWorkflowModal");
 };
 
