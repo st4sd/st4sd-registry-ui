@@ -213,7 +213,7 @@ export default {
           let notificationParameters = {
             kind: "success",
             statusText:
-              "Your selected components are now available in your local template library",
+              "Your selected components are now available in your local Template Workspace",
             statusCode: response.status,
             description: "Components imported successfully",
           };
