@@ -94,7 +94,7 @@
               </dds-link-list-item>
               <dds-link-list-item
                 v-if="isBuildCanvasEditingEnabled"
-                :href="setPvepToLocalStorage()"
+                :href="setPvepToSessionStorage()"
                 :disabled="
                   !experiment.metadata.package.keywords.includes(
                     'internal-experiment',
@@ -256,7 +256,7 @@ export default {
       let endIndex = newStrArr.indexOf(".");
       return newStrArr.slice(0, endIndex).join("");
     },
-    setPvepToLocalStorage() {
+    setPvepToSessionStorage() {
       canvasStore.setPVEP(this.experiment);
       return `${getDeploymentEndpoint()}experiment/${this.id}/edit`;
     },
