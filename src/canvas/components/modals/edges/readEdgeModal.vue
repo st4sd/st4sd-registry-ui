@@ -24,6 +24,7 @@
             <bx-structured-list-cell>{{ key }}</bx-structured-list-cell>
             <bx-structured-list-cell
               v-if="
+                edge.actualValue &&
                 edge.actualValue[key] != undefined &&
                 edge.actualValue[key] != ''
               "
