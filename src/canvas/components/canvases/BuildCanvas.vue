@@ -405,7 +405,7 @@ async function fetchData(id) {
           return;
         }
         localPVEP.value = response.data;
-        canvasStore.setPVEP(response.data);
+        canvasStore.setPVEP(response.data.entry);
       })
       .catch((error) => {
         if ("type" in error && error.type == "experimentTypeUnsupported") {

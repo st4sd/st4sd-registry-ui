@@ -82,7 +82,7 @@ export default {
           `${getDeploymentEndpoint()}registry-ui/backend/canvas/pvep/generate`,
           {
             dsl: this.dsl,
-            pvep: canvasStore.PVEP,
+            pvep: canvasStore.pvep,
           },
         )
         .then((response) => {

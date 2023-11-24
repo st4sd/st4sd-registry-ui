@@ -3,7 +3,7 @@ import { reactive } from "vue";
 export const canvasStore = reactive({
   node: {},
   DAG: {},
-  PVEP: JSON.parse(window.sessionStorage.getItem("pvep")) || {},
+  pvep: JSON.parse(window.sessionStorage.getItem("pvep")) || {},
   graph: JSON.parse(window.sessionStorage.getItem("graph")) || {},
   dsl: JSON.parse(window.sessionStorage.getItem("dsl")) || {},
 
