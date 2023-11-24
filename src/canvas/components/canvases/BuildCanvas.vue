@@ -335,6 +335,7 @@ const emit = defineEmits([
   "updateLibraryError",
   "updateGraphError",
   "pvepFetchFailed",
+  "experimentTypeUnsupported",
 ]);
 const localPVEP = ref();
 let elements = {};
@@ -388,11 +389,28 @@ async function fetchData(id) {
 
     await promisedPvep
       .then((response) => {
+        if (
+          response.data &&
+          !response.data.entry.metadata.package.keywords.includes(
+            "internal-experiment",
+          )
+        ) {
+          let error = {
+            type: "experimentTypeUnsupported",
+            code: 400,
+            statusText: "BAD_REQUEST",
+            description: "Editing is supported only for internal experiments",
+          };
+          emit("experimentTypeUnsupported", error);
+          return;
+        }
         localPVEP.value = response.data;
         canvasStore.setPVEP(response.data);
       })
       .catch((error) => {
-        emit("pvepFetchFailed", error);
+        if ("type" in error && error.type == "experimentTypeUnsupported") {
+          emit("experimentTypeUnsupported", error);
+        } else emit("pvepFetchFailed", error);
       });
   } finally {
     emit("updateLoading", false);

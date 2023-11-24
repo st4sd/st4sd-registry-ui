@@ -33,6 +33,7 @@
     @updateGraphError="updateGraphError"
     @pvepFetchFailed="onPvepFetchFailed"
     @updateLoading="updateLoading"
+    @experimentTypeUnsupported="onExperimentTypeUnsupported"
   />
 </template>
 
@@ -98,6 +99,13 @@ export default {
       };
 
       this.errors.push(pvepError);
+    },
+    onExperimentTypeUnsupported(error) {
+      if (this.fullPageError.code == null) {
+        this.fullPageError = error;
+      }
+
+      this.errors.push(error);
     },
     getBreadcumbs() {
       let breadcrumbs = [
