@@ -45,7 +45,7 @@
         data-modal-close
         kind="tertiary"
         @click="$emit('openShowDslErrors')"
-        :disabled="!dslInvalid"
+        :disabled="!dslInvalidBackend"
         >Show Errors</bx-modal-footer-button
       >
       <bx-modal-footer-button kind="secondary" data-modal-close
@@ -90,6 +90,7 @@ export default {
       dsl: null,
       nameInvalid: true,
       dslInvalid: null,
+      dslInvalidBackend: null,
       dslInvalidTitle: null,
       dslMessage: "",
       dslBeingValidated: "active",
@@ -145,6 +146,7 @@ export default {
           .catch((error) => {
             this.dslBeingValidated = "error";
             this.dslInvalid = true;
+            this.dslInvalidBackend = true;
             this.dslInvalidTitle = error.response.data.message;
             this.dslMessage =
               "There are errors in the DSL validation, click the show errors button to see them";
