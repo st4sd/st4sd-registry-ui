@@ -94,7 +94,7 @@
               </dds-link-list-item>
               <dds-link-list-item
                 v-if="isBuildCanvasEditingEnabled"
-                :href="setPvepToSessionStorage()"
+                :href="`${getDeploymentEndpoint()}experiment/${this.id}/edit`"
                 :disabled="
                   !experiment.metadata.package.keywords.includes(
                     'internal-experiment',
@@ -154,8 +154,6 @@
 <script>
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getDeploymentEndpoint } from "@/functions/public_path";
-
-import { canvasStore } from "@/canvas/stores/canvasStore.js";
 
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
 import runExperimentFormModal from "@/canvas/components/modals/experiment/runExperimentFormModal.vue";
@@ -255,10 +253,6 @@ export default {
       let newStrArr = strArr.slice(startIndex);
       let endIndex = newStrArr.indexOf(".");
       return newStrArr.slice(0, endIndex).join("");
-    },
-    setPvepToSessionStorage() {
-      canvasStore.setPVEP(this.experiment);
-      return `${getDeploymentEndpoint()}experiment/${this.id}/edit`;
     },
   },
 };

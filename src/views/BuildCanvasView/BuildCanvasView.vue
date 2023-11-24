@@ -27,10 +27,11 @@
   </div>
 
   <BuildCanvas
-    @updateLibraryError="onUpdateLibraryError"
-    @updateGraphError="updateGraphError"
     v-show="!loading && fullPageError.code == null"
     :pvep="pvep"
+    @updateLibraryError="onUpdateLibraryError"
+    @updateGraphError="updateGraphError"
+    @pvepFetchFailed="onPvepFetchFailed"
     @updateLoading="updateLoading"
   />
 </template>
@@ -88,6 +89,15 @@ export default {
       }
 
       this.errors.push(graphError);
+    },
+    onPvepFetchFailed(error) {
+      let pvepError = {
+        statusText: error.response.statusText,
+        code: error.response.status,
+        description: "Unable to load PVEP",
+      };
+
+      this.errors.push(pvepError);
     },
     getBreadcumbs() {
       let breadcrumbs = [

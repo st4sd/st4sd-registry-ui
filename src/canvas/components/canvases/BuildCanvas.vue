@@ -334,6 +334,7 @@ const emit = defineEmits([
   "updateLoading",
   "updateLibraryError",
   "updateGraphError",
+  "pvepFetchFailed",
 ]);
 const localPVEP = ref();
 let elements = {};
@@ -355,32 +356,47 @@ const {
 } = useVueFlow(elements);
 setupInputs(elements);
 
-async function getGraph() {
-  let graphData;
+async function fetchData(id) {
+  try {
+    let graphData;
+    let promisedDsl = axios.get(
+      `${getDeploymentEndpoint()}registry-ui/backend/canvas/${id}`,
+    );
+    let promisedPvep = axios.get(
+      `${getDeploymentEndpoint()}registry-ui/backend/experiments/${id}`,
+    );
 
-  await axios
-    .get(`${getDeploymentEndpoint()}registry-ui/backend/canvas/${props.pvep}`)
-    .then((graphResponse) => {
-      if (graphResponse.data.length != 0) {
-        graphData = graphResponse.data;
-      }
-      resetCanvas();
-      const uploadedGraph = getEntryWorkflowBlock(graphData);
-      //Change ID system and add workflow dimensions
-      addWorkflowNodesToCanvas(
-        uploadedGraph,
-        workflowDimensions,
-        getId,
-        addNodes,
-        addEdges,
-      );
-    })
-    .catch((error) => {
-      emit("updateGraphError", error);
-    })
-    .finally(() => {
-      emit("updateLoading", false);
-    });
+    await promisedDsl
+      .then((response) => {
+        if (response.data.length != 0) {
+          graphData = response.data;
+        }
+        resetCanvas();
+        const uploadedGraph = getEntryWorkflowBlock(graphData);
+        //Change ID system and add workflow dimensions
+        addWorkflowNodesToCanvas(
+          uploadedGraph,
+          workflowDimensions,
+          getId,
+          addNodes,
+          addEdges,
+        );
+      })
+      .catch((error) => {
+        emit("updateGraphError", error);
+      });
+
+    await promisedPvep
+      .then((response) => {
+        localPVEP.value = response.data;
+        canvasStore.setPVEP(response.data);
+      })
+      .catch((error) => {
+        emit("pvepFetchFailed", error);
+      });
+  } finally {
+    emit("updateLoading", false);
+  }
 }
 
 //The 405 error code is being used to deny access to functionalities
@@ -402,11 +418,12 @@ function setupCanvas() {
   }
 
   if (props.pvep != "") {
-    localPVEP.value = { ...props.pvep };
-    getGraph();
+    fetchData(props.pvep);
   } else {
     elements.elevateEdgesOnSelect = true;
     emit("updateLoading", false);
+    canvasStore.clearDsl();
+    canvasStore.clearPVEP();
   }
 }
 
