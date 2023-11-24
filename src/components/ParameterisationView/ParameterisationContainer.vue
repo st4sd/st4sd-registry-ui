@@ -126,6 +126,7 @@ export default {
   props: {
     openInRead: Boolean,
     pvep: Object,
+    id: String,
   },
   data() {
     return {
