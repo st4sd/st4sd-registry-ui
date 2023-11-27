@@ -350,7 +350,17 @@ export default {
           this.index,
           1,
         );
-        if (this.variableValues[this.valueIndex].constructor === Array) {
+        // AP: there are instances in which this.valueIndex is
+        // greater or equal to the length of VariableValues
+        // We just add a new element instead of trying to access
+        // an undefined value.
+        if (this.valueIndex >= this.variableValues.length) {
+          this.parameterisationOptions.presets.variables.push({
+            name: this.variable.name,
+            value: "",
+          });
+          this.variableValues[this.valueIndex] = "";
+        } else if (this.variableValues[this.valueIndex].constructor === Array) {
           // Execution option with more than 2 values
           this.parameterisationOptions.presets.variables.push({
             name: this.variable.name,
