@@ -1,11 +1,11 @@
 <template>
   <div id="toast-notification-container">
     <bx-toast-notification
-      v-for="error in errors"
-      :key="error.description"
-      kind="error"
-      :title="error.description"
-      :caption="error.statusText + ' (error ' + error.code + ')'"
+      v-for="notifcation in notifications"
+      :key="notifcation.description"
+      :kind="notifcation.type"
+      :title="notifcation.description"
+      :caption="notifcation.statusText + ' (code ' + notifcation.code + ')'"
       timeout="10000"
     >
     </bx-toast-notification>
@@ -27,10 +27,10 @@
   </div>
 
   <BuildCanvas
+    @updateLibraryNotification="onUpdateLibraryNotification"
+    @updateGraphError="updateGraphError"
     v-show="!loading && fullPageError.code == null"
     :pvep="pvep"
-    @updateLibraryError="onUpdateLibraryError"
-    @updateGraphError="updateGraphError"
     @pvepFetchFailed="onPvepFetchFailed"
     @updateLoading="updateLoading"
     @experimentTypeUnsupported="onExperimentTypeUnsupported"
@@ -53,43 +53,34 @@ export default {
   data() {
     return {
       loading: true,
-      errors: [],
-      fullPageError: {
-        statusText: "",
-        code: null,
-        description: "Unable to load graph library",
-      },
+      notifications: [],
+      fullPageError: {},
     };
   },
   methods: {
     updateLoading(loading) {
       this.loading = loading;
     },
-    onUpdateLibraryError(error) {
-      let libraryError = {
-        statusText: error.response.statusText,
-        code: error.response.status,
-        description: "Unable to load graph library",
-      };
-
-      if (error.response.status == 405) {
-        this.fullPageError = libraryError;
+    onUpdateLibraryNotification(notification) {
+      if (notification.code == 405) {
+        this.fullPageError = notification;
       }
 
-      this.errors.push(libraryError);
+      this.notifications.push(notification);
     },
     updateGraphError(error) {
       let graphError = {
         statusText: error.response.statusText,
         code: error.response.status,
         description: "Unable to load graph",
+        type: "error",
       };
 
       if (this.fullPageError.code == null) {
         this.fullPageError = graphError;
       }
 
-      this.errors.push(graphError);
+      this.notifications.push(graphError);
     },
     onPvepFetchFailed(error) {
       let pvepError = {

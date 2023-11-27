@@ -70,6 +70,15 @@
       @bx-modal-closed="toggleModalVisibility('readWorkflowModal')"
       :node="clickedNode"
       :inputingEdges="[]"
+      :shareEnabled="
+        !persistedGraphs.has(clickedNode.definition.signature.name) &&
+        registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
+      "
+      :deleteEnabled="
+        registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
+      "
+      @deleteWorkflow="handleDeleteTemplate"
+      :requestInProgress="readModalRequestInProgress"
     />
     <readComponentModal
       v-if="modalVisibilities.readComponentModal.value"
@@ -77,6 +86,26 @@
       @bx-modal-closed="toggleModalVisibility('readComponentModal')"
       :node="clickedNode"
       :inputingEdges="[]"
+      :shareEnabled="
+        registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
+      "
+      :deleteEnabled="
+        registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
+      "
+      @shareComponent="shareComponent"
+      @deleteComponent="handleDeleteTemplate"
+      :requestInProgress="readModalRequestInProgress"
+    />
+    <!--Confirm delete template modal-->
+    <confirmModal
+      open
+      v-if="modalVisibilities.confirmDeleteModal.value"
+      title="Delete template?"
+      paragraph1="Are you sure you want to delete this template?"
+      paragraph2="This action cannot be undone."
+      buttonText="Yes, delete template"
+      @dds-expressive-modal-closed="toggleModalVisibility('confirmDeleteModal')"
+      @confirm-button-clicked="deleteTemplate(templateToDelete)"
     />
   </aside>
 </template>
@@ -89,6 +118,7 @@ import { canvasStore } from "@/canvas/stores/canvasStore";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
 import createComponentModal from "@/canvas/components/modals/st4sd_components/createComponentModal.vue";
+import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
 import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
@@ -97,6 +127,8 @@ import router from "@/router";
 import { registryUISharedState } from "@/stores/registryUISharedState";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
+import getDSLDefinition from "@/canvas/functions/removeEmptyValues";
+
 let isGlobalRegistryLibraryEnabled = ref(
   registryUISharedState.isGlobalRegistryLibraryEnabled,
 );
@@ -104,7 +136,9 @@ let isGlobalRegistryLibraryEnabled = ref(
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const emit = defineEmits(["updateLibraryError", "libraryLoaded"]);
+const emit = defineEmits(["updateLibraryNotification", "libraryLoaded"]);
+
+let persistedGraphs = new Set();
 
 async function getNodesFromUrls() {
   let nodes = [];
@@ -122,11 +156,19 @@ async function getNodesFromUrls() {
           entryWorkflowBlock.parentNode = "";
           entryWorkflowBlock.id = getId();
         }
+        persistedGraphs.add(entryWorkflowBlock.definition.signature.name);
+
         nodes.push(entryWorkflowBlock);
       }
     })
     .catch((error) => {
-      emit("updateLibraryError", error);
+      let notification = {
+        statusText: error.response.statusText,
+        code: error.response.status,
+        description: `Template Library could not be loaded`,
+        type: "error",
+      };
+      emit("updateLibraryNotification", notification);
     })
     .finally(() => {
       emit("libraryLoaded");
@@ -138,11 +180,133 @@ let modalVisibilities = {
   readComponentModal: ref(false),
   readWorkflowModal: ref(false),
   createComponentModal: ref(false),
+  confirmDeleteModal: ref(false),
 };
 
 const toggleModalVisibility = (modal) => {
   modalVisibilities[modal].value = !modalVisibilities[modal].value;
 };
+
+//NEW LIBRARY MANAGEMENT FUNCTIONS
+let readModalRequestInProgress = ref(false);
+
+let templateToDelete = null;
+
+function handleDeleteTemplate(template) {
+  toggleModalVisibility("confirmDeleteModal");
+  templateToDelete = template;
+}
+
+async function deleteTemplate(template) {
+  readModalRequestInProgress.value = true;
+  toggleModalVisibility("confirmDeleteModal");
+
+  if (persistedGraphs.has(template.label)) {
+    let notification = {};
+    await axios
+      .delete(
+        `${getDeploymentEndpoint()}registry-ui/backend/canvas/graphs-library/internal/${
+          template.label
+        }`,
+      )
+      .then((response) => {
+        persistedGraphs.delete(template.label);
+
+        notification = {
+          statusText: response.statusText,
+          code: response.status,
+          description: `${template.definition.signature.name} successfully deleted.`,
+          type: "success",
+        };
+      })
+      .catch((error) => {
+        notification = {
+          statusText: error.response.statusText,
+          code: error.response.status,
+          description: `${template.definition.signature.name} could not be deleted.`,
+          type: "error",
+        };
+      })
+      .finally(() => {
+        emit("updateLibraryNotification", notification);
+      });
+  }
+
+  //This if statement ensures the template is only removed from the UI if:
+  // - It was never present on the backend.
+  // - It has deleted on the backend succesfully.
+  if (!persistedGraphs.has(template.label)) {
+    removeTemplateFromTemplateWorkspace(template.label);
+  }
+
+  readModalRequestInProgress.value = false;
+
+  if (template.type == "workflow") {
+    toggleModalVisibility("readWorkflowModal");
+  }
+
+  if (template.type == "component") {
+    toggleModalVisibility("readComponentModal");
+  }
+}
+
+async function shareComponent(component) {
+  readModalRequestInProgress.value = true;
+  let definition = getDSLDefinition(component.definition);
+  let wrappedComponent = { components: [definition] };
+
+  let notification = {};
+
+  axios
+    .post(
+      `${getDeploymentEndpoint()}registry-ui/backend/canvas/graphs-library/internal`,
+      wrappedComponent,
+    )
+    .then((response) => {
+      removeTemplateFromTemplateWorkspace(component.label);
+
+      let graph = response.data.graph;
+
+      const entryWorkflowBlock = getEntryWorkflowBlock(graph);
+
+      if (entryWorkflowBlock.parentNode == undefined) {
+        entryWorkflowBlock.parentNode = "";
+        entryWorkflowBlock.id = getId();
+      }
+      persistedGraphs.add(entryWorkflowBlock.definition.signature.name);
+      elements.value.push(entryWorkflowBlock);
+
+      notification = {
+        statusText: response.statusText,
+        code: response.status,
+        description: `${component.definition.signature.name} successfully shared.`,
+        type: "success",
+      };
+    })
+    .catch((error) => {
+      notification = {
+        statusText: error.response.statusText,
+        code: error.response.status,
+        description: `${component.definition.signature.name} could not be shared.`,
+        type: "error",
+      };
+    })
+    .finally(() => {
+      emit("updateLibraryNotification", notification);
+      readModalRequestInProgress.value = false;
+      toggleModalVisibility("readComponentModal");
+    });
+}
+
+function removeTemplateFromTemplateWorkspace(templateLabel) {
+  for (let index in elements.value) {
+    if (templateLabel == elements.value[index].label) {
+      elements.value.splice(index, 1);
+      break;
+    }
+  }
+}
+//
 
 const onDragStart = (event, element) => {
   canvasStore.setNode(element);

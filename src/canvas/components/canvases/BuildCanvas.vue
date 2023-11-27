@@ -116,8 +116,8 @@
         <WorkflowInputNode :label="label" />
       </template>
     </VueFlow>
-    <BlocksLibrary
-      @updateLibraryError="updateLibraryError"
+    <TemplateWorkspace
+      @updateLibraryNotification="updateLibraryNotification"
       @libraryLoaded="setupCanvas"
     />
     <!-- Error Notification -->
@@ -276,7 +276,7 @@ import {
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import BlocksLibrary from "@/canvas/components/BlocksLibrary";
+import TemplateWorkspace from "@/canvas/components/TemplateWorkspace";
 //Modals
 import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
 import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
@@ -332,7 +332,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   "updateLoading",
-  "updateLibraryError",
+  "updateLibraryNotification",
   "updateGraphError",
   "pvepFetchFailed",
   "experimentTypeUnsupported",
@@ -422,9 +422,9 @@ async function fetchData(id) {
 
 let is405 = false;
 
-function updateLibraryError(error) {
-  emit("updateLibraryError", error);
-  if (error.response.status == 405) {
+function updateLibraryNotification(notification) {
+  emit("updateLibraryNotification", notification);
+  if (notification.code == 405) {
     is405 = true;
   }
 }

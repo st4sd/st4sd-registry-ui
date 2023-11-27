@@ -10,6 +10,7 @@ export const registryUISharedState = reactive({
   isRunExperimentEnabled: false,
   isGlobalRegistryLibraryEnabled: false,
   isBuildCanvasEditingEnabled: false,
+  isLocalGraphsLibraryWriteAccessEnabled: false,
 
   setSettings(obj) {
     this.settings = obj;
@@ -52,6 +53,12 @@ export const registryUISharedState = reactive({
         obj,
       ) == "yes",
     );
+    this.setIsLocalGraphsLibraryWriteAccessEnabled(
+      getValueForEnvVar(
+        "ST4SD_REGISTRY_UI_SETTINGS_ENABLE_LOCAL_GRAPHS_LIBRARY_WRITE_ACCESS",
+        obj,
+      ) == "yes",
+    );
   },
   setIsGlobalRegistry(obj) {
     this.isGlobalRegistry = obj;
@@ -73,5 +80,8 @@ export const registryUISharedState = reactive({
   },
   setIsGlobalRegistryLibraryEnabled(obj) {
     this.isGlobalRegistryLibraryEnabled = obj;
+  },
+  setIsLocalGraphsLibraryWriteAccessEnabled(obj) {
+    this.isLocalGraphsLibraryWriteAccessEnabled = obj;
   },
 });

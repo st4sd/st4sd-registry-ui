@@ -150,16 +150,44 @@
           </bx-structured-list>
         </bx-accordion-item>
       </bx-accordion>
+      <bx-btn
+        kind="danger"
+        v-if="deleteEnabled"
+        @click="deleteWorkflow"
+        :disabled="requestInProgress"
+      >
+        Delete &nbsp;
+        <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+      </bx-btn>
+      <bx-btn
+        kind="primary"
+        v-if="shareEnabled"
+        @click="shareWorkflow"
+        :disabled="requestInProgress"
+      >
+        Share &nbsp;
+        <img class="launch-icon" src="@/assets/launch.svg" />
+      </bx-btn>
+      <div v-if="requestInProgress" id="loading-wheel">
+        <bx-inline-loading status="active">
+          Request in progress ...
+        </bx-inline-loading>
+      </div>
     </bx-modal-body>
+    <bx-modal-footer> </bx-modal-footer>
   </bx-modal>
 </template>
 
 <script>
+import "@carbon/web-components/es/components/inline-loading/index.js";
 export default {
   props: {
     title: String,
     node: Object,
     inputingEdges: Array,
+    shareEnabled: Boolean,
+    deleteEnabled: Boolean,
+    requestInProgress: Boolean,
   },
   data() {
     return {
@@ -183,14 +211,21 @@ export default {
         }
       }
     },
+    shareWorkflow() {
+      this.$emit("shareWorkflow", this.node);
+    },
+    deleteWorkflow() {
+      this.$emit("deleteWorkflow", this.node);
+    },
   },
 };
 </script>
 <style lang="css" scoped>
 @import "@/styles/bx-modal-styles.css";
+@import "@/styles/inline-loading-style.css";
+@import "@/styles/launch-icon.css";
 
 bx-accordion-item::part(content) {
-  /* border: dashed 2px black; */
   padding-right: 1rem;
 }
 </style>

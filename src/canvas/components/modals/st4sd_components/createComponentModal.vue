@@ -51,7 +51,7 @@ export default {
       //the new node card's properties here
       let componentNode = {
         id: "1",
-        label: definition.signature.name,
+        label: definition.signature.name + " (*)",
         type: "component",
         definition: definition,
       };
