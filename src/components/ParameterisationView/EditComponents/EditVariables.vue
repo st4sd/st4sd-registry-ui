@@ -19,7 +19,7 @@
       ></bx-radio-button>
       <div
         v-if="
-          parameterisationOptions.presets.variables[index] != undefined &&
+          getVariablePresetValue() != undefined &&
           presetInputsVisible[this.valueIndex] == true
         "
         id="preset-input"
@@ -50,16 +50,12 @@
       </div>
       <div
         v-if="
-          parameterisationOptions.executionOptions.variables[index] !=
-            undefined &&
-          'value' in parameterisationOptions.executionOptions.variables[index]
+          getVariableExecutionOptionsValue() != undefined &&
+          'value' in getVariableExecutionOptionsValue()
         "
       >
         <bx-inline-notification
-          v-if="
-            parameterisationOptions.executionOptions.variables[index].value ==
-            ''
-          "
+          v-if="getVariableExecutionOptionsValue().value == ''"
           id="no-variable-notification"
           kind="info"
           title="No value set -"
@@ -78,9 +74,7 @@
               size="lg"
               colorScheme="light"
               class="input-size"
-              :value="
-                parameterisationOptions.executionOptions.variables[index].value
-              "
+              :value="getVariableExecutionOptionsValue().value"
               @input="setExecutionOptionValue(i, 'value')"
             />
           </div>
@@ -109,23 +103,15 @@
       </div>
       <div
         v-if="
-          parameterisationOptions.executionOptions.variables[index] !=
-            undefined &&
-          'valueFrom' in
-            parameterisationOptions.executionOptions.variables[index]
+          getVariableExecutionOptionsValue() != undefined &&
+          'valueFrom' in getVariableExecutionOptionsValue()
         "
       >
         <div
-          v-for="(value, i) in parameterisationOptions.executionOptions
-            .variables[index].valueFrom"
+          v-for="(value, i) in getVariableExecutionOptionsValue().valueFrom"
           :key="i"
           @drop="
-            onDrop(
-              $event,
-              i,
-              parameterisationOptions.executionOptions.variables[index]
-                .valueFrom,
-            )
+            onDrop($event, i, getVariableExecutionOptionsValue().valueFrom)
           "
           @dragenter.prevent
           @dragover.prevent
@@ -268,6 +254,23 @@ export default {
     },
   },
   methods: {
+    getVariablePresetValue() {
+      let localIdx = this.parameterisationOptions.presets.variables.findIndex(
+        (variable) => {
+          return variable.name == this.variable.name;
+        },
+      );
+      return this.parameterisationOptions.presets.variables[localIdx];
+    },
+    getVariableExecutionOptionsValue() {
+      let localIdx =
+        this.parameterisationOptions.executionOptions.variables.findIndex(
+          (variable) => {
+            return variable.name == this.variable.name;
+          },
+        );
+      return this.parameterisationOptions.executionOptions.variables[localIdx];
+    },
     setIndex() {
       if (this.variable.type == "presets") {
         this.index = this.parameterisationOptions.presets.variables
