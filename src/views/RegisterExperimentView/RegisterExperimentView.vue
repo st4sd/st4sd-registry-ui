@@ -168,7 +168,7 @@ export default {
           path: `/experiment/${this.name}`,
         });
         breadcrumbs[2].name = "Edit";
-        breadcrumbs[2].path = `/experiment/${this.pvep}/edit`;
+        breadcrumbs[2].path = `/experiment/${this.name}/edit`;
       }
 
       return breadcrumbs;
