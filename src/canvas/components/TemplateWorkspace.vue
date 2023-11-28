@@ -61,6 +61,11 @@
     </div>
     <createComponentModal
       v-if="modalVisibilities.createComponentModal.value"
+      :existingTemplates="
+        new Set(
+          fullElements.map((template) => template.definition.signature.name),
+        )
+      "
       @componentAdded="addComponentNode"
       @bx-modal-closed="toggleModalVisibility('createComponentModal')"
     />
@@ -273,7 +278,8 @@ async function shareComponent(component) {
         entryWorkflowBlock.id = getId();
       }
       persistedGraphs.add(entryWorkflowBlock.definition.signature.name);
-      elements.value.push(entryWorkflowBlock);
+      fullElements.value.push(entryWorkflowBlock);
+      updateList();
 
       notification = {
         statusText: response.statusText,
@@ -298,12 +304,13 @@ async function shareComponent(component) {
 }
 
 function removeTemplateFromTemplateWorkspace(templateLabel) {
-  for (let index in elements.value) {
-    if (templateLabel == elements.value[index].label) {
-      elements.value.splice(index, 1);
+  for (let index in fullElements.value) {
+    if (templateLabel == fullElements.value[index].label) {
+      fullElements.value.splice(index, 1);
       break;
     }
   }
+  updateList();
 }
 //
 
