@@ -133,8 +133,7 @@ let isGlobalRegistryLibraryEnabled = ref(
   registryUISharedState.isGlobalRegistryLibraryEnabled,
 );
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => crypto.randomUUID();
 
 const emit = defineEmits(["updateLibraryNotification", "libraryLoaded"]);
 

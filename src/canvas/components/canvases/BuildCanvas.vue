@@ -448,8 +448,9 @@ function setupCanvas() {
 let allNodes = nodes;
 let allEdges = edges;
 let workflowDimensions = {};
-let id = ref(0);
-const getId = () => `dndnode_${id.value++}`;
+
+const getId = () => crypto.randomUUID();
+
 const onDragOver = (event) => {
   event.preventDefault();
   if (event.dataTransfer) {
@@ -522,9 +523,6 @@ function applyUploadedFiles() {
       };
       toastNotifications.value.push(dslFileUploadError);
     }
-
-    // addNodes(uploadedGraph.nodes);
-    // addEdges(uploadedGraph.edges);
   } else if (uploadedFilesConents.graph != "") {
     if (uploadedFilesConents.graph.nodes) {
       //Canvas is wiped clean

@@ -221,7 +221,7 @@ export function convertToBuildCanvasSystem(
   const idsDict = ref({});
   //Change nodes ids
   for (var node of nodes) {
-    let nodeId = getId();
+    const nodeId = getId();
     idsDict[node.id] = nodeId;
     node.id = nodeId;
     if (node.type == "workflow") {
