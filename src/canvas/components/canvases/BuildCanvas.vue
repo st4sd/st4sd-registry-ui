@@ -516,13 +516,16 @@ function applyUploadedFiles() {
       //Canvas is wiped clean
       nodes.value = [];
       edges.value = [];
-      addWorkflowNodesToCanvas(
+      let id = addWorkflowNodesToCanvas(
         uploadedGraph,
         workflowDimensions,
         getId,
         addNodes,
         addEdges,
       );
+      // Since we clear the canvas before applying uploaded files,
+      // we are sure that this is the first workflow added to the canvas
+      setEntrypointAndNotify(id);
     } else {
       let dslFileUploadError = {
         kind: "error",
@@ -539,6 +542,21 @@ function applyUploadedFiles() {
       edges.value = [];
       addNodes(uploadedFilesConents.graph.nodes);
       addEdges(uploadedFilesConents.graph.edges);
+      // Find if one entrypoint or more exist in this canvas project file
+      let entrypoints = nodes.value.filter(
+        (node) => node.type == "workflow" && node.isEntry == true,
+      );
+      // If there is 1 or no entrypoints, set one
+      if (entrypoints.length == 1) {
+        setEntrypointAndNotify(entrypoints[0].id);
+      }
+      //If more than 1 nodes are marked as entrypoint, we keep only one as entrypoint
+      else if (entrypoints.length > 1) {
+        entrypoints.map((node) => {
+          findNode(node.id).isEntry = false;
+        });
+        setEntrypointAndNotify(entrypoints[0].id);
+      }
     } else {
       let canvasProjectFileUploadError = {
         kind: "error",
@@ -591,11 +609,16 @@ const onDrop = (event) => {
     y: event.clientY - top,
   });
   let id;
+
   if (newNode.type == "workflow") {
     // In a workflow newNode is used to generate the whole workflow and thus
     // newNode itself will not be used in the workflow and will be replaced with
     // the workflow's entry point node, so we manually return the new id to be used
     // in the nextTick() function
+
+    // Check if this is the first workflow added to the canvas
+    // we do this check before adding the nodes to the canvas
+    let workflows = nodes.value.filter((node) => node.type == "workflow");
     id = addWorkflowNodesToCanvas(
       newNode,
       workflowDimensions,
@@ -603,17 +626,8 @@ const onDrop = (event) => {
       addNodes,
       addEdges,
     );
-
-    if (allNodes.value.filter((node) => node.type == "workflow").length == 1) {
-      newNode.isEntry = true;
-      let entrypointAddedNotification = {
-        kind: "info",
-        title: "Entrypoint auto-populated",
-        subtitle: `Workflow ${newNode.label} is now the entrypoint of your experiment.`,
-        caption:
-          "You can change this by clicking on the Select Entrypoint button",
-      };
-      toastNotifications.value.push(entrypointAddedNotification);
+    if (workflows.length == 0) {
+      setEntrypointAndNotify(id);
     }
   } else {
     newNode.id = getId();
@@ -649,19 +663,24 @@ const onDrop = (event) => {
   });
 };
 
+function setEntrypointAndNotify(id) {
+  let node = findNode(id);
+  node.isEntry = true;
+  let entrypointAddedNotification = {
+    kind: "info",
+    title: "Entrypoint auto-populated",
+    subtitle: `Workflow ${node.label} is now the entrypoint of your experiment.`,
+    caption: "You can change this by clicking on the Select Entrypoint button",
+  };
+  toastNotifications.value.push(entrypointAddedNotification);
+}
+
 const addWorkflow = (workflow, input) => {
   addWorkflowNode(workflow, input, workflowDimensions, getId, addNodes);
-  if (allNodes.value.filter((node) => node.type == "workflow").length == 1) {
-    let node = allNodes.value.find((node) => node.type == "workflow");
-    node.isEntry = true;
-    let entrypointAddedNotification = {
-      kind: "info",
-      title: "Entrypoint auto-populated",
-      subtitle: `Workflow ${node.label} is now the entrypoint of your experiment.`,
-      caption:
-        "You can change this by clicking on the Select Entrypoint button",
-    };
-    toastNotifications.value.push(entrypointAddedNotification);
+  // Check if this is the only workflow in the canvas
+  let workflows = nodes.value.filter((node) => node.type == "workflow");
+  if (workflows.length == 1) {
+    setEntrypointAndNotify(workflows[0].id);
   }
   toggleModalVisibility("createWorkflowModal");
 };

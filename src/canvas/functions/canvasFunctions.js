@@ -201,6 +201,8 @@ export function addWorkflowNodesToCanvas(
     (node) => node.id == workflowNode.label,
   );
   entryNode.position = workflowNode.position;
+  entryNode.isEntry = false;
+
   convertToBuildCanvasSystem(
     experimentGraph.nodes,
     experimentGraph.edges,
