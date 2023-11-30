@@ -40,6 +40,7 @@
         class="node"
       >
         <div
+          :id="element.id"
           class="vue-flow__node-workflow"
           :draggable="true"
           @dragstart="onDragStart($event, element)"
@@ -49,6 +50,7 @@
           {{ element.label }}
         </div>
         <div
+          :id="element.id"
           class="vue-flow__node-component"
           :draggable="true"
           @dragstart="onDragStart($event, element)"
@@ -230,6 +232,7 @@ async function deleteTemplate(template) {
           description: `${template.definition.signature.name} could not be deleted.`,
           type: "error",
         };
+        document.getElementById(template.id).classList.add("errored-template");
       })
       .finally(() => {
         emit("updateLibraryNotification", notification);
@@ -295,6 +298,7 @@ async function shareComponent(component) {
         description: `${component.definition.signature.name} could not be shared.`,
         type: "error",
       };
+      document.getElementById(component.id).classList.add("errored-template");
     })
     .finally(() => {
       emit("updateLibraryNotification", notification);

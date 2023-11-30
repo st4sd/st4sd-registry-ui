@@ -18,8 +18,8 @@
   border-radius: 100%;
 }
 
-.vue-flow__node-workflow {
-  background-color: rgba(16, 185, 129, 0.5);
+.vue-flow__node-workflow,
+.vue-flow__node-component {
   padding: 10px;
   border-radius: 3px;
   width: 150px;
@@ -31,16 +31,17 @@
   border-color: var(--vf-node-color);
 }
 
+.vue-flow__node-workflow {
+  background-color: rgba(16, 185, 129, 0.5);
+}
+
 .vue-flow__node-component {
   background-color: rgb(255, 255, 255);
-  padding: 10px;
-  border-radius: 3px;
-  font-size: 12px;
-  text-align: center;
-  border-width: 1px;
-  border-style: solid;
-  color: #222;
-  border-color: var(--vf-node-color);
+}
+
+.vue-flow__node-workflow.errored-template,
+.vue-flow__node-component.errored-template {
+  background-color: rgb(215, 57, 65);
 }
 
 .vue-flow__edge-path,
