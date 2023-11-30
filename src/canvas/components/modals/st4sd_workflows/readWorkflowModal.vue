@@ -198,15 +198,19 @@ export default {
   data() {
     return {
       workflowName: "",
-      workflowParams: "",
-      workflowSteps: "",
+      workflowParams: [],
+      workflowSteps: {},
       workflowExecute: "",
     };
   },
   mounted() {
     this.workflowName = this.node.definition.signature.name;
-    this.workflowParams = this.node.definition.signature.parameters;
-    this.workflowSteps = this.node.definition.steps;
+    if (this.node.definition.signature.parameters) {
+      this.workflowParams = this.node.definition.signature.parameters;
+    }
+    if (this.node.definition.steps) {
+      this.workflowSteps = this.node.definition.steps;
+    }
     this.workflowExecute = this.node.definition.execute;
   },
   methods: {

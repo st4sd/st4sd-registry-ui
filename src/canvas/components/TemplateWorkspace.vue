@@ -182,6 +182,13 @@ async function getNodesFromUrls() {
   return nodes;
 }
 
+const elements = ref([]);
+const fullElements = ref([]);
+getNodesFromUrls().then((data) => {
+  fullElements.value = [...fullElements.value, ...data];
+  elements.value = [...elements.value, ...data];
+});
+
 let modalVisibilities = {
   readComponentModal: ref(false),
   readWorkflowModal: ref(false),
@@ -202,6 +209,34 @@ function handleDeleteTemplate(template) {
   toggleModalVisibility("confirmDeleteModal");
   templateToDelete = template;
 }
+
+function getTemplatesNamesSet() {
+  return new Set(
+    fullElements.value.map((template) => template.definition.signature.name),
+  );
+}
+
+function addToTemplateWorkspace(data, type) {
+  if (type == "workflow") {
+    const block = getEntryWorkflowBlock(data);
+    if (block.parentNode == undefined) {
+      block.parentNode = "";
+      block.id = getId();
+      block.label = block.label + " (*)";
+    }
+    fullElements.value.push(block);
+    elements.value.push(block);
+  } else {
+    data.label = data.label + " (*)";
+    fullElements.value.push(data);
+    elements.value.push(data);
+  }
+}
+
+defineExpose({
+  getTemplatesNamesSet,
+  addToTemplateWorkspace,
+});
 
 async function deleteTemplate(template) {
   readModalRequestInProgress.value = true;
@@ -321,13 +356,6 @@ function removeTemplateFromTemplateWorkspace(templateLabel) {
 const onDragStart = (event, element) => {
   canvasStore.setNode(element);
 };
-
-const elements = ref([]);
-const fullElements = ref([]);
-getNodesFromUrls().then((data) => {
-  fullElements.value = [...fullElements.value, ...data];
-  elements.value = [...elements.value, ...data];
-});
 
 function navigateToGlobalRegistryLibrary() {
   router.push({ path: "/build-canvas/global-registry-library" });

@@ -29,7 +29,7 @@ export function getEntryWorkflowBlock(dsl) {
   return nodes[0];
 }
 //Function to get the definitions of all nested components/workflows
-//inside a workflow, which are necessary to draw it
+//inside a workflow, which are necessary to draw it, from a DSL
 function populateDependencies(workflow, dsl, dependencies) {
   let steps = workflow.steps;
   for (var step in steps) {

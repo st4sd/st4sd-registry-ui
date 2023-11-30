@@ -5,7 +5,7 @@
         <bx-input
           data-modal-primary-focus
           :value="component.signature.name"
-          @input="component.signature.name = $event.target.value"
+          @input="updateComponentName($event.target.value)"
           @blur="onFocusLost($event, component.signature.name)"
           placeholder="name"
           required
@@ -682,7 +682,7 @@ let invalidVariables = {};
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
-  emits: ["update", "removeParent", "add", "invalid"],
+  emits: ["update", "removeParent", "add", "invalid", "nameChanged"],
   data() {
     return {
       contentSwitcherSelection: ref("config"),
@@ -735,6 +735,10 @@ export default {
     },
     removeParentNode() {
       this.$emit("removeParent");
+    },
+    updateComponentName(newName) {
+      this.component.signature.name = newName;
+      this.$emit("nameChanged", newName);
     },
     onFocusLost(event, item) {
       if (item == "") {

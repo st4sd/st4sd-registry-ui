@@ -6,7 +6,7 @@
         placeholder="Workflow name"
         @blur="onFocusLost($event, workflow.getName())"
         :value="workflow.getName()"
-        @input="workflow.setName($event.target.value)"
+        @input="updateWorkflowName($event.target.value)"
         validityMessage="Name cannot be empty"
         required
         colorScheme="light"
@@ -169,7 +169,13 @@ import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
-  emits: ["update", "removeParent", "stepDeleted", "workflowAdded"],
+  emits: [
+    "update",
+    "removeParent",
+    "stepDeleted",
+    "workflowAdded",
+    "nameChanged",
+  ],
   data() {
     return {
       workflow: new St4sdWorkflow(),
@@ -192,6 +198,10 @@ export default {
   methods: {
     removeParent() {
       this.$emit("removeParent");
+    },
+    updateWorkflowName(newName) {
+      this.workflow.setName(newName);
+      this.$emit("nameChanged", newName);
     },
     removeStep(index) {
       let step = this.workflow.getStep(index).step;

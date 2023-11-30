@@ -32,11 +32,24 @@
         @update="update"
         @removeParent="removeParent"
         @stepDeleted="stepDeleted"
+        @nameChanged="updateIsTemplateButtonDisabled"
       />
       <br />
       <bx-btn kind="danger" @click="emitDelete">
         Delete this workflow &nbsp;
         <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+      </bx-btn>
+      <bx-btn
+        kind="primary"
+        :disabled="isTemplateButtonDisabled"
+        :title="
+          isTemplateButtonDisabled
+            ? 'A template with the same name already exists in the Template Workspace'
+            : 'Add to Template Workspace'
+        "
+        @click="emitAddToTemplateWorkspace"
+      >
+        Add to Template Workspace &nbsp;
       </bx-btn>
     </bx-modal-body>
     <bx-modal-footer>
@@ -65,10 +78,12 @@ export default {
     parentNode: Object,
     allNodes: Object,
     dslValidationErrorProp: Array,
+    templatesNamesSet: Set,
   },
   data() {
     return {
       workflowUpdated: false,
+      isTemplateButtonDisabled: false,
     };
   },
   emits: [
@@ -77,10 +92,32 @@ export default {
     "removeParent",
     "stepDeleted",
     "openShowDslErrors",
+    "bxModalClosed",
+    "addToTemplateWorkspace",
   ],
+  mounted() {
+    if (
+      this.templatesNamesSet != undefined &&
+      this.node.definition.signature.name != undefined
+    ) {
+      this.isTemplateButtonDisabled = this.templatesNamesSet.has(
+        this.node.definition.signature.name,
+      );
+    }
+  },
   methods: {
     emitDelete() {
       this.$emit("delete");
+    },
+    emitAddToTemplateWorkspace() {
+      //Save the changes
+      this.save();
+      this.$emit("addToTemplateWorkspace");
+      this.isTemplateButtonDisabled = true;
+    },
+    updateIsTemplateButtonDisabled(newComponentName) {
+      this.isTemplateButtonDisabled =
+        this.templatesNamesSet.has(newComponentName);
     },
     removeParent() {
       this.$emit("removeParent");

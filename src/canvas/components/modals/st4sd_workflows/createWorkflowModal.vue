@@ -24,7 +24,7 @@ import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 
 export default {
   components: { workflowForm },
-  emits: ["added"],
+  emits: ["added", "bxModalClosed"],
   data() {
     return {};
   },

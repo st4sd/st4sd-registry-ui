@@ -117,6 +117,7 @@
       </template>
     </VueFlow>
     <TemplateWorkspace
+      ref="templateWorkspace"
       @updateLibraryNotification="updateLibraryNotification"
       @libraryLoaded="setupCanvas"
     />
@@ -144,11 +145,13 @@
       :allNodes="allNodes"
       :parentNode="parentNode"
       :dslValidationErrorProp="dslValidationErrors"
+      :templatesNamesSet="templatesNamesSet"
       @bx-modal-closed="toggleModalVisibility('updateWorkflowModal')"
       @openShowDslErrors="toggleModalVisibility('showDslErrors')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
+      @addToTemplateWorkspace="addToTemplateWorkspace"
     />
     <updateComponentModal
       v-if="modalVisibilities.updateComponentModal.value"
@@ -156,10 +159,12 @@
       :allNodes="allNodes"
       :parentNode="parentNode"
       :dslValidationErrorProp="dslValidationErrors"
+      :templatesNamesSet="templatesNamesSet"
       @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
       @openShowDslErrors="toggleModalVisibility('showDslErrors')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
+      @addToTemplateWorkspace="addToTemplateWorkspace"
     />
     <createEdgeModal
       v-if="modalVisibilities.createEdgeModal.value"
@@ -301,7 +306,11 @@ import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 
 //Functions
-import { downloadExperiment, download } from "@/canvas/functions/downloadJSON";
+import {
+  downloadExperiment,
+  download,
+  getDsl,
+} from "@/canvas/functions/downloadJSON";
 import { hide, getWorkflowsEdges } from "@/canvas/functions/hideExpand";
 import {
   addWorkflowNode,
@@ -716,10 +725,12 @@ const toggleTheme = () => (dark.value = !dark.value);
 //NODE - COMPONENT
 let selectedNode;
 let parentNode;
-
+let templatesNamesSet;
+const templateWorkspace = ref();
 onNodeDoubleClick(({ node }) => {
   selectedNode = node;
   parentNode = findNode(node.parentNode);
+  templatesNamesSet = templateWorkspace.value.getTemplatesNamesSet();
   if (node.type == "component") {
     nodeType = "component";
     toggleModalVisibility("updateComponentModal");
@@ -732,6 +743,47 @@ onNodeDoubleClick(({ node }) => {
     toggleModalVisibility("updateWorkflowModal");
   }
 });
+function getChildrenNodes(parentNode, validNodes, childrenNodes) {
+  childrenNodes.push(parentNode);
+  validNodes.forEach((node) => {
+    if (node.parentNode == parentNode.id) {
+      if (node.type == "workflow") {
+        getChildrenNodes(node, validNodes, childrenNodes);
+      } else {
+        childrenNodes.push(node);
+      }
+    }
+  });
+}
+const addToTemplateWorkspace = () => {
+  if (selectedNode.type == "workflow") {
+    //prep Nodes
+    let validNodes = nodes.value.filter(
+      (node) => node.type == "workflow" || node.type == "component",
+    );
+    let childrenNodes = [];
+    getChildrenNodes(selectedNode, validNodes, childrenNodes);
+    let workflowDsl = getDsl(childrenNodes, edges.value);
+    templateWorkspace.value.addToTemplateWorkspace(workflowDsl, "workflow");
+    let addedToWorkspaceNotification = {
+      kind: "success",
+      title: "Workflow successfully added to template workspace",
+    };
+    toastNotifications.value.push(addedToWorkspaceNotification);
+  } else {
+    //Deep copy the node so we sever the connection between the node in the canvas
+    //and the node in the template workspace
+    templateWorkspace.value.addToTemplateWorkspace(
+      JSON.parse(JSON.stringify(selectedNode)),
+      "component",
+    );
+    let addedToWorkspaceNotification = {
+      kind: "success",
+      title: "Component successfully added to template workspace",
+    };
+    toastNotifications.value.push(addedToWorkspaceNotification);
+  }
+};
 
 const openDeleteModal = () => {
   toggleModalVisibility("deleteModal");
