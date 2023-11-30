@@ -102,12 +102,12 @@
         </bx-btn>
       </Panel>
       <template #node-component="{ label }">
-        <ComponentNode :label="label" />
+        <ComponentNode :label="label.replace(' (*)', '')" />
       </template>
       <template #node-workflow="nodeProps">
         <WorkflowNode
           :data="nodeProps.data"
-          :label="nodeProps.label"
+          :label="nodeProps.label.replace(' (*)', '')"
           :isHidden="false"
           @changeVisibility="onChangeVisibility(nodeProps, $event.value)"
         />
