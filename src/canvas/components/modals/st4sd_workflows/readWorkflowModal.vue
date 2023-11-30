@@ -152,18 +152,24 @@
       </bx-accordion>
       <bx-btn
         kind="danger"
-        v-if="deleteEnabled"
+        v-if="shareAndDeleteButtonsAvailable"
         @click="deleteWorkflow"
         :disabled="requestInProgress"
+        title="Delete this template"
       >
         Delete &nbsp;
         <img class="trash-can-icon" src="@/assets/trash-can.svg" />
       </bx-btn>
       <bx-btn
         kind="primary"
-        v-if="shareEnabled"
+        v-if="shareAndDeleteButtonsAvailable"
         @click="shareWorkflow"
-        :disabled="requestInProgress"
+        :disabled="requestInProgress || !shareEnabled"
+        :title="
+          shareEnabled
+            ? 'Store this Template in the persistent Graph Library and make it available to all experiments'
+            : 'The persistent Graph Library already contains a template with the same name'
+        "
       >
         Share &nbsp;
         <img class="launch-icon" src="@/assets/launch.svg" />
@@ -186,8 +192,8 @@ export default {
     node: Object,
     inputingEdges: Array,
     shareEnabled: Boolean,
-    deleteEnabled: Boolean,
     requestInProgress: Boolean,
+    shareAndDeleteButtonsAvailable: Boolean,
   },
   data() {
     return {

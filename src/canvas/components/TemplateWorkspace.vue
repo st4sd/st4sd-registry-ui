@@ -81,7 +81,7 @@
         !persistedGraphs.has(clickedNode.definition.signature.name) &&
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
-      :deleteEnabled="
+      :shareAndDeleteButtonsAvailable="
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
       @deleteWorkflow="handleDeleteTemplate"
@@ -96,7 +96,7 @@
       :shareEnabled="
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
-      :deleteEnabled="
+      :shareAndDeleteButtonsAvailable="
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
       @shareComponent="shareComponent"
