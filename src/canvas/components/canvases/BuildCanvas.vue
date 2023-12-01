@@ -102,12 +102,12 @@
         </bx-btn>
       </Panel>
       <template #node-component="{ label }">
-        <ComponentNode :label="label.replace(' (*)', '')" />
+        <ComponentNode :label="label" />
       </template>
       <template #node-workflow="nodeProps">
         <WorkflowNode
           :data="nodeProps.data"
-          :label="nodeProps.label.replace(' (*)', '')"
+          :label="nodeProps.label"
           :isHidden="false"
           @changeVisibility="onChangeVisibility(nodeProps, $event.value)"
         />
@@ -609,7 +609,7 @@ const onDrop = (event) => {
     y: event.clientY - top,
   });
   let id;
-
+  newNode.label = newNode.label.replace(" (*)", "");
   if (newNode.type == "workflow") {
     // In a workflow newNode is used to generate the whole workflow and thus
     // newNode itself will not be used in the workflow and will be replaced with
@@ -632,6 +632,8 @@ const onDrop = (event) => {
   } else {
     newNode.id = getId();
     id = newNode.id;
+    //To adjust the width of the component
+    updateNodeLabel(newNode);
     addNodes([newNode]);
   }
 

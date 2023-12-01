@@ -181,7 +181,7 @@ export function addWorkflowNodesToCanvas(
   //Create an experiment definition to pass it to createWorkflowDAG function
   let WFexp = {
     entrypoint: {
-      "entry-instance": workflowNode.label,
+      "entry-instance": workflowNode.definition.signature.name,
       execute: [
         {
           target: "<entry-instance>",
@@ -198,7 +198,7 @@ export function addWorkflowNodesToCanvas(
   let experimentGraph = createWorkflowDAG(WFexp);
   //get the workflow node from the resulted DAG
   let entryNode = experimentGraph.nodes.find(
-    (node) => node.id == workflowNode.label,
+    (node) => node.id == workflowNode.definition.signature.name,
   );
   entryNode.position = workflowNode.position;
   entryNode.isEntry = false;
