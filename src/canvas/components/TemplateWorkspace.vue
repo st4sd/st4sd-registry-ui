@@ -84,6 +84,7 @@
       :shareAndDeleteButtonsAvailable="
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
+      @shareWorkflow="shareTemplate"
       @deleteWorkflow="handleDeleteTemplate"
       :requestInProgress="readModalRequestInProgress"
     />
@@ -99,7 +100,7 @@
       :shareAndDeleteButtonsAvailable="
         registryUISharedState.isLocalGraphsLibraryWriteAccessEnabled
       "
-      @shareComponent="shareComponent"
+      @shareComponent="shareTemplate"
       @deleteComponent="handleDeleteTemplate"
       :requestInProgress="readModalRequestInProgress"
     />
@@ -292,20 +293,37 @@ async function deleteTemplate(template) {
   }
 }
 
-async function shareComponent(component) {
+async function shareTemplate(template) {
   readModalRequestInProgress.value = true;
-  let definition = getDSLDefinition(component.definition);
-  let wrappedComponent = { components: [definition] };
+  let definition = getDSLDefinition(template.definition);
+  let wrappedTemplate = {};
+  if (template.type == "component") {
+    wrappedTemplate = { components: [definition] };
+  } else {
+    wrappedTemplate = {
+      entrypoint: {
+        "entry-instance": template.definition.signature.name,
+        execute: [
+          {
+            target: "<entry-instance>",
+            args: {},
+          },
+        ],
+      },
+      workflows: [definition].concat(template.dependencies.workflows),
+      components: template.dependencies.components,
+    };
+  }
 
   let notification = {};
 
   axios
     .post(
       `${getDeploymentEndpoint()}registry-ui/backend/canvas/graphs-library/internal`,
-      wrappedComponent,
+      wrappedTemplate,
     )
     .then((response) => {
-      removeTemplateFromTemplateWorkspace(component.label);
+      removeTemplateFromTemplateWorkspace(template.label);
 
       let graph = response.data.graph;
 
@@ -322,7 +340,7 @@ async function shareComponent(component) {
       notification = {
         statusText: response.statusText,
         code: response.status,
-        description: `${component.definition.signature.name} successfully shared.`,
+        description: `${template.definition.signature.name} successfully shared.`,
         type: "success",
       };
     })
@@ -330,15 +348,19 @@ async function shareComponent(component) {
       notification = {
         statusText: error.response.statusText,
         code: error.response.status,
-        description: `${component.definition.signature.name} could not be shared.`,
+        description: `${template.definition.signature.name} could not be shared.`,
         type: "error",
       };
-      document.getElementById(component.id).classList.add("errored-template");
+      document.getElementById(template.id).classList.add("errored-template");
     })
     .finally(() => {
       emit("updateLibraryNotification", notification);
       readModalRequestInProgress.value = false;
-      toggleModalVisibility("readComponentModal");
+      toggleModalVisibility(
+        `read${
+          template.type.charAt(0).toUpperCase() + template.type.slice(1)
+        }Modal`,
+      );
     });
 }
 
