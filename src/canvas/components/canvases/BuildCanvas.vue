@@ -384,13 +384,14 @@ async function fetchData(id) {
         resetCanvas();
         const uploadedGraph = getEntryWorkflowBlock(graphData);
         //Change ID system and add workflow dimensions
-        addWorkflowNodesToCanvas(
+        let id = addWorkflowNodesToCanvas(
           uploadedGraph,
           workflowDimensions,
           getId,
           addNodes,
           addEdges,
         );
+        setEntrypointAndNotify(id);
       })
       .catch((error) => {
         emit("updateGraphError", error);
