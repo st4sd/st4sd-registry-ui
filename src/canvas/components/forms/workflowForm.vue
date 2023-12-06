@@ -212,6 +212,7 @@ export default {
       );
       tobeUpdatedNode.parentNode = undefined;
       tobeUpdatedNode.expandParent = false;
+      tobeUpdatedNode.extent = undefined;
       delete tobeUpdatedNode.stepId;
       this.updateNodeLabel(tobeUpdatedNode);
       this.$emit("stepDeleted", tobeUpdatedNode);

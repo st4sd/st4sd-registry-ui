@@ -115,9 +115,10 @@ export default {
             let nestedNode = this.allNodes.find(
               (n) => n.id == this.toBeNestedNode.id,
             );
-            nestedNode.parentNode = this.selectedWorkflow.id;
+            //nestedNode.extent is used as a way to preserve the node position after nesting
+            nestedNode.extent = "parent";
             nestedNode.expandParent = true;
-            nestedNode.position = { x: 0, y: 0 };
+            nestedNode.parentNode = this.selectedWorkflow.id;
             nestedNode.stepId = this.stepName;
             updateNodeLabel(nestedNode);
             if (nestedNode.type == "workflow") {

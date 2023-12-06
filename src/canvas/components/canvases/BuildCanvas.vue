@@ -831,6 +831,7 @@ const deleteNode = () => {
 const removeParentNode = () => {
   selectedNode.parentNode = undefined;
   selectedNode.expandParent = false;
+  selectedNode.extent = undefined;
   //Remove it as a step from parent WF
   removeStep(parentNode, selectedNode);
   //We call this function after removeStep as removeStep deletes the stepId and then
