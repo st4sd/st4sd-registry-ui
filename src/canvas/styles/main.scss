@@ -5,6 +5,13 @@
 @import "https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css";
 @import "https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css";
 
+// to recolor the node resizer
+.vue-flow__resize-control.handle {
+  background-color: rgb(12, 100, 70);
+}
+.vue-flow__resize-control.line {
+  border-color: rgb(12, 100, 70);
+}
 .vue-flow__node-default .vue-flow__handle,
 .vue-flow__node-input .vue-flow__handle,
 .vue-flow__node-output .vue-flow__handle,
@@ -16,6 +23,20 @@
   background: rgba(0, 0, 0, 0);
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 100%;
+}
+
+.vue-flow__node-component.selected,
+.vue-flow__node-component:focus,
+.vue-flow__node-component:focus-visible {
+  outline: none;
+  border: 2px solid #222;
+}
+
+.vue-flow__node-workflow.selected,
+.vue-flow__node-workflow:focus,
+.vue-flow__node-workflow:focus-visible {
+  outline: none;
+  border: 2px solid rgb(12, 100, 70);
 }
 
 .vue-flow__node-workflow,
