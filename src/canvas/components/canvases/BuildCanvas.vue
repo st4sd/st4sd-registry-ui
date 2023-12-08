@@ -1,5 +1,5 @@
 <template>
-  <div @keyup.delete="onDeleteKeyUp" class="dndflow" @drop="onDrop">
+  <div class="dndflow" @drop="onDrop">
     <VueFlow
       :class="{ dark }"
       :default-zoom="1"
@@ -350,15 +350,12 @@ const localPVEP = ref();
 let elements = {};
 
 const {
-  onNodeDragStart,
   onNodeDragStop,
   onConnect,
   addEdges,
   addNodes,
   onEdgeDoubleClick,
-  onEdgeClick,
   onNodeDoubleClick,
-  onNodeClick,
   removeEdges,
   removeNodes,
   findNode,
@@ -705,12 +702,6 @@ onNodeDragStop((event) => {
     toggleModalVisibility("nestingModal");
   }
 });
-//To make sure that when node is dragged (and therefore selected)
-//we set selectedNode correctly
-onNodeDragStart((event) => {
-  selectedNode = event.node;
-  nodeType = selectedNode.type;
-});
 
 let newEdge;
 onConnect((edgeInProgress) => {
@@ -731,12 +722,6 @@ onConnect((edgeInProgress) => {
 
 let nodeType;
 let selectedEdge;
-
-onEdgeClick(({ edge }) => {
-  selectedEdge = edge;
-  nodeType = "connection";
-});
-
 onEdgeDoubleClick(({ edge }) => {
   selectedEdge = edge;
   nodeType = "connection";
@@ -762,12 +747,6 @@ const toggleTheme = () => (dark.value = !dark.value);
 //NODE - COMPONENT
 let selectedNode;
 let parentNode;
-
-onNodeClick(({ node }) => {
-  selectedNode = node;
-  nodeType = node.type;
-});
-
 let templatesNamesSet;
 const templateWorkspace = ref();
 onNodeDoubleClick(({ node }) => {
@@ -825,12 +804,6 @@ const addToTemplateWorkspace = () => {
       title: "Component successfully added to template workspace",
     };
     toastNotifications.value.push(addedToWorkspaceNotification);
-  }
-};
-
-const onDeleteKeyUp = () => {
-  if (nodeType != "workflow-input") {
-    toggleModalVisibility("deleteModal");
   }
 };
 
