@@ -1,14 +1,4 @@
 <template>
-  <div id="toast-notification-container">
-    <bx-toast-notification
-      id="dsl-valid"
-      kind="success"
-      timeout="10000"
-      @bx-notification-closed="componentUpdated = false"
-      :open="componentUpdated"
-      title="Component successfully updated"
-    />
-  </div>
   <bx-modal open>
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
@@ -31,7 +21,7 @@
         :node="node"
         :allNodes="allNodes"
         :parentNode="parentNode"
-        @update="update"
+        @update="updateComponentModalNotification"
         @nameChanged="updateIsTemplateButtonDisabled"
         @removeParent="removeParent"
         @invalid="submitDisabled"
@@ -91,7 +81,7 @@ export default {
     templatesNamesSet: Set,
   },
   emits: [
-    "updated",
+    "updateComponentModalNotification",
     "delete",
     "removeParent",
     "openShowDslErrors",
@@ -101,7 +91,6 @@ export default {
   data() {
     return {
       disabled: false,
-      componentUpdated: false,
       isTemplateButtonDisabled: false,
     };
   },
@@ -135,8 +124,13 @@ export default {
     updateComponentDefinition() {
       this.$refs.componentForm.update();
     },
-    update() {
-      this.componentUpdated = true;
+    updateComponentModalNotification() {
+      let notification = {
+        kind: "success",
+        title: "Component successfully updated",
+        code: 0,
+      };
+      this.$emit("updateComponentModalNotification", notification);
     },
     submitDisabled(disabled) {
       this.disabled = disabled;

@@ -1,11 +1,15 @@
 <template>
   <div id="toast-notification-container">
     <bx-toast-notification
-      v-for="notifcation in notifications"
-      :key="notifcation.description"
-      :kind="notifcation.type"
-      :title="notifcation.description"
-      :caption="notifcation.statusText + ' (code ' + notifcation.code + ')'"
+      v-for="(notification, idx) in notifications"
+      :key="idx"
+      :kind="notification.kind"
+      :title="notification.title"
+      :subtitle="notification.subtitle"
+      :caption="
+        ('caption' in notification ? notification.caption : '') +
+        (notification.code == 0 ? '' : ` (code ${notification.code})`)
+      "
       timeout="10000"
     >
     </bx-toast-notification>
@@ -20,20 +24,19 @@
   <div v-else-if="fullPageError.code != null">
     <HttpErrorEmptyState
       class="full-height-empty-state"
-      :errorDescription="fullPageError.description"
-      :errorStatusText="fullPageError.statusText"
+      :errorDescription="fullPageError.title"
+      :errorStatusText="fullPageError.caption"
       :errorCode="fullPageError.code"
     />
   </div>
 
   <BuildCanvas
     @updateLibraryNotification="onUpdateLibraryNotification"
-    @updateGraphError="updateGraphError"
+    @updateBuildCanvasNotification="onUpdateBuildCanvasNotification"
+    @updateFatalError="onFatalError"
     v-show="!loading && fullPageError.code == null"
     :pvep="pvep"
-    @pvepFetchFailed="onPvepFetchFailed"
     @updateLoading="updateLoading"
-    @experimentTypeUnsupported="onExperimentTypeUnsupported"
   />
 </template>
 
@@ -68,35 +71,15 @@ export default {
 
       this.notifications.push(notification);
     },
-    updateGraphError(error) {
-      let graphError = {
-        statusText: error.response.statusText,
-        code: error.response.status,
-        description: "Unable to load graph",
-        type: "error",
-      };
+    onUpdateBuildCanvasNotification(notification) {
+      this.notifications.push(notification);
+    },
+    onFatalError(notification) {
+      this.notifications.push(notification);
 
       if (this.fullPageError.code == null) {
-        this.fullPageError = graphError;
+        this.fullPageError = notification;
       }
-
-      this.notifications.push(graphError);
-    },
-    onPvepFetchFailed(error) {
-      let pvepError = {
-        statusText: error.response.statusText,
-        code: error.response.status,
-        description: "Unable to load PVEP",
-      };
-
-      this.errors.push(pvepError);
-    },
-    onExperimentTypeUnsupported(error) {
-      if (this.fullPageError.code == null) {
-        this.fullPageError = error;
-      }
-
-      this.errors.push(error);
     },
     getBreadcumbs() {
       let breadcrumbs = [

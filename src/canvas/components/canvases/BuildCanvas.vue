@@ -121,18 +121,6 @@
       @updateLibraryNotification="updateLibraryNotification"
       @libraryLoaded="setupCanvas"
     />
-    <!-- Error Notification -->
-    <div id="toast-notification-container">
-      <bx-toast-notification
-        v-for="(notification, notifIdx) in toastNotifications"
-        :key="notifIdx"
-        timeout="10000"
-        :kind="notification.kind"
-        :title="notification.title"
-        :subtitle="notification.subtitle"
-        :caption="notification.caption"
-      />
-    </div>
     <!-- CRUD operations -->
     <createWorkflowModal
       v-if="modalVisibilities.createWorkflowModal.value"
@@ -152,6 +140,7 @@
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
       @addToTemplateWorkspace="addToTemplateWorkspace"
+      @updateWorkflowModalNotification="updateBuildCanvasNotifications"
     />
     <updateComponentModal
       v-if="modalVisibilities.updateComponentModal.value"
@@ -165,6 +154,7 @@
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @addToTemplateWorkspace="addToTemplateWorkspace"
+      @updateComponentModalNotification="updateBuildCanvasNotifications"
     />
     <createEdgeModal
       v-if="modalVisibilities.createEdgeModal.value"
@@ -342,9 +332,8 @@ const props = defineProps({
 const emit = defineEmits([
   "updateLoading",
   "updateLibraryNotification",
-  "updateGraphError",
-  "pvepFetchFailed",
-  "experimentTypeUnsupported",
+  "updateBuildCanvasNotification",
+  "updateFatalError",
 ]);
 const localPVEP = ref();
 let elements = {};
@@ -394,7 +383,13 @@ async function fetchData(id) {
         setEntrypointAndNotify(id);
       })
       .catch((error) => {
-        emit("updateGraphError", error);
+        let notification = {
+          kind: "error",
+          title: "Unable to load graph",
+          caption: error.response.statusText,
+          code: error.response.status,
+        };
+        emit("updateFatalError", notification);
       });
 
     await promisedPvep
@@ -406,10 +401,10 @@ async function fetchData(id) {
           )
         ) {
           let error = {
-            type: "experimentTypeUnsupported",
+            kind: "experimentTypeUnsupported",
+            title: "Editing is supported only for internal experiments",
+            caption: "BAD_REQUEST",
             code: 400,
-            statusText: "BAD_REQUEST",
-            description: "Editing is supported only for internal experiments",
           };
           emit("experimentTypeUnsupported", error);
           return;
@@ -418,9 +413,18 @@ async function fetchData(id) {
         canvasStore.setPVEP(response.data.entry);
       })
       .catch((error) => {
-        if ("type" in error && error.type == "experimentTypeUnsupported") {
-          emit("experimentTypeUnsupported", error);
-        } else emit("pvepFetchFailed", error);
+        if ("kind" in error && error.kind == "experimentTypeUnsupported") {
+          error.kind = "error";
+          emit("updateFatalError", error);
+        } else {
+          let notification = {
+            kind: "error",
+            title: "Unable to load PVEP",
+            caption: error.response.statusText,
+            code: error.response.status,
+          };
+          emit("updateFatalError", notification);
+        }
       });
   } finally {
     emit("updateLoading", false);
@@ -437,6 +441,10 @@ function updateLibraryNotification(notification) {
   if (notification.code == 405) {
     is405 = true;
   }
+}
+
+function updateBuildCanvasNotifications(notification) {
+  emit("updateBuildCanvasNotification", notification);
 }
 
 function setupCanvas() {
@@ -485,7 +493,6 @@ let modalVisibilities = {
   showDslErrors: ref(false),
 };
 
-let toastNotifications = ref([]);
 let uploadedFilesConents;
 const uploadFiles = async (files) => {
   //set the object here to avoid saved files from prev uploads
@@ -528,13 +535,14 @@ function applyUploadedFiles() {
       // we are sure that this is the first workflow added to the canvas
       setEntrypointAndNotify(id);
     } else {
-      let dslFileUploadError = {
+      let notification = {
         kind: "error",
         title: "Unable to load DSL files",
         subtitle: "The uploaded file is not in the expected format.",
         caption: "Did you choose the correct file type?",
+        code: 0,
       };
-      toastNotifications.value.push(dslFileUploadError);
+      emit("updateBuildCanvasNotification", notification);
     }
   } else if (uploadedFilesConents.graph != "") {
     if (uploadedFilesConents.graph.nodes) {
@@ -559,13 +567,14 @@ function applyUploadedFiles() {
         setEntrypointAndNotify(entrypoints[0].id);
       }
     } else {
-      let canvasProjectFileUploadError = {
+      let notification = {
         kind: "error",
         title: "Unable to load project files",
         subtitle: "The uploaded file is not in the expected format.",
         caption: "Did you choose the correct file type?",
+        code: 0,
       };
-      toastNotifications.value.push(canvasProjectFileUploadError);
+      emit("updateBuildCanvasNotification", notification);
     }
   }
   // Ensure the confirmUploadModal is hidden
@@ -669,13 +678,14 @@ const onDrop = (event) => {
 function setEntrypointAndNotify(id) {
   let node = findNode(id);
   node.isEntry = true;
-  let entrypointAddedNotification = {
+  let notification = {
     kind: "info",
     title: "Entrypoint auto-populated",
     subtitle: `Workflow ${node.label} is now the entrypoint of your experiment.`,
     caption: "You can change this by clicking on the Select Entrypoint button",
+    code: 0,
   };
-  toastNotifications.value.push(entrypointAddedNotification);
+  emit("updateBuildCanvasNotification", notification);
 }
 
 const addWorkflow = (workflow, input) => {
@@ -787,11 +797,12 @@ const addToTemplateWorkspace = () => {
     getChildrenNodes(selectedNode, validNodes, childrenNodes);
     let workflowDsl = getDsl(childrenNodes, edges.value);
     templateWorkspace.value.addToTemplateWorkspace(workflowDsl, "workflow");
-    let addedToWorkspaceNotification = {
+    let notification = {
       kind: "success",
       title: "Workflow successfully added to template workspace",
+      code: 0,
     };
-    toastNotifications.value.push(addedToWorkspaceNotification);
+    emit("updateBuildCanvasNotification", notification);
   } else {
     //Deep copy the node so we sever the connection between the node in the canvas
     //and the node in the template workspace
@@ -799,11 +810,12 @@ const addToTemplateWorkspace = () => {
       JSON.parse(JSON.stringify(selectedNode)),
       "component",
     );
-    let addedToWorkspaceNotification = {
+    let notification = {
       kind: "success",
       title: "Component successfully added to template workspace",
+      code: 0,
     };
-    toastNotifications.value.push(addedToWorkspaceNotification);
+    emit("updateBuildCanvasNotification", notification);
   }
 };
 
@@ -863,13 +875,14 @@ const downloadExperimentFiles = () => {
   try {
     downloadExperiment(nodes.value, edges.value, dslFileName + "-dsl");
   } catch (error) {
-    let dslDownloadError = {
+    let notification = {
       kind: "error",
       title: "Unable to download DSL file",
       subtitle: "",
-      caption: error.message,
+      caption: error.response.statusText,
+      code: error.response.status,
     };
-    toastNotifications.value.push(dslDownloadError);
+    emit("updateBuildCanvasNotification", notification);
   }
 };
 
@@ -913,6 +926,4 @@ const setDslValidationError = (dslError) => {
 };
 </script>
 
-<style lang="scss" src="@/canvas/styles/main.scss">
-@import "@/styles/toast-notification-styles.scss";
-</style>
+<style lang="scss" src="@/canvas/styles/main.scss"></style>

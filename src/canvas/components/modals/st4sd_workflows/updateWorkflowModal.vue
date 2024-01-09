@@ -1,14 +1,4 @@
 <template>
-  <div id="toast-notification-container">
-    <bx-toast-notification
-      id="dsl-valid"
-      kind="success"
-      timeout="10000"
-      @bx-notification-closed="workflowUpdated = false"
-      :open="workflowUpdated"
-      title="Workflow successfully updated"
-    />
-  </div>
   <bx-modal open>
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
@@ -29,7 +19,7 @@
         :node="node"
         :parentNode="parentNode"
         :allNodes="allNodes"
-        @update="update"
+        @update="updateWorkflowModalNotification"
         @removeParent="removeParent"
         @stepDeleted="stepDeleted"
         @nameChanged="updateIsTemplateButtonDisabled"
@@ -82,7 +72,6 @@ export default {
   },
   data() {
     return {
-      workflowUpdated: false,
       isTemplateButtonDisabled: false,
     };
   },
@@ -94,6 +83,7 @@ export default {
     "openShowDslErrors",
     "bxModalClosed",
     "addToTemplateWorkspace",
+    "updateWorkflowModalNotification",
   ],
   mounted() {
     if (
@@ -128,8 +118,13 @@ export default {
     save() {
       this.$refs.workflowForm.update();
     },
-    update() {
-      this.workflowUpdated = true;
+    updateWorkflowModalNotification() {
+      let notification = {
+        kind: "success",
+        title: "Workflow successfully updated",
+        code: 0,
+      };
+      this.$emit("updateWorkflowModalNotification", notification);
     },
   },
 };
@@ -139,5 +134,4 @@ export default {
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
-@import "@/styles/toast-notification-styles.scss";
 </style>

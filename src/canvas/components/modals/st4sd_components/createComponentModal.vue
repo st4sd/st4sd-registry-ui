@@ -1,15 +1,4 @@
 <template>
-  <div id="toast-notification-container">
-    <bx-toast-notification
-      v-for="(notification, idx) in notifications"
-      :key="idx"
-      kind="error"
-      timeout="10000"
-      :title="`Template ${notification.componentName} already exists`"
-      subtitle="Template names must be unique."
-      caption="Please choose another name."
-    />
-  </div>
   <bx-modal open>
     <bx-modal-header>
       <bx-modal-close-button></bx-modal-close-button>
@@ -44,14 +33,17 @@ import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {
   components: { componentForm },
-  emits: ["componentAdded", "bxModalClosed"],
+  emits: [
+    "componentAdded",
+    "bxModalClosed",
+    "updateCreateComponentModalNotification",
+  ],
   props: {
     existingTemplates: Set,
   },
   data() {
     return {
       disabled: false,
-      notifications: [],
     };
   },
   methods: {
@@ -64,7 +56,14 @@ export default {
     },
     addComponent(definition) {
       if (this.existingTemplates.has(definition.signature.name)) {
-        this.notifications.push({ componentName: definition.signature.name });
+        let notification = {
+          kind: "error",
+          title: `Template ${definition.signature.name} already exists`,
+          subtitle: "Template names must be unique.",
+          caption: "Please choose another name.",
+          code: 0,
+        };
+        this.$emit("updateCreateComponentModalNotification", notification);
       } else {
         //the new node card's properties here
         let componentNode = {
@@ -82,7 +81,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/toast-notification-styles.scss";
-</style>

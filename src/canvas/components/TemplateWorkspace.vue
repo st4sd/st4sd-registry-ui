@@ -70,6 +70,9 @@
       "
       @componentAdded="addComponentNode"
       @bx-modal-closed="toggleModalVisibility('createComponentModal')"
+      @updateCreateComponentModalNotification="
+        onUpdateCreateComponentModalNotification
+      "
     />
     <readWorkflowModal
       v-if="modalVisibilities.readWorkflowModal.value"
@@ -170,10 +173,10 @@ async function getNodesFromUrls() {
     })
     .catch((error) => {
       let notification = {
-        statusText: error.response.statusText,
+        kind: "error",
+        title: "Template Workspace contents could not be loaded",
+        caption: error.response.statusText,
         code: error.response.status,
-        description: `Template Library could not be loaded`,
-        type: "error",
       };
       emit("updateLibraryNotification", notification);
     })
@@ -255,18 +258,18 @@ async function deleteTemplate(template) {
         persistedGraphs.delete(template.label);
 
         notification = {
-          statusText: response.statusText,
+          kind: "success",
+          title: `${template.definition.signature.name} successfully deleted.`,
+          caption: response.statusText,
           code: response.status,
-          description: `${template.definition.signature.name} successfully deleted.`,
-          type: "success",
         };
       })
       .catch((error) => {
         notification = {
-          statusText: error.response.statusText,
+          kind: "error",
+          title: `${template.definition.signature.name} could not be deleted.`,
+          caption: error.response.statusText,
           code: error.response.status,
-          description: `${template.definition.signature.name} could not be deleted.`,
-          type: "error",
         };
         document.getElementById(template.id).classList.add("errored-template");
       })
@@ -338,18 +341,18 @@ async function shareTemplate(template) {
       updateList();
 
       notification = {
-        statusText: response.statusText,
+        kind: "success",
+        title: `${template.definition.signature.name} successfully shared.`,
+        caption: response.statusText,
         code: response.status,
-        description: `${template.definition.signature.name} successfully shared.`,
-        type: "success",
       };
     })
     .catch((error) => {
       notification = {
-        statusText: error.response.statusText,
+        kind: "error",
+        title: `${template.definition.signature.name} could not be shared.`,
+        caption: error.response.statusText,
         code: error.response.status,
-        description: `${template.definition.signature.name} could not be shared.`,
-        type: "error",
       };
       document.getElementById(template.id).classList.add("errored-template");
     })
@@ -389,6 +392,10 @@ const addComponentNode = (newComponent) => {
   elements.value.push(newComponent);
   toggleModalVisibility("createComponentModal");
 };
+
+function onUpdateCreateComponentModalNotification(notification) {
+  emit("updateLibraryNotification", notification);
+}
 
 //Search bar function
 let searchTerm = "";
