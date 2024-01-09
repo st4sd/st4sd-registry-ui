@@ -19,12 +19,11 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/modal/index.js";
 import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 
 export default {
   components: { workflowForm },
-  emits: ["added", "bxModalClosed"],
+  emits: ["added"],
   data() {
     return {};
   },
@@ -39,8 +38,5 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-@import "@/styles/delete-button-icon-inside-cell-style.css";
-@import "@/styles/bx-structured-list-styles.css";
-@import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 </style>

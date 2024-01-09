@@ -29,7 +29,7 @@
           />
         </bx-btn>
         <bx-btn
-          title="Configure Experiment"
+          title="Select Entrypoint"
           @click="toggleModalVisibility('selectEntryPointModal')"
           kind="primary"
           :disabled="
@@ -41,6 +41,7 @@
         <bx-btn
           size="sm"
           title="Add Workflow"
+          kind="primary"
           @click="toggleModalVisibility('createWorkflowModal')"
         >
           + Add workflow

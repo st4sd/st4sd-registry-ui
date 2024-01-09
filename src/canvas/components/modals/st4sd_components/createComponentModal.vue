@@ -33,11 +33,7 @@ import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {
   components: { componentForm },
-  emits: [
-    "componentAdded",
-    "bxModalClosed",
-    "updateCreateComponentModalNotification",
-  ],
+  emits: ["componentAdded", "updateCreateComponentModalNotification"],
   props: {
     existingTemplates: Set,
   },

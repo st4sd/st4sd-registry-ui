@@ -85,7 +85,6 @@ export default {
     "delete",
     "removeParent",
     "openShowDslErrors",
-    "bxModalClosed",
     "addToTemplateWorkspace",
   ],
   data() {

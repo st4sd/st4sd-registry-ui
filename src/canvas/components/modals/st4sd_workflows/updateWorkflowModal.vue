@@ -81,7 +81,6 @@ export default {
     "removeParent",
     "stepDeleted",
     "openShowDslErrors",
-    "bxModalClosed",
     "addToTemplateWorkspace",
     "updateWorkflowModalNotification",
   ],
