@@ -44,6 +44,7 @@
         >
       </bx-accordion-item>
       <bx-accordion-item
+        open
         :title-text="
           'Parameters (' + component.signature.parameters.length + ')'
         "

@@ -8,21 +8,17 @@
       <bx-accordion>
         <bx-accordion-item data-modal-primary-focus open title-text="Overview">
           <bx-structured-list>
-            <bx-structured-list-head>
-              <bx-structured-list-header-row>
-                <bx-structured-list-header-cell
-                  >Property</bx-structured-list-header-cell
-                >
-                <bx-structured-list-header-cell
-                  >Definition</bx-structured-list-header-cell
-                >
-              </bx-structured-list-header-row>
-            </bx-structured-list-head>
             <bx-structured-list-body>
               <bx-structured-list-row v-if="workflowName != ''">
-                <bx-structured-list-cell>Workflow name</bx-structured-list-cell>
+                <bx-structured-list-cell>Name</bx-structured-list-cell>
                 <bx-structured-list-cell>{{
                   workflowName
+                }}</bx-structured-list-cell>
+              </bx-structured-list-row>
+              <bx-structured-list-row v-if="workflowDescription != ''">
+                <bx-structured-list-cell>Description</bx-structured-list-cell>
+                <bx-structured-list-cell>{{
+                  workflowDescription
                 }}</bx-structured-list-cell>
               </bx-structured-list-row>
             </bx-structured-list-body>
@@ -198,20 +194,28 @@ export default {
   data() {
     return {
       workflowName: "",
-      workflowParams: [],
-      workflowSteps: {},
+      workflowDescription: "",
+      workflowParams: "",
+      workflowSteps: "",
       workflowExecute: "",
     };
   },
   mounted() {
-    this.workflowName = this.node.definition.signature.name;
+    if (this.node.definition.signature.name) {
+      this.workflowName = this.node.definition.signature.name;
+    }
+    if (this.node.definition.signature.description) {
+      this.workflowDescription = this.node.definition.signature.description;
+    }
     if (this.node.definition.signature.parameters) {
       this.workflowParams = this.node.definition.signature.parameters;
     }
     if (this.node.definition.steps) {
       this.workflowSteps = this.node.definition.steps;
     }
-    this.workflowExecute = this.node.definition.execute;
+    if (this.node.definition.execute) {
+      this.workflowExecute = this.node.definition.execute;
+    }
   },
   methods: {
     getParameterValue(paramName) {

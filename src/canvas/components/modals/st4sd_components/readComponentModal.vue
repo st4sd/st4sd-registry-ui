@@ -15,6 +15,12 @@
                   componentName
                 }}</bx-structured-list-cell>
               </bx-structured-list-row>
+              <bx-structured-list-row v-if="componentDescription != undefined">
+                <bx-structured-list-cell>Description</bx-structured-list-cell>
+                <bx-structured-list-cell>{{
+                  componentDescription
+                }}</bx-structured-list-cell>
+              </bx-structured-list-row>
               <bx-structured-list-row v-if="componentStage != undefined">
                 <bx-structured-list-cell>Stage</bx-structured-list-cell>
                 <bx-structured-list-cell>{{
@@ -22,7 +28,12 @@
                 }}</bx-structured-list-cell>
               </bx-structured-list-row>
 
-              <bx-structured-list-row v-if="componentVariables != undefined">
+              <bx-structured-list-row
+                v-if="
+                  componentVariables != undefined &&
+                  Object.keys(componentVariables).length > 0
+                "
+              >
                 <bx-structured-list-cell>Variables</bx-structured-list-cell>
                 <bx-structured-list-cell>
                   <bx-structured-list>
@@ -832,6 +843,7 @@ export default {
   data() {
     return {
       componentName: null,
+      componentDescription: null,
       currentDefinition: {},
       componentStage: null,
       componentReferences: [],
@@ -913,9 +925,18 @@ export default {
     };
   },
   mounted() {
-    this.componentName = this.node.definition.signature.name;
-    this.componentStage = this.node.definition.stage;
-    this.componentVariables = this.node.definition.variables;
+    if (this.node.definition.signature.name) {
+      this.componentName = this.node.definition.signature.name;
+    }
+    if (this.node.definition.signature.description) {
+      this.componentDescription = this.node.definition.signature.description;
+    }
+    if (this.node.definition.stage) {
+      this.componentStage = this.node.definition.stage;
+    }
+    if (this.node.definition.variables) {
+      this.componentVariables = this.node.definition.variables;
+    }
     this.componentReferences.push(this.node.definition.references);
     Object.assign(this.componentSignature, this.node.definition.signature);
     Object.assign(this.componentCommand, this.node.definition.command);

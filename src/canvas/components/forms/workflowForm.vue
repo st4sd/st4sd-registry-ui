@@ -43,7 +43,7 @@
       >
     </bx-accordion-item>
     <bx-accordion-item
-      :open="node == undefined"
+      open
       v-if="workflow.getParameters() != undefined"
       :title-text="'Parameters (' + workflow.getParameters().length + ')'"
     >
