@@ -182,6 +182,7 @@ export default {
       childrenNodes: [],
       isError: false,
       oldName: "",
+      removedSteps: [],
     };
   },
   mounted() {
@@ -205,17 +206,22 @@ export default {
     },
     removeStep(index) {
       let step = this.workflow.getStep(index).step;
+      this.removedSteps.push(step);
       this.workflow.removeStep(index);
-      //remove this block from the parent workflow (Un nest it)
-      let tobeUpdatedNode = this.childrenNodes.find(
-        (node) => node.stepId == step,
-      );
-      tobeUpdatedNode.parentNode = undefined;
-      tobeUpdatedNode.expandParent = false;
-      tobeUpdatedNode.extent = undefined;
-      delete tobeUpdatedNode.stepId;
-      this.updateNodeLabel(tobeUpdatedNode);
-      this.$emit("stepDeleted", tobeUpdatedNode);
+    },
+    applyStepRemoval() {
+      this.removedSteps.forEach((removedStep) => {
+        //remove this block from the parent workflow (Un nest it)
+        let tobeUpdatedNode = this.childrenNodes.find(
+          (node) => node.stepId == removedStep,
+        );
+        tobeUpdatedNode.parentNode = undefined;
+        tobeUpdatedNode.expandParent = false;
+        tobeUpdatedNode.extent = undefined;
+        delete tobeUpdatedNode.stepId;
+        this.updateNodeLabel(tobeUpdatedNode);
+        this.$emit("stepDeleted", tobeUpdatedNode);
+      });
     },
     add() {
       if (!this.isError) {
@@ -231,7 +237,9 @@ export default {
     update() {
       if (!this.isError) {
         if (this.workflow.areStepsUnique()) {
+          this.applyStepRemoval();
           this.checkStepsChanges();
+          //chec steps definition to see if any steps got removed
           let updatedWorkflow = this.allNodes.find(
             (node) => node.id == this.node.id,
           );
