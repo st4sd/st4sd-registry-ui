@@ -22,7 +22,12 @@
       <br />
       <bx-btn kind="danger" @click="emitDelete">
         Delete this connection &nbsp;
-        <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+        <img
+          class="white-svg"
+          width="18"
+          height="18"
+          src="@/assets/trash-can.svg"
+        />
       </bx-btn>
     </bx-modal-body>
     <bx-modal-footer>
@@ -81,7 +86,8 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";

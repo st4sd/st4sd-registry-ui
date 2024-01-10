@@ -21,7 +21,11 @@
           :disabled="Object.keys(exp_no_interface).length === 0"
         >
           Download JSON&nbsp;
-          <img class="download-icon" src="../../assets/download.svg"
+          <img
+            class="white-svg"
+            height="18"
+            width="18"
+            src="../../assets/download.svg"
         /></bx-btn>
       </div>
     </div>
@@ -59,7 +63,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
+
 .download-icon {
   height: 16px;
   width: 16px;

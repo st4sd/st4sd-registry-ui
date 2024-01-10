@@ -102,9 +102,9 @@
             >
               Add Component
               <img
-                id="add-icon"
+                id="white-svg"
                 width="20"
-                heigth="20"
+                height="20"
                 src="@/assets/shopping--cart.svg"
               />
             </dds-card-footer>
@@ -125,9 +125,9 @@
           <div id="item-content">
             {{ component["graph"]["entrypoint"]["entry-instance"] }}
             <img
-              id="remove-icon"
+              id="white-svg"
               width="16"
-              heigth="16"
+              height="16"
               src="@/assets/subtract--alt.svg"
             />
           </div>
@@ -138,8 +138,12 @@
         id="basket-button"
         icon-layout
         v-if="componentsToImport.length != 0"
-        ><img width="16" heigth="16" src="@/assets/plus.svg" />Import To Local
-        Library</bx-btn
+        ><img
+          class="white-svg"
+          width="16"
+          height="16"
+          src="@/assets/plus.svg"
+        />Import To Local Library</bx-btn
       >
     </div>
   </div>
@@ -246,6 +250,7 @@ export default {
 <style lang="scss" scoped>
 @use "@carbon/layout";
 
+@import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
 @import "@/styles/empty_state_styles.scss";
 

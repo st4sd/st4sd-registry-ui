@@ -29,7 +29,12 @@
       <br />
       <bx-btn kind="danger" @click="emitDelete">
         Delete this component &nbsp;
-        <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+        <img
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/trash-can.svg"
+        />
       </bx-btn>
       <bx-btn
         kind="primary"
@@ -137,19 +142,10 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 @import "@/styles/toast-notification-styles.scss";
-
-.trash-can-icon {
-  max-height: 18px;
-  max-width: 18px;
-  width: 100%;
-  height: 100%;
-  margin: 0rem;
-  -webkit-filter: invert(0.99);
-  filter: invert(0.99);
-}
 </style>

@@ -42,7 +42,11 @@ No logs available
           @click="download()"
         >
           Download log&nbsp;
-          <img class="download-icon" src="../../assets/download.svg"
+          <img
+            class="white-svg"
+            height="18"
+            width="18"
+            src="../../assets/download.svg"
         /></bx-btn>
       </div>
     </template>
@@ -101,6 +105,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/svg.scss";
+
 p {
   font-size: small;
   background-color: #f4f4f4;
@@ -143,11 +149,5 @@ p {
 
 .bx--btn--primary {
   margin-top: 0;
-}
-
-.download-icon {
-  height: 16px;
-  width: 16px;
-  filter: invert(100);
 }
 </style>

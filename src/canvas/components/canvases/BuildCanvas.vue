@@ -22,9 +22,9 @@
           :disabled="!allNodes.some((node) => node.type != 'input')"
         >
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/reset.svg"
           />
         </bx-btn>
@@ -49,9 +49,9 @@
 
         <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
@@ -66,17 +66,17 @@
           :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/download.svg"
           />
         </bx-btn>
         <bx-btn size="sm" title="Save canvas project" @click="saveGraph">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/save.svg"
           />
         </bx-btn>
@@ -86,9 +86,9 @@
           @click="toggleModalVisibility('fileUploadModal')"
         >
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/upload.svg"
           />
         </bx-btn>
@@ -927,4 +927,8 @@ const setDslValidationError = (dslError) => {
 };
 </script>
 
-<style lang="scss" src="@/canvas/styles/main.scss"></style>
+<style lang="scss">
+@import "@/canvas/styles/main.scss";
+@import "@/styles/toast-notification-styles.scss";
+@import "@/styles/svg.scss";
+</style>

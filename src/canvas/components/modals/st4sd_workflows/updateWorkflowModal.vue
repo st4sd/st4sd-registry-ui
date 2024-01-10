@@ -27,7 +27,12 @@
       <br />
       <bx-btn kind="danger" @click="emitDelete">
         Delete this workflow &nbsp;
-        <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+        <img
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/trash-can.svg"
+        />
       </bx-btn>
       <bx-btn
         kind="primary"
@@ -128,7 +133,8 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";

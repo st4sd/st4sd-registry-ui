@@ -51,13 +51,16 @@
             <bx-btn
               :disabled="propertiesToDisplay.length == 0"
               v-if="properties != []"
-              class="bx--btn--primary"
-              type="button"
+              type="primary"
               @click="download()"
             >
               <p class="download-text">Download&nbsp;</p>
 
-              <img class="download-icon" src="../../assets/download.svg"
+              <img
+                class="white-svg"
+                height="18"
+                width="18"
+                src="../../assets/download.svg"
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
@@ -280,7 +283,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
+
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;

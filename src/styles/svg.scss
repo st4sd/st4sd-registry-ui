@@ -1,0 +1,9 @@
+/*  SVG colour correction
+    Note: brightness and saturate are needed to turn all SVGs
+    black first, so that we don't invert colours unnecessarily
+*/
+
+.white-svg {
+  -webkit-filter: brightness(0) saturate(100%) invert(0.99);
+  filter: brightness(0) saturate(100%) invert(0.99);
+}

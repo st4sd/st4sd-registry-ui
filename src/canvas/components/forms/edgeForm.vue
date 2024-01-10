@@ -79,12 +79,16 @@
         </bx-structured-list-cell>
         <bx-structured-list-cell class="structured-list-delete-button-bottom">
           <bx-btn
-            class="button-inside-cell"
             kind="danger"
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
-            <img src="@/assets/remove.svg" />
+            <img
+              class="white-svg"
+              height="18"
+              width="18"
+              src="@/assets/remove.svg"
+            />
           </bx-btn>
         </bx-structured-list-cell>
       </bx-structured-list-row>
@@ -137,12 +141,16 @@
         </bx-structured-list-cell>
         <bx-structured-list-cell class="structured-list-delete-button-bottom">
           <bx-btn
-            class="button-inside-cell"
             kind="danger"
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
-            <img src="@/assets/remove.svg" />
+            <img
+              class="white-svg"
+              height="18"
+              width="18"
+              src="@/assets/remove.svg"
+            />
           </bx-btn>
         </bx-structured-list-cell>
       </bx-structured-list-row>
@@ -301,6 +309,7 @@ export default {
 };
 </script>
 <style lang="css" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";

@@ -9,7 +9,12 @@
           @click="toggleModalVisibility('createComponentModal')"
           size="sm"
         >
-          <img width="16" heigth="16" src="@/assets/plus.svg" />
+          <img
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/plus.svg"
+          />
           New Component
         </bx-btn>
         <bx-btn
@@ -19,7 +24,12 @@
           @click="navigateToGlobalRegistryLibrary"
           size="sm"
         >
-          <img width="16" heigth="16" src="@/assets/embed.svg" />
+          <img
+            class="white-svg"
+            width="15"
+            height="15"
+            src="@/assets/embed.svg"
+          />
           Import Component
         </bx-btn>
       </div>
@@ -425,6 +435,8 @@ const onDoubleClick = (node) => {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/svg.scss";
+
 .title {
   padding-top: 1.5rem;
 }

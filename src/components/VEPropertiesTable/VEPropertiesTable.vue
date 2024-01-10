@@ -55,7 +55,11 @@
             >
               <p class="download-text">Download&nbsp;</p>
 
-              <img class="download-icon" src="../../assets/download.svg"
+              <img
+                class="white-svg"
+                height="18"
+                width="18"
+                src="../../assets/download.svg"
             /></bx-btn>
           </bx-table-toolbar-content>
         </bx-table-toolbar>
@@ -273,7 +277,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "@/styles/svg.scss";
+
 bx-table-cell,
 bx-table-header-cell {
   text-align: center;

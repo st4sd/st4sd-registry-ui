@@ -803,7 +803,12 @@
         title="Delete this template"
       >
         Delete &nbsp;
-        <img class="trash-can-icon" src="@/assets/trash-can.svg" />
+        <img
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/trash-can.svg"
+        />
       </bx-btn>
       <bx-btn
         kind="primary"
@@ -817,7 +822,12 @@
         "
       >
         Share &nbsp;
-        <img class="launch-icon" src="@/assets/launch.svg" />
+        <img
+          class="white-svg"
+          height="15"
+          width="15"
+          src="@/assets/launch.svg"
+        />
       </bx-btn>
       <div v-if="requestInProgress" id="loading-wheel">
         <bx-inline-loading status="active">
@@ -970,9 +980,9 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 @import "@/styles/inline-loading-style.css";
-@import "@/styles/launch-icon.css";
 </style>

@@ -37,17 +37,17 @@
         </bx-btn>
         <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
         <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/download.svg"
           />
         </bx-btn>
@@ -285,6 +285,8 @@ const handleTransformSelected = (loading, transformId) => {
   emit("transformSelected", loading, transformId);
 };
 </script>
-<style lang="scss" src="@/canvas/styles/main.scss">
+<style lang="scss">
+@import "@/canvas/styles/main.scss";
+@import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
 </style>

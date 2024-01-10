@@ -85,12 +85,13 @@
               <bx-structured-list-cell
                 class="updateModals structured-list-delete-button-bottom"
               >
-                <bx-btn
-                  class="button-inside-cell"
-                  kind="danger"
-                  @click="component.removeParameter(index)"
-                >
-                  <img src="@/assets/remove.svg" />
+                <bx-btn kind="danger" @click="component.removeParameter(index)">
+                  <img
+                    class="white-svg"
+                    height="18"
+                    width="18"
+                    src="@/assets/remove.svg"
+                  />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -206,11 +207,15 @@
                 class="structured-list-delete-button structured-list-delete-button-bottom"
               >
                 <bx-btn
-                  class="button-inside-cell"
                   kind="danger"
                   @click="component.removeRestartHookOn(index)"
                 >
-                  <img src="@/assets/remove.svg" />
+                  <img
+                    class="white-svg"
+                    height="18"
+                    width="18"
+                    src="@/assets/remove.svg"
+                  />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -290,11 +295,15 @@
                 class="structured-list-delete-button structured-list-delete-button-bottom"
               >
                 <bx-btn
-                  class="button-inside-cell"
                   kind="danger"
                   @click="component.removeShutdownOn(index)"
                 >
-                  <img src="@/assets/remove.svg" />
+                  <img
+                    class="white-svg"
+                    height="18"
+                    width="18"
+                    src="@/assets/remove.svg"
+                  />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -653,12 +662,13 @@
               <bx-structured-list-cell
                 class="updateModals structured-list-delete-button-bottom"
               >
-                <bx-btn
-                  class="button-inside-cell"
-                  kind="danger"
-                  @click="removeVariable(idx)"
-                >
-                  <img src="@/assets/remove.svg" />
+                <bx-btn kind="danger" @click="removeVariable(idx)">
+                  <img
+                    class="white-svg"
+                    height="18"
+                    width="18"
+                    src="@/assets/remove.svg"
+                  />
                 </bx-btn>
               </bx-structured-list-cell>
             </bx-structured-list-row>
@@ -796,6 +806,7 @@ export default {
 </script>
 <style lang="css" scoped>
 @import "@/styles/delete-button-icon-inside-cell-style.css";
+@import "@/styles/svg.scss";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";

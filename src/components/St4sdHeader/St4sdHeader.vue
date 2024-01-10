@@ -16,7 +16,12 @@
     >
     <bx-link @click="openModal('login')" v-if="!isGlobalRegistry">
       Login on stp
-      <img class="cmd-login-icon" src="@/assets/terminal.svg" />
+      <img
+        class="white-svg"
+        height="18"
+        width="18"
+        src="@/assets/terminal.svg"
+      />
     </bx-link>
   </bx-header>
   <St4sdLoginModal id="login" :url="this.url" :contextName="this.contextName" />
@@ -57,7 +62,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/svg.scss";
+
 .position-reset {
   position: unset;
 }
@@ -72,15 +79,5 @@ bx-link::part(link) {
   cursor: pointer;
   width: 120%;
   align-items: center;
-}
-
-.cmd-login-icon {
-  max-height: 18px;
-  max-width: 18px;
-  width: 100%;
-  height: 100%;
-  margin: auto 0rem auto 0.2rem;
-  -webkit-filter: invert(0.99);
-  filter: invert(0.99);
 }
 </style>

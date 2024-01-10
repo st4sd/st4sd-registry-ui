@@ -86,12 +86,13 @@
             <bx-structured-list-cell
               class="updateModals structured-list-delete-button-bottom"
             >
-              <bx-btn
-                class="button-inside-cell"
-                kind="danger"
-                @click="workflow.removeParameter(index)"
-              >
-                <img src="@/assets/remove.svg" />
+              <bx-btn kind="danger" @click="workflow.removeParameter(index)">
+                <img
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
+                />
               </bx-btn>
             </bx-structured-list-cell>
           </bx-structured-list-row>
@@ -144,12 +145,13 @@
             <bx-structured-list-cell
               class="updateModals structured-list-delete-button-middle"
             >
-              <bx-btn
-                class="button-inside-cell"
-                kind="danger"
-                @click="removeStep(index)"
-              >
-                <img src="@/assets/remove.svg" />
+              <bx-btn kind="danger" @click="removeStep(index)">
+                <img
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
+                />
               </bx-btn>
             </bx-structured-list-cell>
           </bx-structured-list-row>
@@ -300,7 +302,8 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";

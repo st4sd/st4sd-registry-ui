@@ -43,17 +43,17 @@
         </bx-btn>
         <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/brightness-contrast.svg"
           />
         </bx-btn>
         <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
           <img
-            class="canvas-logo"
+            class="white-svg"
             width="16"
-            heigth="16"
+            height="16"
             src="@/assets/download.svg"
           />
         </bx-btn>
@@ -271,6 +271,7 @@ const downloadExperimentFiles = () => {
 </script>
 <style lang="scss">
 @import "@/canvas/styles/main.scss";
+@import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
 bx-btn::part(button) {
   padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
