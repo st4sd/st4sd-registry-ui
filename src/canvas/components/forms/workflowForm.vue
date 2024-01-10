@@ -70,6 +70,8 @@
                 placeholder="parameter name"
                 :value="parameter.name"
                 @input="parameter.name = $event.target.value"
+                :invalid="parameterNameIsDuplicate(parameter.name)"
+                validity-message="Parameter names must be unique"
                 colorScheme="light"
               >
               </bx-input>
@@ -177,12 +179,14 @@ export default {
     "stepDeleted",
     "workflowAdded",
     "nameChanged",
+    "validityChanged",
   ],
   data() {
     return {
       workflow: new St4sdWorkflow(),
       childrenNodes: [],
-      isError: false,
+      isNameError: false,
+      isParameterError: false,
       oldName: "",
       removedSteps: [],
     };
@@ -226,7 +230,7 @@ export default {
       });
     },
     add() {
-      if (!this.isError) {
+      if (!this.isNameError && !this.isParameterError) {
         //Each workflow will generate a workflow node and an input node  for that workflow
         let { workflowNode, inputNode } = createWorkflowNode(
           this.workflow.getName(),
@@ -237,7 +241,7 @@ export default {
       }
     },
     update() {
-      if (!this.isError) {
+      if (!this.isNameError && !this.isParameterError) {
         if (this.workflow.areStepsUnique()) {
           this.applyStepRemoval();
           this.checkStepsChanges();
@@ -290,14 +294,38 @@ export default {
         ).label = `${tobeUpdatedNode.label} inputs`;
       }
     },
+    // TODO: AP: see warning on parameterNameIsDuplicate in componentForm.vue
+    parameterNameIsDuplicate(name) {
+      let parametersNames = this.workflow
+        .getParameters()
+        .map((param) => param.name);
+      if (new Set(parametersNames).size != parametersNames.length) {
+        let occurrences = 0;
+        for (let parameter of parametersNames) {
+          if (parameter == name) {
+            occurrences++;
+            if (occurrences > 1) {
+              this.isParameterError = true;
+              this.$emit("validityChanged", true);
+              return true;
+            }
+          }
+        }
+      } else {
+        this.isParameterError = false;
+        this.$emit("validityChanged", this.isNameError);
+        return false;
+      }
+    },
     onFocusLost(event, item) {
       if (item == "") {
         event.target.invalid = true;
-        this.isError = true;
+        this.isNameError = true;
       } else {
-        this.isError = false;
+        this.isNameError = false;
         event.target.invalid = false;
       }
+      this.$emit("validityChanged", this.isNameError || this.isParameterError);
     },
   },
 };

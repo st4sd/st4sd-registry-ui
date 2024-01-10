@@ -5,13 +5,21 @@
       <bx-modal-heading>Create workflow</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
-      <workflowForm ref="workflowForm" @workflowAdded="workflowAdded" />
+      <workflowForm
+        ref="workflowForm"
+        @workflowAdded="workflowAdded"
+        @validityChanged="updateIsSubmitButtonDisabled"
+      />
     </bx-modal-body>
     <bx-modal-footer>
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
-      <bx-modal-footer-button kind="primary" type="submit" @click="addWorkflow"
+      <bx-modal-footer-button
+        kind="primary"
+        type="submit"
+        :disabled="isSubmitButtonDisabled"
+        @click="addWorkflow"
         >Submit</bx-modal-footer-button
       >
     </bx-modal-footer>
@@ -25,7 +33,9 @@ export default {
   components: { workflowForm },
   emits: ["added"],
   data() {
-    return {};
+    return {
+      isSubmitButtonDisabled: true,
+    };
   },
   methods: {
     addWorkflow() {
@@ -33,6 +43,9 @@ export default {
     },
     workflowAdded(workflowNode, inputNode) {
       this.$emit("added", workflowNode, inputNode);
+    },
+    updateIsSubmitButtonDisabled(isError) {
+      this.isSubmitButtonDisabled = isError;
     },
   },
 };

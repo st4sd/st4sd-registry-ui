@@ -23,6 +23,7 @@
         @removeParent="removeParent"
         @stepDeleted="stepDeleted"
         @nameChanged="updateIsTemplateButtonDisabled"
+        @validityChanged="updateIsSaveButtonDisabled"
       />
       <br />
       <bx-btn kind="danger" @click="emitDelete">
@@ -57,7 +58,11 @@
       <bx-modal-footer-button kind="secondary" data-modal-close
         >Cancel</bx-modal-footer-button
       >
-      <bx-modal-footer-button kind="primary" type="submit" @click="save"
+      <bx-modal-footer-button
+        kind="primary"
+        type="submit"
+        :disabled="isSaveButtonDisabled"
+        @click="save"
         >Save changes</bx-modal-footer-button
       >
     </bx-modal-footer>
@@ -78,6 +83,7 @@ export default {
   data() {
     return {
       isTemplateButtonDisabled: false,
+      isSaveButtonDisabled: false,
     };
   },
   emits: [
@@ -129,6 +135,9 @@ export default {
         code: 0,
       };
       this.$emit("updateWorkflowModalNotification", notification);
+    },
+    updateIsSaveButtonDisabled(isError) {
+      this.isSaveButtonDisabled = isError;
     },
   },
 };

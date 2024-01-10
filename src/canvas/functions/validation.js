@@ -281,3 +281,21 @@ export const validateSignature = (node) => {
   }
   return nodeSignature;
 };
+
+export const checkParameterNameIsDuplicate = (parameters, targetParameter) => {
+  if (new Set(parameters).size == parameters.length) {
+    return false;
+  }
+
+  let occurrences = 0;
+  for (let parameter of parameters) {
+    if (parameter == targetParameter) {
+      occurrences++;
+      if (occurrences > 1) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};

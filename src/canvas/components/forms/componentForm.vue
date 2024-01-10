@@ -70,6 +70,8 @@
                 <bx-input
                   :value="parameter.name"
                   @input="parameter.name = $event.target.value"
+                  :invalid="parameterNameIsDuplicate(parameter.name)"
+                  validity-message="Parameter names must be unique"
                   placeholder="parameter name"
                   colorScheme="light"
                 />
@@ -689,6 +691,9 @@ import "@carbon/web-components/es/components/accordion/index.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
+// AP: see comment on parameterNameIsDuplicate
+// import { checkParameterNameIsDuplicate } from "@/canvas/functions/validation";
+
 let invalidVariables = {};
 
 export default {
@@ -698,7 +703,8 @@ export default {
     return {
       contentSwitcherSelection: ref("config"),
       component: new St4sdComponent(),
-      isError: false,
+      isNameError: false,
+      isParameterError: false,
       oldName: "",
       variableKeys: [],
       variableValues: [],
@@ -716,7 +722,7 @@ export default {
   },
   methods: {
     update() {
-      if (!this.isError) {
+      if (!this.isNameError && !this.isParameterError) {
         this.setVariables();
         let newComponentNode = this.allNodes.find(
           (node) => node.id == this.node.id,
@@ -739,7 +745,7 @@ export default {
       }
     },
     add() {
-      if (!this.isError) {
+      if (!this.isNameError && !this.isParameterError) {
         this.setVariables();
         this.$emit("add", this.component.getComponentDefintion());
       }
@@ -751,15 +757,53 @@ export default {
       this.component.signature.name = newName;
       this.$emit("nameChanged", newName);
     },
+    // TODO: AP: using this function raises
+    // [Vue warn]: Maximum recursive updates exceeded.
+    // This means you have a reactive effect that is mutating its own dependencies and thus recursively triggering itself.
+    // Possible sources include component template, render function, updated hook or watcher source function.
+    // in St4sdComponent.js:319 or componentForm.vue:71
+    // parameterNameIsDuplicate(name) {
+    //   let parameterNames = this.component
+    //     .getParameters()
+    //     .map((param) => param.name);
+    //   this.isParameterError = checkParameterNameIsDuplicate(
+    //     parameterNames,
+    //     name,
+    //   );
+    //   this.$emit("invalid", this.isNameError || this.isParameterError);
+    //   return this.isParameterError;
+    // },
+    parameterNameIsDuplicate(name) {
+      let parametersNames = this.component
+        .getParameters()
+        .map((param) => param.name);
+      if (new Set(parametersNames).size != parametersNames.length) {
+        let occurrences = 0;
+        for (let parameter of parametersNames) {
+          if (parameter == name) {
+            occurrences++;
+            if (occurrences > 1) {
+              this.isParameterError = true;
+              this.$emit("invalid", true);
+              return true;
+            }
+          }
+        }
+      } else {
+        this.isParameterError = false;
+        this.$emit("invalid", this.isNameError);
+        return false;
+      }
+    },
     onFocusLost(event, item) {
       if (item == "") {
         event.target.invalid = true;
-        this.isError = true;
+        this.isNameError = true;
       } else {
-        this.isError = false;
+        this.isNameError = false;
         event.target.invalid = false;
       }
-      this.$emit("invalid", this.isError);
+      this.$emit("invalid", this.isNameError);
     },
     addVariables() {
       this.variableKeys.push("");
