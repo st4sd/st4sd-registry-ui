@@ -32,4 +32,9 @@ export default {
   border-color: #222;
   height: 25px;
 }
+
+.dark .workflow-input-node {
+  background: rgb(30, 30, 27);
+  color: #fffffb;
+}
 </style>

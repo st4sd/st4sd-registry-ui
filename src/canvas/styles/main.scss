@@ -5,6 +5,30 @@
 @import "https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css";
 @import "https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css";
 
+// to recolor the node resizer
+.vue-flow__resize-control.handle {
+  background-color: rgb(12, 100, 70);
+}
+.vue-flow__resize-control.line {
+  border-color: rgb(12, 100, 70);
+}
+
+//to make the selected component visually identifiable
+.vue-flow__node-component.selected,
+.vue-flow__node-component:focus,
+.vue-flow__node-component:focus-visible {
+  outline: none;
+  border: 1.5px solid #222;
+}
+
+//to make the selected workflow visually identifiable
+.vue-flow__node-workflow.selected,
+.vue-flow__node-workflow:focus,
+.vue-flow__node-workflow:focus-visible {
+  outline: none;
+  border: 1.5px solid rgb(12, 100, 70);
+}
+
 .vue-flow__node-default .vue-flow__handle,
 .vue-flow__node-input .vue-flow__handle,
 .vue-flow__node-output .vue-flow__handle,
@@ -88,7 +112,8 @@
   background: #57534e;
   color: #fffffb;
 }
-.basicflow.dark .vue-flow__node {
+
+.basicflow.dark .vue-flow__node-component {
   background: #292524;
   color: #fffffb;
 }
@@ -103,6 +128,7 @@
 .basicflow.dark .vue-flow__edge-text {
   fill: #fffffb;
 }
+
 .basicflow .controls {
   display: flex;
   flex-wrap: wrap;
@@ -154,6 +180,7 @@
   display: flex;
   height: 77vh;
 }
+
 aside .vue-flow__node-workflow {
   background-color: rgba(16, 185, 129);
 }

@@ -40,11 +40,16 @@ const changeVisibility = () => {
 </script>
 
 <style scoped>
+/* Only the text color is set here, the background color is set main.scss */
 .workflow {
   padding: 10px 5px;
   font-size: 12px;
   text-align: center;
   color: #222;
+}
+
+.dark .workflow {
+  color: #fffffb;
 }
 #nodeToolbar {
   display: flex;
