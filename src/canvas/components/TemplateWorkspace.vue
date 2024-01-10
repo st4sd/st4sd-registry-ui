@@ -233,17 +233,24 @@ function getTemplatesNamesSet() {
 function addToTemplateWorkspace(data, type) {
   if (type == "workflow") {
     const block = getEntryWorkflowBlock(data);
-    if (block.parentNode == undefined) {
-      block.parentNode = "";
-      block.id = getId();
-      block.label = block.label + " (*)";
-    }
+    block.label = block.label + " (*)";
+    block.id = getId();
     fullElements.value.push(block);
     elements.value.push(block);
   } else {
-    data.label = data.label + " (*)";
-    fullElements.value.push(data);
-    elements.value.push(data);
+    //Create a new object to make sure no values are carried over when un needed
+    //We don't do this for workflow type as the dsl generate new element objects anyway
+    let element = {
+      id: getId(),
+      definition: data.definition,
+      label: data.label + " (*)",
+      parentNode: "",
+      type: data.type,
+      position: { x: 0, y: 0 },
+      width: data.width,
+    };
+    fullElements.value.push(element);
+    elements.value.push(element);
   }
 }
 

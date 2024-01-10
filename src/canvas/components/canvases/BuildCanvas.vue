@@ -789,13 +789,24 @@ function getChildrenNodes(parentNode, validNodes, childrenNodes) {
   });
 }
 const addToTemplateWorkspace = () => {
-  if (selectedNode.type == "workflow") {
+  //Deep copy the node so we sever the connection between the node in the canvas
+  //and the node in the template workspace
+  let selectedTemplateCopy = JSON.parse(JSON.stringify(selectedNode));
+  if (selectedTemplateCopy.type == "workflow") {
     //prep Nodes
     let validNodes = nodes.value.filter(
       (node) => node.type == "workflow" || node.type == "component",
     );
     let childrenNodes = [];
-    getChildrenNodes(selectedNode, validNodes, childrenNodes);
+    //Set the node as entrypoint to get correct DSL
+    selectedTemplateCopy.isEntry = true;
+    getChildrenNodes(selectedTemplateCopy, validNodes, childrenNodes);
+    //Make sure only the entrypointNode is set as entrypoint
+    childrenNodes.map((node) => {
+      if (node.id != selectedTemplateCopy.id) {
+        node.isEntry = false;
+      }
+    });
     let workflowDsl = getDsl(childrenNodes, edges.value);
     templateWorkspace.value.addToTemplateWorkspace(workflowDsl, "workflow");
     let notification = {
@@ -805,10 +816,13 @@ const addToTemplateWorkspace = () => {
     };
     emit("updateBuildCanvasNotification", notification);
   } else {
-    //Deep copy the node so we sever the connection between the node in the canvas
-    //and the node in the template workspace
+    //if node is a step, we have to remove stepId and update the node label
+    if (selectedTemplateCopy.stepId) {
+      delete selectedTemplateCopy.stepId;
+    }
+    updateNodeLabel(selectedTemplateCopy);
     templateWorkspace.value.addToTemplateWorkspace(
-      JSON.parse(JSON.stringify(selectedNode)),
+      selectedTemplateCopy,
       "component",
     );
     let notification = {

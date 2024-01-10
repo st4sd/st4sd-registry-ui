@@ -9,7 +9,7 @@ export default function buildExperiment(nodes, edges, entryNode) {
   if (entryNode != undefined) {
     result = {
       entrypoint: {
-        "entry-instance": entryNode.label,
+        "entry-instance": entryNode.definition.signature.name,
         execute: [
           {
             target: "<entry-instance>",
