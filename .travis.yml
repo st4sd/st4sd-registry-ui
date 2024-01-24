@@ -32,7 +32,7 @@ after_success:
   - unzip tt_latest.zip
   - cd tt_*/linux_x86_64
   - chmod +x tt
-  - ./tt image pull-and-scan --user $TT_USER:$TT_API_KEY --url $TWISTLOCK_ENDPOINT --control-group $TT_CONTROL_GROUP --output-format json $FULL_IMAGE_ID || travis_terminate 1
+  - ./tt image pull-and-scan --imagetype prod --user $TT_USER:$TT_API_KEY --url $TWISTLOCK_ENDPOINT --control-group $TT_CONTROL_GROUP --output-format json $FULL_IMAGE_ID || travis_terminate 1
 
 jobs:
   include:
