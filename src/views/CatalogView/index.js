@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import CatalogView from "./CatalogView";
+import CatalogView from "./CatalogView.vue";
 export default CatalogView;

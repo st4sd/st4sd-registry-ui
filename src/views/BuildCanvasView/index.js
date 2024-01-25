@@ -4,5 +4,5 @@
 
     Author: Philip Burrows & Andy Mair
 */
-import BuildCanvasView from "./BuildCanvasView";
+import BuildCanvasView from "./BuildCanvasView.vue";
 export default BuildCanvasView;

@@ -2,11 +2,11 @@
   "name": "st4sd-registry",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "serve": "vite",
+    "build": "vite build",
+    "preview": "vite preview --open --port 8080"
   },
   "dependencies": {
     "@carbon/charts": "^1.13.7",
@@ -19,26 +19,20 @@
     "@vue-flow/node-toolbar": "^1.1.0",
     "axios": "^1.6.1",
     "d3": "^7.8.5",
-    "process": "^0.11.10",
-    "typescript": "~4.8.0",
-    "vue": "3.3.8",
-    "vue-router": "^4.2.5"
+    "process": "^0.11.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.3",
-    "@babel/eslint-parser": "^7.23.3",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vitejs/plugin-vue": "^5.0.3",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.18.1",
     "prettier": "^3.0.3",
-    "sass": "~1.69.5",
-    "sass-loader": "^13.3.2",
-    "webpack": "^5.89.0"
+    "sass": "^1.70.0",
+    "vite": "^5.0.12",
+    "typescript": "~4.8.0",
+    "vue": "3.3.8",
+    "vue-router": "^4.2.5"
   },
   "eslintConfig": {
     "root": true,
@@ -50,9 +44,6 @@
       "eslint:recommended",
       "plugin:prettier/recommended"
     ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
     "rules": {},
     "overrides": [
       {

@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import St4sdHeader from "./St4sdHeader";
+import St4sdHeader from "./St4sdHeader.vue";
 export default St4sdHeader;

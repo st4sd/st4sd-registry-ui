@@ -42,7 +42,7 @@
 
 <script>
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
-import BuildCanvas from "@/canvas/components/canvases/BuildCanvas";
+import BuildCanvas from "@/canvas/components/canvases/BuildCanvas.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 export default {

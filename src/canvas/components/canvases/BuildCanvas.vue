@@ -272,13 +272,13 @@ import {
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import TemplateWorkspace from "@/canvas/components/TemplateWorkspace";
+import TemplateWorkspace from "@/canvas/components/TemplateWorkspace.vue";
 //Modals
 import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
 import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
 import createWorkflowModal from "@/canvas/components/modals/st4sd_workflows/createWorkflowModal.vue";
 import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
-import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal";
+import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
 import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
@@ -293,7 +293,7 @@ import { canvasStore } from "@/canvas/stores/canvasStore";
 
 //Node types
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
-import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
+import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 
 //Functions

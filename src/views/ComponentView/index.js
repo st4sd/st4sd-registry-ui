@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import ComponentView from "./ComponentView";
+import ComponentView from "./ComponentView.vue";
 export default ComponentView;

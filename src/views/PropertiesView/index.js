@@ -4,5 +4,5 @@
 
     Authors: Philip Burrows and Andy Mair
 */
-import PropertiesView from "./PropertiesView";
+import PropertiesView from "./PropertiesView.vue";
 export default PropertiesView;

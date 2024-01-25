@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import ViewCanvasView from "./ViewCanvasView";
+import ViewCanvasView from "./ViewCanvasView.vue";
 export default ViewCanvasView;

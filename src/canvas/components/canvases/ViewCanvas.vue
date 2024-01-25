@@ -123,7 +123,7 @@ import { canvasStore } from "@/canvas/stores/canvasStore";
 //Node types
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
-import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
+import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 //Modals
 import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";

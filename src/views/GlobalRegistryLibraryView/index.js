@@ -4,5 +4,5 @@
 
     Author: Andy Mair & Philip Burrows
 */
-import GlobalRegistryLibraryView from "./GlobalRegistryLibraryView";
+import GlobalRegistryLibraryView from "./GlobalRegistryLibraryView.vue";
 export default GlobalRegistryLibraryView;

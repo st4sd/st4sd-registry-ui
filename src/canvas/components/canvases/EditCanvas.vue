@@ -119,7 +119,7 @@ import { VueFlow, useVueFlow } from "@vue-flow/core";
 import { canvasStore } from "@/canvas/stores/canvasStore";
 //Node types
 import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.vue";
-import WorkflowNode from "@/canvas/components/node_types/WorkflowNode";
+import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
 //Modals
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";

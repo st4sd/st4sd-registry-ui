@@ -124,9 +124,9 @@ import { getBestPracticesScore } from "@/functions/best_practices";
 import St4sdModal from "@/components/St4sdBestPracticesProgressIndicator/St4sdModal.vue";
 
 // Icons
-const successGreenImage = require("../../assets/checkmark--filled.svg");
-const warningYellowImage = require("../../assets/warning--filled.svg");
-const failRedImage = require("../../assets/misuse.svg");
+import successGreenImage from "../../assets/checkmark--filled.svg";
+import warningYellowImage from "../../assets/warning--filled.svg";
+import failRedImage from "../../assets/misuse.svg";
 //
 const successGreenImageHTML = `<img width="20" height="20" class="success-green" src="${successGreenImage}" />`;
 const warningYellowImageHTML = `<img width="20" height="20" class="warning-yellow" src="${warningYellowImage}" />`;

@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import ComponentLogView from "./ComponentLogView";
+import ComponentLogView from "./ComponentLogView.vue";
 export default ComponentLogView;

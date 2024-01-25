@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import St4sdLogView from "./St4sdLogView";
+import St4sdLogView from "./St4sdLogView.vue";
 export default St4sdLogView;

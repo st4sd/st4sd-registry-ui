@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import RunLogView from "./RunLogView";
+import RunLogView from "./RunLogView.vue";
 export default RunLogView;

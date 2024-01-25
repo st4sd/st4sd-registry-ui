@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import St4sdBestPracticesProgressIndicator from "./St4sdBestPracticesProgressIndicator";
+import St4sdBestPracticesProgressIndicator from "./St4sdBestPracticesProgressIndicator.vue";
 export default St4sdBestPracticesProgressIndicator;

@@ -84,7 +84,7 @@ import ViewCanvas from "@/canvas/components/canvases/ViewCanvas.vue";
 import EditCanvas from "@/canvas/components/canvases/EditCanvas.vue";
 import submitExperimentModal from "@/canvas/components/modals/experiment/submitExperimentModal.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
-import { ref, defineProps, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { canvasStore } from "@/canvas/stores/canvasStore";
 import { createDAG } from "@/canvas/functions/createDAG";
 import axios from "axios";

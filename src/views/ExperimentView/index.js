@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import ExperimentView from "./ExperimentView";
+import ExperimentView from "./ExperimentView.vue";
 export default ExperimentView;

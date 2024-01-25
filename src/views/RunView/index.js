@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import RunView from "./RunView";
+import RunView from "./RunView.vue";
 export default RunView;

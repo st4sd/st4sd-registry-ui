@@ -6,6 +6,6 @@
 */
 export function getDeploymentEndpoint() {
   let publicPath =
-    process.env.NODE_ENV === "production" ? "/registry-ui/" : "/";
+  import.meta.env.PROD ? "/registry-ui/" : "/";
   return window.location.origin + publicPath;
 }

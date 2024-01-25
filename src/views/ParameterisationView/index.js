@@ -4,5 +4,5 @@
 
     Author: Alessandro Pomponio
 */
-import ParameterisationView from "./ParameterisationView";
+import ParameterisationView from "./ParameterisationView.vue";
 export default ParameterisationView;
