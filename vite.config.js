@@ -13,8 +13,8 @@ export default defineConfig({
     }),
   ],
   define: {
-    "process.env": {},
     "process": {},
+    "process.env": {}
   },
   transpileDependencies: true,
   base: process.env.NODE_ENV === "production" ? "/registry-ui/" : "/",
