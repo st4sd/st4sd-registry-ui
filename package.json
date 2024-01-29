@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
-    "preview": "vite preview --open --port 8080"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@carbon/charts": "^1.13.24",

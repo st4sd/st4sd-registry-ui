@@ -27,6 +27,21 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    host: "localhost",
+    port: "8080",
+    proxy: {
+      "/registry-ui\/registry-ui/": {
+        target: "http://localhost:8080",
+        rewrite: (path) => path.replace(/registry-ui/, ""),
+      },
+      "^/registry-ui/backend/": {
+        target: "http://0.0.0.0:8085",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/registry-ui\/backend/, ""),
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
