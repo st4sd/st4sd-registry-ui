@@ -12,26 +12,27 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.23.3.tgz#0ce0be31a4ca4f1884b5786057cadcb6c3be58f9"
   integrity sha512-uVsWNvlVsIninV2prNz/3lHCb+5CJ+e+IUBfbjToAHODtfGYLfCFuY4AU7TskI+dAKk+njsPiBjq1gKTvZOBaw==
 
-"@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.21.0", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.9.2":
   version "7.23.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.2.tgz#062b0ac103261d68a966c4c7baf2ae3e62ec3885"
   integrity sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@carbon/charts@^1.13.7":
-  version "1.13.7"
-  resolved "https://registry.yarnpkg.com/@carbon/charts/-/charts-1.13.7.tgz#12457efd08cfcef37ab156ee8259097debcac06f"
-  integrity sha512-FLjJgXQ1oBvBrobjCMJAmjQvGE6juY/+T60QVDXxSqDKdEOKKZ24yLxPW67BieS+uO2WsIEu+awqLXF1iJwrgw==
+"@carbon/charts@^1.13.24":
+  version "1.13.24"
+  resolved "https://registry.yarnpkg.com/@carbon/charts/-/charts-1.13.24.tgz#fb66f829fcdd381e3118ac5376d8b18f39c41384"
+  integrity sha512-TJeoIAhrBlImR1WCRmYNSgQnXpRcUIrFIqYI0ozqQDGUMcoTDLkA/LIgMoAJemrKxnMIxUKw/ZuQYIc1Z2sgsw==
   dependencies:
-    "@carbon/colors" "^11.19.0"
+    "@carbon/colors" "^11.20.1"
     "@carbon/telemetry" "~0.1.0"
     "@carbon/utils-position" "^1.1.4"
-    carbon-components "^10.58.10"
+    carbon-components "^10.58.13"
     d3 "^7.8.5"
     d3-cloud "^1.2.7"
     d3-sankey "^0.12.3"
-    date-fns "^2.30.0"
+    date-fns "^3.3.0"
+    dompurify "^3.0.8"
     html-to-image "^1.11.11"
     lodash-es "^4.17.21"
     topojson-client "^3.1.0"
@@ -42,7 +43,7 @@
   resolved "https://registry.yarnpkg.com/@carbon/colors/-/colors-10.37.2.tgz#22dc0310b7bcd9e00a1b54d94a4e4193ae6899f5"
   integrity sha512-0XkeRr2+2wsYxZJ/cTrCfa5m3Q35vZjF9uHkajpXrGR6NJXLabKk3tM/PtQcstw3U1ndYHgdJD3usvSmWhQ2rA==
 
-"@carbon/colors@^11.19.0", "@carbon/colors@^11.20.1":
+"@carbon/colors@^11.20.1":
   version "11.20.1"
   resolved "https://registry.yarnpkg.com/@carbon/colors/-/colors-11.20.1.tgz#15bf97aa075674f9a198c0ce89f7dadde1d0499c"
   integrity sha512-CiW+05/LaYCZ8LW5ioEz4EL0DBxI0psZGdiA7leQSH/Wvec7mvEANhze3lYhfx3ZH700Q4Y2O9/roW+yLB1CQw==
@@ -923,10 +924,10 @@ carbon-components@10.58.8:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
-carbon-components@^10.58.10:
-  version "10.58.10"
-  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.58.10.tgz#712eadb48faa8cce26096659f5956bce41811db5"
-  integrity sha512-RnTFB5s27rTKiGELIZVF72CKCFNy6Mz3x4cU6wVifbgjYKRDVlFCyXsmo56pNIhfGi5LPFHfLl/+sc/+ImkOsg==
+carbon-components@^10.58.13:
+  version "10.58.13"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.58.13.tgz#0e2d57f26a4b6e1506aa9faa7124bc0cb7c5fb26"
+  integrity sha512-qZU6hKik393PIP3qYfV1aeIWTX5CMextRxCQOKoKP23hpeg+gEWjF/WQPvRtD96gJk2ZurqbxkhqSLsIQrPrIg==
   dependencies:
     "@carbon/telemetry" "0.1.0"
     flatpickr "4.6.1"
@@ -1344,12 +1345,10 @@ data-urls@^4.0.0:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^12.0.0"
 
-date-fns@^2.30.0:
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
-  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
-  dependencies:
-    "@babel/runtime" "^7.21.0"
+date-fns@^3.3.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.3.1.tgz#7581daca0892d139736697717a168afbb908cfed"
+  integrity sha512-y8e109LYGgoQDveiEBD3DYXKba1jWf5BA8YU1FL5Tvm0BTdEfy54WLCwnuYWZNnzzvALy/QQ4Hov+Q9RVRv+Zw==
 
 debug@4, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
@@ -1426,6 +1425,11 @@ dompurify@^2.4.3:
   version "2.4.7"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.4.7.tgz#277adeb40a2c84be2d42a8bcd45f582bfa4d0cfc"
   integrity sha512-kxxKlPEDa6Nc5WJi+qRgPbOAbgTpSULL+vI3NUXsZMlkJxTqYI9wg5ZTay2sFrdZRWHPWNi+EdAhcJf81WtoMQ==
+
+dompurify@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.0.8.tgz#e0021ab1b09184bc8af7e35c7dd9063f43a8a437"
+  integrity sha512-b7uwreMYL2eZhrSCRC4ahLTeZcPZxSmYfmcQGXGkXiZSNW1X85v+SDM5KsWcpivIiUBH47Ji7NtyUdpLeF5JZQ==
 
 entities@^4.4.0:
   version "4.5.0"

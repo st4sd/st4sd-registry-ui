@@ -47,6 +47,13 @@
         :disabled="formattedChartData.length === 0"
         >Line Chart</bx-tab
       >
+      <bx-tab
+        id="TabForVEPropertiesHistogram"
+        value="PropertiesHistogram"
+        target="VEPropertiesHistogram"
+        :disabled="formattedChartData.length === 0"
+        >Histogram</bx-tab
+      >
     </bx-tabs>
 
     <HttpErrorEmptyState
@@ -82,6 +89,18 @@
           :propertyHeaders="propertyHeaders"
         />
       </div>
+      <div
+        id="VEPropertiesHistogram"
+        aria-labelledby="tab-VEPropertiesHistogram"
+        role="tabpanel"
+        hidden
+      >
+        <VEPropertiesHistogram
+          :id="id"
+          :data="formattedChartData"
+          :propertyHeaders="propertyHeaders"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -89,6 +108,7 @@
 <script>
 import VEPropertiesTable from "@/components/VEPropertiesTable/VEPropertiesTable.vue";
 import VEPropertiesLineChart from "@/components/VEPropertiesTable/VEPropertiesLineChart.vue";
+import VEPropertiesHistogram from "@/components/VEPropertiesTable/VEPropertiesHistogram.vue";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
@@ -103,6 +123,7 @@ export default {
     St4sdBreadcrumb,
     VEPropertiesLineChart,
     HttpErrorEmptyState,
+    VEPropertiesHistogram,
   },
   props: {
     id: String,
