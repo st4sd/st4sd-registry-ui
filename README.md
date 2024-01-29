@@ -1,7 +1,7 @@
 # ST4SD Registry UI
 
 The ST4SD Registry UI is a web interface for the ST4SD Runtime Service, written
-in Vue 2.
+in Vue 3.
 
 ## Quick links
 
@@ -25,24 +25,7 @@ node -v
 ```
 
 Please refer to the [Node.js download page](https://nodejs.org/en/download/) if
-you don't have it installed or if your installed version is older than 16.
-
-#### Vue CLI
-
-Ensure that you have the Vue CLI installed with
-
-```bash
-vue -V
-```
-
-Or install it with:
-
-```bash
-npm install -g @vue/cli
-```
-
-Additional intructions are available on the
-[official Vue CLI website](https://cli.vuejs.org/#getting-started).
+you don't have it installed or if your installed version is older than 20.
 
 ## Development
 
@@ -50,7 +33,7 @@ Additional intructions are available on the
 
 The project requires access to a
 [backend service](https://github.com/st4sd/st4sd-registry-backend) to work. The
-[development configuration provided](vue.config.js) intercepts the calls to the
+[development configuration provided](vite.config.js) intercepts the calls to the
 backend and forwards them to `0.0.0.0:8085`.
 
 #### Spinning up a development version of the st4sd-registry-backend
@@ -99,20 +82,6 @@ optimizations such as minifying the output files.
 ```bash
 yarn build
 ```
-
-### Lint and fix files
-
-To ensure there are no linting errors in the files, run:
-
-```
-yarn lint
-```
-
-The dev configuration already includes `prettier`, which will help during
-development, giving errors in case of missing `;`, wrong indentation, etc. These
-errors can often be fixed automatically in IDEs such as Visual Studio Code using
-the "Format Document" key binding (`notebook.formatCell`, Option+Shift+F on
-MacOS).
 
 ## Help and Support
 
