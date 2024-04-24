@@ -9,12 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@carbon/charts": "^1.15.3",
+    "@carbon/charts": "^1.15.7",
     "@carbon/grid": "^11.22.0",
-    "@carbon/ibmdotcom-web-components": "1.42.0",
-    "@carbon/styles": "^1.53.0",
+    "@carbon/ibmdotcom-web-components": "^1.43.0",
+    "@carbon/styles": "^1.55.0",
     "@vue-flow/additional-components": "^1.3.3",
-    "@vue-flow/core": "^1.33.4",
+    "@vue-flow/core": "^1.33.5",
     "@vue-flow/node-resizer": "^1.3.6",
     "@vue-flow/node-toolbar": "^1.1.0",
     "axios": "^1.6.8",
@@ -26,13 +26,13 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-vue": "^9.23.0",
+    "eslint-plugin-vue": "^9.25.0",
     "prettier": "^3.2.5",
-    "sass": "^1.72.0",
-    "typescript": "~5.4.2",
-    "vite": "^5.1.6",
+    "sass": "^1.75.0",
+    "typescript": "~5.4.5",
+    "vite": "^5.2.10",
     "vue": "3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.2"
   },
   "eslintConfig": {
     "root": true,
