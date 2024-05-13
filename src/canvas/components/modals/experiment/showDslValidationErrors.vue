@@ -33,12 +33,10 @@
 </template>
 
 <script>
-import axios from "axios";
-
 import "@carbon/web-components/es/components/inline-loading/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
-import { getDeploymentEndpoint } from "@/functions/public_path";
+import { postDslForValidation } from "@/functions/post_dsl_for_validation";
 
 export default {
   data() {
@@ -68,6 +66,7 @@ export default {
     },
   },
   methods: {
+    postDslForValidation,
     validateDsl() {
       this.dslBeingValidated = "active";
       this.dslErrors = [];
@@ -77,31 +76,6 @@ export default {
       } catch (error) {
         this.dslInvalid = true;
         this.dslInvalidTitle = error.message;
-      }
-    },
-    postDslForValidation() {
-      if (this.dsl != null) {
-        axios
-          .post(
-            `${getDeploymentEndpoint()}registry-ui/backend/canvas/dsl/validate`,
-            this.dsl,
-          )
-          .then((response) => {
-            if (response.status == 200) {
-              this.dslBeingValidated = "finished";
-              this.dslInvalid = false;
-              this.$emit("dslValidationError", []);
-            }
-          })
-          .catch((error) => {
-            this.dslBeingValidated = "error";
-            this.dslInvalid = true;
-            this.dslInvalidTitle = error.response.data.message;
-            this.dslMessage =
-              "There are errors in the DSL validation, click the show errors button to see them";
-            this.dslErrors = error.response.data.problems;
-            this.$emit("dslValidationError", this.dslErrors);
-          });
       }
     },
   },

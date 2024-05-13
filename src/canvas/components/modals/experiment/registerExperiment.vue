@@ -70,12 +70,7 @@ import "@carbon/web-components/es/components/input/index.js";
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";
 
-import axios from "axios";
-
-import { getDeploymentEndpoint } from "@/functions/public_path";
-
-//Stores
-import { canvasStore } from "@/canvas/stores/canvasStore";
+import { postDslForValidation } from "@/functions/post_dsl_for_validation";
 
 export default {
   props: {
@@ -112,47 +107,17 @@ export default {
     }
   },
   methods: {
+    postDslForValidation,
     validateDsl() {
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);
-        this.postDslForValidation();
+        this.postDslForValidation(true);
         return true;
       } catch (error) {
         this.dslBeingValidated = "finished";
         this.dslInvalid = true;
         this.dslInvalidTitle = error.message;
         return false;
-      }
-    },
-    postDslForValidation() {
-      if (this.dsl != null) {
-        axios
-          .post(
-            `${getDeploymentEndpoint()}registry-ui/backend/canvas/dsl/validate`,
-            this.dsl,
-          )
-          .then((response) => {
-            if (response.status == 200) {
-              this.dslBeingValidated = "finished";
-              this.dslInvalid = false;
-              canvasStore.setDsl(this.dsl);
-              canvasStore.setGraph({
-                nodes: this.allNodes,
-                edges: this.allEdges,
-              });
-            }
-            this.$emit("dslValidationError", []);
-          })
-          .catch((error) => {
-            this.dslBeingValidated = "error";
-            this.dslInvalid = true;
-            this.dslInvalidBackend = true;
-            this.dslInvalidTitle = error.response.data.message;
-            this.dslMessage =
-              "There are errors in the DSL validation, click the show errors button to see them";
-            this.dslErrors = error.response.data.problems;
-            this.$emit("dslValidationError", this.dslErrors);
-          });
       }
     },
     validateExperimentName(event) {
