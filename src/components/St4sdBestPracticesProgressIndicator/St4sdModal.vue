@@ -35,12 +35,14 @@
               v-if="row.col2Type == 'info'"
               class="center"
             >
-              <button
-                class="bx-tooltip bx--tooltip__trigger bx--tooltip--a11y bx--tooltip--left bx--tooltip--align-center"
-              >
-                <img width="16" height="16" src="../../assets/info.svg" />
-                <span class="bx--assistive-text">{{ row.col2 }}</span>
-              </button>
+              <cds-tooltip align="bottom">
+                <div class="sb-tooltip-trigger" aria-labelledby="content">
+                  <img width="16" height="16" src="../../assets/info.svg" />
+                </div>
+                <cds-tooltip-content id="content">
+                  {{ row.col2 }}
+                </cds-tooltip-content>
+              </cds-tooltip>
             </bx-structured-list-cell>
             <bx-structured-list-cell v-else class="center">
               {{ row.col2 }}
@@ -68,7 +70,7 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/tooltip/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tooltip.min.js";
 import "@carbon/web-components/es/components/structured-list/index.js";
 export default {
   name: "St4sdModal",
@@ -84,16 +86,11 @@ export default {
 
 <style lang="css" scoped>
 @import "@/styles/bx-modal-styles.css";
-
-.iconPaddingFix {
-  border-bottom: none;
-  padding-inline-start: 30%;
-}
 .center {
   text-align: center;
 }
 
 .center img {
-  transform: translate(0, 25%);
+  transform: translate(0, -12%);
 }
 </style>

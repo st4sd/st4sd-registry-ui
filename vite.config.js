@@ -7,15 +7,16 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes("bx-") || tag.includes("dds-"),
+          isCustomElement: (tag) =>
+            tag.includes("bx-") || tag.includes("dds-") || tag.includes("cds-"),
         },
       },
     }),
     splitVendorChunkPlugin(),
   ],
   define: {
-    "process": {},
-    "process.env": {}
+    process: {},
+    "process.env": {},
   },
   transpileDependencies: true,
   base: process.env.NODE_ENV === "production" ? "/registry-ui/" : "/",
@@ -32,7 +33,7 @@ export default defineConfig({
     host: "localhost",
     port: "8080",
     proxy: {
-      "/registry-ui\/registry-ui/": {
+      "/registry-ui/registry-ui/": {
         target: "http://localhost:8080",
         rewrite: (path) => path.replace(/registry-ui/, ""),
       },
