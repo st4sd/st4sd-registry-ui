@@ -16,25 +16,29 @@
       </bx-dropdown>
     </div>
     <div v-if="searchSelector == 'custom'" class="date-picker-container">
-      <bx-date-picker
+      <cds-date-picker
         date-format="d/m/y"
-        @bx-date-picker-changed="handleDatePickerChange"
+        @cds-date-picker-changed="handleDatePickerChange"
       >
-        <bx-date-picker-input
+        <cds-date-picker-input
           kind="from"
           label-text="From:"
           placeholder="dd/mm/yy"
         >
-        </bx-date-picker-input>
-        <bx-date-picker-input kind="to" label-text="To:" placeholder="dd/mm/yy">
-        </bx-date-picker-input>
-      </bx-date-picker>
+        </cds-date-picker-input>
+        <cds-date-picker-input
+          kind="to"
+          label-text="To:"
+          placeholder="dd/mm/yy"
+        >
+        </cds-date-picker-input>
+      </cds-date-picker>
     </div>
   </div>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/date-picker/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/date-picker.min.js";
 
 export default {
   name: "St4sdDateFilter",
