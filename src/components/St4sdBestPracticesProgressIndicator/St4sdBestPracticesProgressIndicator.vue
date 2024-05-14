@@ -127,7 +127,7 @@ import St4sdModal from "@/components/St4sdBestPracticesProgressIndicator/St4sdMo
 import successGreenImage from "../../assets/checkmark--filled.svg";
 import warningYellowImage from "../../assets/warning--filled.svg";
 import failRedImage from "../../assets/misuse.svg";
-//
+
 const successGreenImageHTML = `<img width="20" height="20" class="success-green" src="${successGreenImage}" />`;
 const warningYellowImageHTML = `<img width="20" height="20" class="warning-yellow" src="${warningYellowImage}" />`;
 const failRedImageHTML = `<img width="20" height="20" class="fail-red" src="${failRedImage}" />`;
