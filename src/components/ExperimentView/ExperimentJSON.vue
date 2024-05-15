@@ -9,9 +9,12 @@
     </div>
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12" id="code-snippet">
       <div class="cds--row">
-        <bx-code-snippet language="json" type="multi">
+        <cds-code-snippet
+          type="multi"
+          :disabled="Object.keys(exp_no_interface).length === 0"
+        >
           {{ JSON.stringify(exp_no_interface, null, 2) }}
-        </bx-code-snippet>
+        </cds-code-snippet>
       </div>
       <div class="cds--row">
         <bx-btn
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/code-snippet.min.js";
 export default {
   name: "ExperimentJSON",
   props: {
