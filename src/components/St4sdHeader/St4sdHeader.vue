@@ -12,9 +12,14 @@
     <bx-header-nav-item
       :href="`${getDeploymentEndpoint()}build-canvas`"
       v-if="isBuildCanvasEnabled"
+      class="hidden-on-mobile"
       >Build an experiment</bx-header-nav-item
     >
-    <bx-link @click="openModal('login')" v-if="!isGlobalRegistry">
+    <bx-link
+      @click="openModal('login')"
+      v-if="!isGlobalRegistry"
+      class="hidden-on-mobile"
+    >
       Login on stp
       <img
         class="white-svg"
@@ -64,6 +69,7 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/svg.scss";
+@import "@/styles/hidden-on-mobile.css";
 
 .position-reset {
   position: unset;
