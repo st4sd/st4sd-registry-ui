@@ -19,14 +19,14 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@carbon/charts@^1.15.8":
-  version "1.15.8"
-  resolved "https://registry.yarnpkg.com/@carbon/charts/-/charts-1.15.8.tgz#e7682ad8045b103ff81b0167b350e4507dca5445"
-  integrity sha512-mmx+pqjHPpRqMugCm9eFspXj71QhI4WYWAi9SdqQNbzAnKvVvADxT+OIb5FCEOg8OE8Zbd3d1BNCZIotBJb01A==
+"@carbon/charts@^1.16.1":
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/@carbon/charts/-/charts-1.16.1.tgz#a1ac05f5b7044a215ddf8cb1e7441a9c3cabaa53"
+  integrity sha512-A8yMpdWu2VFRWzSZELFCk1XHO31Mk562doTBMSQAhKeCRPl2HrevaRwGXuu6t9OwDBNSfMiLxUy/poe71C5ubQ==
   dependencies:
     "@carbon/colors" "^11.21.0"
     "@carbon/utils-position" "^1.2.0"
-    "@ibm/telemetry-js" "^1.4.0"
+    "@ibm/telemetry-js" "^1.5.1"
     carbon-components "^10.58.14"
     d3 "^7.9.0"
     d3-cloud "^1.2.7"
@@ -91,22 +91,22 @@
     "@carbon/layout" "^11.22.0"
     "@ibm/telemetry-js" "^1.5.0"
 
-"@carbon/ibmdotcom-services@1.59.0-rc.1":
-  version "1.59.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-services/-/ibmdotcom-services-1.59.0-rc.1.tgz#73e9e784679d0fcf0dcd9eb6d33cf3dd904f7b0e"
-  integrity sha512-1lvxjxivo8gRdRYDMffqONe0JKPq/hlitPwMzBPNAy0AOmVfZT4Kp3a8/66DwxgFwUbYZC03hRifkFD+rvkezw==
+"@carbon/ibmdotcom-services@1.59.0":
+  version "1.59.0"
+  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-services/-/ibmdotcom-services-1.59.0.tgz#91eb235d08980b5809ed7723b08b7fc274514be1"
+  integrity sha512-kTt79UDa/pJ8cLH/nWVp7OBfhRTNt92UrK3pWW/2f2r3pAxw6b4yZDJZ3vOQnr1kswpJ8DZ5ZvSDhEE8NFXDfg==
   dependencies:
     "@babel/runtime" "^7.16.3"
-    "@carbon/ibmdotcom-utilities" "1.59.0-rc.0"
+    "@carbon/ibmdotcom-utilities" "1.59.0"
     "@ibm/telemetry-js" "^1.3.0"
     axios "^1.6.8"
     marked "^4.0.10"
     window-or-global "^1.0.1"
 
-"@carbon/ibmdotcom-styles@1.59.0-rc.0":
-  version "1.59.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-styles/-/ibmdotcom-styles-1.59.0-rc.0.tgz#bd0771081ddc3dc2dca836ba77da864a1a40ce2e"
-  integrity sha512-oFfo3YtRjbeVd2DhKM7EivrpfLiwkYuZbjoUjUQIouiSwJrTDB+t1DPEO28KRdecB0OgWGgT2WOslMJ25P5kww==
+"@carbon/ibmdotcom-styles@1.59.0":
+  version "1.59.0"
+  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-styles/-/ibmdotcom-styles-1.59.0.tgz#21d36656930ed3e8fe00771803dc6b36069c81ca"
+  integrity sha512-rAhdGHEEjhWlxosZtZeoviVXriHO8DeFfekq0yG/5kX0D6MfKRuFOcc0/4SKj04qGx+l2EOENHf/H/HerRXU4A==
   dependencies:
     "@carbon/grid" "10.43.2"
     "@carbon/icons-react" "10.49.2"
@@ -118,10 +118,10 @@
     "@ibm/telemetry-js" "^1.3.0"
     carbon-components "10.58.12"
 
-"@carbon/ibmdotcom-utilities@1.59.0-rc.0":
-  version "1.59.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-utilities/-/ibmdotcom-utilities-1.59.0-rc.0.tgz#6718ee73c646110995383b36931eed3a2f613f53"
-  integrity sha512-f8HR11prvMf7Qrdu5N4silwXasmmrcrXgT7f6haoN0ZnM1RpvmF/yBqY3aXJr4ASQVmE5jhENBWYZr3y7hZ+dA==
+"@carbon/ibmdotcom-utilities@1.59.0":
+  version "1.59.0"
+  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-utilities/-/ibmdotcom-utilities-1.59.0.tgz#feebb4db764707fd12343249a5c0ae7cc00834e6"
+  integrity sha512-gWxT4L0XvTo2Kp64REVTRTF2NDV3Jls67kDoTw92myA933e6xKXL2aTD8rqtLy4wkwsdW/o9tKkg2wSOijM+RQ==
   dependencies:
     "@ibm/telemetry-js" "^1.3.0"
     axios "^1.6.8"
@@ -132,17 +132,17 @@
     striptags "^3.2.0"
     window-or-global "^1.0.1"
 
-"@carbon/ibmdotcom-web-components@^1.44.0-rc.1":
-  version "1.44.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-web-components/-/ibmdotcom-web-components-1.44.0-rc.1.tgz#cc29906f6ab940a2af0bcbc3bebe0e967480c5a1"
-  integrity sha512-B07VRyrpO6IWS33/CZIxQq4n0uPtGP+ClhnIN/grZlb4jAAu+tVcU0Ed3EfcsyL9g2ggPsc3UG3Nh+tsFbdgpw==
+"@carbon/ibmdotcom-web-components@^1.44.0":
+  version "1.44.0"
+  resolved "https://registry.yarnpkg.com/@carbon/ibmdotcom-web-components/-/ibmdotcom-web-components-1.44.0.tgz#97b13c4143b44f94dfa70be9971550a6fbba958b"
+  integrity sha512-eQZuFvb1Zo1DPMywQyizUwtougBzrLJ94EjYY/YWTVNaT1uimxKu6UBiu3Fp35AYTMgd+9hZ/EpkPPvDZoBWaw==
   dependencies:
-    "@carbon/ibmdotcom-services" "1.59.0-rc.1"
-    "@carbon/ibmdotcom-styles" "1.59.0-rc.0"
-    "@carbon/ibmdotcom-utilities" "1.59.0-rc.0"
+    "@carbon/ibmdotcom-services" "1.59.0"
+    "@carbon/ibmdotcom-styles" "1.59.0"
+    "@carbon/ibmdotcom-utilities" "1.59.0"
     "@carbon/layout" "10.37.2"
     "@carbon/motion" "^11.0.0"
-    "@carbon/web-components" "1.40.0-rc.0"
+    "@carbon/web-components" "1.40.0"
     "@ibm/telemetry-js" "^1.3.0"
     carbon-components "10.58.12"
     lit-element "^2.5.1"
@@ -297,10 +297,10 @@
   dependencies:
     "@ibm/telemetry-js" "^1.3.0"
 
-"@carbon/web-components@1.40.0-rc.0":
-  version "1.40.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@carbon/web-components/-/web-components-1.40.0-rc.0.tgz#6a4921af9a6f4efb16ff9102e4a029abe2a1ac46"
-  integrity sha512-8uCA2jdRLI4mvXwBxdG6lqUmNk8Jrl0KySZ/Q6z8H8j+BafYjlP/o3L6nJ7z4wr1LBlt0NNdHXppGUkBtYtrng==
+"@carbon/web-components@1.40.0":
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/@carbon/web-components/-/web-components-1.40.0.tgz#1c70ca40a278cd340ea72a378e55d9d49021bbe3"
+  integrity sha512-A6uV2icuTfukmTJTMBygYcOmui9gyJLOg+wbg0+89fPBIVSeXnu5OaR+MsSsEksvZiRAM+BFdm9i4m8Tb6993A==
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@ibm/telemetry-js" "^1.3.0"
@@ -491,12 +491,7 @@
   resolved "https://registry.yarnpkg.com/@ibm/telemetry-js/-/telemetry-js-1.3.0.tgz#321f2ed4bbbc78d69dc1ee9cb6f83d2d2af9baef"
   integrity sha512-9gIkyF2B9RizWN6rsdQN76DN6D+/Xbr4HGTwm6EUujfXvEVtWbf4jzxDFwKvZkeTC2tjHpkUNJQKdivbMKt8yg==
 
-"@ibm/telemetry-js@^1.4.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@ibm/telemetry-js/-/telemetry-js-1.5.0.tgz#ab73e0988088e2cbb01a7086a31ccc3826a81ba0"
-  integrity sha512-RwOohLaWw97vEEwhPnlDJlORuworVOjC2R6WzSVlG7suG08qTMLVRVpnnunUCSQHyxP1Y30V9IF5vsxVrMBOHg==
-
-"@ibm/telemetry-js@^1.5.0":
+"@ibm/telemetry-js@^1.5.0", "@ibm/telemetry-js@^1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@ibm/telemetry-js/-/telemetry-js-1.5.1.tgz#a4bcb51a8223f2c7b20fe5092768de8e3dcf38b9"
   integrity sha512-Hu8iJAy9UGvjWjpMmHTNgekr2+b44nvp37RxSdWogpkSO7bPajR3CbDvb0QWAvJ7KnW+VmB3aDi1rlNsIyrZVw==
@@ -689,10 +684,10 @@
     d3-selection "^3.0.0"
     d3-zoom "^3.0.0"
 
-"@vue-flow/core@^1.33.7":
-  version "1.33.7"
-  resolved "https://registry.yarnpkg.com/@vue-flow/core/-/core-1.33.7.tgz#3bb06d7debd69172e6edbf2cdbddb1f3cf68eb28"
-  integrity sha512-6I9VvV1efsABclHqTe/HpWC6v3POrEzngOvhBi+wfa8k4dtr9a2ULW9cFUGGHhPLH0zcNskdDazVLT8kS20zbg==
+"@vue-flow/core@^1.33.8":
+  version "1.33.8"
+  resolved "https://registry.yarnpkg.com/@vue-flow/core/-/core-1.33.8.tgz#658f853642071a1e51f8dcca8e8dbed812961d96"
+  integrity sha512-dwHRtMrp9Wje4b0mmZiU00VSWcPFnOAn+g/x6WBHpVhW4KCv3ckHsfZF3p1ApjKJYv/w4lntsN+cJmkIz7dJqw==
   dependencies:
     "@vueuse/core" "^10.5.0"
     d3-drag "^3.0.0"
@@ -897,6 +892,15 @@ axios@^1.6.8:
   version "1.6.8"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
   integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.0.tgz#b48f715325457ededfcb3f0a44a3fb9d5742acb6"
+  integrity sha512-IiB0wQeKyPRdsFVhBgIo31FbzOyf2M6wYl7/NVutFwFBRMiAbjNiydJIHKeLmPugF4kJLfA1uWZ82Is2QzqqFA==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -2402,10 +2406,10 @@ rw@1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass@^1.77.1:
-  version "1.77.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.77.1.tgz#018cdfb206afd14724030c02e9fefd8f30a76cd0"
-  integrity sha512-OMEyfirt9XEfyvocduUIOlUSkWOXS/LAt6oblR/ISXCTukyavjex+zQNm51pPCOiFKY1QpWvEH1EeCkgyV3I6w==
+sass@^1.77.2:
+  version "1.77.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.77.2.tgz#18d4ed2eefc260cdc8099c5439ec1303fd5863aa"
+  integrity sha512-eb4GZt1C3avsX3heBNlrc7I09nyT00IUuo4eFhAbeXWU2fvA7oXI53SxODVAA+zgZCk9aunAZgO+losjR3fAwA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
