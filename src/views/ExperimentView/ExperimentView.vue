@@ -108,6 +108,7 @@
           :id="id"
         />
         <AddPackageVue :exp_python="exp_python" />
+        <GetPackageWithSTP />
         <ExperimentJSONVue
           :exp_no_interface="exp_no_interface"
           :experiment="experiment"
@@ -165,6 +166,7 @@ import PackageInfoBaseVue from "@/components/ExperimentView/PackageInfoBase.vue"
 import PackageInfoContainerVue from "@/components/ExperimentView/PackageInfoContainer.vue";
 import PackageInfoMetadataVue from "@/components/ExperimentView/PackageInfoMetadata.vue";
 import ExperimentHistoryVue from "@/components/ExperimentView/ExperimentHistory.vue";
+import GetPackageWithSTP from "@/components/ExperimentView/GetPackageWithSTP.vue";
 import AddPackageVue from "@/components/ExperimentView/AddPackage.vue";
 import ExperimentJSONVue from "@/components/ExperimentView/ExperimentJSON.vue";
 import { registryUISharedState } from "@/stores/registryUISharedState";
@@ -184,6 +186,7 @@ export default {
     PackageInfoMetadataVue,
     ExperimentHistoryVue,
     AddPackageVue,
+    GetPackageWithSTP,
     ExperimentJSONVue,
     TitleElement,
     St4sdBreadcrumb,
