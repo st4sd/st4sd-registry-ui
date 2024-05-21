@@ -107,7 +107,6 @@
           :data="data"
           :id="id"
         />
-        <AddPackageVue :exp_python="exp_python" />
         <GetPackageWithSTP />
         <ExperimentJSONVue
           :exp_no_interface="exp_no_interface"
@@ -167,7 +166,6 @@ import PackageInfoContainerVue from "@/components/ExperimentView/PackageInfoCont
 import PackageInfoMetadataVue from "@/components/ExperimentView/PackageInfoMetadata.vue";
 import ExperimentHistoryVue from "@/components/ExperimentView/ExperimentHistory.vue";
 import GetPackageWithSTP from "@/components/ExperimentView/GetPackageWithSTP.vue";
-import AddPackageVue from "@/components/ExperimentView/AddPackage.vue";
 import ExperimentJSONVue from "@/components/ExperimentView/ExperimentJSON.vue";
 import { registryUISharedState } from "@/stores/registryUISharedState";
 import axios from "axios";
@@ -185,7 +183,6 @@ export default {
     PackageInfoContainerVue,
     PackageInfoMetadataVue,
     ExperimentHistoryVue,
-    AddPackageVue,
     GetPackageWithSTP,
     ExperimentJSONVue,
     TitleElement,
@@ -205,7 +202,7 @@ export default {
       history: null,
       tags: null,
       exp_python: null,
-      loading: 5,
+      loading: 4,
       data: null,
       isGlobalRegistry: false,
       isCanvasDisabled: false,
@@ -303,30 +300,6 @@ export default {
         this.historyError.statusText = error.response.statusText;
         this.historyError.code = error.response.status;
         this.errors.push(this.historyError);
-      })
-      .finally(() => {
-        this.loading--;
-      });
-
-    // Fetch python-version of the experiment
-    axios
-      .get(
-        window.location.origin +
-          "/registry-ui/backend/experiments/" +
-          this.id +
-          "?outputFormat=python&hideMetadataRegistry=y&hideNone=y",
-      )
-      .then((response) => {
-        this.exp_python = response.data.entry;
-      })
-      .catch((error) => {
-        //Used 'Get this package' information for description display name as it's the UI section it appears under
-        this.errors.push({
-          description: "Unable to load 'Get this package' information",
-          statusText: error.response.statusText,
-          code: error.response.status,
-        });
-        this.exp_python = "";
       })
       .finally(() => {
         this.loading--;
