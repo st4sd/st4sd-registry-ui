@@ -5,55 +5,68 @@
       <bx-modal-heading>{{ title }}</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
-      <!-- <bx-file-uploader
-        helper-text="Only JSON files. (MAX SIZE???) (MULTIPLE???)"
-        label-text="Canvas file"
-      >
-        <bx-file-drop-container multiple="false">
-          Drag and drop file here or click to upload
-        </bx-file-drop-container>
-      </bx-file-uploader> -->
-      <bx-toggle
-        id="fileToggle"
-        checked="true"
-        checked-text="Canvas project files"
-        label-text="Choose file type (Canvas project files or DSL)"
-        unchecked-text="DSL"
-        @bx-toggle-changed="toggleGraphUpload"
-      ></bx-toggle>
-      <div v-if="graphUpload" class="fileUpload">
-        <label for="graphFile">Upload a Canvas project file</label>
-        <input
-          @change="updateGraphFile"
-          type="file"
-          accept="application/JSON"
-          name="graphFile"
-          id="graphFile"
-        />
-      </div>
-      <div v-else>
-        <div class="fileUpload">
-          <label for="dslFile">Upload a DSL file</label>
-          <input
-            @change="updateDSLFile"
-            type="file"
-            accept="application/JSON"
-            name="dslFile"
-            id="dslFile"
-          />
+      <cds-tabs @cds-tabs-selected="setActiveTab" value="project">
+        <cds-tab value="project">Canvas Project</cds-tab>
+        <cds-tab value="dsl">Experiment DSL</cds-tab>
+      </cds-tabs>
+      <div class="cds--grid">
+        <div class="cds--row">
+          <cds-file-uploader
+            :label-title="
+              'Upload a ' +
+              (this.selectedTab === 'project' ? 'Canvas project' : 'DSL') +
+              ' file'
+            "
+          >
+            <div class="file-uploader-container">
+              <cds-file-uploader-button
+                accept="application/json"
+                :disabled="this.file ? true : false"
+                @cds-file-uploader-button-changed="
+                  this.file = $event.detail.addedFiles[0]
+                "
+                >Choose file
+              </cds-file-uploader-button>
+              <cds-file-uploader-item
+                :state="this.file ? 'edit' : 'uploaded'"
+                @cds-file-uploader-item-deleted="this.file = null"
+                >{{
+                  this.file?.name ? this.file.name : "No file chosen"
+                }}</cds-file-uploader-item
+              >
+            </div>
+          </cds-file-uploader>
         </div>
-        <bx-accordion>
-          <bx-accordion-item title-text="PVEP file to add inputs (optional)">
-            <label for="inputFile">Upload PVEP file</label>
-            <input
-              @change="updateInputFile"
-              type="file"
-              accept="application/JSON"
-              name="inputFile"
-              id="inputFile"
-            />
-          </bx-accordion-item>
-        </bx-accordion>
+        <div class="cds--row" v-if="this.selectedTab !== 'project'">
+          <bx-accordion class="pvep-accordion">
+            <bx-accordion-item
+              title-text="PVEP file to add inputs (optional)"
+              class="pvep-accordion-item"
+            >
+              <cds-file-uploader label-title="Upload PVEP file">
+                <div class="file-uploader-container">
+                  <cds-file-uploader-button
+                    accept="application/json"
+                    :disabled="this.pvepFile ? true : false"
+                    @cds-file-uploader-button-changed="
+                      this.pvepFile = $event.detail.addedFiles[0]
+                    "
+                    >Choose file
+                  </cds-file-uploader-button>
+                  <cds-file-uploader-item
+                    :state="this.pvepFile ? 'edit' : 'uploaded'"
+                    @cds-file-uploader-item-deleted="this.pvepFile = null"
+                    >{{
+                      this.pvepFile?.name
+                        ? this.pvepFile.name
+                        : "No file chosen"
+                    }}</cds-file-uploader-item
+                  >
+                </div>
+              </cds-file-uploader>
+            </bx-accordion-item>
+          </bx-accordion>
+        </div>
       </div>
     </bx-modal-body>
     <bx-modal-footer>
@@ -61,7 +74,7 @@
         >Cancel</bx-modal-footer-button
       >
       <bx-modal-footer-button
-        :disabled="disabled()"
+        :disabled="this.file == null || this.submitted"
         kind="primary"
         type="submit"
         @click="upload"
@@ -72,81 +85,50 @@
 </template>
 
 <script>
-// import "@carbon/web-components/es/components/file-uploader/index.js";
-import "@carbon/web-components/es/components/toggle/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/file-uploader.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
 
 export default {
   props: { title: String },
   emits: ["upload"],
   data() {
     return {
-      graphUpload: true,
-      graphFile: null,
-      dslFile: null,
-      inputFile: null,
+      selectedTab: "project",
+      file: null,
+      pvepFile: null,
       submitted: false,
     };
   },
   methods: {
+    setActiveTab(event) {
+      this.file = null;
+      if (this.selectedTab === "dsl") {
+        this.pvepFile = null;
+      }
+      this.selectedTab = event.detail.item.value;
+    },
     upload() {
       this.submitted = true;
-      if (this.graphUpload && this.graphFile != null) {
-        this.$emit("upload", this.graphFile);
-      } else if (!this.graphUpload && this.dslFile != null) {
-        this.$emit("upload", [this.dslFile, this.inputFile]);
+      if (this.file == null) {
+        return;
       }
-    },
-    toggleGraphUpload() {
-      this.graphUpload = !this.graphUpload;
-    },
-    disabled() {
-      if (this.graphUpload == true) {
-        return this.graphFile == null || this.submitted;
+      if (this.selectedTab === "dsl") {
+        this.$emit("upload", [this.file, this.pvepFile]);
       } else {
-        return this.dslFile == null || this.submitted;
+        this.$emit("upload", this.file);
       }
-    },
-    updateGraphFile(event) {
-      this.graphFile = event.target.files[0];
-    },
-    updateDSLFile(event) {
-      this.dslFile = event.target.files[0];
-    },
-    updateInputFile(event) {
-      this.inputFile = event.target.files[0];
     },
   },
 };
 </script>
 
 <style scoped>
-input[type="file"] {
-  margin-top: 1rem;
-}
-input[type="file"]::file-selector-button {
-  background: #0e61fe;
-  padding: 0.7rem 1rem;
-  padding-right: 2.5rem;
-  margin-right: 1rem;
-  color: white;
-  border: none;
-  cursor: pointer;
+.file-uploader-container {
+  display: flex;
+  flex-direction: row;
 }
 
-input[type="file"]::file-selector-button:hover {
-  background: #0a52d8;
-}
-
-label {
-  display: block;
-  margin-top: 1rem;
-}
-
-br {
-  margin: 1rem 0;
-}
-
-.fileUpload {
-  padding: 0 1rem 1rem;
+cds-file-uploader {
+  padding-top: 1rem;
 }
 </style>
