@@ -1,9 +1,9 @@
 <template>
   <!-- Experiment header -->
   <div>
-    <div class="cds--row pad1 topPad">
+    <div class="cds--row topPad">
       <!-- Left column  -->
-      <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-12 pad1">
+      <div class="cds--col-sm-4 cds--col-md-8 cds--col-lg-12">
         <!-- Experiment name and description -->
         <dds-content-block>
           <dds-content-block-heading>{{
@@ -270,6 +270,10 @@ dds-structured-list-cell {
 dds-cta-block {
   padding: 0;
   font-size: 16px;
+
+  @media screen and (max-width: 672px) {
+    padding-top: 2rem;
+  }
 }
 
 bx-toggle {

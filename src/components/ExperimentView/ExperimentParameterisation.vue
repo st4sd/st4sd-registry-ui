@@ -388,4 +388,8 @@ export default {
 bx-unordered-list {
   padding-left: 0;
 }
+
+bx-unordered-list bx-list-item {
+  padding-left: 10px;
+}
 </style>
