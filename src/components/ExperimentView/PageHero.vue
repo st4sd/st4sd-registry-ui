@@ -276,6 +276,10 @@ dds-cta-block {
   }
 }
 
+dds-content-block-copy {
+  margin: 0;
+}
+
 bx-toggle {
   padding-bottom: 1rem !important;
 }
