@@ -27,20 +27,11 @@
           <span slot="label-text">Description:</span>
         </bx-input>
         <br />
-        <bx-input
-          v-if="parentNode != undefined"
-          readonly
-          :value="parentNode.label"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Parent Workflow:</span>
-        </bx-input>
         <bx-btn
-          v-if="parentNode != undefined"
-          kind="primary"
+          v-if="componentHasParent"
+          kind="tertiary"
           @click="removeParentNode()"
-          >Unnest</bx-btn
+          >Unnest from workflow</bx-btn
         >
       </bx-accordion-item>
       <bx-accordion-item
@@ -697,7 +688,7 @@ import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 let invalidVariables = {};
 
 export default {
-  props: { node: Object, parentNode: Object, allNodes: Object },
+  props: { node: Object, allNodes: Object },
   emits: ["update", "removeParent", "add", "invalid", "nameChanged"],
   data() {
     return {
@@ -719,6 +710,14 @@ export default {
         this.variableValues = Object.values(this.node.definition.variables);
       }
     }
+  },
+  computed: {
+    componentHasParent() {
+      let componentNode = this.allNodes?.find(
+        (node) => node.id == this.node.id,
+      );
+      return componentNode?.parentNode != undefined;
+    },
   },
   methods: {
     update() {

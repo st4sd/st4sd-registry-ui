@@ -20,7 +20,6 @@
         ref="componentForm"
         :node="node"
         :allNodes="allNodes"
-        :parentNode="parentNode"
         @update="updateComponentModalNotification"
         @nameChanged="updateIsTemplateButtonDisabled"
         @removeParent="removeParent"
@@ -80,7 +79,6 @@ export default {
   },
   props: {
     node: Object,
-    parentNode: Object,
     allNodes: Object,
     dslValidationErrorProp: Array,
     templatesNamesSet: Set,

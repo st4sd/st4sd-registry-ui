@@ -147,7 +147,6 @@
       v-if="modalVisibilities.updateComponentModal.value"
       :node="selectedNode"
       :allNodes="allNodes"
-      :parentNode="parentNode"
       :dslValidationErrorProp="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
       @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
