@@ -249,7 +249,7 @@ aside .node > * {
   flex-grow: 1;
   height: 100%;
 }
-@media screen and (max-width: 672px) {
+@media screen and (max-width: 671px) {
   .dndflow {
     flex-direction: column;
   }
@@ -289,7 +289,7 @@ aside .node > * {
   }
 }
 
-@media screen and (max-height: 672px) and (max-width: 672px) {
+@media screen and (max-height: 672px) and (max-width: 671px) {
   aside #controls {
     height: 100%;
     overflow-y: scroll;

@@ -271,7 +271,7 @@ dds-cta-block {
   padding: 0;
   font-size: 16px;
 
-  @media screen and (max-width: 672px) {
+  @media screen and (max-width: 671px) {
     padding-top: 2rem;
   }
 }

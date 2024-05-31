@@ -398,7 +398,7 @@ bx-breadcrumb-item {
     font-size: calc(16px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
     margin-bottom: 1rem;
   }
-  @media screen and (max-width: 672px) {
+  @media screen and (max-width: 671px) {
     margin-bottom: 16px;
     margin-left: 0;
   }
@@ -406,7 +406,7 @@ bx-breadcrumb-item {
 }
 
 .ve-copy {
-  @media screen and (max-width: 672px) {
+  @media screen and (max-width: 671px) {
     margin-left: 0;
   }
   margin-right: 16px;

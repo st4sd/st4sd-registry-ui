@@ -287,7 +287,7 @@ export default {
   height: fit-content;
 }
 
-@media screen and (max-width: 672px) {
+@media screen and (max-width: 671px) {
   #basket {
     max-width: 300px;
     margin-left: 1rem;

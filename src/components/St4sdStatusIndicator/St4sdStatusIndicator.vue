@@ -154,7 +154,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 672px) {
+@media screen and (max-width: 671px) {
   #statusChart {
     width: 75%;
   }

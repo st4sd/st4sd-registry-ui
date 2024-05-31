@@ -300,7 +300,7 @@ bx-table-header-cell {
   margin-top: 0;
 }
 
-@media screen and (max-width: 672px) {
+@media screen and (max-width: 671px) {
   .download-text {
     display: none;
   }
