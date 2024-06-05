@@ -7,7 +7,7 @@
 <template>
   <bx-header class="position-reset" aria-label="ST4SD Registry">
     <bx-header-name :href="getDeploymentEndpoint()" prefix="IBM"
-      >ST4SD Virtual Experiments Registry</bx-header-name
+      >ST4SD Registry</bx-header-name
     >
     <bx-header-nav-item
       :href="`${getDeploymentEndpoint()}build-canvas`"
