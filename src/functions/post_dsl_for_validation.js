@@ -30,8 +30,8 @@ export function postDslForValidation(saveResultToCanvasStore = false) {
         this.dslInvalidTitle = error.response.data.message;
         this.dslMessage =
           "There are errors in the DSL validation, click the show errors button to see them";
-        this.dslErrors = error.response.data.problems;
-        this.$emit("dslValidationError", this.dslErrors);
+        this.dslErrorsData = error.response.data.problems;
+        this.$emit("dslValidationError", this.dslErrorsData);
       });
   }
 }

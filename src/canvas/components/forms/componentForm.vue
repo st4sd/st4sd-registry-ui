@@ -606,11 +606,7 @@
       <bx-accordion-item
         :title-text="'Variables (' + variableKeys.length + ')'"
       >
-        <bx-table-toolbar>
-          <bx-table-toolbar-content>
-            <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
-          </bx-table-toolbar-content>
-        </bx-table-toolbar>
+        <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
         <bx-structured-list v-if="variableKeys.length != 0">
           <bx-structured-list-head>
             <bx-structured-list-header-row>

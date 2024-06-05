@@ -18,7 +18,7 @@
         <bx-btn
           size="sm"
           title="Reset canvas"
-          @click="toggleModalVisibility('resetConfirmModal')"
+          @click="toggleVisibility('resetConfirmModal')"
           :disabled="!allNodes.some((node) => node.type != 'input')"
         >
           <img
@@ -30,7 +30,7 @@
         </bx-btn>
         <bx-btn
           title="Select Entrypoint"
-          @click="toggleModalVisibility('selectEntryPointModal')"
+          @click="toggleVisibility('selectEntryPointModal')"
           kind="primary"
           :disabled="
             allNodes.filter((node) => node.type == 'workflow').length < 1
@@ -42,7 +42,7 @@
           size="sm"
           title="Add Workflow"
           kind="primary"
-          @click="toggleModalVisibility('createWorkflowModal')"
+          @click="toggleVisibility('createWorkflowModal')"
         >
           + Add workflow
         </bx-btn>
@@ -83,7 +83,7 @@
         <bx-btn
           size="sm"
           title="Load canvas from file"
-          @click="toggleModalVisibility('fileUploadModal')"
+          @click="toggleVisibility('fileUploadModal')"
         >
           <img
             class="white-svg"
@@ -95,7 +95,7 @@
         <bx-btn
           size="sm"
           title="Register experiment"
-          @click="toggleModalVisibility('registerExperimentModal')"
+          @click="toggleVisibility('registerExperimentModal')"
           kind="secondary"
           :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
@@ -124,92 +124,94 @@
     />
     <!-- CRUD operations -->
     <createWorkflowModal
-      v-if="modalVisibilities.createWorkflowModal.value"
+      v-if="componentVisibilities.createWorkflowModal.value"
       @added="addWorkflow"
-      @bx-modal-closed="toggleModalVisibility('createWorkflowModal')"
+      @bx-modal-closed="toggleVisibility('createWorkflowModal')"
     />
     <updateWorkflowModal
-      v-if="modalVisibilities.updateWorkflowModal.value"
+      v-if="componentVisibilities.updateWorkflowModal.value"
       :node="selectedNode"
       :allNodes="allNodes"
       :parentNode="parentNode"
       :dslValidationErrorProp="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
-      @bx-modal-closed="toggleModalVisibility('updateWorkflowModal')"
-      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
+      @bx-modal-closed="toggleVisibility('updateWorkflowModal')"
+      @openShowDslErrors="toggleVisibility('showDslErrors')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
       @addToTemplateWorkspace="addToTemplateWorkspace"
       @updateWorkflowModalNotification="updateBuildCanvasNotifications"
     />
-    <updateComponentModal
-      v-if="modalVisibilities.updateComponentModal.value"
+    <UpdateComponentSidePanel
+      v-if="componentVisibilities.updateComponentSidePanel.value"
       :node="selectedNode"
       :allNodes="allNodes"
-      :dslValidationErrorProp="dslValidationErrors"
+      :allEdges="allEdges"
+      :parentNode="parentNode"
+      :dslValidationErrors="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
-      @bx-modal-closed="toggleModalVisibility('updateComponentModal')"
-      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
+      :setDslValidationErrorFunction="setDslValidationError"
+      @cds-side-panel-closed="toggleVisibility('updateComponentSidePanel')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @addToTemplateWorkspace="addToTemplateWorkspace"
       @updateComponentModalNotification="updateBuildCanvasNotifications"
     />
     <createEdgeModal
-      v-if="modalVisibilities.createEdgeModal.value"
+      v-if="componentVisibilities.createEdgeModal.value"
       :edgeProp="newEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @bx-modal-closed="toggleModalVisibility('createEdgeModal')"
+      @bx-modal-closed="toggleVisibility('createEdgeModal')"
       @created="addEdge"
     />
     <updateEdgeModal
-      v-if="modalVisibilities.updateEdgeModal.value"
+      v-if="componentVisibilities.updateEdgeModal.value"
       :edgeProp="selectedEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @bx-modal-closed="toggleModalVisibility('updateEdgeModal')"
-      @update="toggleModalVisibility('updateEdgeModal')"
+      @bx-modal-closed="toggleVisibility('updateEdgeModal')"
+      @update="toggleVisibility('updateEdgeModal')"
       @delete="openDeleteModal"
     />
     <!-- Nesting -->
     <nestNodeModal
-      v-if="modalVisibilities.nestingModal.value"
+      v-if="componentVisibilities.nestingModal.value"
       :toBeNestedNode="nestingNode"
       :nestingWorkflows="nestingWFs"
       :allNodes="allNodes"
-      @bx-modal-closed="toggleModalVisibility('nestingModal')"
+      @bx-modal-closed="toggleVisibility('nestingModal')"
       @done="addStep"
     />
     <!-- Experiment configuration -->
     <selectEntryPointModal
-      v-if="modalVisibilities.selectEntryPointModal.value"
+      v-if="componentVisibilities.selectEntryPointModal.value"
       :allNodes="allNodes"
-      @bx-modal-closed="toggleModalVisibility('selectEntryPointModal')"
-      @update="toggleModalVisibility('selectEntryPointModal')"
+      @bx-modal-closed="toggleVisibility('selectEntryPointModal')"
+      @update="toggleVisibility('selectEntryPointModal')"
     />
     <fileUploadModal
       open
       title="Upload Files"
       @upload="uploadFiles"
-      v-if="modalVisibilities.fileUploadModal.value"
-      @bx-modal-closed="toggleModalVisibility('fileUploadModal')"
+      v-if="componentVisibilities.fileUploadModal.value"
+      @bx-modal-closed="toggleVisibility('fileUploadModal')"
     />
     <registerExperiment
       open
-      v-if="modalVisibilities.registerExperimentModal.value"
-      @bx-modal-closed="toggleModalVisibility('registerExperimentModal')"
-      @openShowDslErrors="toggleModalVisibility('showDslErrors')"
+      v-if="componentVisibilities.registerExperimentModal.value"
+      @bx-modal-closed="toggleVisibility('registerExperimentModal')"
+      @openShowDslErrors="toggleVisibility('showDslErrors')"
       @dslValidationError="setDslValidationError"
       :name="props.pvep"
       :allNodes="allNodes"
       :allEdges="allEdges"
     />
-    <ShowDslValidationErrors
+    <ShowDslValidationErrorsModal
       open
-      v-if="modalVisibilities.showDslErrors.value"
-      @bx-modal-closed="toggleModalVisibility('showDslErrors')"
+      v-if="componentVisibilities.showDslErrors.value"
+      @bx-modal-closed="toggleVisibility('showDslErrors')"
       @dslValidationError="setDslValidationError"
       :dslErrorsProp="dslValidationErrors"
       :allNodes="allNodes"
@@ -219,36 +221,36 @@
     <!-- Confirm upload files-->
     <confirmModal
       open
-      v-if="modalVisibilities.confirmUploadModal.value"
+      v-if="componentVisibilities.confirmUploadModal.value"
       title="Upload file?"
       paragraph1="Performing this action will replace all the templates and connections
         on the canvas with the contents of the uploaded file."
       paragraph2="This action cannot be undone. Do you still want to proceed?"
       buttonText="Yes, upload the file"
-      @dds-expressive-modal-closed="toggleModalVisibility('confirmUploadModal')"
+      @dds-expressive-modal-closed="toggleVisibility('confirmUploadModal')"
       @confirm-button-clicked="applyUploadedFiles"
     />
     <!-- Confirm delete node -->
     <confirmModal
       open
-      v-if="modalVisibilities.deleteModal.value"
+      v-if="componentVisibilities.deleteModal.value"
       :title="`Delete ${nodeType}?`"
       :paragraph1="`Are you sure you want to delete this ${nodeType}?`"
       paragraph2="This action cannot be undone."
       :buttonText="`Yes, delete ${nodeType}`"
-      @dds-expressive-modal-closed="toggleModalVisibility('deleteModal')"
+      @dds-expressive-modal-closed="toggleVisibility('deleteModal')"
       @confirm-button-clicked="deleteNode"
     />
     <!-- Confirm reset canvas -->
     <confirmModal
       open
-      v-if="modalVisibilities.resetConfirmModal.value"
+      v-if="componentVisibilities.resetConfirmModal.value"
       title="Reset the canvas?"
       paragraph1="Performing this action will remove all the templates and connections
         from the canvas."
       paragraph2="This action cannot be undone. Do you still want to proceed?"
       buttonText="Yes, reset the canvas"
-      @dds-expressive-modal-closed="toggleModalVisibility('resetConfirmModal')"
+      @dds-expressive-modal-closed="toggleVisibility('resetConfirmModal')"
       @confirm-button-clicked="resetCanvas"
     />
   </div>
@@ -278,14 +280,16 @@ import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vu
 import createWorkflowModal from "@/canvas/components/modals/st4sd_workflows/createWorkflowModal.vue";
 import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
-import updateComponentModal from "@/canvas/components/modals/st4sd_components/updateComponentModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
-import ShowDslValidationErrors from "@/canvas/components/modals/experiment/showDslValidationErrors.vue";
+import ShowDslValidationErrorsModal from "@/canvas/components/modals/experiment/showDslValidationErrorsModal.vue";
 
 //Confirm Modal
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
+
+//Side Panels
+import UpdateComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/updateComponentSidePanel.vue";
 
 //Stores
 import { canvasStore } from "@/canvas/stores/canvasStore";
@@ -476,12 +480,13 @@ const onDragOver = (event) => {
   }
 };
 
-let modalVisibilities = {
+let componentVisibilities = {
   createWorkflowModal: ref(false),
   createEdgeModal: ref(false),
   updateEdgeModal: ref(false),
   updateWorkflowModal: ref(false),
   updateComponentModal: ref(false),
+  updateComponentSidePanel: ref(false),
   selectEntryPointModal: ref(false),
   nestingModal: ref(false),
   stepExecuteModal: ref(false),
@@ -505,12 +510,12 @@ const uploadFiles = async (files) => {
   } else {
     uploadedFilesConents.graph = await readFile(files);
   }
-  toggleModalVisibility("fileUploadModal");
+  toggleVisibility("fileUploadModal");
 
   //Check if any nodes are in the current canvas, if so ask the user to confirm
   //that he wants to erase the current state
   if (nodes.value.some((node) => node.type != "input")) {
-    toggleModalVisibility("confirmUploadModal");
+    toggleVisibility("confirmUploadModal");
   } else {
     applyUploadedFiles();
   }
@@ -578,15 +583,15 @@ function applyUploadedFiles() {
     }
   }
   // Ensure the confirmUploadModal is hidden
-  modalVisibilities["confirmUploadModal"].value = false;
+  componentVisibilities["confirmUploadModal"].value = false;
 }
 
 function resetCanvas() {
   nodes.value = [];
   edges.value = [];
   setupInputs(elements);
-  if (modalVisibilities.resetConfirmModal.value) {
-    toggleModalVisibility("resetConfirmModal");
+  if (componentVisibilities.resetConfirmModal.value) {
+    toggleVisibility("resetConfirmModal");
   }
 }
 
@@ -605,8 +610,8 @@ function readFile(file) {
   });
 }
 
-const toggleModalVisibility = (modal) => {
-  modalVisibilities[modal].value = !modalVisibilities[modal].value;
+const toggleVisibility = (modal) => {
+  componentVisibilities[modal].value = !componentVisibilities[modal].value;
 };
 
 const onDrop = (event) => {
@@ -695,7 +700,7 @@ const addWorkflow = (workflow, input) => {
   if (workflows.length == 1) {
     setEntrypointAndNotify(workflows[0].id);
   }
-  toggleModalVisibility("createWorkflowModal");
+  toggleVisibility("createWorkflowModal");
 };
 
 let nestingNode = {};
@@ -709,7 +714,7 @@ onNodeDragStop((event) => {
   if (isNesting) {
     nestingNode = { ...event.node };
     nestingWFs = nestingWorkflows;
-    toggleModalVisibility("nestingModal");
+    toggleVisibility("nestingModal");
   }
 });
 
@@ -724,9 +729,9 @@ onConnect((edgeInProgress) => {
   if (existingEdge != undefined) {
     selectedEdge = existingEdge;
     nodeType = "connection";
-    toggleModalVisibility("updateEdgeModal");
+    toggleVisibility("updateEdgeModal");
   } else if (isConnectionValid(newEdge, findNode)) {
-    toggleModalVisibility("createEdgeModal");
+    toggleVisibility("createEdgeModal");
   }
 });
 
@@ -735,14 +740,14 @@ let selectedEdge;
 onEdgeDoubleClick(({ edge }) => {
   selectedEdge = edge;
   nodeType = "connection";
-  toggleModalVisibility("updateEdgeModal");
+  toggleVisibility("updateEdgeModal");
 });
 
 const addEdge = (newEdge) => {
   if (Object.keys(newEdge.definition).length > 0) {
     addEdges([newEdge]);
   }
-  toggleModalVisibility("createEdgeModal");
+  toggleVisibility("createEdgeModal");
 };
 
 const dark = ref(false);
@@ -765,14 +770,14 @@ onNodeDoubleClick(({ node }) => {
   templatesNamesSet = templateWorkspace.value.getTemplatesNamesSet();
   if (node.type == "component") {
     nodeType = "component";
-    toggleModalVisibility("updateComponentModal");
+    toggleVisibility("updateComponentSidePanel");
   } else {
     if (node.type == "workflow-input") {
       selectedNode = findNode(node.parentNode);
       parentNode = findNode(selectedNode.parentNode);
     }
     nodeType = "workflow";
-    toggleModalVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowModal");
   }
 });
 function getChildrenNodes(parentNode, validNodes, childrenNodes) {
@@ -834,14 +839,14 @@ const addToTemplateWorkspace = () => {
 };
 
 const openDeleteModal = () => {
-  toggleModalVisibility("deleteModal");
+  toggleVisibility("deleteModal");
   //close update modals
   if (nodeType == "workflow") {
-    toggleModalVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowModal");
   } else if (nodeType == "component") {
-    toggleModalVisibility("updateComponentModal");
+    toggleVisibility("updateComponentSidePanel");
   } else if (nodeType == "connection") {
-    toggleModalVisibility("updateEdgeModal");
+    toggleVisibility("updateEdgeModal");
   }
 };
 
@@ -851,7 +856,7 @@ const deleteNode = () => {
   } else {
     removeNodeAndStepReference(selectedNode, findNode, removeNodes);
   }
-  toggleModalVisibility("deleteModal");
+  toggleVisibility("deleteModal");
 };
 
 const removeParentNode = () => {
@@ -865,9 +870,9 @@ const removeParentNode = () => {
   updateNodeLabel(selectedNode);
   removeConnectingEdges(selectedNode);
   if (nodeType == "workflow") {
-    toggleModalVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowModal");
   } else if (nodeType == "component") {
-    toggleModalVisibility("updateComponentModal");
+    toggleVisibility("updateComponentSidePanel");
   }
 };
 
@@ -921,7 +926,7 @@ const onChangeVisibility = (node, isHidden) => {
 };
 
 const addStep = () => {
-  toggleModalVisibility("nestingModal");
+  toggleVisibility("nestingModal");
 };
 
 onMounted(() => {
