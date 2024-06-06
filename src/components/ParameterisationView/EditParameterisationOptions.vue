@@ -53,7 +53,7 @@
             <br />
             <bx-dropdown
               :value="selectedPlatform"
-              @bx-dropdown-selected="setSelectedPlatform()"
+              @bx-dropdown-selected="setSelectedPlatform"
               colorScheme="light"
               class="input-size drag-input padding-right"
             >
@@ -631,7 +631,16 @@ export default {
       this.singlePlatform = !this.singlePlatform;
     },
     setPlatformType() {
+      // singlePlatform == true means we're switching from
+      // executionOptions to preset platform
       if (this.singlePlatform) {
+        // There might be cases where there is an empty array for the
+        // execution platforms: we just delete it
+        if (this.parameterisation.executionOptions.platform.length == 0) {
+          delete this.parameterisation.executionOptions.platform;
+        }
+
+        // If the user doesn't have any option in the form
         if (this.parameterisation.executionOptions.platform == undefined) {
           this.selectedPlatform = this.platformOptions[0];
         } else {
@@ -642,12 +651,14 @@ export default {
         delete this.parameterisation.executionOptions.platform;
       } else {
         delete this.parameterisation.presets.platform;
-        this.parameterisation.executionOptions.platform = [
-          this.selectedPlatform,
-        ];
+        if (this.selectedPlatform != undefined) {
+          this.parameterisation.executionOptions.platform = [
+            this.selectedPlatform,
+          ];
+        }
       }
     },
-    setSelectedPlatform() {
+    setSelectedPlatform(event) {
       this.parameterisation.presets.platform = event.detail.item.value;
       this.selectedPlatform = event.detail.item.value;
     },
