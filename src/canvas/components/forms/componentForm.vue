@@ -2,30 +2,26 @@
   <div>
     <bx-accordion>
       <bx-accordion-item title-text="Overview" open>
-        <bx-input
+        <cds-text-input
+          class="cds-theme-zone-g10"
+          label="Component name (Required)"
           data-modal-primary-focus
           :value="component.signature.name"
           @input="updateComponentName($event.target.value)"
           @blur="onFocusLost($event, component.signature.name)"
           placeholder="name"
           required
-          validityMessage="Name cannot be empty"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Component name (Required)</span>
-        </bx-input>
+          invalidText="Name cannot be empty"
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          class="cds-theme-zone-g10"
+          label="Description:"
           :value="component.signature.description"
           @input="component.signature.description = $event.target.value"
           placeholder="description"
           required
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Description:</span>
-        </bx-input>
+        />
         <br />
         <bx-btn
           v-if="componentHasParent"
@@ -58,21 +54,21 @@
               :key="index"
             >
               <bx-structured-list-cell class="updateModals">
-                <bx-input
+                <cds-text-input
+                  class="cds-theme-zone-g10"
                   :value="parameter.name"
                   @input="parameter.name = $event.target.value"
                   :invalid="parameterNameIsDuplicate(parameter.name)"
-                  validity-message="Parameter names must be unique"
+                  invalidText="Parameter names must be unique"
                   placeholder="parameter name"
-                  colorScheme="light"
                 />
               </bx-structured-list-cell>
               <bx-structured-list-cell class="updateModals">
-                <bx-input
+                <cds-text-input
+                  class="cds-theme-zone-g10"
                   :value="parameter.default"
                   @input="parameter.default = $event.target.value"
                   placeholder="parameter default"
-                  colorScheme="light"
                 />
               </bx-structured-list-cell>
               <bx-structured-list-cell
@@ -95,58 +91,46 @@
         </bx-structured-list>
       </bx-accordion-item>
       <bx-accordion-item title-text="Command">
-        <bx-input
+        <cds-text-input
+          label="Executable:"
+          class="cds-theme-zone-g10"
           :value="component.command.executable"
           @input="component.command.executable = $event.target.value"
           placeholder="executable"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text"> Executable:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Arguments:"
+          class="cds-theme-zone-g10"
           :value="component.command.arguments"
           @input="component.command.arguments = $event.target.value"
           placeholder="arguments"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text"> Arguments:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Expand Argument:"
+          class="cds-theme-zone-g10"
           :value="component.command.expandArguments"
           @input="component.command.expandArguments = $event.target.value"
           placeholder="expand argument"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text"> Expand Argument:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Environment: String or Object(currently only handles string)"
+          class="cds-theme-zone-g10"
           :value="component.command.environment"
           @input="component.command.environment = $event.target.value"
           placeholder="environment"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">
-            Environment: String or Object(currently only handles string)</span
-          >
-        </bx-input>
+        />
       </bx-accordion-item>
       <bx-accordion-item title-text="Workflow Attributes">
-        <bx-input
+        <cds-text-input
+          label="Replicate:"
+          class="cds-theme-zone-g10"
           :value="component.workflowAttributes.replicate"
           @input="component.workflowAttributes.replicate = $event.target.value"
           placeholder="replicate"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text"> Replicate:</span>
-        </bx-input>
+        />
         <br />
         <bx-toggle
           :checked="component.workflowAttributes.aggregate"
@@ -156,17 +140,15 @@
           @bx-toggle-changed="!component.workflowAttributes.aggregate"
         ></bx-toggle>
         <br />
-        <bx-input
+        <cds-text-input
+          label="Restart Hook File:"
+          class="cds-theme-zone-g10"
           :value="component.workflowAttributes.restartHookFile"
           @input="
             component.workflowAttributes.restartHookFile = $event.target.value
           "
           placeholder="retstart hook file"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Restart Hook File:</span>
-        </bx-input>
+        />
         <br />
 
         <bx-structured-list>
@@ -186,15 +168,13 @@
               :key="index"
             >
               <bx-structured-list-cell>
-                <bx-input
+                <cds-text-input
+                  label="Restart Hook On:"
+                  class="cds-theme-zone-g10"
                   :value="restartHook"
                   @input="restartHook = $event.target.value"
                   placeholder="restart hook name"
-                  colorScheme="light"
-                >
-                  <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text">Restart Hook On:</span>
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell
                 class="structured-list-delete-button structured-list-delete-button-bottom"
@@ -218,41 +198,35 @@
           </bx-btn>
         </bx-structured-list>
 
-        <bx-input
+        <cds-text-input
+          label="Repeat Interval:"
+          class="cds-theme-zone-g10"
           :value="component.workflowAttributes.repeatInterval"
           @input="
             component.workflowAttributes.repeatInterval = $event.target.value
           "
           placeholder="repeat interval"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Repeat Interval:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Repeat Retries:"
+          class="cds-theme-zone-g10"
           :value="component.workflowAttributes.repeatRetries"
           @input="
             component.workflowAttributes.repeatRetries = $event.target.value
           "
           placeholder="repeat retries"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Repeat Retries:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Max Restarts:"
+          class="cds-theme-zone-g10"
           :value="component.workflowAttributes.maxRestarts"
           @input="
             component.workflowAttributes.maxRestarts = $event.target.value
           "
           placeholder="max restarts"
-          colorScheme="light"
-          label="Max Restarts:"
-        >
-        </bx-input>
-
+        />
         <bx-structured-list
           v-if="component.workflowAttributes.shutdownOn != undefined"
         >
@@ -274,15 +248,13 @@
               :key="index"
             >
               <bx-structured-list-cell>
-                <bx-input
+                <cds-text-input
+                  label="Shutdown On:"
+                  class="cds-theme-zone-g10"
                   :value="shutdownOn"
                   @input="shutdownOn = $event.target.value"
                   placeholder="shutdown on"
-                  colorScheme="light"
-                >
-                  <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                  <span slot="label-text">Shutdown On:</span>
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell
                 class="structured-list-delete-button structured-list-delete-button-bottom"
@@ -324,284 +296,238 @@
         </bx-content-switcher>
         <template v-if="contentSwitcherSelection == 'config'">
           <br />
-          <bx-input
+          <cds-text-input
+            label="Backend:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.config.backend"
             @input="
               component.resourceManager.config.backend = $event.target.value
             "
             placeholder="backend"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Backend:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Walltime:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.config.walltime"
             @input="
               component.resourceManager.config.walltime = $event.target.value
             "
             placeholder="walltime"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Walltime:</span>
-          </bx-input>
+          />
         </template>
         <template v-if="contentSwitcherSelection == 'lsf'">
           <br />
-          <bx-input
+          <cds-text-input
+            label="Status Request Interval:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.statusRequestInterval"
             @input="
               component.resourceManager.lsf.statusRequestInterval =
                 $event.target.value
             "
             placeholder="status request interval"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Status Request Interval:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Queue:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.queue"
             @input="component.resourceManager.lsf.queue = $event.target.value"
             placeholder="queue"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Queue:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Reservation:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.reservation"
             @input="
               component.resourceManager.lsf.reservation = $event.target.value
             "
             placeholder="reservation"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Reservation:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Resource String:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.resourceString"
             @input="
               component.resourceManager.lsf.resourceString = $event.target.value
             "
             placeholder="resource string"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Resource String:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Docker Image:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.dockerImage"
             @input="
               component.resourceManager.lsf.dockerImage = $event.target.value
             "
             placeholder="docker image"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Docker Image:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Docker Profile App:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.dockerProfileApp"
             @input="
               component.resourceManager.lsf.dockerProfileApp =
                 $event.target.value
             "
             placeholder="docker profile app"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Docker Profile App:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Docker Option:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.lsf.dockerOption"
             @input="
               component.resourceManager.lsf.dockerOption = $event.target.value
             "
             placeholder="docker option"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Docker Option:</span>
-          </bx-input>
+          />
         </template>
         <template v-if="contentSwitcherSelection == 'kubernetes'">
           <br />
-          <bx-input
+          <cds-text-input
+            label="Image:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.image"
             @input="
               component.resourceManager.kubernetes.image = $event.target.value
             "
             placeholder="image"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Image:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Image Pull Secret:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.imagePullSecret"
             @input="
               component.resourceManager.kubernetes.imagePullSecret =
                 $event.target.value
             "
             placeholder="image pull secret"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Image Pull Secret:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Grace Period:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.gracePeriod"
             @input="
               component.resourceManager.kubernetes.gracePeriod =
                 $event.target.value
             "
             placeholder="grace period"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Grace Period:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Pod Spec:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.podSpec"
             @input="
               component.resourceManager.kubernetes.podSpec = $event.target.value
             "
             placeholder="pod spec"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Pod Spec:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Api Key Var:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.apiKeyVar"
             @input="
               component.resourceManager.kubernetes.apiKeyVar =
                 $event.target.value
             "
             placeholder="api key var"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Api Key Var:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Host:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.host"
             @input="
               component.resourceManager.kubernetes.host = $event.target.value
             "
             placeholder="host"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Host:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="Namespace:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.namespace"
             @input="
               component.resourceManager.kubernetes.namespace =
                 $event.target.value
             "
             placeholder="namespace"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">Namespace:</span>
-          </bx-input>
+          />
           <br />
-          <bx-input
+          <cds-text-input
+            label="CPU Units Per Core:"
+            class="cds-theme-zone-g10"
             :value="component.resourceManager.kubernetes.cpuUnitsPerCore"
             @input="
               component.resourceManager.kubernetes.cpuUnitsPerCore =
                 $event.target.value
             "
             placeholder="cpu units per core"
-            colorScheme="light"
-          >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-            <span slot="label-text">CPU Units Per Core:</span>
-          </bx-input>
+          />
         </template>
       </bx-accordion-item>
       <bx-accordion-item title-text="Resource Request">
-        <bx-input
+        <cds-text-input
+          label="Number of Processes:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.numberProcesses"
           @input="
             component.resourceRequest.numberProcesses = $event.target.value
           "
           placeholder="number of processes"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Number of Processes:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Number of Thread:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.numberThreads"
           @input="component.resourceRequest.numberThreads = $event.target.value"
           placeholder="number of threads"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Number of Threads:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Ranks per Node:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.ranksPerNode"
           @input="component.resourceRequest.ranksPerNode = $event.target.value"
           placeholder="ranks per node"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Ranks per Node:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Threads per Core:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.threadsPerCore"
           @input="
             component.resourceRequest.threadsPerCore = $event.target.value
           "
           placeholder="threads per core"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Threads per Core:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="Memory:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.memory"
           @input="component.resourceRequest.memory = $event.target.value"
           placeholder="memory"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">Memory:</span>
-        </bx-input>
+        />
         <br />
-        <bx-input
+        <cds-text-input
+          label="GPUs:"
+          class="cds-theme-zone-g10"
           :value="component.resourceRequest.gpus"
           @input="component.resourceRequest.gpus = $event.target.value"
           placeholder="gpus"
-          colorScheme="light"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text">GPUs:</span>
-        </bx-input>
+        />
       </bx-accordion-item>
       <bx-accordion-item
         :title-text="'Variables (' + variableKeys.length + ')'"
@@ -625,28 +551,26 @@
               :key="idx"
             >
               <bx-structured-list-cell class="updateModals">
-                <bx-input
+                <cds-text-input
+                  class="cds-theme-zone-g10"
                   id="add-component-variables-input"
                   type="text"
                   :value="key"
                   @input="setVariableKey(idx, $event.target.value)"
                   :invalid="checkKeyIsDuplicate(idx, key)"
-                  validity-message="Variable names must be unique"
+                  invalidText="Variable names must be unique"
                   placeholder="variable name"
-                  colorScheme="light"
-                >
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell class="updateModals">
-                <bx-input
+                <cds-text-input
+                  class="cds-theme-zone-g10"
                   id="add-component-variables-input"
                   type="text"
                   :value="variableValues[idx]"
                   @input="setVariableValue(idx, $event.target.value)"
                   placeholder="variable value"
-                  colorScheme="light"
-                >
-                </bx-input>
+                />
               </bx-structured-list-cell>
               <bx-structured-list-cell
                 class="updateModals structured-list-delete-button-bottom"

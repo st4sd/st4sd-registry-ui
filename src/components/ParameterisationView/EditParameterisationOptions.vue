@@ -55,7 +55,7 @@
               :value="selectedPlatform"
               @bx-dropdown-selected="setSelectedPlatform"
               colorScheme="light"
-              class="input-size drag-input padding-right"
+              class="input-size padding-right"
             >
               <bx-dropdown-item
                 v-for="(platform, idx) in platformOptions"
@@ -156,10 +156,9 @@
                   class="drag-input"
                   draggable="false"
                 />
-                <bx-input
+                <cds-text-input
                   size="lg"
-                  class="input-size drag-input padding-right"
-                  colorScheme="light"
+                  class="input-size padding-right cds-theme-zone-g10"
                   readonly
                   :value="platform"
                   @input="setPlatformName(idx)"
@@ -315,9 +314,8 @@
             id="input"
             class="cds--row"
           >
-            <bx-input
-              class="cds--col-lg-10 cds--col-md-5"
-              colorScheme="light"
+            <cds-text-input
+              class="cds--col-lg-10 cds--col-md-5 cds-theme-zone-g10"
               :value="input.name"
               readonly
               disabled
@@ -369,22 +367,16 @@
                 heigth="16"
                 src="@/assets/draggable.svg"
                 class="drag-input"
-                :style="[
-                  runtimeArgsInvalid[idx]
-                    ? ' position: relative; top: -2rem;'
-                    : '',
-                ]"
               />
-              <bx-input
+              <cds-text-input
                 size="lg"
-                colorScheme="light"
                 :value="arg"
-                class="input-size drag-input padding-right"
+                class="input-size padding-right cds-theme-zone-g10"
                 @input="setRuntimeArg(idx)"
                 draggable="true"
                 @dragstart="startDrag($event, idx)"
                 :invalid="runtimeArgsInvalid[idx]"
-                validity-message="Value can not be an empty string"
+                invalidText="Value can not be an empty string"
               />
             </div>
             <div class="cds--col-lg-1 cds--col-md-1 margin-horizontal">
@@ -437,21 +429,21 @@
           class="cds--row"
         >
           <div class="cds--col-lg-12 cds--col-md-6">
-            <bx-input
-              colorScheme="light"
+            <cds-text-input
+              class="cds-theme-zone-g10"
               :value="orchestratorResources.cpu"
               @input="setOrchestratorResourcesValues('cpu')"
-              label-text="CPU"
+              label="CPU"
               :invalid="orchestratorResourcesInvalid[0]"
-              validity-message="Value can not be an empty string"
+              invalidText="Value can not be an empty string"
             />
-            <bx-input
-              colorScheme="light"
+            <cds-text-input
+              class="cds-theme-zone-g10"
               :value="orchestratorResources.memory"
               @input="setOrchestratorResourcesValues('memory')"
-              label-text="Memory"
+              label="Memory"
               :invalid="orchestratorResourcesInvalid[1]"
-              validity-message="Value can not be an empty string"
+              invalidText="Value can not be an empty string"
             />
           </div>
         </div>
@@ -865,6 +857,10 @@ export default {
 }
 .drag-input:active {
   cursor: grabbing !important;
+}
+.drag-input {
+  position: relative;
+  top: 2rem;
 }
 .remove-btn {
   position: relative;

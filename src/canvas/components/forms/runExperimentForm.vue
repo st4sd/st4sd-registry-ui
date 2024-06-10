@@ -37,12 +37,12 @@
         >
           <div v-if="runExperimentPayload.inputs != undefined">
             <div v-for="(input, idx) in runExperimentPayload.inputs" :key="idx">
-              <bx-input
+              <cds-text-input
                 @input="input.filename = $event.target.value"
                 :value="input.filename"
-                labelText="Filename"
-                colorScheme="light"
-              ></bx-input>
+                label="Filename"
+                class="cds-theme-zone-g10"
+              />
               <bx-textarea
                 rows="4"
                 cols="50"
@@ -54,12 +54,12 @@
             </div>
           </div>
           <h4>Add Inputs</h4>
-          <bx-input
+          <cds-text-input
             @input="input.filename = $event.target.value"
             :value="input.filename"
-            labelText="Filename"
-            colorScheme="light"
-          ></bx-input>
+            label="Filename"
+            class="cds-theme-zone-g10"
+          />
           <bx-textarea
             rows="4"
             cols="50"
@@ -84,34 +84,34 @@
             v-for="(option, idx) in runExperimentPayload.data"
             v-bind:key="idx"
           >
-            <bx-input
+            <cds-text-input
               @input="option.name = $event.target.value"
               :value="option.name"
-              labelText="Filename"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Filename"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               @input="option.value = $event.target.value"
               :value="option.value"
-              labelText="Content"
-              colorScheme="light"
-            ></bx-input>
+              label="Content"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromArray('data', idx)">X</button>
           </div>
           <br />
           <p>Add Data:</p>
-          <bx-input
+          <cds-text-input
             @input="data.name = $event.target.value"
             :value="data.name"
-            labelText="Filename"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Filename"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             @input="data.value = $event.target.value"
             :value="data.value"
-            labelText="Content"
-            colorScheme="light"
-          ></bx-input>
+            label="Content"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('data', [])"
             @click="addToPayloadArray('data', { ...data })"
@@ -128,78 +128,78 @@
           class="tab-panels"
         >
           <h4>Inputs for S3</h4>
-          <bx-input
+          <cds-text-input
             @input="
               s3.accessKey = $event.target.value;
               addS3KeyToPayload();
               addS3ObjectToPayload('accessKey', s3.accessKey);
             "
             :value="s3.accessKey"
-            labelText="S3 accessKey"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="S3 accessKey"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             @input="
               s3.secretAccessKey = $event.target.value;
               addS3KeyToPayload();
               addS3ObjectToPayload('secretAccessKey', s3.secretAccessKey);
             "
             :value="s3.secretAccessKey"
-            labelText="S3 secretAccessKey"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="S3 secretAccessKey"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             @input="
               s3.bucket = $event.target.value;
               addS3KeyToPayload();
               addS3ObjectToPayload('bucket', s3.bucket);
             "
             :value="s3.bucket"
-            labelText="S3 bucket"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="S3 bucket"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             @input="
               s3.endpoint = $event.target.value;
               addS3KeyToPayload();
               addS3ObjectToPayload('endpoint', s3.endpoint);
             "
             :value="s3.endpoint"
-            labelText="S3 endpoint"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="S3 endpoint"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             @input="
               s3.region = $event.target.value;
               addS3KeyToPayload();
               addS3ObjectToPayload('region', s3.region);
             "
             :value="s3.region"
-            labelText="S3 region"
-            colorScheme="light"
-          ></bx-input>
+            label="S3 region"
+            class="cds-theme-zone-g10"
+          />
           <h4>Data</h4>
           <p>The contents of this data fill will be read from S3</p>
           <div
             v-for="(option, idx) in runExperimentPayload.data"
             v-bind:key="idx"
           >
-            <bx-input
+            <cds-text-input
               @input="option.name = $event.target.value"
               :value="option.name"
-              labelText="Filename"
-              colorScheme="light"
-            ></bx-input>
+              label="Filename"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromArray('data', idx)">X</button>
           </div>
           <br />
           <p>Add Data:</p>
-          <bx-input
+          <cds-text-input
             @input="data.name = $event.target.value"
             :value="data.name"
-            labelText="Filename"
-            colorScheme="light"
-          ></bx-input>
+            label="Filename"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('data', [])"
             @click="addToPayloadArray('data', { ...data })"
@@ -215,12 +215,12 @@
           class="tab-panels"
         >
           <h4>Inputs for Datashim</h4>
-          <bx-input
+          <cds-text-input
             @input="s3.dataset = $event.target.value"
             :value="s3.dataset"
-            labelText="S3 dataset"
-            colorScheme="light"
-          ></bx-input>
+            label="S3 dataset"
+            class="cds-theme-zone-g10"
+          />
           <div>
             <h4>Data</h4>
             The contents of this data fill will be read from the S3 bucket that
@@ -229,23 +229,23 @@
               v-for="(option, idx) in runExperimentPayload.data"
               v-bind:key="idx"
             >
-              <bx-input
+              <cds-text-input
                 @input="option.name = $event.target.value"
                 :value="option.name"
-                labelText="Filename"
-                colorScheme="light"
-              ></bx-input>
+                label="Filename"
+                class="cds-theme-zone-g10"
+              />
               <button @click="removeFromArray('data', idx)">X</button>
             </div>
           </div>
           <br />
           <p>Add Data:</p>
-          <bx-input
+          <cds-text-input
             @input="data.name = $event.target.value"
             :value="data.name"
-            labelText="Filename"
-            colorScheme="light"
-          ></bx-input>
+            label="Filename"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('data', [])"
             @click="addToPayloadArray('data', { ...data })"
@@ -265,49 +265,49 @@
       <h4>Options</h4>
       <bx-accordion>
         <bx-accordion-item title-text="Platform">
-          <bx-input
+          <cds-text-input
             @input="
               platform = $event.target.value;
               addPlatformToPayload();
             "
             :value="platform"
-            labelText="Platform Name"
-            colorScheme="light"
-          ></bx-input>
+            label="Platform Name"
+            class="cds-theme-zone-g10"
+          />
         </bx-accordion-item>
         <bx-accordion-item title-text="Variables">
           <div
             v-for="(variable, key, idx) in runExperimentPayload.variables"
             v-bind:key="idx"
           >
-            <bx-input
+            <cds-text-input
               :value="key"
               @input="key = $event.target.value"
-              labelText="Name"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Name"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               :value="variable"
               @input="variable = $event.target.value"
-              labelText="Value"
-              colorScheme="light"
-            ></bx-input>
+              label="Value"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromObject('variables', key)">X</button>
           </div>
 
           <p>Add Variable</p>
-          <bx-input
+          <cds-text-input
             :value="variable.name"
             @input="variable.name = $event.target.value"
-            labelText="Name"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Name"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="variable.value"
             @input="variable.value = $event.target.value"
-            labelText="Value"
-            colorScheme="light"
-          ></bx-input>
+            label="Value"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('variables', {})"
             @click="
@@ -324,24 +324,24 @@
             v-for="(option, idx) in runExperimentPayload.additionalOptions"
             v-bind:key="idx"
           >
-            <bx-input
+            <cds-text-input
               :value="runExperimentPayload.additionalOptions[idx]"
               @input="
                 runExperimentPayload.additionalOptions[idx] =
                   $event.target.value
               "
-              labelText="Option"
-              colorScheme="light"
-            ></bx-input>
+              label="Option"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeString('additionalOptions', idx)">X</button>
           </div>
           <p>Add Option</p>
-          <bx-input
+          <cds-text-input
             :value="additionalOption"
             @input="additionalOption = $event.target.value"
-            labelText="Option"
-            colorScheme="light"
-          ></bx-input>
+            label="Option"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('additionalOptions', [])"
             @click="addToPayloadArray('additionalOptions', additionalOption)"
@@ -357,35 +357,35 @@
             v-bind:key="idx"
             colorScheme="light"
           >
-            <bx-input
+            <cds-text-input
               :value="key"
               @input="key = $event.target.value"
-              labelText="Name"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Name"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               :value="option"
               @input="option = $event.target.value"
-              labelText="Value"
-              colorScheme="light"
-            ></bx-input>
+              label="Value"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromObject('environmentalVariables', key)">
               X
             </button>
           </div>
           <p>Add Config Key & Value</p>
-          <bx-input
+          <cds-text-input
             :value="environmentalVariable.name"
             @input="environmentalVariable.name = $event.target.value"
-            labelText="Key"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Key"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="environmentalVariable.value"
             @input="environmentalVariable.value = $event.target.value"
-            labelText="Value"
-            colorScheme="light"
-          ></bx-input>
+            label="Value"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('environmentalVariables', {})"
             @click="
@@ -402,33 +402,33 @@
             v-for="(metadata, key, idx) in runExperimentPayload.metadata"
             v-bind:key="idx"
           >
-            <bx-input
+            <cds-text-input
               :value="key"
               @input="key = $event.target.value"
-              labelText="Name"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Name"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               :value="metadata"
               @input="metadata = $event.target.value"
-              labelText="Value"
-              colorScheme="light"
-            ></bx-input>
+              label="Value"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromObject('metadata', key)">X</button>
           </div>
           <p>Add Metadata Name & Value</p>
-          <bx-input
+          <cds-text-input
             :value="metadata.name"
             @input="metadata.name = $event.target.value"
-            labelText="Name"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Name"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="metadata.value"
             @input="metadata.value = $event.target.value"
-            labelText="Value"
-            colorScheme="light"
-          ></bx-input>
+            label="Value"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('metadata', {})"
             @click="addObjectToPayload('metadata', { ...metadata })"
@@ -437,16 +437,16 @@
           </button>
         </bx-accordion-item>
         <bx-accordion-item title-text="Runtime Policy">
-          <bx-input
+          <cds-text-input
             @input="
               runtimePolicy.name = $event.target.value;
               addRunTimePolicyKeyToPayload();
               addRuntimePolicyNameToPayload('name', runtimePolicy.name);
             "
             :value="runtimePolicy.name"
-            labelText="Name"
-            colorScheme="light"
-          ></bx-input>
+            label="Name"
+            class="cds-theme-zone-g10"
+          />
           <p>Config</p>
           <div v-if="runExperimentPayload.runtimePolicy != undefined">
             <div v-if="runExperimentPayload.runtimePolicy.config != undefined">
@@ -455,18 +455,18 @@
                   .config"
                 v-bind:key="idx"
               >
-                <bx-input
+                <cds-text-input
                   :value="key"
                   @input="key = $event.target.value"
-                  labelText="Key"
-                  colorScheme="light"
-                ></bx-input>
-                <bx-input
+                  label="Key"
+                  class="cds-theme-zone-g10"
+                />
+                <cds-text-input
                   :value="value"
                   @input="value = $event.target.value"
-                  labelText="Value"
-                  colorScheme="light"
-                ></bx-input>
+                  label="Value"
+                  class="cds-theme-zone-g10"
+                />
                 <button @click="removeFromObject('runtimePolicy.config', key)">
                   X
                 </button>
@@ -474,18 +474,18 @@
             </div>
           </div>
           <p>Add Config Key & Value</p>
-          <bx-input
+          <cds-text-input
             :value="runtimePolicyConfigKey"
             @input="runtimePolicyConfigKey = $event.target.value"
-            labelText="Key"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Key"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="runtimePolicyConfigValue"
             @input="runtimePolicyConfigValue = $event.target.value"
-            labelText="Value"
-            colorScheme="light"
-          ></bx-input>
+            label="Value"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click="
               addRunTimePolicyKeyToPayload();
@@ -520,32 +520,32 @@
               <bx-dropdown-item value="configMap">configMap</bx-dropdown-item>
               <bx-dropdown-item value="secret">secret</bx-dropdown-item>
             </bx-dropdown>
-            <bx-input
+            <cds-text-input
               :value="runExperimentPayload.volumes[idx].type[volumeTypeKey]"
               @input="
                 runExperimentPayload.volumes[idx].type[volumeTypeKey] =
                   $event.target.value
               "
-              labelText="Volume Type Value"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Volume Type Value"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               :value="runExperimentPayload.volumes[idx].applicationDependency"
               @input="
                 runExperimentPayload.volumes[idx].applicationDependency =
                   $event.target.value
               "
-              labelText="Volume Application Dependancy"
-              colorScheme="light"
-            ></bx-input>
-            <bx-input
+              label="Volume Application Dependancy"
+              class="cds-theme-zone-g10"
+            />
+            <cds-text-input
               :value="runExperimentPayload.volumes[idx].subPath"
               @input="
                 runExperimentPayload.volumes[idx].subPath = $event.target.value
               "
-              labelText="Volume SubPath"
-              colorScheme="light"
-            ></bx-input>
+              label="Volume SubPath"
+              class="cds-theme-zone-g10"
+            />
             <button @click="removeFromArray('volumes', idx)">X</button>
           </div>
           <p>Add Volume</p>
@@ -562,24 +562,24 @@
             <bx-dropdown-item value="configMap">configMap</bx-dropdown-item>
             <bx-dropdown-item value="secret">secret</bx-dropdown-item>
           </bx-dropdown>
-          <bx-input
+          <cds-text-input
             :value="volume.type[volumeTypeKey]"
             @input="volume.type[volumeTypeKey] = $event.target.value"
-            labelText="Volume Type Value"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Volume Type Value"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="volume.applicationDependency"
             @input="volume.applicationDependency = $event.target.value"
-            labelText="Volume Application Dependancy"
-            colorScheme="light"
-          ></bx-input>
-          <bx-input
+            label="Volume Application Dependancy"
+            class="cds-theme-zone-g10"
+          />
+          <cds-text-input
             :value="volume.subPath"
             @input="volume.subPath = $event.target.value"
-            labelText="Volume SubPath"
-            colorScheme="light"
-          ></bx-input>
+            label="Volume SubPath"
+            class="cds-theme-zone-g10"
+          />
           <button
             @click.once="addKeyToPayload('volumes', [])"
             @click="addToPayloadArray('volumes', { ...volume })"
@@ -605,17 +605,17 @@
         @bx-toggle-changed="handleStoreToggle(event)"
       ></bx-toggle>
       <div v-if="storeIns3Bucket">
-        <bx-input
+        <cds-text-input
           @input="
             s3Store.bucketPath = $event.target.value;
             addS3StoreKeyToPayload();
             addS3StoreObjectToPayload('bucketPath', s3Store.bucketPath);
           "
           :value="s3Store.bucketPath"
-          labelText="Bucket Path"
-          colorScheme="light"
-        ></bx-input>
-        <bx-input
+          label="Bucket Path"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
           @input="
             s3Store.credentials.accessKey = $event.target.value;
             addS3StoreKeyToPayload();
@@ -625,10 +625,10 @@
             );
           "
           :value="s3Store.credentials.accessKey"
-          labelText="S3 accessKey"
-          colorScheme="light"
-        ></bx-input>
-        <bx-input
+          label="S3 accessKey"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
           @input="
             s3Store.credentials.secretAccessKey = $event.target.value;
             addS3StoreKeyToPayload();
@@ -638,10 +638,10 @@
             );
           "
           :value="s3Store.credentials.secretAccessKey"
-          labelText="S3 secretAccessKey"
-          colorScheme="light"
-        ></bx-input>
-        <bx-input
+          label="S3 secretAccessKey"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
           @input="
             s3Store.credentials.bucket = $event.target.value;
             addS3StoreKeyToPayload();
@@ -651,10 +651,10 @@
             );
           "
           :value="s3Store.credentials.bucket"
-          labelText="S3 bucket"
-          colorScheme="light"
-        ></bx-input>
-        <bx-input
+          label="S3 bucket"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
           @input="
             s3Store.credentials.endpoint = $event.target.value;
             addS3StoreKeyToPayload();
@@ -664,10 +664,10 @@
             );
           "
           :value="s3Store.credentials.endpoint"
-          labelText="S3 endpoint"
-          colorScheme="light"
-        ></bx-input>
-        <bx-input
+          label="S3 endpoint"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
           @input="
             s3Store.credentials.region = $event.target.value;
             addS3StoreKeyToPayload();
@@ -677,11 +677,11 @@
             );
           "
           :value="s3Store.credentials.region"
-          labelText="S3 region"
-          colorScheme="light"
-        ></bx-input>
+          label="S3 region"
+          class="cds-theme-zone-g10"
+        />
       </div>
-      <bx-input
+      <cds-text-input
         v-else
         @input="
           s3Store.datasetStoreURI = $event.target.value;
@@ -689,9 +689,9 @@
           addS3StoreObjectToPayload('datasetStoreURI', s3Store.datasetStoreURI);
         "
         :value="s3Store.datasetStoreURI"
-        labelText="Dataset Store URI"
-        colorScheme="light"
-      ></bx-input>
+        label="Dataset Store URI"
+        class="cds-theme-zone-g10"
+      />
     </div>
   </div>
 </template>

@@ -26,19 +26,19 @@
       </bx-radio-button-group>
       <br />
       <div v-if="this.selectedWorkflowId != ''">
-        <bx-input
+        <p>
+          Choose the step name that the
+          <u>{{ toBeNestedNode.label }}</u> component should have in the
+          <u>{{ getSelectedWorkflow().label }}</u> workflow:
+        </p>
+        <cds-text-input
           helperText="Please make sure the step name is unique"
           placeholder="Write your step name here"
+          label="Step name"
           :value="stepName"
           @input="stepName = $event.target.value"
           @blur="onFocusLost($event, stepName)"
-        >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-          <span slot="label-text"
-            >What do you want to name <u>{{ toBeNestedNode.label }}</u> step in
-            <u>{{ getSelectedWorkflow().label }}</u> workflow:</span
-          >
-        </bx-input>
+        />
         <br />
         <p>
           <u>{{ this.selectedWorkflow.label }}</u> steps: <br />

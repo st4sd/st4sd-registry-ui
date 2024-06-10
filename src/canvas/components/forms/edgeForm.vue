@@ -1,15 +1,12 @@
 <template>
-  <bx-input
+  <cds-text-input
+    label="Connection label:"
+    helperText="optional"
+    class="cds-theme-zone-g10"
     placeholder="Label"
-    colorScheme="light"
     @input="edge.label = $event.target.value"
     :value="edge.label"
-  >
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <span slot="label-text">Connection label:</span>
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <span slot="helper-text">optional</span>
-  </bx-input>
+  />
   <br />
   <h5 v-if="edge.definition != undefined">Arguments:</h5>
   <bx-structured-list>
@@ -69,9 +66,9 @@
           </bx-dropdown>
         </bx-structured-list-cell>
         <bx-structured-list-cell>
-          <bx-input
-            label-text="optional"
-            colorScheme="light"
+          <cds-text-input
+            label="optional"
+            class="cds-theme-zone-g10"
             :value="argument.suffix"
             @input="argument.suffix = $event.target.value"
             placeholder="e.g. :ref or /path:ref, etc"
@@ -129,15 +126,14 @@
           </h5>
         </bx-structured-list-cell>
         <bx-structured-list-cell>
-          <bx-input
-            label-text="optional"
-            colorScheme="light"
+          <cds-text-input
+            label="optional"
+            class="cds-theme-zone-g10"
             :value="argument.suffix"
             @input="argument.suffix = $event.target.value"
             required
             placeholder="e.g. /path:ref"
-          >
-          </bx-input>
+          />
         </bx-structured-list-cell>
         <bx-structured-list-cell class="structured-list-delete-button-bottom">
           <bx-btn

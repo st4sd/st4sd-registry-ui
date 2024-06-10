@@ -5,17 +5,16 @@
       <bx-modal-heading>{{ title }}</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
-      <bx-input
+      <cds-text-input
         name="ExperimentName"
         @focus="validateExperimentName"
         @input="validateExperimentName"
         :disabled="submitting"
         :invalid="invalid"
-        label-text="Experiment Name"
-        color-scheme="light"
-        validity-message="Experiment names should only consist of lower case letters, numbers, and -"
-      >
-      </bx-input>
+        label="Experiment Name"
+        class="cds-theme-zone-g10"
+        invalidText="Experiment names should only consist of lower case letters, numbers, and -"
+      />
       <div v-if="submitting">
         <bx-inline-loading status="active">
           Submitting Experiment ...

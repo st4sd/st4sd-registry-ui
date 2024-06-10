@@ -24,14 +24,14 @@
         "
         id="preset-input"
       >
-        <bx-input
+        <cds-text-input
           size="lg"
-          colorScheme="light"
+          class="cds-theme-zone-g10"
           :value="parameterisationOptions.presets.variables[index].value"
           @input="setPresetValue"
-          label-text="Value"
+          label="Value"
           :invalid="invalidVariables[this.valueIndex]"
-          validity-message="Value can not be an empty string"
+          invalidText="Value can not be an empty string"
         />
       </div>
       <bx-radio-button
@@ -70,10 +70,9 @@
               src="@/assets/draggable.svg"
               class="drag-input"
             />
-            <bx-input
+            <cds-text-input
               size="lg"
-              colorScheme="light"
-              class="input-size"
+              class="input-size cds-theme-zone-g10"
               :value="getVariableExecutionOptionsValue().value"
               @input="setExecutionOptionValue(i, 'value')"
             />
@@ -127,21 +126,15 @@
                 heigth="16"
                 src="@/assets/draggable.svg"
                 class="drag-input"
-                :style="[
-                  invalidExecutionOptions[valueIndex][i]
-                    ? ' position: relative; top: -2rem;'
-                    : '',
-                ]"
                 draggable="false"
               />
-              <bx-input
+              <cds-text-input
                 size="lg"
-                colorScheme="light"
-                class="input-size"
+                class="input-size cds-theme-zone-g10"
                 :value="value.value"
                 @input="setExecutionOptionValue(i, 'valueFrom')"
                 :invalid="invalidExecutionOptions[valueIndex][i]"
-                validity-message="Value can not be an empty string"
+                invalidText="Value can not be an empty string"
               />
             </div>
             <div class="cds--col-lg-2 padding-left">
@@ -611,5 +604,10 @@ export default {
 .input {
   display: inline-block;
   width: calc(100% - layout.$spacing-05);
+}
+
+.drag-input {
+  position: relative;
+  top: 2rem;
 }
 </style>

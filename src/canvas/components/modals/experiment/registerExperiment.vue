@@ -25,19 +25,16 @@
         :title="dslInvalidTitle"
         :subtitle="dslMessage"
       />
-      <bx-input
+      <cds-text-input
+        class="cds-theme-zone-g10"
+        label="Experiment name:"
         placeholder="your-experiment-name"
-        colorScheme="light"
         @input="validateExperimentName"
         :value="experimentName"
         :invalid="nameInvalid"
         :disabled="dslInvalid"
-        validity-message="Experiment names should only consist of lower case letters, numbers, and - to separate words e.g. name-1"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <span slot="label-text">Experiment name:</span>
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-      </bx-input>
+        invalidText="Experiment names should only consist of lower case letters, numbers, and - to separate words e.g. name-1"
+      />
       <br />
     </bx-modal-body>
     <bx-modal-footer>

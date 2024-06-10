@@ -16,6 +16,7 @@
 
 <script>
 import "@carbon/ibmdotcom-web-components/es/components/back-to-top/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/text-input.min.js";
 import St4sdHeader from "./components/St4sdHeader";
 
 export default {
@@ -30,6 +31,8 @@ export default {
 </script>
 
 <style>
+@import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/themes.css";
+
 #main-content {
   margin: 2rem;
 }

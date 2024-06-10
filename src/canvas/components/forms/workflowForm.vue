@@ -1,39 +1,33 @@
 <template>
   <bx-accordion>
     <bx-accordion-item open title-text="Overview">
-      <bx-input
+      <cds-text-input
+        class="cds-theme-zone-g10"
+        label="Workflow name (Required)"
         data-modal-primary-focus
         placeholder="Workflow name"
         @blur="onFocusLost($event, workflow.getName())"
         :value="workflow.getName()"
         @input="updateWorkflowName($event.target.value)"
-        validityMessage="Name cannot be empty"
+        invalidText="Name cannot be empty"
         required
-        colorScheme="light"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-        <span slot="label-text">Workflow name (Required)</span>
-      </bx-input>
+      />
       <br />
-      <bx-input
+      <cds-text-input
+        class="cds-theme-zone-g10"
+        label="Workflow description"
         placeholder="Description"
         :value="workflow.getDescription()"
         @input="workflow.setDescription($event.target.value)"
-        colorScheme="light"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-        <span slot="label-text">Workflow description</span>
-      </bx-input>
+      />
       <br />
-      <bx-input
+      <cds-text-input
+        class="cds-theme-zone-g10"
         v-if="this.parentNode != undefined"
+        label="Parent Workflow:"
         readonly
         :value="parentNode.label"
-        colorScheme="light"
-      >
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-        <span slot="label-text">Parent Workflow:</span>
-      </bx-input>
+      />
       <br />
       <bx-btn
         v-if="this.parentNode != undefined"
@@ -66,24 +60,22 @@
             :key="index"
           >
             <bx-structured-list-cell class="updateModals">
-              <bx-input
+              <cds-text-input
+                class="cds-theme-zone-g10"
                 placeholder="parameter name"
                 :value="parameter.name"
                 @input="parameter.name = $event.target.value"
                 :invalid="parameterNameIsDuplicate(parameter.name)"
-                validity-message="Parameter names must be unique"
-                colorScheme="light"
-              >
-              </bx-input>
+                invalidText="Parameter names must be unique"
+              />
             </bx-structured-list-cell>
             <bx-structured-list-cell class="updateModals">
-              <bx-input
+              <cds-text-input
+                class="cds-theme-zone-g10"
                 placeholder="parameter default"
                 :value="parameter.default"
                 @input="parameter.default = $event.target.value"
-                colorScheme="light"
-              >
-              </bx-input>
+              />
             </bx-structured-list-cell>
             <bx-structured-list-cell
               class="updateModals structured-list-delete-button-bottom"
@@ -125,24 +117,21 @@
             :key="index"
           >
             <bx-structured-list-cell class="updateModals">
-              <bx-input
+              <cds-text-input
+                class="cds-theme-zone-g10"
+                helperText="Steps have to be unique"
                 placeholder="Step"
                 :value="step.step"
                 @input="workflow.setStep(index, $event.target.value)"
-                colorScheme="light"
-              >
-                <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute  -->
-                <span slot="helper-text">Steps have to be unique</span>
-              </bx-input>
+              />
             </bx-structured-list-cell>
             <bx-structured-list-cell class="updateModals">
-              <bx-input
+              <cds-text-input
+                class="cds-theme-zone-g10"
                 readonly
                 placeholder="Step reference"
                 :value="step.stepReference"
-                colorScheme="light"
-              >
-              </bx-input>
+              />
             </bx-structured-list-cell>
             <bx-structured-list-cell
               class="updateModals structured-list-delete-button-middle"
