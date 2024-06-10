@@ -8,7 +8,7 @@
       :caption="
         loadingError.statusText + ' (error ' + loadingError.statusCode + ')'
       "
-      timeout="10000"
+      timeout="5000"
     >
     </bx-toast-notification>
     <bx-toast-notification
@@ -22,7 +22,7 @@
         toastNotification.statusCode +
         ')'
       "
-      timeout="10000"
+      timeout="5000"
     >
     </bx-toast-notification>
   </div>

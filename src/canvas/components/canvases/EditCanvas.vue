@@ -4,7 +4,7 @@
     <bx-toast-notification
       v-for="(notification, notifIdx) in toastNotifications"
       :key="notifIdx"
-      timeout="10000"
+      timeout="5000"
       :kind="notification.kind"
       :title="notification.title"
       :subtitle="notification.subtitle"

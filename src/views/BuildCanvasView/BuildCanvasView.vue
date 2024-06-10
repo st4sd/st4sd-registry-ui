@@ -10,7 +10,7 @@
         ('caption' in notification ? notification.caption : '') +
         (notification.code == 0 ? '' : ` (code ${notification.code})`)
       "
-      timeout="10000"
+      timeout="5000"
     >
     </bx-toast-notification>
   </div>

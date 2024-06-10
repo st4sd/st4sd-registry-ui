@@ -12,7 +12,7 @@
       kind="error"
       :title="error.description"
       :caption="error.statusText + ' (error ' + error.code + ')'"
-      timeout="10000"
+      timeout="5000"
     >
     </bx-toast-notification>
   </div>

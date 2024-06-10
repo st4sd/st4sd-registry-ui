@@ -17,7 +17,7 @@
         kind="error"
         :title="errorDescription"
         :caption="errorStatusText + ' (error ' + errorCode + ')'"
-        timeout="20000"
+        timeout="5000"
       >
       </bx-toast-notification>
       <ParameterisationContainer
