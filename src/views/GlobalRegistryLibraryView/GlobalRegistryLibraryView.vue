@@ -83,8 +83,8 @@
                 ]["signature"]["description"]
               }}
             </p>
-            <dds-tag-group>
-              <bx-tag
+            <div class="tag-group-container">
+              <cds-tag
                 v-for="(parameter, idx) in component['graph']['workflows'][
                   component['workflowEntryIndex']
                 ]['signature']['parameters']"
@@ -92,8 +92,8 @@
                 type="gray"
               >
                 {{ parameter.name }}
-              </bx-tag>
-            </dds-tag-group>
+              </cds-tag>
+            </div>
             <!-- eslint-disable vue/no-deprecated-slot-attribute  -->
             <dds-card-footer
               slot="footer"
@@ -155,6 +155,7 @@ import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 import "@carbon/web-components/es/components/tile/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
 
 import axios from "axios";
 
@@ -253,6 +254,7 @@ export default {
 @import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
 @import "@/styles/empty_state_styles.scss";
+@import "@/styles/cds-tag-styles.scss";
 
 .cds--col-lg-13 {
   height: fit-content;

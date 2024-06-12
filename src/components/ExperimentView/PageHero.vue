@@ -14,32 +14,32 @@
           }}</dds-content-block-copy>
 
           <!-- Experiment tags -->
-          <dds-tag-group>
+          <div class="tag-group-container">
             <!-- Virtual experiment -->
-            <bx-tag v-if="checkVeInterfaceIsPresent(experiment)" type="green">
+            <cds-tag v-if="checkVeInterfaceIsPresent(experiment)" type="green">
               virtual-experiment
-            </bx-tag>
+            </cds-tag>
             <!-- Platforms -->
-            <bx-tag
+            <cds-tag
               v-for="option in getAvailablePlatforms"
               :key="`platformoption-${option}`"
               type="red"
             >
               platform: {{ option }}
-            </bx-tag>
+            </cds-tag>
             <!-- Tags -->
-            <bx-tag
+            <cds-tag
               v-for="(tag, idx) in experiment.metadata.registry.tags"
               :key="`registrytag-${idx}`"
               type="blue"
             >
               tag: {{ tag }}
-            </bx-tag>
+            </cds-tag>
             <!-- Digest -->
-            <bx-tag type="blue">
+            <cds-tag type="blue">
               digest: {{ experiment.metadata.registry.digest }}
-            </bx-tag>
-          </dds-tag-group>
+            </cds-tag>
+          </div>
 
           <!-- eslint-disable -->
           <dds-cta-block no-border>
@@ -166,6 +166,7 @@ import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
 import "@carbon/web-components/es/components/toggle/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
 import axios from "axios";
 import router from "@/router";
 
@@ -259,6 +260,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/styles/cds-tag-styles.scss";
+
 dds-content-block {
   padding-bottom: 0;
   padding-top: 0;

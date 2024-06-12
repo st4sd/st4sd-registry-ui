@@ -1,0 +1,13 @@
+// Original style definition: https://github.com/carbon-design-system/carbon-for-ibm-dotcom/blob/8aa629b63f11b460b109b7005fa40b5d55673965/packages/styles/scss/components/tag-group/_tag-group.scss
+
+@use "@carbon/layout";
+
+.tag-group-container {
+    display: flex;
+    flex-flow: row wrap;
+    gap: layout.$spacing-03;
+}
+
+cds-tag {
+  margin: 0 !important;
+} 

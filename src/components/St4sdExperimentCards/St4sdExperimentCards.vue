@@ -33,18 +33,18 @@
           <p>
             {{ experiment.metadata.package.description }}
           </p>
-          <dds-tag-group>
+          <div class="tag-group-container">
             <!-- VE interface -->
-            <bx-tag
+            <cds-tag
               v-if="
                 Object.keys(experiment.metadata.registry.interface).length != 0
               "
               type="green"
             >
               virtual-experiment
-            </bx-tag>
+            </cds-tag>
             <!-- Platform -->
-            <bx-tag
+            <cds-tag
               v-for="(platform, platformIdx) in getAvailablePlatforms(
                 experiment,
               )"
@@ -52,9 +52,9 @@
               type="red"
             >
               platform: {{ platform }}
-            </bx-tag>
+            </cds-tag>
             <!-- Available tags -->
-            <bx-tag
+            <cds-tag
               v-for="(tag, tagIdx) in findTagsForPackageName(
                 experiment.metadata.package.name,
               )"
@@ -62,16 +62,16 @@
               type="blue"
             >
               tag: {{ tag }}
-            </bx-tag>
+            </cds-tag>
             <!-- User metadata -->
-            <bx-tag
+            <cds-tag
               v-for="label in experiment.metadata.package.keywords"
               :key="label"
               type="purple"
             >
               {{ label }}
-            </bx-tag>
-          </dds-tag-group>
+            </cds-tag>
+          </div>
           <dds-card-footer> </dds-card-footer>
         </dds-card>
       </div>
@@ -103,6 +103,7 @@ import { getAvailablePlatforms } from "@/functions/package_utilities";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
 
 export default {
   components: {
@@ -194,6 +195,7 @@ export default {
 @use "@carbon/layout";
 
 @import "@/styles/empty_state_styles.scss";
+@import "@/styles/cds-tag-styles.scss";
 
 .card-row {
   margin-top: layout.$spacing-05;
