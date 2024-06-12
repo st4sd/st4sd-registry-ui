@@ -354,52 +354,54 @@
           <div
             v-for="(arg, idx) in runtimeArgs"
             :key="idx"
-            class="cds--row remove-btn-alignment"
+            @drop="onDrop($event, idx, runtimeArgs)"
+            @dragenter.prevent
+            @dragover.prevent
           >
             <div
-              class="cds--col-lg-12 cds--col-md-6 padding-right"
-              @drop="onDrop($event, idx, runtimeArgs)"
-              @dragenter.prevent
-              @dragover.prevent
+              class="cds--row drag"
+              draggable="true"
+              @dragstart="startDrag($event, idx)"
             >
-              <img
-                width="16"
-                heigth="16"
-                src="@/assets/draggable.svg"
-                class="drag-input"
-              />
-              <cds-text-input
-                size="lg"
-                :value="arg"
-                class="input-size padding-right cds-theme-zone-g10"
-                @input="setRuntimeArg(idx)"
-                draggable="true"
-                @dragstart="startDrag($event, idx)"
-                :invalid="runtimeArgsInvalid[idx]"
-                invalidText="Value can not be an empty string"
-              />
-            </div>
-            <div class="cds--col-lg-1 cds--col-md-1 margin-horizontal">
-              <bx-btn
-                class="remove-btn"
-                id="runtime-remove-btn"
-                kind="danger-ghost"
-                icon-layout
-                size="sm"
-                @click="removeRuntimeArg(arg, idx)"
-                title="Remove"
-              >
-                <!-- eslint-disable vue/no-deprecated-slot-attribute -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16px"
-                  height="16px"
-                  viewBox="0 0 32 32"
-                  slot="icon"
+              <div class="cds--col-lg-12 cds--col-md-6 padding-right">
+                <img
+                  width="16"
+                  heigth="16"
+                  src="@/assets/draggable.svg"
+                  class="drag-input"
+                  draggable="false"
+                />
+                <cds-text-input
+                  size="lg"
+                  :value="arg"
+                  class="input-size cds-theme-zone-g10"
+                  @input="setRuntimeArg(idx)"
+                  :invalid="runtimeArgsInvalid[idx]"
+                  invalidText="Value can not be an empty string"
+                />
+              </div>
+              <div class="cds--col-lg-2 padding-left-rm-btm">
+                <bx-btn
+                  class="remove-btn"
+                  id="runtime-remove-btn"
+                  kind="danger-ghost"
+                  icon-layout
+                  size="sm"
+                  @click="removeRuntimeArg(arg, idx)"
+                  title="Remove"
                 >
-                  <rect x="8" y="15" width="16" height="2" />
-                </svg>
-              </bx-btn>
+                  <!-- eslint-disable vue/no-deprecated-slot-attribute -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 32 32"
+                    slot="icon"
+                  >
+                    <rect x="8" y="15" width="16" height="2" />
+                  </svg>
+                </bx-btn>
+              </div>
             </div>
           </div>
         </div>
@@ -865,9 +867,6 @@ export default {
 .remove-btn {
   position: relative;
   height: layout.$spacing-09 !important;
-  width: layout.$spacing-09 !important;
-}
-#runtime-remove-btn {
   top: layout.$spacing-05;
 }
 #loading-container {
@@ -880,6 +879,10 @@ export default {
 }
 .padding-left {
   padding-left: layout.$spacing-05 !important;
+}
+
+.padding-left-rm-btm {
+  padding-left: 0 !important;
 }
 
 #platform-modal {
