@@ -126,9 +126,9 @@ export default {
           this.pvep = {};
           this.loading = false;
           this.errorDescription = error.response.data.message;
-          this.errorStatusText = error.response.data.problems.map(
-            (problem) => problem.message,
-          );
+          this.errorStatusText = error.response.data?.problems
+            ? error.response.data.problems.map((problem) => problem.message)
+            : "";
           this.errorCode = error.response.status;
           this.isSaveError = true;
         });
