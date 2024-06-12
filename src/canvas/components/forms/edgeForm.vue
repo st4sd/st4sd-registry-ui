@@ -4,7 +4,7 @@
     helperText="optional"
     class="cds-theme-zone-g10"
     placeholder="Label"
-    @input="edge.label = $event.target.value"
+    @input="this.edgeName = $event.target.value"
     :value="edge.label"
   />
   <br />
@@ -181,6 +181,7 @@ export default {
       possibleArguments: [],
       selectedArguments: [],
       possibleArgumentValues: [],
+      edgeName: "",
     };
   },
   mounted() {
@@ -233,6 +234,7 @@ export default {
           });
         }
       }
+      this.edge.label = this.edgeName;
       this.edge.definition = newEdgeDefinition;
       this.$emit("created", this.edge);
     },
@@ -271,6 +273,7 @@ export default {
           });
         }
         this.edge.definition = newEdgeDefinition;
+        this.edge.label = this.edgeName;
         this.$emit("updated");
       }
     },
