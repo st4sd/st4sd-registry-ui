@@ -1,25 +1,32 @@
 <template>
+  <div id="toast-notification-container">
+    <bx-toast-notification
+      v-for="(notification, idx) in notifications"
+      :key="idx"
+      :kind="notification.kind"
+      :title="notification.title"
+      :subtitle="notification.subtitle"
+      :caption="
+        ('caption' in notification ? notification.caption : '') +
+        (notification.code == 0 ? '' : ` (code ${notification.code})`)
+      "
+      timeout="5000"
+    >
+    </bx-toast-notification>
+  </div>
   <St4sdBreadcrumb :breadcrumbs="getBreadcumbs()" />
   <div v-if="loading" id="loading-container">
     <bx-loading type="overlay"></bx-loading>
   </div>
   <div v-if="!loading">
-    <HttpError
-      :errorDescription="errorDescription"
-      :errorStatusText="errorStatusText"
-      :errorCode="errorCode"
+    <HttpErrorEmptyState
+      :errorDescription="pvepErrorDescription"
+      :errorStatusText="pvepErrorStatusText"
+      :errorCode="pvepErrorCode"
       v-if="isPvepError"
     >
-    </HttpError>
+    </HttpErrorEmptyState>
     <div v-else>
-      <bx-toast-notification
-        v-if="isSaveError"
-        kind="error"
-        :title="errorDescription"
-        :caption="errorStatusText + ' (error ' + errorCode + ')'"
-        timeout="5000"
-      >
-      </bx-toast-notification>
       <ParameterisationContainer
         :openInRead="false"
         :pvep="pvep"
@@ -36,7 +43,7 @@ import ParameterisationContainer from "@/components/ParameterisationView/Paramet
 //Stores
 import { canvasStore } from "@/canvas/stores/canvasStore";
 
-import HttpError from "@/components/EmptyState/HttpError.vue";
+import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
@@ -47,7 +54,7 @@ export default {
   components: {
     St4sdBreadcrumb,
     ParameterisationContainer,
-    HttpError,
+    HttpErrorEmptyState,
   },
   data() {
     return {
@@ -55,10 +62,10 @@ export default {
       dsl: null,
       loading: true,
       isPvepError: false,
-      isSaveError: false,
-      errorDescription: "",
-      errorStatusText: "",
-      errorCode: 0,
+      pvepErrorDescription: "",
+      pvepErrorStatusText: "",
+      pvepErrorCode: 0,
+      notifications: [],
     };
   },
   props: {
@@ -94,11 +101,19 @@ export default {
         })
         .catch((error) => {
           this.loading = false;
-          this.errorDescription = error.response.data.message;
-          this.errorStatusText = error.response.data.problems
-            .map((problem) => problem.problem)
-            .toString();
-          this.errorCode = error.response.status;
+          this.pvepErrorDescription = error.response.data?.message;
+          this.pvepErrorStatusText = error.response.data?.problems
+            ? error.response.data.problems.map((problem) => problem.message)
+            : "";
+          this.pvepErrorCode = error.response.status;
+          let notification = {
+            kind: "error",
+            title: this.pvepErrorDescription,
+            subtitle: this.pvepErrorStatusText,
+            caption: "",
+            code: this.pvepErrorCode,
+          };
+          this.notifications.push(notification);
           this.isPvepError = true;
         });
     },
@@ -125,12 +140,17 @@ export default {
         .catch((error) => {
           this.pvep = {};
           this.loading = false;
-          this.errorDescription = error.response.data.message;
-          this.errorStatusText = error.response.data?.problems
+          let errorStatusText = error.response.data?.problems
             ? error.response.data.problems.map((problem) => problem.message)
             : "";
-          this.errorCode = error.response.status;
-          this.isSaveError = true;
+          let notification = {
+            kind: "error",
+            title: error.response.data?.message,
+            subtitle: errorStatusText,
+            caption: "",
+            code: error.response.status,
+          };
+          this.notifications.push(notification);
         });
     },
     cancel() {
