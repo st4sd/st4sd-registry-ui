@@ -8,7 +8,10 @@ export default defineConfig({
       template: {
         compilerOptions: {
           isCustomElement: (tag) =>
-            tag.includes("bx-") || tag.includes("dds-") || tag.includes("cds-"),
+            tag.includes("bx-") ||
+            tag.includes("dds-") ||
+            tag.includes("cds-") ||
+            tag.includes("c4d-"),
         },
       },
     }),

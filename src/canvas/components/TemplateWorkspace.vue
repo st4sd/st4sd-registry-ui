@@ -125,7 +125,7 @@
       paragraph1="Are you sure you want to delete this template?"
       paragraph2="This action cannot be undone."
       buttonText="Yes, delete template"
-      @dds-expressive-modal-closed="toggleModalVisibility('confirmDeleteModal')"
+      @c4d-expressive-modal-closed="toggleModalVisibility('confirmDeleteModal')"
       @confirm-button-clicked="deleteTemplate(templateToDelete)"
     />
   </aside>

@@ -1,12 +1,12 @@
 <template>
-  <dds-expressive-modal open>
-    <dds-expressive-modal-header>
-      <dds-expressive-modal-close-button role="button">
-      </dds-expressive-modal-close-button>
+  <c4d-expressive-modal open>
+    <c4d-expressive-modal-header>
+      <c4d-expressive-modal-close-button role="button">
+      </c4d-expressive-modal-close-button>
 
-      <dds-expressive-modal-heading>{{ title }}</dds-expressive-modal-heading>
-    </dds-expressive-modal-header>
-    <dds-expressive-modal-body data-modal-primary-focus>
+      <c4d-expressive-modal-heading>{{ title }}</c4d-expressive-modal-heading>
+    </c4d-expressive-modal-header>
+    <c4d-expressive-modal-body data-modal-primary-focus>
       <span v-if="paragraph2 != undefined">
         <p>
           {{ paragraph1 }}
@@ -21,19 +21,17 @@
           {{ paragraph1 }}
         </p></span
       >
-    </dds-expressive-modal-body>
-    <dds-expressive-modal-footer>
-      <dds-button-expressive
-        :kind="buttonKind"
-        @click="emitConfirmButtonClicked"
-      >
+    </c4d-expressive-modal-body>
+    <c4d-expressive-modal-footer>
+      <cds-button :kind="buttonKind" @click="emitConfirmButtonClicked">
         {{ buttonText }}
-      </dds-button-expressive>
-    </dds-expressive-modal-footer>
-  </dds-expressive-modal>
+      </cds-button>
+    </c4d-expressive-modal-footer>
+  </c4d-expressive-modal>
 </template>
 <script>
-import "@carbon/ibmdotcom-web-components/es/components/expressive-modal/index.js";
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/expressive-modal.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 export default {
   props: {
     title: String,

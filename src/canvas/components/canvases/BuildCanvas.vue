@@ -227,7 +227,7 @@
         on the canvas with the contents of the uploaded file."
       paragraph2="This action cannot be undone. Do you still want to proceed?"
       buttonText="Yes, upload the file"
-      @dds-expressive-modal-closed="toggleVisibility('confirmUploadModal')"
+      @c4d-expressive-modal-closed="toggleVisibility('confirmUploadModal')"
       @confirm-button-clicked="applyUploadedFiles"
     />
     <!-- Confirm delete node -->
@@ -238,7 +238,7 @@
       :paragraph1="`Are you sure you want to delete this ${nodeType}?`"
       paragraph2="This action cannot be undone."
       :buttonText="`Yes, delete ${nodeType}`"
-      @dds-expressive-modal-closed="toggleVisibility('deleteModal')"
+      @c4d-expressive-modal-closed="toggleVisibility('deleteModal')"
       @confirm-button-clicked="deleteNode"
     />
     <!-- Confirm reset canvas -->
@@ -250,7 +250,7 @@
         from the canvas."
       paragraph2="This action cannot be undone. Do you still want to proceed?"
       buttonText="Yes, reset the canvas"
-      @dds-expressive-modal-closed="toggleVisibility('resetConfirmModal')"
+      @c4d-expressive-modal-closed="toggleVisibility('resetConfirmModal')"
       @confirm-button-clicked="resetCanvas"
     />
   </div>
