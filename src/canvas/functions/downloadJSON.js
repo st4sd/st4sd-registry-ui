@@ -1,13 +1,7 @@
 import buildExperiment from "@/canvas/functions/buildExperiment";
 
 export function validateExperiment(nodes, entryNode) {
-  if (duplicateNamesExist(nodes)) {
-    return {
-      isValid: false,
-      payload:
-        "2+ components or workflows have the same name. Template names must be unique.",
-    };
-  } else if (entryNode == undefined) {
+  if (entryNode == undefined) {
     return {
       isValid: false,
       payload:
@@ -34,19 +28,6 @@ export function downloadExperiment(nodes, edges, fileName) {
     download(fileName + ".json", dsl);
   }
 }
-
-const duplicateNamesExist = (elements) => {
-  let namesSet = new Set();
-  elements = elements.filter(
-    (element) => element.type == "workflow" || element.type == "component",
-  );
-  elements.forEach((element) => {
-    if (element.definition.signature.name) {
-      namesSet.add(element.definition.signature.name);
-    }
-  });
-  return elements.length != namesSet.size;
-};
 
 export const download = (filename, exp) => {
   var hiddenElement = document.createElement("a");
