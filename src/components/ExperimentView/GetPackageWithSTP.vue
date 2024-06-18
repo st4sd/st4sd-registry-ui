@@ -8,12 +8,13 @@
       </dds-content-block>
     </div>
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12 no-left-padding">
-      <bx-code-snippet> stp package import {{ pageURL }} </bx-code-snippet>
+      <cds-code-snippet> stp package import {{ pageURL }} </cds-code-snippet>
     </div>
   </div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/code-snippet.min.js";
 export default {
   name: "GetPackageWithSTP",
   computed: {
