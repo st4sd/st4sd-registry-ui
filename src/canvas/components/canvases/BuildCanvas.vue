@@ -196,7 +196,7 @@
       title="Upload Files"
       @upload="uploadFiles"
       v-if="componentVisibilities.fileUploadModal.value"
-      @bx-modal-closed="toggleVisibility('fileUploadModal')"
+      @cds-modal-closed="toggleVisibility('fileUploadModal')"
     />
     <registerExperiment
       open

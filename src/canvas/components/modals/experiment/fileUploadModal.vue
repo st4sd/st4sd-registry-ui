@@ -1,10 +1,10 @@
 <template>
-  <bx-modal>
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading>{{ title }}</bx-modal-heading>
-    </bx-modal-header>
-    <bx-modal-body>
+  <cds-modal class="cds-theme-zone-g10">
+    <cds-modal-header>
+      <cds-modal-close-button></cds-modal-close-button>
+      <cds-modal-heading>{{ title }}</cds-modal-heading>
+    </cds-modal-header>
+    <cds-modal-body>
       <cds-tabs @cds-tabs-selected="setActiveTab" value="project">
         <cds-tab value="project">Canvas Project</cds-tab>
         <cds-tab value="dsl">Experiment DSL</cds-tab>
@@ -28,6 +28,7 @@
                 >Choose file
               </cds-file-uploader-button>
               <cds-file-uploader-item
+                class="cds-theme-zone-g10"
                 :state="this.file ? 'edit' : 'uploaded'"
                 @cds-file-uploader-item-deleted="this.file = null"
                 >{{
@@ -38,10 +39,9 @@
           </cds-file-uploader>
         </div>
         <div class="cds--row" v-if="this.selectedTab !== 'project'">
-          <bx-accordion class="pvep-accordion">
-            <bx-accordion-item
-              title-text="PVEP file to add inputs (optional)"
-              class="pvep-accordion-item"
+          <cds-accordion>
+            <cds-accordion-item
+              title="PVEP file to add inputs (optional)"
             >
               <cds-file-uploader label-title="Upload PVEP file">
                 <div class="file-uploader-container">
@@ -54,6 +54,7 @@
                     >Choose file
                   </cds-file-uploader-button>
                   <cds-file-uploader-item
+                    class="cds-theme-zone-g10"
                     :state="this.pvepFile ? 'edit' : 'uploaded'"
                     @cds-file-uploader-item-deleted="this.pvepFile = null"
                     >{{
@@ -64,29 +65,31 @@
                   >
                 </div>
               </cds-file-uploader>
-            </bx-accordion-item>
-          </bx-accordion>
+            </cds-accordion-item>
+          </cds-accordion>
         </div>
       </div>
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button kind="secondary" data-modal-close
-        >Cancel</bx-modal-footer-button
+    </cds-modal-body>
+    <cds-modal-footer>
+      <cds-modal-footer-button kind="secondary" data-modal-close
+        >Cancel</cds-modal-footer-button
       >
-      <bx-modal-footer-button
+      <cds-modal-footer-button
         :disabled="this.file == null || this.submitted"
         kind="primary"
         type="submit"
         @click="upload"
-        >Upload</bx-modal-footer-button
+        >Upload</cds-modal-footer-button
       >
-    </bx-modal-footer>
-  </bx-modal>
+    </cds-modal-footer>
+  </cds-modal>
 </template>
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/file-uploader.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
 
 export default {
   props: { title: String },
