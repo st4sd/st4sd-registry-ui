@@ -1,5 +1,5 @@
 <template>
-  <cds-modal class="cds-theme-zone-g10">
+  <cds-modal>
     <cds-modal-header>
       <cds-modal-close-button></cds-modal-close-button>
       <cds-modal-heading>{{ title }}</cds-modal-heading>
@@ -28,7 +28,7 @@
                 >Choose file
               </cds-file-uploader-button>
               <cds-file-uploader-item
-                class="cds-theme-zone-g10"
+                class="cds-theme-zone-white"
                 :state="this.file ? 'edit' : 'uploaded'"
                 @cds-file-uploader-item-deleted="this.file = null"
                 >{{
@@ -40,9 +40,7 @@
         </div>
         <div class="cds--row" v-if="this.selectedTab !== 'project'">
           <cds-accordion>
-            <cds-accordion-item
-              title="PVEP file to add inputs (optional)"
-            >
+            <cds-accordion-item title="PVEP file to add inputs (optional)">
               <cds-file-uploader label-title="Upload PVEP file">
                 <div class="file-uploader-container">
                   <cds-file-uploader-button
@@ -54,7 +52,7 @@
                     >Choose file
                   </cds-file-uploader-button>
                   <cds-file-uploader-item
-                    class="cds-theme-zone-g10"
+                    class="cds-theme-zone-white"
                     :state="this.pvepFile ? 'edit' : 'uploaded'"
                     @cds-file-uploader-item-deleted="this.pvepFile = null"
                     >{{
