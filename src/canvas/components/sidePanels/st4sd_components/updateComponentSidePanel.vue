@@ -175,7 +175,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
-@import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 @import "@/styles/toast-notification-styles.scss";

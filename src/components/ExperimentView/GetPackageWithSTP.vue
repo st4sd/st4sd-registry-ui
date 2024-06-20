@@ -7,7 +7,7 @@
         >
       </dds-content-block>
     </div>
-    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12 no-left-padding">
+    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
       <cds-code-snippet> stp package import {{ pageURL }} </cds-code-snippet>
     </div>
   </div>
@@ -29,9 +29,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.no-left-padding {
-  padding-left: 0;
-}
-</style>

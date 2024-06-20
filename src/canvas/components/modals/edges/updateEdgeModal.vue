@@ -89,7 +89,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
-@import "@/styles/bx-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 

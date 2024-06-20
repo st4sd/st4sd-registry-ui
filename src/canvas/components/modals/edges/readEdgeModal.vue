@@ -5,43 +5,43 @@
       <bx-modal-heading>Edge Parameters</bx-modal-heading>
     </bx-modal-header>
     <bx-modal-body>
-      <bx-structured-list>
-        <bx-structured-list-head>
-          <bx-structured-list-header-row>
-            <bx-structured-list-header-cell
-              >Name</bx-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Name</cds-structured-list-header-cell
             >
-            <bx-structured-list-header-cell
-              >Definition</bx-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Definition</cds-structured-list-header-cell
             >
-          </bx-structured-list-header-row>
-        </bx-structured-list-head>
-        <bx-structured-list-body>
-          <bx-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="key in Object.keys(edge.definition)"
             :key="key"
           >
-            <bx-structured-list-cell>{{ key }}</bx-structured-list-cell>
-            <bx-structured-list-cell
+            <cds-structured-list-cell>{{ key }}</cds-structured-list-cell>
+            <cds-structured-list-cell
               v-if="
                 edge.actualValue &&
                 edge.actualValue[key] != undefined &&
                 edge.actualValue[key] != ''
               "
-              >{{ edge.actualValue[key] }}</bx-structured-list-cell
+              >{{ edge.actualValue[key] }}</cds-structured-list-cell
             >
-            <bx-structured-list-cell v-else>{{
+            <cds-structured-list-cell v-else>{{
               edge.definition[key]
-            }}</bx-structured-list-cell>
-          </bx-structured-list-row>
-        </bx-structured-list-body>
-      </bx-structured-list>
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </bx-modal-body>
   </bx-modal>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/structured-list/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 
 export default {
   props: {

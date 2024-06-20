@@ -161,7 +161,6 @@ import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
 
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta-section/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
@@ -266,7 +265,7 @@ dds-content-block {
   padding-bottom: 0;
   padding-top: 0;
 }
-dds-structured-list-cell {
+cds-structured-list-cell {
   overflow-wrap: anywhere;
 }
 

@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/inline-loading/index.js";
 
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";

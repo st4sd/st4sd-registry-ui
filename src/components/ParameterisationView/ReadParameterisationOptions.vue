@@ -5,26 +5,26 @@
       v-if="pvep.parameterisation.presets.platform != undefined"
     >
       <h3>Platform</h3>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell
-              >Name</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Name</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Type</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Type</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row>
-            <dds-structured-list-cell>{{
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row>
+            <cds-structured-list-cell>{{
               pvep.parameterisation.presets.platform
-            }}</dds-structured-list-cell>
-            <dds-structured-list-cell>Preset</dds-structured-list-cell>
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+            }}</cds-structured-list-cell>
+            <cds-structured-list-cell>Preset</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
     <div
       class="cds--col-lg-14 cds--col-md-6"
@@ -39,32 +39,32 @@
         When launching the workflow, the platform can be set to one of the
         following values:
       </p>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell class="list-spacing"
-              >Name</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >Name</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Type</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Type</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(platform, idx) in pvep.parameterisation.executionOptions
               .platform"
             :key="idx"
           >
-            <dds-structured-list-cell class="list-spacing">{{
+            <cds-structured-list-cell class="list-spacing">{{
               platform
-            }}</dds-structured-list-cell>
-            <dds-structured-list-cell
-              >Execution Option</dds-structured-list-cell
+            }}</cds-structured-list-cell>
+            <cds-structured-list-cell
+              >Execution Option</cds-structured-list-cell
             >
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
     <div v-else class="cds--col-lg-14 cds--col-md-6">
       <h3>Platform</h3>
@@ -72,28 +72,28 @@
         When launching the workflow, the platform can be set to any value, with
         the default being:
       </p>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell class="list-spacing"
-              >Name</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >Name</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Type</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Type</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row>
-            <dds-structured-list-cell class="list-spacing"
-              >default</dds-structured-list-cell
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row>
+            <cds-structured-list-cell class="list-spacing"
+              >default</cds-structured-list-cell
             >
-            <dds-structured-list-cell
-              >Execution Option</dds-structured-list-cell
+            <cds-structured-list-cell
+              >Execution Option</cds-structured-list-cell
             >
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
   </div>
   <div v-if="tabSelector == 'variables'" class="cds--row tab">
@@ -102,34 +102,34 @@
       class="cds--col-lg-14 cds--col-md-6"
     >
       <h3>Variables</h3>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell class="list-spacing"
-              >Name</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >Name</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Type</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Type</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Value</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Value</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(variable, idx) in variables"
             :key="idx"
           >
-            <dds-structured-list-cell class="list-spacing">{{
+            <cds-structured-list-cell class="list-spacing">{{
               variable.name
-            }}</dds-structured-list-cell>
-            <dds-structured-list-cell>
+            }}</cds-structured-list-cell>
+            <cds-structured-list-cell>
               <span v-if="variable.type == 'presets'">Preset</span>
               <span v-else-if="variable.type == 'default'">Default</span>
               <span v-else>Execution Option</span>
-            </dds-structured-list-cell>
-            <dds-structured-list-cell>
+            </cds-structured-list-cell>
+            <cds-structured-list-cell>
               <p
                 v-if="variable.value != undefined && variable.type == 'presets'"
               >
@@ -191,10 +191,10 @@
                   </p>
                 </span>
               </span>
-            </dds-structured-list-cell>
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
   </div>
   <div v-if="tabSelector == 'data'" class="cds--row tab">
@@ -203,34 +203,34 @@
       v-if="dataOptions != undefined && dataOptions.length != 0"
     >
       <h3>Data Files</h3>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell class="list-spacing"
-              >File</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >File</cds-structured-list-header-cell
             >
-            <dds-structured-list-header-cell
-              >Type</dds-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Type</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(file, idx) in dataOptions"
             :key="idx"
           >
-            <dds-structured-list-cell class="list-spacing">{{
+            <cds-structured-list-cell class="list-spacing">{{
               file.name
-            }}</dds-structured-list-cell>
-            <dds-structured-list-cell v-if="file.type == 'presets'">
+            }}</cds-structured-list-cell>
+            <cds-structured-list-cell v-if="file.type == 'presets'">
               Preset
-            </dds-structured-list-cell>
-            <dds-structured-list-cell v-else
-              >Execution Option</dds-structured-list-cell
+            </cds-structured-list-cell>
+            <cds-structured-list-cell v-else
+              >Execution Option</cds-structured-list-cell
             >
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
     <div v-else>
       <div class="cds--col-lg-16 cds--col-md-8">
@@ -242,22 +242,22 @@
   <div v-if="tabSelector == 'input'" class="cds--row tab">
     <div class="cds--col-lg-14 cds--col-md-6" v-if="inputs != undefined">
       <h3>Input Files</h3>
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell class="list-spacing"
-              >File</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >File</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row v-for="(input, idx) in inputs" :key="idx">
-            <dds-structured-list-cell class="list-spacing">{{
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row v-for="(input, idx) in inputs" :key="idx">
+            <cds-structured-list-cell class="list-spacing">{{
               input.name
-            }}</dds-structured-list-cell>
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
     <div v-else>
       <div class="cds--col-lg-16 cds--col-md-8">
@@ -273,25 +273,25 @@
         class="cds--col-lg-14 cds--col-md-6"
       >
         <h3>Runtime Args</h3>
-        <dds-structured-list>
-          <dds-structured-list-head>
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell class="list-spacing"
-                >Name</dds-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell class="list-spacing"
+                >Name</cds-structured-list-header-cell
               >
-            </dds-structured-list-header-row>
-          </dds-structured-list-head>
-          <dds-structured-list-body>
-            <dds-structured-list-row
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row
               v-for="(arg, idx) in runtimeArgs"
               :key="idx"
             >
-              <dds-structured-list-cell class="list-spacing">{{
+              <cds-structured-list-cell class="list-spacing">{{
                 arg
-              }}</dds-structured-list-cell>
-            </dds-structured-list-row>
-          </dds-structured-list-body>
-        </dds-structured-list>
+              }}</cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
       </div>
       <div v-else>
         <div class="cds--col-lg-16 cds--col-md-8">
@@ -309,36 +309,36 @@
         class="cds--col-lg-14 cds--col-md-6"
       >
         <h3 id="orchestrator-resources">Orchestrator Resources</h3>
-        <dds-structured-list>
-          <dds-structured-list-head>
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell class="list-spacing"
-                >Resource</dds-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell class="list-spacing"
+                >Resource</cds-structured-list-header-cell
               >
-              <dds-structured-list-header-cell
-                >Value</dds-structured-list-header-cell
+              <cds-structured-list-header-cell
+                >Value</cds-structured-list-header-cell
               >
-            </dds-structured-list-header-row>
-          </dds-structured-list-head>
-          <dds-structured-list-body>
-            <dds-structured-list-row>
-              <dds-structured-list-cell class="list-spacing"
-                >CPU</dds-structured-list-cell
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row>
+              <cds-structured-list-cell class="list-spacing"
+                >CPU</cds-structured-list-cell
               >
-              <dds-structured-list-cell>{{
+              <cds-structured-list-cell>{{
                 orchestratorResources.cpu
-              }}</dds-structured-list-cell>
-            </dds-structured-list-row>
-            <dds-structured-list-row>
-              <dds-structured-list-cell class="list-spacing"
-                >Memory</dds-structured-list-cell
+              }}</cds-structured-list-cell>
+            </cds-structured-list-row>
+            <cds-structured-list-row>
+              <cds-structured-list-cell class="list-spacing"
+                >Memory</cds-structured-list-cell
               >
-              <dds-structured-list-cell>{{
+              <cds-structured-list-cell>{{
                 orchestratorResources.memory
-              }}</dds-structured-list-cell>
-            </dds-structured-list-row>
-          </dds-structured-list-body>
-        </dds-structured-list>
+              }}</cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
       </div>
       <div v-else>
         <div class="cds--col-lg-16 cds--col-md-8">
@@ -351,6 +351,7 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import {
   setRuntimeArgs,
   setVariables,

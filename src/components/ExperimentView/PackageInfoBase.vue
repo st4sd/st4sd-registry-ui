@@ -8,54 +8,64 @@
       </dds-content-block>
     </div>
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
-      <dds-structured-list>
-        <dds-structured-list-body>
-          <dds-structured-list-group
-            v-for="(basePackage, idx) in filterBasePackages(
-              experiment.base.packages,
-              'git',
-            )"
-            :key="idx"
-            :title="basePackage.name"
+      <div
+        class="pad1"
+        v-for="(basePackage, idx) in filterBasePackages(
+          experiment.base.packages,
+          'git',
+        )"
+        :key="idx"
+      >
+        <cds-structured-list>
+          <cds-structured-list-head
+            style="background-color: var(--cds-ui-03, #e0e0e0)"
           >
-            <dds-structured-list-row>
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Source</dds-structured-list-cell
-              ><dds-structured-list-cell class="cds--col-sm-3">
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell>
+                {{ basePackage.name }}
+              </cds-structured-list-header-cell>
+              <cds-structured-list-header-cell />
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row>
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Source</cds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-3">
                 <bx-link :href="getUrl(basePackage.source.git)"
                   >{{ getUrl(basePackage.source.git) }}
                 </bx-link>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-            <dds-structured-list-row
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+            <cds-structured-list-row
               v-if="basePackage.source.git.location.commit != null"
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Version</dds-structured-list-cell
-              ><dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Version</cds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.commit }}</code>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-            <dds-structured-list-row
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+            <cds-structured-list-row
               v-else-if="basePackage.source.git.location.branch != null"
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Branch</dds-structured-list-cell
-              ><dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Branch</cds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.branch }}</code>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-            <dds-structured-list-row v-else>
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Tag</dds-structured-list-cell
-              ><dds-structured-list-cell class="cds--col-sm-3">
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+            <cds-structured-list-row v-else>
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Tag</cds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-3">
                 <code>{{ basePackage.source.git.location.tag }}</code>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-            <dds-structured-list-row>
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Report a problem</dds-structured-list-cell
-              ><dds-structured-list-cell class="cds--col-sm-3">
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+            <cds-structured-list-row>
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Report a problem</cds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-3 pad1">
                 <bx-link
                   :href="
                     createIssueForGitPackage(experiment, basePackage.source.git)
@@ -72,16 +82,17 @@
                   />
                   <!-- eslint-enable -->
                 </bx-link>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-          </dds-structured-list-group>
-        </dds-structured-list-body>
-      </dds-structured-list>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 export default {
   name: "PackageInfoBase",
   props: {
@@ -153,5 +164,5 @@ export default {
 <style
   lang="css"
   scoped
-  src="../../styles/structured-list-grid-column-styles.css"
+  src="@/styles/structured-list-grid-column-styles.css"
 ></style>

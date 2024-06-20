@@ -120,7 +120,6 @@
 <script>
 import "@carbon/web-components/es/components/code-snippet/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/content-block/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/structured-list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta/text-cta.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/progress-indicator/index.js";

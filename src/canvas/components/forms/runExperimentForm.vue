@@ -697,7 +697,6 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";

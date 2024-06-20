@@ -1,7 +1,6 @@
 <template>
   <cds-text-input
-    label="Connection label:"
-    helperText="optional"
+    label="Connection label (optional):"
     class="cds-theme-zone-g10"
     placeholder="Label"
     @input="this.edgeName = $event.target.value"
@@ -9,24 +8,28 @@
   />
   <br />
   <h5 v-if="edge.definition != undefined">Arguments:</h5>
-  <bx-structured-list>
-    <bx-structured-list-head>
-      <bx-structured-list-header-row>
-        <bx-structured-list-header-cell>Target</bx-structured-list-header-cell>
-        <bx-structured-list-header-cell>Source</bx-structured-list-header-cell>
-        <bx-structured-list-header-cell>Suffix</bx-structured-list-header-cell>
-      </bx-structured-list-header-row>
-    </bx-structured-list-head>
-    <bx-structured-list-body v-if="sourceNodeType == 'workflow-input'">
-      <bx-structured-list-row
+  <cds-structured-list>
+    <cds-structured-list-head>
+      <cds-structured-list-header-row>
+        <cds-structured-list-header-cell
+          >Target</cds-structured-list-header-cell
+        >
+        <cds-structured-list-header-cell
+          >Source</cds-structured-list-header-cell
+        >
+        <cds-structured-list-header-cell
+          >Suffix (optional)</cds-structured-list-header-cell
+        >
+      </cds-structured-list-header-row>
+    </cds-structured-list-head>
+    <cds-structured-list-body v-if="sourceNodeType == 'workflow-input'">
+      <cds-structured-list-row
         v-for="(argument, index) in argumentsArray"
         :key="index"
       >
-        <bx-structured-list-cell class="structured-list-delete-button-bottom">
-          <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
+        <cds-structured-list-cell>
           <bx-dropdown
             class="updatedChoices"
-            helper-text=" "
             trigger-content="Select target"
             required
             colorScheme="light"
@@ -46,11 +49,9 @@
               >{{ possibleArgument }}</bx-dropdown-item
             >
           </bx-dropdown>
-        </bx-structured-list-cell>
-        <bx-structured-list-cell class="structured-list-delete-button-bottom">
-          <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
+        </cds-structured-list-cell>
+        <cds-structured-list-cell>
           <bx-dropdown
-            helper-text=" "
             trigger-content="Select source"
             required
             colorScheme="light"
@@ -64,42 +65,44 @@
               >{{ possibleValue.name }}</bx-dropdown-item
             >
           </bx-dropdown>
-        </bx-structured-list-cell>
-        <bx-structured-list-cell>
+        </cds-structured-list-cell>
+        <cds-structured-list-cell class="align-top">
           <cds-text-input
-            label="optional"
             class="cds-theme-zone-g10"
             :value="argument.suffix"
             @input="argument.suffix = $event.target.value"
             placeholder="e.g. :ref or /path:ref, etc"
           />
-        </bx-structured-list-cell>
-        <bx-structured-list-cell class="structured-list-delete-button-bottom">
-          <bx-btn
+        </cds-structured-list-cell>
+        <cds-structured-list-cell class="align-top">
+          <cds-icon-button
             kind="danger"
+            enter-delay-ms="1000"
+            leave-delay-ms="0"
+            align="bottom"
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
             <img
+              slot="icon"
               class="white-svg"
               height="18"
               width="18"
               src="@/assets/remove.svg"
             />
-          </bx-btn>
-        </bx-structured-list-cell>
-      </bx-structured-list-row>
-    </bx-structured-list-body>
-    <bx-structured-list-body v-else>
-      <bx-structured-list-row
+            <p slot="tooltip-content">Remove item</p>
+          </cds-icon-button>
+        </cds-structured-list-cell>
+      </cds-structured-list-row>
+    </cds-structured-list-body>
+    <cds-structured-list-body v-else>
+      <cds-structured-list-row
         v-for="(argument, index) in argumentsArray"
         :key="index"
       >
-        <bx-structured-list-cell class="structured-list-delete-button-bottom">
-          <!-- helper text is done in this way to ensure the dropdown box aligns with the input -->
+        <cds-structured-list-cell>
           <bx-dropdown
             class="updatedChoices"
-            helper-text=" "
             trigger-content="Select an argument"
             required
             colorScheme="light"
@@ -119,47 +122,55 @@
               >{{ possibleArgument }}</bx-dropdown-item
             >
           </bx-dropdown>
-        </bx-structured-list-cell>
-        <bx-structured-list-cell class="structured-list-delete-button-middle">
-          <h5 class="padding-top">
-            {{ "<" + sourceNode.stepId + ">" }}
-          </h5>
-        </bx-structured-list-cell>
-        <bx-structured-list-cell>
+        </cds-structured-list-cell>
+        <cds-structured-list-cell class="align-top">
           <cds-text-input
-            label="optional"
+            class="cds-theme-zone-g10"
+            readonly
+            :value="`<${sourceNode.stepId}>`"
+          />
+        </cds-structured-list-cell>
+        <cds-structured-list-cell class="align-top">
+          <cds-text-input
             class="cds-theme-zone-g10"
             :value="argument.suffix"
             @input="argument.suffix = $event.target.value"
             required
             placeholder="e.g. /path:ref"
           />
-        </bx-structured-list-cell>
-        <bx-structured-list-cell class="structured-list-delete-button-bottom">
-          <bx-btn
+        </cds-structured-list-cell>
+        <cds-structured-list-cell class="align-top">
+          <cds-icon-button
             kind="danger"
+            enter-delay-ms="1000"
+            leave-delay-ms="0"
+            align="bottom"
             v-if="argumentsArray.length > 1"
             @click="removeArgument(index)"
           >
             <img
+              slot="icon"
               class="white-svg"
               height="18"
               width="18"
               src="@/assets/remove.svg"
             />
-          </bx-btn>
-        </bx-structured-list-cell>
-      </bx-structured-list-row>
-    </bx-structured-list-body>
+            <p slot="tooltip-content">Remove item</p>
+          </cds-icon-button>
+        </cds-structured-list-cell>
+      </cds-structured-list-row>
+    </cds-structured-list-body>
     <bx-btn kind="primary" @click="addArgument()"> Add </bx-btn>
-  </bx-structured-list>
+  </cds-structured-list>
 </template>
 
 <script>
 import "@carbon/web-components/es/components/modal/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
+
 import {
   getArguments,
   getPossibleArgumentNames,
@@ -310,7 +321,7 @@ export default {
 <style lang="css" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
-@import "@/styles/bx-structured-list-styles.css";
+@import "@/styles/cds-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 

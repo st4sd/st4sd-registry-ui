@@ -9,7 +9,6 @@
     </div>
     <div
       class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12"
-      id="padding-fix"
       v-if="error.code != 0"
     >
       <HttpErrorEmptyState
@@ -18,11 +17,7 @@
         :errorCode="error.code"
       />
     </div>
-    <div
-      class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12"
-      id="padding-fix"
-      v-else
-    >
+    <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12" v-else>
       <div class="tableOverflowContainer">
         <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
           <bx-table-head>
@@ -210,9 +205,5 @@ bx-table-cell {
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
-}
-
-#padding-fix {
-  padding-left: 0;
 }
 </style>

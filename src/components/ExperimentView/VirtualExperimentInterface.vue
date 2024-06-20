@@ -12,38 +12,39 @@
         </dds-content-block>
       </div>
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
-        <dds-structured-list>
-          <dds-structured-list-head>
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell class="cds--col-sm-1"
-                >Property name</dds-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell class="cds--col-sm-1"
+                >Property name</cds-structured-list-header-cell
               >
-              <dds-structured-list-header-cell class="cds--col-sm-3"
-                >Property description</dds-structured-list-header-cell
+              <cds-structured-list-header-cell class="cds--col-sm-3"
+                >Property description</cds-structured-list-header-cell
               >
-            </dds-structured-list-header-row>
-          </dds-structured-list-head>
-          <dds-structured-list-body>
-            <dds-structured-list-row
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row
               v-for="property in experiment.metadata.registry.interface
                 .propertiesSpec"
               :key="property.name"
             >
-              <dds-structured-list-cell class="cds--col-sm-1">{{
+              <cds-structured-list-cell class="cds--col-sm-1">{{
                 property.name
-              }}</dds-structured-list-cell>
-              <dds-structured-list-cell class="cds--col-sm-3">
+              }}</cds-structured-list-cell>
+              <cds-structured-list-cell class="cds--col-sm-3">
                 {{ property.description }}
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
-          </dds-structured-list-body>
-        </dds-structured-list>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 export default {
   name: "VirtualExperimentInterface",

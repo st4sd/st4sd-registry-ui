@@ -14,28 +14,28 @@
         </dds-content-block>
       </div>
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
-        <dds-structured-list>
-          <dds-structured-list-head>
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell class="cds--col-sm-1"
-                >Setting</dds-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell class="cds--col-sm-1"
+                >Setting</cds-structured-list-header-cell
               >
-              <dds-structured-list-header-cell class="cds--col-sm-3"
-                >Value</dds-structured-list-header-cell
+              <cds-structured-list-header-cell class="cds--col-sm-3"
+                >Value</cds-structured-list-header-cell
               >
-            </dds-structured-list-header-row>
-          </dds-structured-list-head>
-          <dds-structured-list-body>
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
             <!-- Data -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.executionOptions.data.length != 0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Data files</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Data files</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="(entry, idx) in experiment.parameterisation
@@ -45,20 +45,20 @@
                     <code>{{ entry.name }}</code>
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Platform -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.executionOptions.platform.length !=
                 0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Platforms</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Platforms</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="platform in experiment.parameterisation
@@ -67,21 +67,21 @@
                   >
                     <code>{{ platform }}</code>
                   </bx-list-item>
-                </bx-unordered-list></dds-structured-list-cell
-              ></dds-structured-list-row
+                </bx-unordered-list></cds-structured-list-cell
+              ></cds-structured-list-row
             >
 
             <!-- Runtime args -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.executionOptions.runtime.args
                   .length != 0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Runtime arguments</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Runtime arguments</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="arg in experiment.parameterisation.executionOptions
@@ -91,21 +91,21 @@
                     <code>{{ arg }}</code>
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Runtime resources -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 Object.keys(
                   experiment.parameterisation.executionOptions.runtime
                     .resources,
                 ).length != 0
               "
-              ><dds-structured-list-cell class="cds--col-sm-1"
-                >Runtime resources (CPU/Memory)</dds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-1"
+                >Runtime resources (CPU/Memory)</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 {{
                   experiment.parameterisation.executionOptions.runtime.resources
                     .cpu
@@ -116,19 +116,19 @@
                     .memory
                 }}
                 RAM
-              </dds-structured-list-cell></dds-structured-list-row
+              </cds-structured-list-cell></cds-structured-list-row
             >
 
             <!-- Variables -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.executionOptions.variables.length !=
                 0
               "
-              ><dds-structured-list-cell class="cds--col-sm-1"
-                >Variables</dds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-1"
+                >Variables</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="(entry, idx) in experiment.parameterisation
@@ -192,10 +192,10 @@
                     </div>
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell></dds-structured-list-row
+              </cds-structured-list-cell></cds-structured-list-row
             >
-          </dds-structured-list-body>
-        </dds-structured-list>
+          </cds-structured-list-body>
+        </cds-structured-list>
       </div>
     </div>
     <!-- Experiment presets -->
@@ -209,26 +209,26 @@
         </dds-content-block>
       </div>
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
-        <dds-structured-list>
-          <dds-structured-list-head>
-            <dds-structured-list-header-row>
-              <dds-structured-list-header-cell class="cds--col-sm-1"
-                >Setting</dds-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell class="cds--col-sm-1"
+                >Setting</cds-structured-list-header-cell
               >
-              <dds-structured-list-header-cell class="cds--col-sm-3"
-                >Value</dds-structured-list-header-cell
+              <cds-structured-list-header-cell class="cds--col-sm-3"
+                >Value</cds-structured-list-header-cell
               >
-            </dds-structured-list-header-row>
-          </dds-structured-list-head>
-          <dds-structured-list-body>
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
             <!-- Data -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="experiment.parameterisation.presets.data.length != 0"
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Data files</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Data files</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="entry in experiment.parameterisation.presets.data"
@@ -237,27 +237,27 @@
                     {{ entry.name }}
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Platform -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.presets.platform != null ||
                 experiment.parameterisation.executionOptions.platform.length ==
                   0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Platform</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Platform</cds-structured-list-cell
               >
-              <dds-structured-list-cell
+              <cds-structured-list-cell
                 class="cds--col-sm-3"
                 v-if="experiment.parameterisation.presets.platform != null"
               >
                 <code>{{ experiment.parameterisation.presets.platform }}</code>
-              </dds-structured-list-cell>
-              <dds-structured-list-cell
+              </cds-structured-list-cell>
+              <cds-structured-list-cell
                 class="cds--col-sm-3"
                 v-else-if="
                   experiment.parameterisation.executionOptions.platform
@@ -265,20 +265,20 @@
                 "
               >
                 <code>default</code>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Environment variables -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.presets.environmentVariables
                   .length != 0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Environment variables</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Environment variables</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="(entry, idx) in experiment.parameterisation.presets
@@ -288,19 +288,19 @@
                     {{ entry.name }}
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Runtime args -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 experiment.parameterisation.presets.runtime.args.length != 0
               "
             >
-              <dds-structured-list-cell class="cds--col-sm-1"
-                >Runtime arguments</dds-structured-list-cell
+              <cds-structured-list-cell class="cds--col-sm-1"
+                >Runtime arguments</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="arg in experiment.parameterisation.presets.runtime
@@ -310,36 +310,36 @@
                     <code>{{ arg }}</code>
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell>
-            </dds-structured-list-row>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
 
             <!-- Runtime resources -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="
                 Object.keys(
                   experiment.parameterisation.presets.runtime.resources,
                 ).length != 0
               "
-              ><dds-structured-list-cell class="cds--col-sm-1"
-                >Runtime resources (CPU/Memory)</dds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-1"
+                >Runtime resources (CPU/Memory)</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 {{ experiment.parameterisation.presets.runtime.resources.cpu }}
                 CPUs,
                 {{
                   experiment.parameterisation.presets.runtime.resources.memory
                 }}
                 RAM
-              </dds-structured-list-cell></dds-structured-list-row
+              </cds-structured-list-cell></cds-structured-list-row
             >
 
             <!-- Variables -->
-            <dds-structured-list-row
+            <cds-structured-list-row
               v-if="experiment.parameterisation.presets.variables.length != 0"
-              ><dds-structured-list-cell class="cds--col-sm-1"
-                >Variables</dds-structured-list-cell
+              ><cds-structured-list-cell class="cds--col-sm-1"
+                >Variables</cds-structured-list-cell
               >
-              <dds-structured-list-cell class="cds--col-sm-3">
+              <cds-structured-list-cell class="cds--col-sm-3">
                 <bx-unordered-list>
                   <bx-list-item
                     v-for="(entry, idx) in experiment.parameterisation.presets
@@ -350,16 +350,17 @@
                     >: <code>{{ entry.value }}</code>
                   </bx-list-item>
                 </bx-unordered-list>
-              </dds-structured-list-cell></dds-structured-list-row
+              </cds-structured-list-cell></cds-structured-list-row
             >
-          </dds-structured-list-body>
-        </dds-structured-list>
+          </cds-structured-list-body>
+        </cds-structured-list>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 export default {
   name: "ExperimentParameterisation",
   props: {

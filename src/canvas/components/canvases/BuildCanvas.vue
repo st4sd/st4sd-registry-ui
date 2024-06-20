@@ -259,7 +259,6 @@
 <script setup>
 import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 
 import { nextTick, watch } from "vue";
@@ -318,7 +317,6 @@ import {
   removeNodeAndStepReference,
 } from "@/canvas/functions/stepFunctions";
 
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";

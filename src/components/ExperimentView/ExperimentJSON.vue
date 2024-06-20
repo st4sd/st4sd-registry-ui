@@ -76,7 +76,9 @@ export default {
   filter: invert(100);
 }
 
+// Padding has to be 2 rems instead of 1 rem like the rest of the items
+//  because otherwise the padding will appear "internal" to the code snippet
 #code-snippet {
-  padding-left: 1rem;
+  padding-left: 2rem;
 }
 </style>

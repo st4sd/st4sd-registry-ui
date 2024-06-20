@@ -8,31 +8,32 @@
       </dds-content-block>
     </div>
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
-      <dds-structured-list>
-        <dds-structured-list-head>
-          <dds-structured-list-header-row>
-            <dds-structured-list-header-cell
-              >Image name</dds-structured-list-header-cell
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Image name</cds-structured-list-header-cell
             >
-          </dds-structured-list-header-row>
-        </dds-structured-list-head>
-        <dds-structured-list-body>
-          <dds-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(containerImage, idx) in experiment.metadata.registry
               .containerImages"
             :key="idx"
           >
-            <dds-structured-list-cell>{{
+            <cds-structured-list-cell>{{
               containerImage.name
-            }}</dds-structured-list-cell>
-          </dds-structured-list-row>
-        </dds-structured-list-body>
-      </dds-structured-list>
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
     </div>
   </div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 export default {
   name: "PackageInfoContainer",
   props: {

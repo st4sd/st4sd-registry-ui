@@ -41,25 +41,25 @@
       v-if="workflow.getParameters() != undefined"
       :title-text="'Parameters (' + workflow.getParameters().length + ')'"
     >
-      <bx-structured-list>
-        <bx-structured-list-head>
-          <bx-structured-list-header-row>
-            <bx-structured-list-header-cell
-              >Name</bx-structured-list-header-cell
+      <cds-structured-list v-if="workflow.getParameters().length != 0">
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Name</cds-structured-list-header-cell
             >
-            <bx-structured-list-header-cell
+            <cds-structured-list-header-cell
               >Default: Could be string, int, number or object (currenly only
-              handles string)</bx-structured-list-header-cell
+              handles string)</cds-structured-list-header-cell
             >
-            <bx-structured-list-header-cell></bx-structured-list-header-cell>
-          </bx-structured-list-header-row>
-        </bx-structured-list-head>
-        <bx-structured-list-body>
-          <bx-structured-list-row
+            <cds-structured-list-header-cell></cds-structured-list-header-cell>
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(parameter, index) in workflow.getParameters()"
             :key="index"
           >
-            <bx-structured-list-cell class="updateModals">
+            <cds-structured-list-cell>
               <cds-text-input
                 class="cds-theme-zone-g10"
                 placeholder="parameter name"
@@ -68,55 +68,61 @@
                 :invalid="parameterNameIsDuplicate(parameter.name)"
                 invalidText="Parameter names must be unique"
               />
-            </bx-structured-list-cell>
-            <bx-structured-list-cell class="updateModals">
+            </cds-structured-list-cell>
+            <cds-structured-list-cell>
               <cds-text-input
                 class="cds-theme-zone-g10"
                 placeholder="parameter default"
                 :value="parameter.default"
                 @input="parameter.default = $event.target.value"
               />
-            </bx-structured-list-cell>
-            <bx-structured-list-cell
-              class="updateModals structured-list-delete-button-bottom"
-            >
-              <bx-btn kind="danger" @click="workflow.removeParameter(index)">
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-top">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="workflow.removeParameter(index)"
+              >
                 <img
+                  slot="icon"
                   class="white-svg"
                   height="18"
                   width="18"
                   src="@/assets/remove.svg"
                 />
-              </bx-btn>
-            </bx-structured-list-cell>
-          </bx-structured-list-row>
-        </bx-structured-list-body>
-        <bx-btn kind="primary" @click="workflow.addParameter()">
-          Add Parameter +
-        </bx-btn>
-      </bx-structured-list>
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+      <bx-btn kind="primary" @click="workflow.addParameter()">
+        Add Parameter +
+      </bx-btn>
     </bx-accordion-item>
     <bx-accordion-item
       v-if="node != undefined"
       :title-text="'Steps (' + workflow.getNumberOfSteps() + ')'"
     >
-      <bx-structured-list>
-        <bx-structured-list-head>
-          <bx-structured-list-header-row>
-            <bx-structured-list-header-cell
-              >Step</bx-structured-list-header-cell
+      <cds-structured-list v-if="workflow.getStepsArray().length != 0">
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Step</cds-structured-list-header-cell
             >
-            <bx-structured-list-header-cell
-              >Reference</bx-structured-list-header-cell
+            <cds-structured-list-header-cell
+              >Reference</cds-structured-list-header-cell
             >
-          </bx-structured-list-header-row>
-        </bx-structured-list-head>
-        <bx-structured-list-body>
-          <bx-structured-list-row
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
             v-for="(step, index) in workflow.getStepsArray()"
             :key="index"
           >
-            <bx-structured-list-cell class="updateModals">
+            <cds-structured-list-cell>
               <cds-text-input
                 class="cds-theme-zone-g10"
                 helperText="Steps have to be unique"
@@ -124,41 +130,57 @@
                 :value="step.step"
                 @input="workflow.setStep(index, $event.target.value)"
               />
-            </bx-structured-list-cell>
-            <bx-structured-list-cell class="updateModals">
+            </cds-structured-list-cell>
+            <cds-structured-list-cell>
               <cds-text-input
                 class="cds-theme-zone-g10"
                 readonly
                 placeholder="Step reference"
                 :value="step.stepReference"
               />
-            </bx-structured-list-cell>
-            <bx-structured-list-cell
-              class="updateModals structured-list-delete-button-middle"
-            >
-              <bx-btn kind="danger" @click="removeStep(index)">
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-top">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="removeStep(index)"
+              >
                 <img
+                  slot="icon"
                   class="white-svg"
                   height="18"
                   width="18"
                   src="@/assets/remove.svg"
                 />
-              </bx-btn>
-            </bx-structured-list-cell>
-          </bx-structured-list-row>
-        </bx-structured-list-body>
-      </bx-structured-list>
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+      <cds-inline-notification
+        v-else
+        low-contrast
+        hide-close-button
+        kind="info"
+        title="No components in this workflow"
+        subtitle="Drag and drop components on the workflow to add them."
+      >
+      </cds-inline-notification>
     </bx-accordion-item>
   </bx-accordion>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
@@ -322,7 +344,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
-@import "@/styles/bx-structured-list-styles.css";
+@import "@/styles/cds-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 </style>

@@ -2,12 +2,18 @@
 preset parameters and base package info tables 
 in Experiment View*/
 
+/* 
+    cds grid classes overwrite structured-list component display attributes to block, causing issues.
+    setting 'display: table-cell !important;' resets the elements to the correct display value 
+*/
 .cds--col-sm-1 {
   overflow-wrap: normal;
+  display: table-cell !important;
 }
 .cds--col-sm-3 {
   padding-left: 2.5rem;
+  display: table-cell !important;
 }
-dds-structured-list {
+cds-structured-list {
   overflow-x: hidden;
 }

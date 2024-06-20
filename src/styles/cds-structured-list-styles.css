@@ -1,0 +1,24 @@
+/* 
+  AP: setting the height of the button to 2.5 rem to make
+  it equal to the height of the text-input according to:
+  https://carbondesignsystem.com/components/text-input/usage/#sizing
+*/
+cds-icon-button {
+  height: 2.5rem;
+}
+
+/* 
+  AP: used when the component is in a cds-structured-list-cell and
+  is next to components that **DO NOT HAVE** a label
+*/
+cds-structured-list-cell.align-top {
+  vertical-align: top;
+}
+
+/* 
+  AP: used when the component is in a cds-structured-list-cell and
+  is next to components that **HAVE** a label
+*/
+cds-structured-list-cell.align-bottom {
+  vertical-align: bottom;
+}

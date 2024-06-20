@@ -62,7 +62,6 @@
 <script>
 import "@carbon/web-components/es/components/modal/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";

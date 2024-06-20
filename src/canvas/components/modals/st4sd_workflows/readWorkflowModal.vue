@@ -7,143 +7,145 @@
     <bx-modal-body>
       <bx-accordion>
         <bx-accordion-item data-modal-primary-focus open title-text="Overview">
-          <bx-structured-list>
-            <bx-structured-list-body>
-              <bx-structured-list-row v-if="workflowName != ''">
-                <bx-structured-list-cell>Name</bx-structured-list-cell>
-                <bx-structured-list-cell>{{
+          <cds-structured-list>
+            <cds-structured-list-body>
+              <cds-structured-list-row v-if="workflowName != ''">
+                <cds-structured-list-cell>Name</cds-structured-list-cell>
+                <cds-structured-list-cell>{{
                   workflowName
-                }}</bx-structured-list-cell>
-              </bx-structured-list-row>
-              <bx-structured-list-row v-if="workflowDescription != ''">
-                <bx-structured-list-cell>Description</bx-structured-list-cell>
-                <bx-structured-list-cell>{{
+                }}</cds-structured-list-cell>
+              </cds-structured-list-row>
+              <cds-structured-list-row v-if="workflowDescription != ''">
+                <cds-structured-list-cell>Description</cds-structured-list-cell>
+                <cds-structured-list-cell>{{
                   workflowDescription
-                }}</bx-structured-list-cell>
-              </bx-structured-list-row>
-            </bx-structured-list-body>
-          </bx-structured-list>
+                }}</cds-structured-list-cell>
+              </cds-structured-list-row>
+            </cds-structured-list-body>
+          </cds-structured-list>
         </bx-accordion-item>
 
         <bx-accordion-item
           :title-text="'Parameters (' + workflowParams.length + ')'"
         >
-          <bx-structured-list>
-            <bx-structured-list-head>
-              <bx-structured-list-header-row>
-                <bx-structured-list-header-cell
-                  >Name</bx-structured-list-header-cell
+          <cds-structured-list>
+            <cds-structured-list-head>
+              <cds-structured-list-header-row>
+                <cds-structured-list-header-cell
+                  >Name</cds-structured-list-header-cell
                 >
-                <bx-structured-list-header-cell
-                  >Value</bx-structured-list-header-cell
+                <cds-structured-list-header-cell
+                  >Value</cds-structured-list-header-cell
                 >
-              </bx-structured-list-header-row>
-            </bx-structured-list-head>
-            <bx-structured-list-body>
-              <bx-structured-list-row
+              </cds-structured-list-header-row>
+            </cds-structured-list-head>
+            <cds-structured-list-body>
+              <cds-structured-list-row
                 v-for="param in workflowParams"
                 :key="param.name"
               >
-                <bx-structured-list-cell>{{
+                <cds-structured-list-cell>{{
                   param.name
-                }}</bx-structured-list-cell>
-                <bx-structured-list-cell
+                }}</cds-structured-list-cell>
+                <cds-structured-list-cell
                   v-if="getParameterValue(param.name) != undefined"
                 >
                   {{ getParameterValue(param.name) }}
-                </bx-structured-list-cell>
+                </cds-structured-list-cell>
                 <template v-else>
-                  <bx-structured-list-cell v-if="param.default != undefined">{{
+                  <cds-structured-list-cell v-if="param.default != undefined">{{
                     param.default
-                  }}</bx-structured-list-cell>
-                  <bx-structured-list-cell v-else></bx-structured-list-cell
+                  }}</cds-structured-list-cell>
+                  <cds-structured-list-cell v-else></cds-structured-list-cell
                 ></template>
-              </bx-structured-list-row>
-            </bx-structured-list-body>
-          </bx-structured-list>
+              </cds-structured-list-row>
+            </cds-structured-list-body>
+          </cds-structured-list>
         </bx-accordion-item>
 
         <bx-accordion-item
           :title-text="'Steps (' + Object.keys(workflowSteps).length + ')'"
         >
-          <bx-structured-list>
-            <bx-structured-list-head>
-              <bx-structured-list-header-row>
-                <bx-structured-list-header-cell
-                  >Name</bx-structured-list-header-cell
+          <cds-structured-list>
+            <cds-structured-list-head>
+              <cds-structured-list-header-row>
+                <cds-structured-list-header-cell
+                  >Name</cds-structured-list-header-cell
                 >
-                <bx-structured-list-header-cell
-                  >Default value</bx-structured-list-header-cell
+                <cds-structured-list-header-cell
+                  >Default value</cds-structured-list-header-cell
                 >
-              </bx-structured-list-header-row>
-            </bx-structured-list-head>
-            <bx-structured-list-body>
-              <bx-structured-list-row
+              </cds-structured-list-header-row>
+            </cds-structured-list-head>
+            <cds-structured-list-body>
+              <cds-structured-list-row
                 v-for="(stepRef, stepName) in workflowSteps"
                 :key="stepName"
               >
-                <bx-structured-list-cell>{{
+                <cds-structured-list-cell>{{
                   stepName
-                }}</bx-structured-list-cell>
-                <bx-structured-list-cell>{{ stepRef }}</bx-structured-list-cell>
-              </bx-structured-list-row>
-            </bx-structured-list-body>
-          </bx-structured-list>
+                }}</cds-structured-list-cell>
+                <cds-structured-list-cell>{{
+                  stepRef
+                }}</cds-structured-list-cell>
+              </cds-structured-list-row>
+            </cds-structured-list-body>
+          </cds-structured-list>
         </bx-accordion-item>
 
         <bx-accordion-item title-text="Execute">
-          <bx-structured-list>
-            <bx-structured-list-head>
-              <bx-structured-list-header-row>
-                <bx-structured-list-header-cell
-                  >Target Name</bx-structured-list-header-cell
+          <cds-structured-list>
+            <cds-structured-list-head>
+              <cds-structured-list-header-row>
+                <cds-structured-list-header-cell
+                  >Target Name</cds-structured-list-header-cell
                 >
-              </bx-structured-list-header-row>
-            </bx-structured-list-head>
-            <bx-structured-list-body>
+              </cds-structured-list-header-row>
+            </cds-structured-list-head>
+            <cds-structured-list-body>
               <template
                 v-for="execute in workflowExecute"
                 :key="execute.target"
               >
-                <bx-structured-list-row>
-                  <bx-structured-list-cell>{{
+                <cds-structured-list-row>
+                  <cds-structured-list-cell>{{
                     execute.target
-                  }}</bx-structured-list-cell>
-                </bx-structured-list-row>
-                <bx-structured-list-row>
-                  <bx-structured-list>
-                    <bx-structured-list-head>
-                      <bx-structured-list-header-row>
-                        <bx-structured-list-header-cell
-                          >>></bx-structured-list-header-cell
+                  }}</cds-structured-list-cell>
+                </cds-structured-list-row>
+                <cds-structured-list-row>
+                  <cds-structured-list>
+                    <cds-structured-list-head>
+                      <cds-structured-list-header-row>
+                        <cds-structured-list-header-cell
+                          >>></cds-structured-list-header-cell
                         >
-                        <bx-structured-list-header-cell
-                          >Argument name</bx-structured-list-header-cell
+                        <cds-structured-list-header-cell
+                          >Argument name</cds-structured-list-header-cell
                         >
-                        <bx-structured-list-header-cell
-                          >Definition</bx-structured-list-header-cell
+                        <cds-structured-list-header-cell
+                          >Definition</cds-structured-list-header-cell
                         >
-                      </bx-structured-list-header-row>
-                    </bx-structured-list-head>
-                    <bx-structured-list-body>
-                      <bx-structured-list-row
+                      </cds-structured-list-header-row>
+                    </cds-structured-list-head>
+                    <cds-structured-list-body>
+                      <cds-structured-list-row
                         v-for="(argRef, argName) in execute.args"
                         :key="argName"
                       >
-                        <bx-structured-list-cell></bx-structured-list-cell>
-                        <bx-structured-list-cell>{{
+                        <cds-structured-list-cell></cds-structured-list-cell>
+                        <cds-structured-list-cell>{{
                           argName
-                        }}</bx-structured-list-cell>
-                        <bx-structured-list-cell>{{
+                        }}</cds-structured-list-cell>
+                        <cds-structured-list-cell>{{
                           argRef
-                        }}</bx-structured-list-cell>
-                      </bx-structured-list-row>
-                    </bx-structured-list-body>
-                  </bx-structured-list>
-                </bx-structured-list-row>
+                        }}</cds-structured-list-cell>
+                      </cds-structured-list-row>
+                    </cds-structured-list-body>
+                  </cds-structured-list>
+                </cds-structured-list-row>
               </template>
-            </bx-structured-list-body>
-          </bx-structured-list>
+            </cds-structured-list-body>
+          </cds-structured-list>
         </bx-accordion-item>
       </bx-accordion>
       <bx-btn
@@ -191,6 +193,7 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import "@carbon/web-components/es/components/inline-loading/index.js";
 export default {
   props: {

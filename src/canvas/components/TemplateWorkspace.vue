@@ -140,8 +140,6 @@ import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWo
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
 import createComponentModal from "@/canvas/components/modals/st4sd_components/createComponentModal.vue";
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
-import "@carbon/web-components/es/components/input/index.js";
-import "@carbon/web-components/es/components/number-input/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/search/index.js";
 import router from "@/router";

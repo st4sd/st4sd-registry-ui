@@ -36,24 +36,24 @@
           'Parameters (' + component.signature.parameters.length + ')'
         "
       >
-        <bx-structured-list>
-          <bx-structured-list-head>
-            <bx-structured-list-header-row>
-              <bx-structured-list-header-cell
-                >Name</bx-structured-list-header-cell
+        <cds-structured-list v-if="component.signature?.parameters.length != 0">
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell
+                >Name</cds-structured-list-header-cell
               >
-              <bx-structured-list-header-cell
+              <cds-structured-list-header-cell
                 >Default: Could be string, int, number or object (currenly only
-                handles string)</bx-structured-list-header-cell
+                handles string)</cds-structured-list-header-cell
               >
-            </bx-structured-list-header-row>
-          </bx-structured-list-head>
-          <bx-structured-list-body>
-            <bx-structured-list-row
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row
               v-for="(parameter, index) in component.signature.parameters"
               :key="index"
             >
-              <bx-structured-list-cell class="updateModals">
+              <cds-structured-list-cell>
                 <cds-text-input
                   class="cds-theme-zone-g10"
                   :value="parameter.name"
@@ -62,33 +62,39 @@
                   invalidText="Parameter names must be unique"
                   placeholder="parameter name"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell class="updateModals">
+              </cds-structured-list-cell>
+              <cds-structured-list-cell>
                 <cds-text-input
                   class="cds-theme-zone-g10"
                   :value="parameter.default"
                   @input="parameter.default = $event.target.value"
                   placeholder="parameter default"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="updateModals structured-list-delete-button-bottom"
-              >
-                <bx-btn kind="danger" @click="component.removeParameter(index)">
+              </cds-structured-list-cell>
+              <cds-structured-list-cell class="align-top">
+                <cds-icon-button
+                  kind="danger"
+                  enter-delay-ms="1000"
+                  leave-delay-ms="0"
+                  align="bottom"
+                  @click="component.removeParameter(index)"
+                >
                   <img
+                    slot="icon"
                     class="white-svg"
                     height="18"
                     width="18"
                     src="@/assets/remove.svg"
                   />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
-          <bx-btn kind="primary" @click="component.addParameter()">
-            Add Parameter +
-          </bx-btn>
-        </bx-structured-list>
+                  <p slot="tooltip-content">Remove item</p>
+                </cds-icon-button>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
+        <bx-btn kind="primary" @click="component.addParameter()">
+          Add Parameter +
+        </bx-btn>
       </bx-accordion-item>
       <bx-accordion-item title-text="Command">
         <cds-text-input
@@ -151,23 +157,23 @@
         />
         <br />
 
-        <bx-structured-list>
-          <bx-structured-list-head>
-            <bx-structured-list-header-row>
-              <bx-structured-list-header-cell
+        <cds-structured-list>
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell
                 >Restart Hooks: ({{
                   component.workflowAttributes.restartHookOn.length
-                }})</bx-structured-list-header-cell
+                }})</cds-structured-list-header-cell
               >
-            </bx-structured-list-header-row>
-          </bx-structured-list-head>
-          <bx-structured-list-body>
-            <bx-structured-list-row
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row
               v-for="(restartHook, index) in component.workflowAttributes
                 .restartHookOn"
               :key="index"
             >
-              <bx-structured-list-cell>
+              <cds-structured-list-cell>
                 <cds-text-input
                   label="Restart Hook On:"
                   class="cds-theme-zone-g10"
@@ -175,28 +181,31 @@
                   @input="restartHook = $event.target.value"
                   placeholder="restart hook name"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="structured-list-delete-button structured-list-delete-button-bottom"
-              >
-                <bx-btn
+              </cds-structured-list-cell>
+              <cds-structured-list-cell class="align-bottom">
+                <cds-icon-button
                   kind="danger"
+                  enter-delay-ms="1000"
+                  leave-delay-ms="0"
+                  align="bottom"
                   @click="component.removeRestartHookOn(index)"
                 >
                   <img
+                    slot="icon"
                     class="white-svg"
                     height="18"
                     width="18"
                     src="@/assets/remove.svg"
                   />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
+                  <p slot="tooltip-content">Remove item</p>
+                </cds-icon-button>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
           <bx-btn kind="primary" @click="component.addRestartHookOn()">
             Add
           </bx-btn>
-        </bx-structured-list>
+        </cds-structured-list>
 
         <cds-text-input
           label="Repeat Interval:"
@@ -227,27 +236,27 @@
           "
           placeholder="max restarts"
         />
-        <bx-structured-list
+        <cds-structured-list
           v-if="component.workflowAttributes.shutdownOn != undefined"
         >
-          <bx-structured-list-head>
-            <bx-structured-list-header-row>
-              <bx-structured-list-header-cell
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell
                 >Shutdown Hooks: ({{
                   component.workflowAttributes.shutdownOn.length
-                }})</bx-structured-list-header-cell
+                }})</cds-structured-list-header-cell
               >
-            </bx-structured-list-header-row>
-          </bx-structured-list-head>
-          <bx-structured-list-body
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body
             v-if="component.workflowAttributes.shutdownOn != undefined"
           >
-            <bx-structured-list-row
+            <cds-structured-list-row
               v-for="(shutdownOn, index) in component.workflowAttributes
                 .shutdownOn"
               :key="index"
             >
-              <bx-structured-list-cell>
+              <cds-structured-list-cell>
                 <cds-text-input
                   label="Shutdown On:"
                   class="cds-theme-zone-g10"
@@ -255,28 +264,31 @@
                   @input="shutdownOn = $event.target.value"
                   placeholder="shutdown on"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="structured-list-delete-button structured-list-delete-button-bottom"
-              >
-                <bx-btn
+              </cds-structured-list-cell>
+              <cds-structured-list-cell class="align-bottom">
+                <cds-icon-button
                   kind="danger"
+                  enter-delay-ms="1000"
+                  leave-delay-ms="0"
+                  align="bottom"
                   @click="component.removeShutdownOn(index)"
                 >
                   <img
+                    slot="icon"
                     class="white-svg"
                     height="18"
                     width="18"
                     src="@/assets/remove.svg"
                   />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
+                  <p slot="tooltip-content">Remove item</p>
+                </cds-icon-button>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
           <bx-btn kind="primary" @click="component.addShutdownOn()">
             Add
           </bx-btn>
-        </bx-structured-list>
+        </cds-structured-list>
       </bx-accordion-item>
       <bx-accordion-item title-text="Resource Manager">
         <bx-content-switcher
@@ -532,25 +544,24 @@
       <bx-accordion-item
         :title-text="'Variables (' + variableKeys.length + ')'"
       >
-        <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
-        <bx-structured-list v-if="variableKeys.length != 0">
-          <bx-structured-list-head>
-            <bx-structured-list-header-row>
-              <bx-structured-list-header-cell
-                >Name</bx-structured-list-header-cell
+        <cds-structured-list v-if="variableKeys.length != 0">
+          <cds-structured-list-head>
+            <cds-structured-list-header-row>
+              <cds-structured-list-header-cell
+                >Name</cds-structured-list-header-cell
               >
-              <bx-structured-list-header-cell
-                >Value</bx-structured-list-header-cell
+              <cds-structured-list-header-cell
+                >Value</cds-structured-list-header-cell
               >
-              <bx-structured-list-header-cell></bx-structured-list-header-cell>
-            </bx-structured-list-header-row>
-          </bx-structured-list-head>
-          <bx-structured-list-body>
-            <bx-structured-list-row
+              <cds-structured-list-header-cell></cds-structured-list-header-cell>
+            </cds-structured-list-header-row>
+          </cds-structured-list-head>
+          <cds-structured-list-body>
+            <cds-structured-list-row
               v-for="(key, idx) in variableKeys"
               :key="idx"
             >
-              <bx-structured-list-cell class="updateModals">
+              <cds-structured-list-cell>
                 <cds-text-input
                   class="cds-theme-zone-g10"
                   id="add-component-variables-input"
@@ -561,8 +572,8 @@
                   invalidText="Variable names must be unique"
                   placeholder="variable name"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell class="updateModals">
+              </cds-structured-list-cell>
+              <cds-structured-list-cell>
                 <cds-text-input
                   class="cds-theme-zone-g10"
                   id="add-component-variables-input"
@@ -571,22 +582,29 @@
                   @input="setVariableValue(idx, $event.target.value)"
                   placeholder="variable value"
                 />
-              </bx-structured-list-cell>
-              <bx-structured-list-cell
-                class="updateModals structured-list-delete-button-bottom"
-              >
-                <bx-btn kind="danger" @click="removeVariable(idx)">
+              </cds-structured-list-cell>
+              <cds-structured-list-cell class="align-top">
+                <cds-icon-button
+                  kind="danger"
+                  enter-delay-ms="1000"
+                  leave-delay-ms="0"
+                  align="bottom"
+                  @click="removeVariable(idx)"
+                >
                   <img
+                    slot="icon"
                     class="white-svg"
                     height="18"
                     width="18"
                     src="@/assets/remove.svg"
                   />
-                </bx-btn>
-              </bx-structured-list-cell>
-            </bx-structured-list-row>
-          </bx-structured-list-body>
-        </bx-structured-list>
+                  <p slot="tooltip-content">Remove item</p>
+                </cds-icon-button>
+              </cds-structured-list-cell>
+            </cds-structured-list-row>
+          </cds-structured-list-body>
+        </cds-structured-list>
+        <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
       </bx-accordion-item>
     </bx-accordion>
   </div>
@@ -594,14 +612,13 @@
 
 <script>
 import { ref } from "vue";
-import "@carbon/web-components/es/components/number-input/index.js";
-import "@carbon/web-components/es/components/input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/toggle/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
-
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
 // AP: see comment on parameterNameIsDuplicate
 // import { checkParameterNameIsDuplicate } from "@/canvas/functions/validation";
 
@@ -770,7 +787,7 @@ export default {
 <style lang="css" scoped>
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/svg.scss";
-@import "@/styles/bx-structured-list-styles.css";
+@import "@/styles/cds-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
 </style>
