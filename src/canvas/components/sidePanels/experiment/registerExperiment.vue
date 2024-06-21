@@ -1,30 +1,52 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <bx-modal open>
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading>Register experiment</bx-modal-heading>
-    </bx-modal-header>
-    <bx-modal-body>
-      <bx-inline-loading
+  <cds-side-panel
+    open
+    size="md"
+    includeOverlay="true"
+    :title="this.step == 0 ? 'Register Experiment' : 'DSL Validation Errors'"
+    :currentStep="this.step"
+    @cds-side-panel-navigate-back="this.step = 0"
+    @cds-side-panel-closed="this.closeSidePanel"
+  >
+    <div v-if="this.step == 1">
+      <DslValidationErrors
+        open
+        @dslValidationError="this.setDslValidationErrorFunction"
+        :dslErrors="dslValidationErrors"
+        :allNodes="allNodes"
+        :allEdges="allEdges"
+      />
+    </div>
+    <div v-else>
+      <cds-inline-loading
         v-show="dslBeingValidated == 'active'"
         :status="dslBeingValidated"
-        >Validating DSL...</bx-inline-loading
+        >Validating DSL...</cds-inline-loading
       >
-      <bx-inline-notification
+      <cds-inline-notification
         id="dsl-valid"
         kind="success"
+        lowContrast
         :open="dslBeingValidated != 'active' && !dslInvalid"
         hide-close-button
         title="DSL Valid"
       />
-      <bx-inline-notification
+      <cds-actionable-notification
         id="dsl-invalid-notification"
         kind="error"
-        :open="dslInvalid"
+        lowContrast
+        inline
+        :open="dslBeingValidated != 'active' && dslInvalid"
         hide-close-button
-        :title="dslInvalidTitle"
-        :subtitle="dslMessage"
-      />
+        title="DSL Validation Errors"
+        subtitle="There are errors in the DSL validation, click the show errors button to see them"
+      >
+        <cds-actionable-notification-button @click="this.step = 1" slot="action"
+          >View Errors</cds-actionable-notification-button
+        >
+      </cds-actionable-notification>
+      <br />
       <cds-text-input
         class="cds-theme-zone-g10"
         label="Experiment name:"
@@ -35,46 +57,52 @@
         :disabled="dslInvalid"
         invalidText="Experiment names should only consist of lower case letters, numbers, and - to separate words e.g. name-1"
       />
-      <br />
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button
-        data-modal-close
-        kind="tertiary"
-        @click="$emit('openShowDslErrors')"
-        :disabled="!dslInvalidBackend"
-        >Show Errors</bx-modal-footer-button
-      >
-      <bx-modal-footer-button kind="secondary" data-modal-close
-        >Cancel</bx-modal-footer-button
-      >
-      <bx-modal-footer-button
-        kind="primary"
-        type="submit"
-        @click="registerExperiment()"
-        :disabled="dslBeingValidated == 'active' || nameInvalid || dslInvalid"
-        >Register Experiment</bx-modal-footer-button
-      >
-    </bx-modal-footer>
-  </bx-modal>
+    </div>
+    <cds-button
+      v-if="this.step == 0"
+      slot="actions"
+      kind="secondary"
+      @click="this.closeSidePanel"
+      >Cancel</cds-button
+    >
+    <cds-button v-else slot="actions" kind="secondary" @click="this.step = 0"
+      >Back</cds-button
+    >
+    <cds-button
+      kind="primary"
+      type="submit"
+      slot="actions"
+      @click="registerExperiment()"
+      :disabled="dslBeingValidated == 'active' || nameInvalid || dslInvalid"
+    >
+      Register Experiment
+    </cds-button>
+  </cds-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/modal/index.js";
-import "@carbon/web-components/es/components/button/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";
-
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";
 
+import DslValidationErrors from "@/canvas/components/DslValidationErrors.vue";
+
 export default {
+  components: {
+    DslValidationErrors,
+  },
   props: {
     name: String,
     allNodes: Object,
     allEdges: Object,
+    dslValidationErrors: Array,
+    setDslValidationErrorFunction: Function,
   },
-  emits: ["openShowDslErrors", "dslValidationError"],
+  emits: ["dslValidationError", "sidePanelClosed"],
   data() {
     return {
       experimentName: null,
@@ -87,6 +115,8 @@ export default {
       dslBeingValidated: "active",
       dslErrors: null,
       edit: null,
+      step: 0,
+      openSidePanel: true,
     };
   },
   mounted() {
@@ -104,6 +134,9 @@ export default {
   },
   methods: {
     postDslForValidation,
+    closeSidePanel() {
+      this.$emit("sidePanelClosed");
+    },
     validateDsl() {
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);

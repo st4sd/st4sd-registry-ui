@@ -95,7 +95,7 @@
         <bx-btn
           size="sm"
           title="Register experiment"
-          @click="toggleVisibility('registerExperimentModal')"
+          @click="toggleVisibility('registerExperimentSidePanel')"
           kind="secondary"
           :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
@@ -152,7 +152,7 @@
       :dslValidationErrors="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
       :setDslValidationErrorFunction="setDslValidationError"
-      @cds-side-panel-closed="toggleVisibility('updateComponentSidePanel')"
+      @sidePanelClosed="toggleVisibility('updateComponentSidePanel')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @addToTemplateWorkspace="addToTemplateWorkspace"
@@ -200,9 +200,10 @@
     />
     <registerExperiment
       open
-      v-if="componentVisibilities.registerExperimentModal.value"
-      @bx-modal-closed="toggleVisibility('registerExperimentModal')"
-      @openShowDslErrors="toggleVisibility('showDslErrors')"
+      v-if="componentVisibilities.registerExperimentSidePanel.value"
+      @sidePanelClosed="toggleVisibility('registerExperimentSidePanel')"
+      :dslValidationErrors="dslValidationErrors"
+      :setDslValidationErrorFunction="setDslValidationError"
       @dslValidationError="setDslValidationError"
       :name="props.pvep"
       :allNodes="allNodes"
@@ -281,7 +282,7 @@ import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/upda
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
-import registerExperiment from "@/canvas/components/modals/experiment/registerExperiment.vue";
+import registerExperiment from "@/canvas/components/sidePanels/experiment/registerExperiment.vue";
 import ShowDslValidationErrorsModal from "@/canvas/components/modals/experiment/showDslValidationErrorsModal.vue";
 
 //Confirm Modal
@@ -490,7 +491,7 @@ let componentVisibilities = {
   stepExecuteModal: ref(false),
   deleteModal: ref(false),
   fileUploadModal: ref(false),
-  registerExperimentModal: ref(false),
+  registerExperimentSidePanel: ref(false),
   confirmUploadModal: ref(false),
   resetConfirmModal: ref(false),
   showDslErrors: ref(false),

@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <cds-side-panel
-    :open="this.openSidePanel"
+    open
     size="lg"
     includeOverlay="true"
     :title="
@@ -9,6 +9,7 @@
     "
     :currentStep="this.step"
     @cds-side-panel-navigate-back="this.step = 0"
+    @cds-side-panel-closed="this.closeSidePanel"
   >
     <div>
       <div v-if="this.step == 1">
@@ -75,7 +76,7 @@
       v-if="this.step == 0"
       slot="actions"
       kind="secondary"
-      @click="this.openSidePanel = false"
+      @click="this.closeSidePanel"
       >Cancel</cds-button
     >
     <cds-button v-else slot="actions" kind="secondary" @click="this.step = 0"
@@ -115,6 +116,7 @@ export default {
     setDslValidationErrorFunction: Function,
   },
   emits: [
+    "sidePanelClosed",
     "updateComponentModalNotification",
     "delete",
     "removeParent",
@@ -125,7 +127,6 @@ export default {
       componentInvalid: false,
       isTemplateButtonDisabled: false,
       step: 0,
-      openSidePanel: true,
     };
   },
   mounted() {
@@ -139,6 +140,9 @@ export default {
     }
   },
   methods: {
+    closeSidePanel() {
+      this.$emit("sidePanelClosed");
+    },
     emitDelete() {
       this.$emit("delete");
     },
