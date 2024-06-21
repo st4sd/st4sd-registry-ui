@@ -158,12 +158,12 @@
       @addToTemplateWorkspace="addToTemplateWorkspace"
       @updateComponentModalNotification="updateBuildCanvasNotifications"
     />
-    <createEdgeModal
-      v-if="componentVisibilities.createEdgeModal.value"
+    <createEdgeSidePanel
+      v-if="componentVisibilities.createEdgeSidePanel.value"
       :edgeProp="newEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @bx-modal-closed="toggleVisibility('createEdgeModal')"
+      @closeSidePanel="toggleVisibility('createEdgeSidePanel')"
       @created="addEdge"
     />
     <updateEdgeModal
@@ -275,7 +275,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import TemplateWorkspace from "@/canvas/components/TemplateWorkspace.vue";
 //Modals
-import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
+import createEdgeSidePanel from "@/canvas/components/sidePanels/edges/createEdgeSidePanel.vue";
 import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
 import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
 import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
@@ -481,7 +481,7 @@ const onDragOver = (event) => {
 
 let componentVisibilities = {
   createWorkflowSidePanel: ref(false),
-  createEdgeModal: ref(false),
+  createEdgeSidePanel: ref(false),
   updateEdgeModal: ref(false),
   updateWorkflowModal: ref(false),
   updateComponentModal: ref(false),
@@ -730,7 +730,7 @@ onConnect((edgeInProgress) => {
     nodeType = "connection";
     toggleVisibility("updateEdgeModal");
   } else if (isConnectionValid(newEdge, findNode)) {
-    toggleVisibility("createEdgeModal");
+    toggleVisibility("createEdgeSidePanel");
   }
 });
 
@@ -746,7 +746,7 @@ const addEdge = (newEdge) => {
   if (Object.keys(newEdge.definition).length > 0) {
     addEdges([newEdge]);
   }
-  toggleVisibility("createEdgeModal");
+  toggleVisibility("createEdgeSidePanel");
 };
 
 const dark = ref(false);
