@@ -5,10 +5,11 @@
         <cds-text-input
           class="cds-theme-zone-g10"
           label="Component name (Required)"
-          data-modal-primary-focus
+          id="createComponentSidePanel"
           :value="component.signature.name"
           @input="updateComponentName($event.target.value)"
           @blur="onFocusLost($event, component.signature.name)"
+          @mouseleave="onFocusLost($event, component.signature.name)"
           placeholder="name"
           required
           invalidText="Name cannot be empty"

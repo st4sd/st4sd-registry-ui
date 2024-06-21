@@ -1,48 +1,57 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <bx-modal open>
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading>Create component</bx-modal-heading>
-    </bx-modal-header>
-    <bx-modal-body>
-      <div>
-        <componentForm
-          ref="componentForm"
-          @add="addComponent"
-          @invalid="submitDisabled"
-        />
-      </div>
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button kind="secondary" data-modal-close
-        >Cancel</bx-modal-footer-button
-      >
-      <bx-modal-footer-button
-        kind="primary"
-        type="submit"
-        @click="getNewComponentDefinition"
-        :disabled="disabled"
-        >Submit</bx-modal-footer-button
-      >
-    </bx-modal-footer>
-  </bx-modal>
+  <cds-side-panel
+    open
+    size="lg"
+    includeOverlay="true"
+    title="Create component"
+    selector-initial-focus="#createComponentSidePanel"
+    @cds-side-panel-closed="closeSidePanel"
+  >
+    <componentForm
+      ref="componentForm"
+      @add="addComponent"
+      @invalid="submitDisabled"
+    />
+    <cds-button slot="actions" kind="secondary" @click="closeSidePanel"
+      >Cancel</cds-button
+    >
+    <cds-button
+      kind="primary"
+      type="submit"
+      slot="actions"
+      @click="getNewComponentDefinition"
+      :disabled="disabled"
+    >
+      Submit
+    </cds-button>
+  </cds-side-panel>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/side-panel.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {
   components: { componentForm },
-  emits: ["componentAdded", "updateCreateComponentModalNotification"],
+  emits: [
+    "componentAdded",
+    "updateCreateComponentModalNotification",
+    "sidePanelClosed",
+  ],
   props: {
     existingTemplates: Set,
   },
   data() {
     return {
-      disabled: false,
+      disabled: true,
     };
   },
   methods: {
+    closeSidePanel() {
+      this.$emit("sidePanelClosed");
+    },
     removeEmptyString(obj) {
       Object.keys(obj).forEach((k) => obj[k] === "" && delete obj[k]);
       return obj;

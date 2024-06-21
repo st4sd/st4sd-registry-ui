@@ -6,7 +6,7 @@
         <bx-btn
           title="Create Component"
           icon-layout
-          @click="toggleModalVisibility('createComponentModal')"
+          @click="toggleModalVisibility('createComponentSidePanel')"
           size="sm"
         >
           <img
@@ -71,15 +71,15 @@
         </div>
       </div>
     </div>
-    <createComponentModal
-      v-if="modalVisibilities.createComponentModal.value"
+    <createComponentSidePanel
+      v-if="modalVisibilities.createComponentSidePanel.value"
       :existingTemplates="
         new Set(
           fullElements.map((template) => template.definition.signature.name),
         )
       "
       @componentAdded="addComponentNode"
-      @bx-modal-closed="toggleModalVisibility('createComponentModal')"
+      @sidePanelClosed="toggleModalVisibility('createComponentSidePanel')"
       @updateCreateComponentModalNotification="
         onUpdateCreateComponentModalNotification
       "
@@ -138,7 +138,7 @@ import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock"
 import { canvasStore } from "@/canvas/stores/canvasStore";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
 import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
-import createComponentModal from "@/canvas/components/modals/st4sd_components/createComponentModal.vue";
+import createComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/createComponentSidePanel.vue";
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/search/index.js";
@@ -204,7 +204,7 @@ getNodesFromUrls().then((data) => {
 let modalVisibilities = {
   readComponentModal: ref(false),
   readWorkflowModal: ref(false),
-  createComponentModal: ref(false),
+  createComponentSidePanel: ref(false),
   confirmDeleteModal: ref(false),
 };
 
@@ -405,7 +405,7 @@ const addComponentNode = (newComponent) => {
   newComponent.id = getId();
   fullElements.value.push(newComponent);
   elements.value.push(newComponent);
-  toggleModalVisibility("createComponentModal");
+  toggleModalVisibility("createComponentSidePanel");
 };
 
 function onUpdateCreateComponentModalNotification(notification) {
