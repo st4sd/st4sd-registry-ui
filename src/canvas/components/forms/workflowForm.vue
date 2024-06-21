@@ -3,10 +3,11 @@
     <bx-accordion-item open title-text="Overview">
       <cds-text-input
         class="cds-theme-zone-g10"
+        id="createWorkflowSidePanel"
         label="Workflow name (Required)"
-        data-modal-primary-focus
         placeholder="Workflow name"
         @blur="onFocusLost($event, workflow.getName())"
+        @mouseleave="onFocusLost($event, workflow.getName())"
         :value="workflow.getName()"
         @input="updateWorkflowName($event.target.value)"
         invalidText="Name cannot be empty"

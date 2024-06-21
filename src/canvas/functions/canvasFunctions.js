@@ -93,7 +93,7 @@ function addOtherInputNode(graph) {
   });
 }
 
-//Used in createWorkflowModal
+//Used in createWorkflowSidePanel
 //This function takes the details collected from the modal and creates a workflow node
 export function createWorkflowNode(
   workflowName,

@@ -42,7 +42,7 @@
           size="sm"
           title="Add Workflow"
           kind="primary"
-          @click="toggleVisibility('createWorkflowModal')"
+          @click="toggleVisibility('createWorkflowSidePanel')"
         >
           + Add workflow
         </bx-btn>
@@ -123,10 +123,10 @@
       @libraryLoaded="setupCanvas"
     />
     <!-- CRUD operations -->
-    <createWorkflowModal
-      v-if="componentVisibilities.createWorkflowModal.value"
+    <createWorkflowSidePanel
+      v-if="componentVisibilities.createWorkflowSidePanel.value"
       @added="addWorkflow"
-      @bx-modal-closed="toggleVisibility('createWorkflowModal')"
+      @closeSidePanel="toggleVisibility('createWorkflowSidePanel')"
     />
     <updateWorkflowModal
       v-if="componentVisibilities.updateWorkflowModal.value"
@@ -277,7 +277,7 @@ import TemplateWorkspace from "@/canvas/components/TemplateWorkspace.vue";
 //Modals
 import createEdgeModal from "@/canvas/components/modals/edges/createEdgeModal.vue";
 import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
-import createWorkflowModal from "@/canvas/components/modals/st4sd_workflows/createWorkflowModal.vue";
+import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
 import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
@@ -480,7 +480,7 @@ const onDragOver = (event) => {
 };
 
 let componentVisibilities = {
-  createWorkflowModal: ref(false),
+  createWorkflowSidePanel: ref(false),
   createEdgeModal: ref(false),
   updateEdgeModal: ref(false),
   updateWorkflowModal: ref(false),
@@ -699,7 +699,7 @@ const addWorkflow = (workflow, input) => {
   if (workflows.length == 1) {
     setEntrypointAndNotify(workflows[0].id);
   }
-  toggleVisibility("createWorkflowModal");
+  toggleVisibility("createWorkflowSidePanel");
 };
 
 let nestingNode = {};
