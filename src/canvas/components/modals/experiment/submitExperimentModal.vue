@@ -1,10 +1,13 @@
 <template>
-  <bx-modal class="no-transform">
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading>{{ title }}</bx-modal-heading>
-    </bx-modal-header>
-    <bx-modal-body>
+  <cds-modal
+    :preventClose="submitting"
+    :preventCloseOnClickOutside="submitting"
+  >
+    <cds-modal-header>
+      <cds-modal-close-button></cds-modal-close-button>
+      <cds-modal-heading>{{ title }}</cds-modal-heading>
+    </cds-modal-header>
+    <cds-modal-body>
       <cds-text-input
         name="ExperimentName"
         @focus="validateExperimentName"
@@ -16,27 +19,31 @@
         invalidText="Experiment names should only consist of lower case letters, numbers, and -"
       />
       <div v-if="submitting">
-        <bx-inline-loading status="active">
+        <cds-inline-loading status="active">
           Submitting Experiment ...
-        </bx-inline-loading>
+        </cds-inline-loading>
       </div>
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button kind="secondary" data-modal-close
-        >Cancel</bx-modal-footer-button
+    </cds-modal-body>
+    <cds-modal-footer>
+      <cds-modal-footer-button
+        kind="secondary"
+        data-modal-close
+        :disabled="submitting"
+        >Cancel</cds-modal-footer-button
       >
-      <bx-modal-footer-button
+      <cds-modal-footer-button
         kind="primary"
         @click="submit"
         :disabled="invalid || submitting"
-        >Submit</bx-modal-footer-button
+        >Submit</cds-modal-footer-button
       >
-    </bx-modal-footer>
-  </bx-modal>
+    </cds-modal-footer>
+  </cds-modal>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/inline-loading/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
 
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";
 
