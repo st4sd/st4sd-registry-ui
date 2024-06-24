@@ -82,15 +82,15 @@
       open="true"
     >
     </readWorkflowModal>
-    <readComponentModal
-      v-if="modalVisibilities.readComponentModal.value"
+    <readComponentSidePanel
+      v-if="modalVisibilities.readComponentSidePanel.value"
       title="Component Details"
-      @bx-modal-closed="toggleModalVisibility('readComponentModal')"
+      @closeSidePanel="toggleModalVisibility('readComponentSidePanel')"
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
     >
-    </readComponentModal>
+    </readComponentSidePanel>
     <readExperimentInputsModal
       v-if="modalVisibilities.readExperimentInputsModal.value"
       @bx-modal-closed="toggleModalVisibility('readExperimentInputsModal')"
@@ -123,7 +123,7 @@ import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
 //Modals
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
-import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
+import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
 import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
 import { downloadExperiment } from "@/canvas/functions/downloadJSON";
@@ -162,7 +162,7 @@ let inputingEdges;
 let modalVisibilities = {
   readEdgeModal: ref(false),
   readExperimentInputsModal: ref(false),
-  readComponentModal: ref(false),
+  readComponentSidePanel: ref(false),
   readWorkflowModal: ref(false),
 };
 
@@ -233,7 +233,7 @@ onNodeDoubleClick(({ node }) => {
     //https://github.ibm.com/st4sd/overview/issues/517
   } else if (node.type == "component") {
     inputingEdges = edges.value.filter((n) => n.target == node.id);
-    toggleModalVisibility("readComponentModal");
+    toggleModalVisibility("readComponentSidePanel");
   } else if (node.type == "input") {
     toggleModalVisibility("readExperimentInputsModal");
   }

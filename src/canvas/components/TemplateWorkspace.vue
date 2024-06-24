@@ -101,10 +101,10 @@
       @deleteWorkflow="handleDeleteTemplate"
       :requestInProgress="readModalRequestInProgress"
     />
-    <readComponentModal
-      v-if="modalVisibilities.readComponentModal.value"
+    <readComponentSidePanel
+      v-if="modalVisibilities.readComponentSidePanel.value"
       title="Component Details"
-      @bx-modal-closed="toggleModalVisibility('readComponentModal')"
+      @closeSidepanel="toggleModalVisibility('readComponentSidePanel')"
       :node="clickedNode"
       :inputingEdges="[]"
       :shareEnabled="
@@ -137,7 +137,7 @@ import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
 import { canvasStore } from "@/canvas/stores/canvasStore";
 import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
-import readComponentModal from "@/canvas/components/modals/st4sd_components/readComponentModal.vue";
+import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import createComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/createComponentSidePanel.vue";
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
 import "@carbon/web-components/es/components/dropdown/index.js";
@@ -202,7 +202,7 @@ getNodesFromUrls().then((data) => {
 });
 
 let modalVisibilities = {
-  readComponentModal: ref(false),
+  readComponentSidePanel: ref(false),
   readWorkflowModal: ref(false),
   createComponentSidePanel: ref(false),
   confirmDeleteModal: ref(false),
@@ -307,7 +307,7 @@ async function deleteTemplate(template) {
   }
 
   if (template.type == "component") {
-    toggleModalVisibility("readComponentModal");
+    toggleModalVisibility("readComponentSidePanel");
   }
 }
 
@@ -434,7 +434,7 @@ const onDoubleClick = (node) => {
   if (node.type == "workflow") {
     toggleModalVisibility("readWorkflowModal");
   } else if (node.type == "component") {
-    toggleModalVisibility("readComponentModal");
+    toggleModalVisibility("readComponentSidePanel");
   }
 };
 </script>
