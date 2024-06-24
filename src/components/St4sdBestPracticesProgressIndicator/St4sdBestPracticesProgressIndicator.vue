@@ -5,106 +5,118 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div>
-    <!-- Loading -->
-    <template v-if="loading != 0"
-      ><bx-progress-indicator-skeleton class="ve-progress-indicator" vertical>
-        <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-        <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-        <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-        <bx-progress-step-skeleton
-          vertical
-        ></bx-progress-step-skeleton> </bx-progress-indicator-skeleton
-    ></template>
-    <!-- Ready -->
-    <template v-else
-      ><bx-progress-indicator
-        class="ve-progress-indicator"
-        :vertical="direction"
-      >
-        <!-- Strong versioning -->
-        <bx-progress-step
-          id="strongVersioning"
-          class="mediumHorizontalSpacing"
-          label-text="Strong versioning"
-          :secondary-label-text="`${getStrongVersioningScore(experiment)}%`"
-          @click="openModal('strong-versioning-modal')"
-        ></bx-progress-step>
+  <!-- Loading -->
+  <template v-if="loading != 0"
+    ><cds-progress-indicator-skeleton class="ve-progress-indicator" vertical>
+      <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+      <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+      <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+      <cds-progress-step-skeleton
+        vertical
+      ></cds-progress-step-skeleton> </cds-progress-indicator-skeleton
+  ></template>
+  <!-- Ready -->
+  <template v-else
+    ><cds-progress-indicator
+      class="ve-progress-indicator"
+      :vertical="direction"
+      space-equally
+    >
+      <!-- Strong versioning -->
+      <cds-progress-step
+        id="strongVersioning"
+        label="Strong versioning"
+        :secondary-label-text="`${getStrongVersioningScore(experiment)}%`"
+        :state="
+          this.getIndicatorState(this.getStrongVersioningScore(this.experiment))
+        "
+        @click="openModal('strong-versioning-modal')"
+      ></cds-progress-step>
 
-        <!-- Virtual experiment interface -->
-        <bx-progress-step
-          id="virtualExperimentInterface"
-          class="mediumHorizontalSpacing"
-          label-text="Virtual-experiment interface"
-          @click="openModal('virtual-experiment-interface-modal')"
-          :secondary-label-text="interfaceStatus"
-        ></bx-progress-step>
+      <!-- Virtual experiment interface -->
+      <cds-progress-step
+        id="virtualExperimentInterface"
+        label="Virtual-experiment interface"
+        @click="openModal('virtual-experiment-interface-modal')"
+        :state="
+          this.getIndicatorState(
+            this.checkVeInterfaceIsPresent(this.experiment),
+          )
+        "
+        :secondary-label-text="interfaceStatus"
+      ></cds-progress-step>
 
-        <!-- Developer metadata -->
-        <bx-progress-step
-          id="developerMetadata"
-          class="mediumHorizontalSpacing"
-          label-text="Developer metadata"
-          :secondary-label-text="`${getDeveloperMetadataScore(experiment)}%`"
-          @click="openModal('developer-metadata-modal')"
-        ></bx-progress-step>
+      <!-- Developer metadata -->
+      <cds-progress-step
+        id="developerMetadata"
+        label="Developer metadata"
+        :secondary-label-text="`${getDeveloperMetadataScore(experiment)}%`"
+        :state="
+          this.getIndicatorState(
+            this.getDeveloperMetadataScore(this.experiment),
+          )
+        "
+        @click="openModal('developer-metadata-modal')"
+      ></cds-progress-step>
 
-        <!-- Execution environment -->
-        <bx-progress-step
-          id="ST4SDBestPractices"
-          class="mediumHorizontalSpacing"
-          label-text="ST4SD best practices"
-          :secondary-label-text="`${getBestPracticesScore(experiment)}%`"
-          @click="openModal('best-practices-modal')"
-        ></bx-progress-step>
-      </bx-progress-indicator>
+      <!-- Execution environment -->
+      <cds-progress-step
+        id="ST4SDBestPractices"
+        label="ST4SD best practices"
+        :secondary-label-text="`${getBestPracticesScore(experiment)}%`"
+        :state="
+          this.getIndicatorState(this.getBestPracticesScore(this.experiment))
+        "
+        @click="openModal('best-practices-modal')"
+      ></cds-progress-step>
+    </cds-progress-indicator>
 
-      <!-- Modals -->
+    <!-- Modals -->
 
-      <!-- Strong versioning modal -->
-      <St4sdModal
-        id="strong-versioning-modal"
-        title="Strong Versioning"
-        heading1="Check"
-        heading2="Info"
-        heading3="Status"
-        :structuredListData="strongVersioningData"
-      />
+    <!-- Strong versioning modal -->
+    <St4sdModal
+      id="strong-versioning-modal"
+      title="Strong Versioning"
+      heading1="Check"
+      heading2="Info"
+      heading3="Status"
+      :structuredListData="strongVersioningData"
+    />
 
-      <!-- Virtual experiment interface modal -->
-      <St4sdModal
-        id="virtual-experiment-interface-modal"
-        title="Virtual experiment interface"
-        heading1="Check"
-        heading2="Info"
-        heading3="Status"
-        :structuredListData="VEInterfaceData"
-      />
+    <!-- Virtual experiment interface modal -->
+    <St4sdModal
+      id="virtual-experiment-interface-modal"
+      title="Virtual experiment interface"
+      heading1="Check"
+      heading2="Info"
+      heading3="Status"
+      :structuredListData="VEInterfaceData"
+    />
 
-      <!-- Developer metadata modal -->
-      <St4sdModal
-        id="developer-metadata-modal"
-        title="Developer metadata"
-        heading1="Check"
-        heading2="Info"
-        heading3="Status"
-        :structuredListData="developerMetadataData"
-      />
+    <!-- Developer metadata modal -->
+    <St4sdModal
+      id="developer-metadata-modal"
+      title="Developer metadata"
+      heading1="Check"
+      heading2="Info"
+      heading3="Status"
+      :structuredListData="developerMetadataData"
+    />
 
-      <!-- Best practices modal -->
-      <St4sdModal
-        id="best-practices-modal"
-        title="Summary"
-        heading1="Check"
-        heading2="Score"
-        heading3="Status"
-        :structuredListData="bestPracticesData"
-      />
-    </template>
-  </div>
+    <!-- Best practices modal -->
+    <St4sdModal
+      id="best-practices-modal"
+      title="Summary"
+      heading1="Check"
+      heading2="Score"
+      heading3="Status"
+      :structuredListData="bestPracticesData"
+    />
+  </template>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/progress-indicator.min.js";
 import {
   checkContainerImagesHaveTagOtherThanLatest,
   checkBasePackagesHaveCommitOrTag,
@@ -246,6 +258,9 @@ export default {
   mounted() {
     window.addEventListener("resize", this.getWidth);
     this.getWidth();
+
+    // AP: This is required because of 
+    // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11891
     document
       .getElementById("strongVersioning")
       .setAttribute(
@@ -361,9 +376,9 @@ export default {
     contrast(94%);
 }
 
-@media screen and (max-width: 1055px) and (min-width: 672px) {
-  .mediumHorizontalSpacing {
-    width: 25%;
-  }
+// AP: required because of
+// https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11890
+cds-progress-step {
+  min-block-size: 6rem;
 }
 </style>
