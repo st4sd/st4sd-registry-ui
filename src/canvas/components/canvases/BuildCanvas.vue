@@ -168,13 +168,13 @@
       @closeSidePanel="toggleVisibility('createEdgeSidePanel')"
       @created="addEdge"
     />
-    <updateEdgeModal
-      v-if="componentVisibilities.updateEdgeModal.value"
+    <updateEdgeSidePanel
+      v-if="componentVisibilities.updateEdgeSidePanel.value"
       :edgeProp="selectedEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @bx-modal-closed="toggleVisibility('updateEdgeModal')"
-      @update="toggleVisibility('updateEdgeModal')"
+      @closeSidePanel="toggleVisibility('updateEdgeSidePanel')"
+      @update="toggleVisibility('updateEdgeSidePanel')"
       @delete="openDeleteModal"
     />
     <!-- Nesting -->
@@ -278,7 +278,7 @@ import { useRoute } from "vue-router";
 import TemplateWorkspace from "@/canvas/components/TemplateWorkspace.vue";
 //Modals
 import createEdgeSidePanel from "@/canvas/components/sidePanels/edges/createEdgeSidePanel.vue";
-import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
+import updateEdgeSidePanel from "@/canvas/components/sidePanels/edges/updateEdgeSidePanel.vue";
 import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
 import updateWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/updateWorkflowSidePanel.vue";
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
@@ -484,7 +484,7 @@ const onDragOver = (event) => {
 let componentVisibilities = {
   createWorkflowSidePanel: ref(false),
   createEdgeSidePanel: ref(false),
-  updateEdgeModal: ref(false),
+  updateEdgeSidePanel: ref(false),
   updateWorkflowSidePanel: ref(false),
   updateComponentModal: ref(false),
   updateComponentSidePanel: ref(false),
@@ -730,7 +730,7 @@ onConnect((edgeInProgress) => {
   if (existingEdge != undefined) {
     selectedEdge = existingEdge;
     nodeType = "connection";
-    toggleVisibility("updateEdgeModal");
+    toggleVisibility("updateEdgeSidePanel");
   } else if (isConnectionValid(newEdge, findNode)) {
     toggleVisibility("createEdgeSidePanel");
   }
@@ -741,7 +741,7 @@ let selectedEdge;
 onEdgeDoubleClick(({ edge }) => {
   selectedEdge = edge;
   nodeType = "connection";
-  toggleVisibility("updateEdgeModal");
+  toggleVisibility("updateEdgeSidePanel");
 });
 
 const addEdge = (newEdge) => {
@@ -847,7 +847,7 @@ const openDeleteModal = () => {
   } else if (nodeType == "component") {
     toggleVisibility("updateComponentSidePanel");
   } else if (nodeType == "connection") {
-    toggleVisibility("updateEdgeModal");
+    toggleVisibility("updateEdgeSidePanel");
   }
 };
 

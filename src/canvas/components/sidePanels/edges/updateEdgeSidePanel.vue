@@ -1,13 +1,13 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <bx-modal open class="no-transform">
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading data-modal-primary-focus
-        >Configure how &lt;{{ targetNode.label }}&gt; consumes the outputs of
-        &lt;{{ sourceNode.label }}&gt;</bx-modal-heading
-      >
-    </bx-modal-header>
-    <bx-modal-body>
+  <cds-side-panel
+    open
+    size="lg"
+    includeOverlay="true"
+    :title="`Configure how <${targetNode.label}> consumes the outputs of <${sourceNode.label}>`"
+    @cds-side-panel-closed="$emit('closeSidePanel')"
+  >
+    <div>
       <edgeForm
         v-if="loaded"
         ref="edgeForm"
@@ -20,30 +20,29 @@
         @updated="updated"
       />
       <br />
-      <bx-btn kind="danger" @click="emitDelete">
+      <cds-button kind="danger" @click="emitDelete">
         Delete this connection &nbsp;
         <img
+          slot="icon"
           class="white-svg"
           width="18"
           height="18"
           src="@/assets/trash-can.svg"
         />
-      </bx-btn>
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button kind="secondary" data-modal-close
-        >Cancel</bx-modal-footer-button
-      >
-      <bx-modal-footer-button kind="primary" type="submit" @click="update"
-        >Save</bx-modal-footer-button
-      >
-    </bx-modal-footer>
-  </bx-modal>
+      </cds-button>
+    </div>
+    <cds-button slot="actions" kind="secondary" @click="$emit('closeSidePanel')"
+      >Cancel</cds-button
+    >
+    <cds-button kind="primary" type="submit" slot="actions" @click="update">
+      Save
+    </cds-button>
+  </cds-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/modal/index.js";
-import "@carbon/web-components/es/components/button/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/side-panel.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 import edgeForm from "@/canvas/components/forms/edgeForm.vue";
 import { getSourceAndTargetNodes } from "@/canvas/functions/modalFunctions";
 
@@ -54,7 +53,7 @@ export default {
     allNodes: Object,
     allEdges: Object,
   },
-  emits: ["update", "delete"],
+  emits: ["update", "delete", "closeSidePanel"],
   data() {
     return {
       sourceNode: {},
@@ -88,11 +87,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
-@import "@/styles/delete-button-icon-inside-cell-style.css";
-@import "@/styles/bx-accordion-styles.css";
-@import "@/styles/bx-modal-styles.css";
-
-.padding-top {
-  padding-top: 1.5rem;
-}
 </style>
