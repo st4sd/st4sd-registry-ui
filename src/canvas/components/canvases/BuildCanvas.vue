@@ -128,20 +128,22 @@
       @added="addWorkflow"
       @closeSidePanel="toggleVisibility('createWorkflowSidePanel')"
     />
-    <updateWorkflowModal
-      v-if="componentVisibilities.updateWorkflowModal.value"
+    <updateWorkflowSidePanel
+      v-if="componentVisibilities.updateWorkflowSidePanel.value"
       :node="selectedNode"
+      :allEdges="allEdges"
       :allNodes="allNodes"
       :parentNode="parentNode"
       :dslValidationErrorProp="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
-      @bx-modal-closed="toggleVisibility('updateWorkflowModal')"
-      @openShowDslErrors="toggleVisibility('showDslErrors')"
+      :dslValidationErrors="dslValidationErrors"
+      :setDslValidationErrorFunction="setDslValidationError"
+      @closeSidePanel="toggleVisibility('updateWorkflowSidePanel')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
       @addToTemplateWorkspace="addToTemplateWorkspace"
-      @updateWorkflowModalNotification="updateBuildCanvasNotifications"
+      @updateWorkflowSidePanelNotification="updateBuildCanvasNotifications"
     />
     <UpdateComponentSidePanel
       v-if="componentVisibilities.updateComponentSidePanel.value"
@@ -278,7 +280,7 @@ import TemplateWorkspace from "@/canvas/components/TemplateWorkspace.vue";
 import createEdgeSidePanel from "@/canvas/components/sidePanels/edges/createEdgeSidePanel.vue";
 import updateEdgeModal from "@/canvas/components/modals/edges/updateEdgeModal.vue";
 import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
-import updateWorkflowModal from "@/canvas/components/modals/st4sd_workflows/updateWorkflowModal.vue";
+import updateWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/updateWorkflowSidePanel.vue";
 import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
@@ -483,7 +485,7 @@ let componentVisibilities = {
   createWorkflowSidePanel: ref(false),
   createEdgeSidePanel: ref(false),
   updateEdgeModal: ref(false),
-  updateWorkflowModal: ref(false),
+  updateWorkflowSidePanel: ref(false),
   updateComponentModal: ref(false),
   updateComponentSidePanel: ref(false),
   selectEntryPointModal: ref(false),
@@ -776,7 +778,7 @@ onNodeDoubleClick(({ node }) => {
       parentNode = findNode(selectedNode.parentNode);
     }
     nodeType = "workflow";
-    toggleVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowSidePanel");
   }
 });
 function getChildrenNodes(parentNode, validNodes, childrenNodes) {
@@ -841,7 +843,7 @@ const openDeleteModal = () => {
   toggleVisibility("deleteModal");
   //close update modals
   if (nodeType == "workflow") {
-    toggleVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowSidePanel");
   } else if (nodeType == "component") {
     toggleVisibility("updateComponentSidePanel");
   } else if (nodeType == "connection") {
@@ -869,7 +871,7 @@ const removeParentNode = () => {
   updateNodeLabel(selectedNode);
   removeConnectingEdges(selectedNode);
   if (nodeType == "workflow") {
-    toggleVisibility("updateWorkflowModal");
+    toggleVisibility("updateWorkflowSidePanel");
   } else if (nodeType == "component") {
     toggleVisibility("updateComponentSidePanel");
   }
