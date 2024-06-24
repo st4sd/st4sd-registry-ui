@@ -178,12 +178,12 @@
       @delete="openDeleteModal"
     />
     <!-- Nesting -->
-    <nestNodeModal
-      v-if="componentVisibilities.nestingModal.value"
+    <nestNodeSidePanel
+      v-if="componentVisibilities.nestNodeSidePanel.value"
       :toBeNestedNode="nestingNode"
       :nestingWorkflows="nestingWFs"
       :allNodes="allNodes"
-      @bx-modal-closed="toggleVisibility('nestingModal')"
+      @closeSidePanel="toggleVisibility('nestNodeSidePanel')"
       @done="addStep"
     />
     <!-- Experiment configuration -->
@@ -281,7 +281,7 @@ import createEdgeSidePanel from "@/canvas/components/sidePanels/edges/createEdge
 import updateEdgeSidePanel from "@/canvas/components/sidePanels/edges/updateEdgeSidePanel.vue";
 import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
 import updateWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/updateWorkflowSidePanel.vue";
-import nestNodeModal from "@/canvas/components/modals/st4sd_workflows/nestNodeModal.vue";
+import nestNodeSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/nestNodeSidePanel.vue";
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/sidePanels/experiment/registerExperiment.vue";
@@ -489,7 +489,7 @@ let componentVisibilities = {
   updateComponentModal: ref(false),
   updateComponentSidePanel: ref(false),
   selectEntryPointModal: ref(false),
-  nestingModal: ref(false),
+  nestNodeSidePanel: ref(false),
   stepExecuteModal: ref(false),
   deleteModal: ref(false),
   fileUploadModal: ref(false),
@@ -715,7 +715,7 @@ onNodeDragStop((event) => {
   if (isNesting) {
     nestingNode = { ...event.node };
     nestingWFs = nestingWorkflows;
-    toggleVisibility("nestingModal");
+    toggleVisibility("nestNodeSidePanel");
   }
 });
 
@@ -927,7 +927,7 @@ const onChangeVisibility = (node, isHidden) => {
 };
 
 const addStep = () => {
-  toggleVisibility("nestingModal");
+  toggleVisibility("nestNodeSidePanel");
 };
 
 onMounted(() => {

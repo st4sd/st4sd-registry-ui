@@ -1,29 +1,30 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <bx-modal open>
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-heading
-        >Add <u>{{ toBeNestedNode.label }}</u> to a workflow</bx-modal-heading
-      >
-    </bx-modal-header>
-    <bx-modal-body>
+  <cds-side-panel
+    open
+    size="lg"
+    includeOverlay="true"
+    :title="`Add <${toBeNestedNode.label}> to a workflow`"
+    @cds-side-panel-closed="$emit('closeSidePanel')"
+  >
+    <div>
       <p>Choose a workflow:</p>
       <br />
-      <bx-radio-button-group
+      <cds-radio-button-group
         name="nestOptions"
         orientation="vertical"
         :value="selectedWorkflowId"
-        @bx-radio-button-group-changed="
+        @cds-radio-button-group-changed="
           selectedWorkflowId = $event.detail.value
         "
       >
         <template v-for="(node, i) in nestingWorkflows" :key="i">
-          <bx-radio-button
+          <cds-radio-button
             :label-text="node.label"
             :value="node.id"
-          ></bx-radio-button>
+          ></cds-radio-button>
         </template>
-      </bx-radio-button-group>
+      </cds-radio-button-group>
       <br />
       <div v-if="this.selectedWorkflowId != ''">
         <p>
@@ -54,25 +55,21 @@
           </template>
         </p>
       </div>
-    </bx-modal-body>
-
-    <bx-modal-footer>
-      <bx-modal-footer-button
-        kind="secondary"
-        data-modal-close
-        @click="resetSelection"
-        >Cancel</bx-modal-footer-button
-      >
-
-      <bx-modal-footer-button kind="primary" type="submit" @click="nest"
-        >Submit</bx-modal-footer-button
-      >
-    </bx-modal-footer>
-  </bx-modal>
+    </div>
+    <cds-button slot="actions" kind="secondary" @click="$emit('closeSidePanel')"
+      >Cancel</cds-button
+    >
+    <cds-button kind="primary" type="submit" slot="actions" @click="nest">
+      Submit
+    </cds-button>
+  </cds-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/radio-button/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/radio-button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/side-panel.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/text-input.min.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 
 export default {
@@ -81,7 +78,7 @@ export default {
     toBeNestedNode: Object,
     allNodes: Object,
   },
-  emits: ["done", "nestedNode", "updatedWorkflow"],
+  emits: ["done", "nestedNode", "updatedWorkflow", "closeSidePanel"],
   data() {
     return {
       allSteps: null,
