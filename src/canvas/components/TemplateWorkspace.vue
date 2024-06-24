@@ -84,10 +84,10 @@
         onUpdateCreateComponentModalNotification
       "
     />
-    <readWorkflowModal
-      v-if="modalVisibilities.readWorkflowModal.value"
+    <readWorkflowSidePanel
+      v-if="modalVisibilities.readWorkflowSidePanel.value"
       title="Workflow Details"
-      @bx-modal-closed="toggleModalVisibility('readWorkflowModal')"
+      @closeSidePanel="toggleModalVisibility('readWorkflowSidePanel')"
       :node="clickedNode"
       :inputingEdges="[]"
       :shareEnabled="
@@ -136,7 +136,7 @@ import { ref } from "vue";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
 import { canvasStore } from "@/canvas/stores/canvasStore";
-import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
+import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/readWorkflowSidePanel.vue";
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import createComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/createComponentSidePanel.vue";
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
@@ -203,7 +203,7 @@ getNodesFromUrls().then((data) => {
 
 let modalVisibilities = {
   readComponentSidePanel: ref(false),
-  readWorkflowModal: ref(false),
+  readWorkflowSidePanel: ref(false),
   createComponentSidePanel: ref(false),
   confirmDeleteModal: ref(false),
 };
@@ -303,7 +303,7 @@ async function deleteTemplate(template) {
   readModalRequestInProgress.value = false;
 
   if (template.type == "workflow") {
-    toggleModalVisibility("readWorkflowModal");
+    toggleModalVisibility("readWorkflowSidePanel");
   }
 
   if (template.type == "component") {
@@ -432,7 +432,7 @@ let clickedNode;
 const onDoubleClick = (node) => {
   clickedNode = { ...node };
   if (node.type == "workflow") {
-    toggleModalVisibility("readWorkflowModal");
+    toggleModalVisibility("readWorkflowSidePanel");
   } else if (node.type == "component") {
     toggleModalVisibility("readComponentSidePanel");
   }

@@ -78,10 +78,10 @@
       are populated, if it's rendered on start and the modal 
       is toggled with open/close then the prop data will not 
       be passed to the modal and the modal will appear empty -->
-    <readWorkflowModal
-      v-if="modalVisibilities.readWorkflowModal.value"
+    <readWorkflowSidePanel
+      v-if="modalVisibilities.readWorkflowSidePanel.value"
       title="Workflow Details"
-      @bx-modal-closed="toggleModalVisibility('readWorkflowModal')"
+      @closeSidePanel="toggleModalVisibility('readWorkflowSidePanel')"
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
@@ -126,7 +126,7 @@ import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
 import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 //Modals
 import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
-import readWorkflowModal from "@/canvas/components/modals/st4sd_workflows/readWorkflowModal.vue";
+import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/readWorkflowSidePanel.vue";
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
 //Functions
@@ -154,7 +154,7 @@ let inputingEdges;
 let modalVisibilities = {
   readEdgeModal: ref(false),
   readComponentSidePanel: ref(false),
-  readWorkflowModal: ref(false),
+  readWorkflowSidePanel: ref(false),
   readExperimentInputsModal: ref(false),
 };
 const dark = ref(false);
@@ -219,7 +219,7 @@ onNodeDoubleClick(({ node }) => {
   clickedNode = { ...node };
   inputingEdges = edges.value.filter((n) => n.target == node.id);
   if (node.type == "workflow") {
-    toggleModalVisibility("readWorkflowModal");
+    toggleModalVisibility("readWorkflowSidePanel");
     //node type to change to component instead of empty string
     //there is an issue to track this
     //https://github.ibm.com/st4sd/overview/issues/517
