@@ -100,9 +100,9 @@
       :node="clickedNode"
       open="true"
     />
-    <readEdgeModal
-      v-if="modalVisibilities.readEdgeModal.value"
-      @bx-modal-closed="toggleModalVisibility('readEdgeModal')"
+    <readEdgeSidePanel
+      v-if="modalVisibilities.readEdgeSidePanel.value"
+      @closeSidePanel="toggleModalVisibility('readEdgeSidePanel')"
       :edge="clickedEdge"
       open="true"
     />
@@ -125,7 +125,7 @@ import WorkflowInputNode from "@/canvas/components/node_types/WorkflowInputNode.
 import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
 import WorkflowNode from "@/canvas/components/node_types/WorkflowNode.vue";
 //Modals
-import readEdgeModal from "@/canvas/components/modals/edges/readEdgeModal.vue";
+import readEdgeSidePanel from "@/canvas/components/sidePanels/edges/readEdgeSidePanel.vue";
 import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/readWorkflowSidePanel.vue";
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
@@ -152,7 +152,7 @@ let clickedNode;
 let clickedEdge;
 let inputingEdges;
 let modalVisibilities = {
-  readEdgeModal: ref(false),
+  readEdgeSidePanel: ref(false),
   readComponentSidePanel: ref(false),
   readWorkflowSidePanel: ref(false),
   readExperimentInputsModal: ref(false),
@@ -232,7 +232,7 @@ onNodeDoubleClick(({ node }) => {
 
 onEdgeDoubleClick(({ edge }) => {
   clickedEdge = { ...edge };
-  toggleModalVisibility("readEdgeModal");
+  toggleModalVisibility("readEdgeSidePanel");
 });
 
 /**
