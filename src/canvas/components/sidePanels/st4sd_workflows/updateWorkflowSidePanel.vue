@@ -127,7 +127,6 @@ export default {
     "delete",
     "removeParent",
     "stepDeleted",
-    "openShowDslErrors",
     "addToTemplateWorkspace",
     "updateWorkflowSidePanelNotification",
     "closeSidePanel",

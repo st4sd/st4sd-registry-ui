@@ -211,15 +211,6 @@
       :allNodes="allNodes"
       :allEdges="allEdges"
     />
-    <ShowDslValidationErrorsModal
-      open
-      v-if="componentVisibilities.showDslErrors.value"
-      @bx-modal-closed="toggleVisibility('showDslErrors')"
-      @dslValidationError="setDslValidationError"
-      :dslErrorsProp="dslValidationErrors"
-      :allNodes="allNodes"
-      :allEdges="allEdges"
-    />
     <!-- Confirm Modals -->
     <!-- Confirm upload files-->
     <confirmModal
@@ -285,7 +276,6 @@ import nestNodeSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/ne
 import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/sidePanels/experiment/registerExperiment.vue";
-import ShowDslValidationErrorsModal from "@/canvas/components/modals/experiment/showDslValidationErrorsModal.vue";
 
 //Confirm Modal
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
@@ -496,7 +486,6 @@ let componentVisibilities = {
   registerExperimentSidePanel: ref(false),
   confirmUploadModal: ref(false),
   resetConfirmModal: ref(false),
-  showDslErrors: ref(false),
 };
 
 let uploadedFilesConents;
