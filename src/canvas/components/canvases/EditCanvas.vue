@@ -91,9 +91,9 @@
       open="true"
     >
     </readComponentSidePanel>
-    <readExperimentInputsModal
-      v-if="modalVisibilities.readExperimentInputsModal.value"
-      @bx-modal-closed="toggleModalVisibility('readExperimentInputsModal')"
+    <readExperimentInputsSidePanel
+      v-if="modalVisibilities.readExperimentInputsSidePanel.value"
+      @closeSidePanel="toggleModalVisibility('readExperimentInputsSidePanel')"
       :node="clickedNode"
       open="true"
     />
@@ -124,7 +124,7 @@ import ComponentNode from "@/canvas/components/node_types/ComponentNode.vue";
 //Modals
 import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/readWorkflowSidePanel.vue";
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
-import readExperimentInputsModal from "@/canvas/components/modals/experiment/readExperimentInputsModal.vue";
+import readExperimentInputsSidePanel from "@/canvas/components/sidePanels/experiment/readExperimentInputsSidePanel.vue";
 import readEdgeSidePanel from "@/canvas/components/sidePanels/edges/readEdgeSidePanel.vue";
 import { downloadExperiment } from "@/canvas/functions/downloadJSON";
 import {
@@ -161,7 +161,7 @@ let inputingEdges;
 
 let modalVisibilities = {
   readEdgeSidePanel: ref(false),
-  readExperimentInputsModal: ref(false),
+  readExperimentInputsSidePanel: ref(false),
   readComponentSidePanel: ref(false),
   readWorkflowSidePanel: ref(false),
 };
@@ -235,7 +235,7 @@ onNodeDoubleClick(({ node }) => {
     inputingEdges = edges.value.filter((n) => n.target == node.id);
     toggleModalVisibility("readComponentSidePanel");
   } else if (node.type == "input") {
-    toggleModalVisibility("readExperimentInputsModal");
+    toggleModalVisibility("readExperimentInputsSidePanel");
   }
 });
 
