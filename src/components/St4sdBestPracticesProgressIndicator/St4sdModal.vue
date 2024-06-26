@@ -1,11 +1,11 @@
 <template>
-  <bx-modal class="no-transform">
-    <bx-modal-header>
-      <bx-modal-close-button></bx-modal-close-button>
-      <bx-modal-label>ST4SD Best Practices</bx-modal-label>
-      <bx-modal-heading>{{ title }}</bx-modal-heading>
-    </bx-modal-header>
-    <bx-modal-body>
+  <cds-modal class="no-transform">
+    <cds-modal-header>
+      <cds-modal-close-button></cds-modal-close-button>
+      <cds-modal-label>ST4SD Best Practices</cds-modal-label>
+      <cds-modal-heading>{{ title }}</cds-modal-heading>
+    </cds-modal-header>
+    <cds-modal-body>
       <cds-structured-list>
         <cds-structured-list-head>
           <cds-structured-list-header-row>
@@ -35,9 +35,9 @@
               v-if="row.col2Type == 'info'"
               class="center"
             >
-              <cds-tooltip align="bottom">
+              <cds-tooltip align="top-right">
                 <div class="sb-tooltip-trigger" aria-labelledby="content">
-                  <img width="16" height="16" src="../../assets/info.svg" />
+                  <img width="16" height="16" src="@/assets/info.svg" />
                 </div>
                 <cds-tooltip-content id="content">
                   {{ row.col2 }}
@@ -53,25 +53,21 @@
               v-html="row.col3"
             ></cds-structured-list-cell>
           </cds-structured-list-row>
-
-          <!-- cv-tooltip seems to have a bug that autofocuses the last cv-tooltip on the page -->
-          <!-- included this 'invisible' cv-tooltip to prevent auto focus on the displayed cv-tooltips -->
-          <bx-tooltip style="position: absolute; top: -1000px"></bx-tooltip>
-          <!-- -------------------------------------- -->
         </cds-structured-list-body>
       </cds-structured-list>
-    </bx-modal-body>
-    <bx-modal-footer>
-      <bx-modal-footer-button class="focus" kind="primary" data-modal-close
-        >Close</bx-modal-footer-button
+    </cds-modal-body>
+    <cds-modal-footer>
+      <cds-modal-footer-button kind="primary" data-modal-close
+        >Close</cds-modal-footer-button
       >
-    </bx-modal-footer>
-  </bx-modal>
+    </cds-modal-footer>
+  </cds-modal>
 </template>
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tooltip.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
 export default {
   name: "St4sdModal",
   props: {
@@ -85,7 +81,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-@import "@/styles/bx-modal-styles.css";
 .center {
   text-align: center;
 }
