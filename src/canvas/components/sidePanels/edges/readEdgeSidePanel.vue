@@ -4,7 +4,7 @@
     size="lg"
     includeOverlay="true"
     title="Edge Parameters"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <cds-structured-list>
       <cds-structured-list-head>

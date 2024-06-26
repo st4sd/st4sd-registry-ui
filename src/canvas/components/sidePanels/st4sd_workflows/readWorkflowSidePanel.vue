@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     :title="this.title"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
     selectorInitialFocus="#firstAccordionItem"
   >
     <cds-accordion>

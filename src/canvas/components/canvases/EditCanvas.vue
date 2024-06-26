@@ -76,7 +76,7 @@
     <readWorkflowSidePanel
       v-if="modalVisibilities.readWorkflowSidePanel.value"
       title="Workflow Details"
-      @closeSidePanel="toggleModalVisibility('readWorkflowSidePanel')"
+      @side-panel-closed="toggleModalVisibility('readWorkflowSidePanel')"
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
@@ -85,7 +85,7 @@
     <readComponentSidePanel
       v-if="modalVisibilities.readComponentSidePanel.value"
       title="Component Details"
-      @closeSidePanel="toggleModalVisibility('readComponentSidePanel')"
+      @side-panel-closed="toggleModalVisibility('readComponentSidePanel')"
       :node="clickedNode"
       :inputingEdges="inputingEdges"
       open="true"
@@ -93,13 +93,15 @@
     </readComponentSidePanel>
     <readExperimentInputsSidePanel
       v-if="modalVisibilities.readExperimentInputsSidePanel.value"
-      @closeSidePanel="toggleModalVisibility('readExperimentInputsSidePanel')"
+      @side-panel-closed="
+        toggleModalVisibility('readExperimentInputsSidePanel')
+      "
       :node="clickedNode"
       open="true"
     />
     <readEdgeSidePanel
       v-if="modalVisibilities.readEdgeSidePanel.value"
-      @closeSidePanel="toggleModalVisibility('readEdgeSidePanel')"
+      @side-panel-closed="toggleModalVisibility('readEdgeSidePanel')"
       :edge="clickedEdge"
       open="true"
     />

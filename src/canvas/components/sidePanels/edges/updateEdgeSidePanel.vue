@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     :title="`Configure how <${targetNode.label}> consumes the outputs of <${sourceNode.label}>`"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <div>
       <edgeForm
@@ -31,7 +31,7 @@
         />
       </cds-button>
     </div>
-    <cds-button slot="actions" kind="secondary" @click="$emit('closeSidePanel')"
+    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button kind="primary" type="submit" slot="actions" @click="update">
@@ -53,7 +53,7 @@ export default {
     allNodes: Object,
     allEdges: Object,
   },
-  emits: ["update", "delete", "closeSidePanel"],
+  emits: ["update", "delete", "side-panel-closed"],
   data() {
     return {
       sourceNode: {},

@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     :title="`Add <${toBeNestedNode.label}> to a workflow`"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <div>
       <p>Choose a workflow:</p>
@@ -56,7 +56,7 @@
         </p>
       </div>
     </div>
-    <cds-button slot="actions" kind="secondary" @click="$emit('closeSidePanel')"
+    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button kind="primary" type="submit" slot="actions" @click="nest">
@@ -78,7 +78,7 @@ export default {
     toBeNestedNode: Object,
     allNodes: Object,
   },
-  emits: ["done", "nestedNode", "updatedWorkflow", "closeSidePanel"],
+  emits: ["done", "nestedNode", "updatedWorkflow", "side-panel-closed"],
   data() {
     return {
       allSteps: null,

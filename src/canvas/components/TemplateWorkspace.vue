@@ -79,7 +79,7 @@
         )
       "
       @componentAdded="addComponentNode"
-      @sidePanelClosed="toggleModalVisibility('createComponentSidePanel')"
+      @side-panel-closed="toggleModalVisibility('createComponentSidePanel')"
       @updateCreateComponentModalNotification="
         onUpdateCreateComponentModalNotification
       "
@@ -87,7 +87,7 @@
     <readWorkflowSidePanel
       v-if="modalVisibilities.readWorkflowSidePanel.value"
       title="Workflow Details"
-      @closeSidePanel="toggleModalVisibility('readWorkflowSidePanel')"
+      @side-panel-closed="toggleModalVisibility('readWorkflowSidePanel')"
       :node="clickedNode"
       :inputingEdges="[]"
       :shareEnabled="
@@ -104,7 +104,7 @@
     <readComponentSidePanel
       v-if="modalVisibilities.readComponentSidePanel.value"
       title="Component Details"
-      @closeSidepanel="toggleModalVisibility('readComponentSidePanel')"
+      @side-panel-closed="toggleModalVisibility('readComponentSidePanel')"
       :node="clickedNode"
       :inputingEdges="[]"
       :shareEnabled="

@@ -259,7 +259,7 @@ export default {
     window.addEventListener("resize", this.getWidth);
     this.getWidth();
 
-    // AP: This is required because of 
+    // AP: This is required because of
     // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11891
     document
       .getElementById("strongVersioning")

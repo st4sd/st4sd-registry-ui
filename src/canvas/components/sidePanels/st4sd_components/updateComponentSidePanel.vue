@@ -9,7 +9,7 @@
     "
     :currentStep="this.step"
     @cds-side-panel-navigate-back="this.step = 0"
-    @cds-side-panel-closed="this.closeSidePanel"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <div>
       <div v-if="this.step == 1">
@@ -76,7 +76,7 @@
       v-if="this.step == 0"
       slot="actions"
       kind="secondary"
-      @click="this.closeSidePanel"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button v-else slot="actions" kind="secondary" @click="this.step = 0"
@@ -116,7 +116,7 @@ export default {
     setDslValidationErrorFunction: Function,
   },
   emits: [
-    "sidePanelClosed",
+    "side-panel-closed",
     "updateComponentModalNotification",
     "delete",
     "removeParent",
@@ -140,9 +140,6 @@ export default {
     }
   },
   methods: {
-    closeSidePanel() {
-      this.$emit("sidePanelClosed");
-    },
     emitDelete() {
       this.$emit("delete");
     },

@@ -6,14 +6,14 @@
     includeOverlay="true"
     title="Create component"
     selector-initial-focus="#createComponentSidePanel"
-    @cds-side-panel-closed="closeSidePanel"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <componentForm
       ref="componentForm"
       @add="addComponent"
       @invalid="submitDisabled"
     />
-    <cds-button slot="actions" kind="secondary" @click="closeSidePanel"
+    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button
@@ -38,7 +38,7 @@ export default {
   emits: [
     "componentAdded",
     "updateCreateComponentModalNotification",
-    "sidePanelClosed",
+    "side-panel-closed",
   ],
   props: {
     existingTemplates: Set,
@@ -49,9 +49,6 @@ export default {
     };
   },
   methods: {
-    closeSidePanel() {
-      this.$emit("sidePanelClosed");
-    },
     removeEmptyString(obj) {
       Object.keys(obj).forEach((k) => obj[k] === "" && delete obj[k]);
       return obj;

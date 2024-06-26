@@ -4,7 +4,7 @@
     size="lg"
     includeOverlay="true"
     :title="`${this.node.label} details`"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <cds-structured-list>
       <cds-structured-list-head>

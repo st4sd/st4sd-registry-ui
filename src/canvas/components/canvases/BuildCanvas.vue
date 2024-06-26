@@ -126,7 +126,7 @@
     <createWorkflowSidePanel
       v-if="componentVisibilities.createWorkflowSidePanel.value"
       @added="addWorkflow"
-      @closeSidePanel="toggleVisibility('createWorkflowSidePanel')"
+      @side-panel-closed="toggleVisibility('createWorkflowSidePanel')"
     />
     <updateWorkflowSidePanel
       v-if="componentVisibilities.updateWorkflowSidePanel.value"
@@ -138,7 +138,7 @@
       :templatesNamesSet="templatesNamesSet"
       :dslValidationErrors="dslValidationErrors"
       :setDslValidationErrorFunction="setDslValidationError"
-      @closeSidePanel="toggleVisibility('updateWorkflowSidePanel')"
+      @side-panel-closed="toggleVisibility('updateWorkflowSidePanel')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @stepDeleted="removeConnectingEdges"
@@ -154,7 +154,7 @@
       :dslValidationErrors="dslValidationErrors"
       :templatesNamesSet="templatesNamesSet"
       :setDslValidationErrorFunction="setDslValidationError"
-      @sidePanelClosed="toggleVisibility('updateComponentSidePanel')"
+      @side-panel-closed="toggleVisibility('updateComponentSidePanel')"
       @delete="openDeleteModal"
       @removeParent="removeParentNode"
       @addToTemplateWorkspace="addToTemplateWorkspace"
@@ -165,7 +165,7 @@
       :edgeProp="newEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @closeSidePanel="toggleVisibility('createEdgeSidePanel')"
+      @side-panel-closed="toggleVisibility('createEdgeSidePanel')"
       @created="addEdge"
     />
     <updateEdgeSidePanel
@@ -173,7 +173,7 @@
       :edgeProp="selectedEdge"
       :allNodes="allNodes"
       :allEdges="allEdges"
-      @closeSidePanel="toggleVisibility('updateEdgeSidePanel')"
+      @side-panel-closed="toggleVisibility('updateEdgeSidePanel')"
       @update="toggleVisibility('updateEdgeSidePanel')"
       @delete="openDeleteModal"
     />
@@ -183,7 +183,7 @@
       :toBeNestedNode="nestingNode"
       :nestingWorkflows="nestingWFs"
       :allNodes="allNodes"
-      @closeSidePanel="toggleVisibility('nestNodeSidePanel')"
+      @side-panel-closed="toggleVisibility('nestNodeSidePanel')"
       @done="addStep"
     />
     <!-- Experiment configuration -->
@@ -203,7 +203,7 @@
     <registerExperiment
       open
       v-if="componentVisibilities.registerExperimentSidePanel.value"
-      @sidePanelClosed="toggleVisibility('registerExperimentSidePanel')"
+      @side-panel-closed="toggleVisibility('registerExperimentSidePanel')"
       :dslValidationErrors="dslValidationErrors"
       :setDslValidationErrorFunction="setDslValidationError"
       @dslValidationError="setDslValidationError"

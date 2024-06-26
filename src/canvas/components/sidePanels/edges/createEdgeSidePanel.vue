@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     :title="`Configure how <${targetNode.label}> consumes the outputs of <${sourceNode.label}>`"
-    @cds-side-panel-closed="closeSidePanel"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <edgeForm
       v-if="loaded"
@@ -18,7 +18,7 @@
       :sourceNodeType="sourceNodeType"
       @created="created"
     />
-    <cds-button slot="actions" kind="secondary" @click="closeSidePanel"
+    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button kind="primary" type="submit" slot="actions" @click="create">
@@ -40,7 +40,7 @@ export default {
     allNodes: Object,
     allEdges: Object,
   },
-  emits: ["created", "closeSidePanel"],
+  emits: ["created", "side-panel-closed"],
   data() {
     return {
       sourceNode: {},
@@ -59,9 +59,6 @@ export default {
     }
   },
   methods: {
-    closeSidePanel() {
-      this.$emit("closeSidePanel");
-    },
     create() {
       this.$refs.edgeForm.create();
     },

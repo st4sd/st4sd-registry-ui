@@ -7,7 +7,7 @@
     :title="this.step == 0 ? 'Register Experiment' : 'DSL Validation Errors'"
     :currentStep="this.step"
     @cds-side-panel-navigate-back="this.step = 0"
-    @cds-side-panel-closed="this.closeSidePanel"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <div v-if="this.step == 1">
       <DslValidationErrors
@@ -62,7 +62,7 @@
       v-if="this.step == 0"
       slot="actions"
       kind="secondary"
-      @click="this.closeSidePanel"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button v-else slot="actions" kind="secondary" @click="this.step = 0"
@@ -102,7 +102,7 @@ export default {
     dslValidationErrors: Array,
     setDslValidationErrorFunction: Function,
   },
-  emits: ["dslValidationError", "sidePanelClosed"],
+  emits: ["dslValidationError", "side-panel-closed"],
   data() {
     return {
       experimentName: null,
@@ -134,9 +134,6 @@ export default {
   },
   methods: {
     postDslForValidation,
-    closeSidePanel() {
-      this.$emit("sidePanelClosed");
-    },
     validateDsl() {
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);

@@ -7,7 +7,7 @@
     :title="step == 0 ? 'Update workflow details' : 'DSL Validation Errors'"
     :currentStep="step"
     @cds-side-panel-navigate-back="step = 0"
-    @cds-side-panel-closed="$emit('closeSidePanel')"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <div v-if="this.step == 1">
       <DslValidationErrors
@@ -79,7 +79,7 @@
       v-if="step == 0"
       slot="actions"
       kind="secondary"
-      @click="$emit('closeSidePanel')"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button v-else slot="actions" kind="secondary" @click="step = 0"
@@ -129,7 +129,7 @@ export default {
     "stepDeleted",
     "addToTemplateWorkspace",
     "updateWorkflowSidePanelNotification",
-    "closeSidePanel",
+    "side-panel-closed",
   ],
   mounted() {
     if (

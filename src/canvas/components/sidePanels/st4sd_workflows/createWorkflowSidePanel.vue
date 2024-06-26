@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     title="Create workflow"
-    @cds-side-panel-closed="closeSidePanel"
+    @cds-side-panel-closed="$emit('side-panel-closed')"
     selector-initial-focus="#createWorkflowSidePanel"
   >
     <workflowForm
@@ -13,7 +13,7 @@
       @workflowAdded="workflowAdded"
       @validityChanged="updateIsSubmitButtonDisabled"
     />
-    <cds-button slot="actions" kind="secondary" @click="closeSidePanel"
+    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button
@@ -35,16 +35,13 @@ import workflowForm from "@/canvas/components/forms/workflowForm.vue";
 
 export default {
   components: { workflowForm },
-  emits: ["added", "closeSidePanel"],
+  emits: ["added", "side-panel-closed"],
   data() {
     return {
       isSubmitButtonDisabled: true,
     };
   },
   methods: {
-    closeSidePanel() {
-      this.$emit("closeSidePanel");
-    },
     addWorkflow() {
       this.$refs.workflowForm.add();
     },
