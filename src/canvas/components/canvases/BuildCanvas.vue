@@ -340,6 +340,7 @@ const {
   addNodes,
   onEdgeDoubleClick,
   onNodeDoubleClick,
+  getIntersectingNodes,
   removeEdges,
   removeNodes,
   findNode,
@@ -698,7 +699,7 @@ let nestingWFs = [];
 onNodeDragStop((event) => {
   let { isNesting, nestingWorkflows } = isNestingValid(
     event.node,
-    event.intersections,
+    getIntersectingNodes(event.node),
     nodes.value,
   );
   if (isNesting) {
