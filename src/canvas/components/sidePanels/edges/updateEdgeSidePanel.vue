@@ -17,6 +17,7 @@
         :sourceNode="sourceNode"
         :targetNode="targetNode"
         :sourceNodeType="sourceNodeType"
+        @submitDisabled="this.submitDisabled"
         @updated="updated"
       />
       <br />
@@ -31,7 +32,10 @@
         />
       </cds-button>
     </div>
-    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
+    <cds-button
+      slot="actions"
+      kind="secondary"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button kind="primary" type="submit" slot="actions" @click="update">
@@ -60,6 +64,7 @@ export default {
       targetNode: {},
       sourceNodeType: "",
       loaded: false,
+      disabled: true,
     };
   },
   mounted() {
@@ -72,6 +77,9 @@ export default {
     }
   },
   methods: {
+    submitDisabled(value) {
+      this.disabled = value;
+    },
     update() {
       this.$refs.edgeForm.update();
     },

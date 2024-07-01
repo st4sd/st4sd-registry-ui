@@ -1,10 +1,11 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <cds-text-input
     label="Connection label (optional):"
     class="cds-theme-zone-g10"
     placeholder="Label"
     @input="this.edgeName = $event.target.value"
-    :value="edge.label"
+    :value="tempName"
   />
   <br />
   <h5 v-if="edge.definition != undefined">Arguments:</h5>
@@ -29,15 +30,11 @@
       >
         <cds-structured-list-cell>
           <bx-dropdown
-            class="updatedChoices"
             trigger-content="Select target"
             required
             colorScheme="light"
             :value="argument.name"
-            @bx-dropdown-selected="
-              argument.name = $event.target.value;
-              updateSelectedArguments();
-            "
+            @bx-dropdown-selected="argument.name = $event.target.value"
           >
             <bx-dropdown-item
               v-for="(possibleArgument, key) in possibleArguments.filter(
@@ -81,7 +78,7 @@
             leave-delay-ms="0"
             align="bottom"
             v-if="argumentsArray.length > 1"
-            @click="removeArgument(index)"
+            @click="argumentsArray.splice(index, 1)"
           >
             <img
               slot="icon"
@@ -102,15 +99,11 @@
       >
         <cds-structured-list-cell>
           <bx-dropdown
-            class="updatedChoices"
             trigger-content="Select an argument"
             required
             colorScheme="light"
             :value="argument.name"
-            @bx-dropdown-selected="
-              argument.name = $event.target.value;
-              updateSelectedArguments();
-            "
+            @bx-dropdown-selected="argument.name = $event.target.value"
           >
             <bx-dropdown-item
               v-for="(possibleArgument, key) in possibleArguments.filter(
@@ -146,7 +139,7 @@
             leave-delay-ms="0"
             align="bottom"
             v-if="argumentsArray.length > 1"
-            @click="removeArgument(index)"
+            @click="argumentsArray.splice(index, 1)"
           >
             <img
               slot="icon"
@@ -160,7 +153,19 @@
         </cds-structured-list-cell>
       </cds-structured-list-row>
     </cds-structured-list-body>
-    <bx-btn kind="primary" @click="addArgument()"> Add </bx-btn>
+    <bx-btn
+      kind="primary"
+      :disabled="argumentsArray.length == possibleArguments.length"
+      @click="
+        this.argumentsArray.push({
+          name: '',
+          value: '',
+          suffix: '',
+        })
+      "
+    >
+      Add
+    </bx-btn>
   </cds-structured-list>
 </template>
 
@@ -184,19 +189,24 @@ export default {
     targetNode: Object,
     sourceNodeType: String,
   },
-  emits: ["created", "updated"],
+  emits: ["created", "updated", "submitDisabled"],
   data() {
     return {
       edge: {},
       argumentsArray: [],
       possibleArguments: [],
-      selectedArguments: [],
+      sourceArguments: [],
       possibleArgumentValues: [],
       edgeName: "",
+      tempName: "",
     };
   },
   mounted() {
     this.edge = this.edgeProp;
+    if (!this.edge.label) {
+      this.edge.label = "";
+    }
+    this.tempName = this.edge.label;
     //Get source node target node and arguments
     this.argumentsArray = getArguments(this.sourceNodeType, this.edgeProp);
     //Get all possible arguments that have not been used in other connections
@@ -208,7 +218,33 @@ export default {
     this.possibleArgumentValues = [
       ...this.sourceNode.definition.signature.parameters,
     ];
-    this.selectedArguments = [...this.argumentsArray.map((arg) => arg.name)];
+  },
+  watch: {
+    edgeName(name) {
+      this.tempName = name;
+    },
+    // AP: with a deep watcher on the argumentsArray we emit
+    // the validity status every time something changes in the array
+    argumentsArray: {
+      handler() {
+        this.$emit(
+          "submitDisabled",
+          !this.argumentsArray.every(
+            (element) =>
+              element.name.trim() != "" &&
+              // AP: only workflow-input nodes allow selecting the source
+              (this.sourceNodeType != "workflow-input" ||
+                element.value.trim() != ""),
+          ),
+        );
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    selectedArguments() {
+      return [...this.argumentsArray.map((arg) => arg.name)];
+    },
   },
   methods: {
     create() {
@@ -288,33 +324,6 @@ export default {
         this.$emit("updated");
       }
     },
-    addArgument() {
-      this.updateSelectedArguments();
-      this.argumentsArray.push({
-        name: "",
-        value: "",
-        suffix: "",
-      });
-    },
-    removeArgument(index) {
-      let name = this.argumentsArray[index].name;
-      this.argumentsArray.splice(index, 1);
-      //we update selectedArguments this way instead of calling updateSelectedArguments()
-      //because getElementsByClassName("updatedChoices") in that function will not pick up
-      //the removal of that element and the deletion of that argument row will not change selectedArguments
-      if (name != undefined) {
-        this.selectedArguments = this.selectedArguments.filter(
-          (arg) => arg != name,
-        );
-      }
-    },
-    updateSelectedArguments() {
-      this.selectedArguments = [];
-      var elements = document.getElementsByClassName("updatedChoices");
-      for (var element of elements) {
-        this.selectedArguments.push(element.value);
-      }
-    },
   },
 };
 </script>
@@ -324,8 +333,4 @@ export default {
 @import "@/styles/cds-structured-list-styles.css";
 @import "@/styles/bx-accordion-styles.css";
 @import "@/styles/bx-modal-styles.css";
-
-.padding-top {
-  padding-top: 1.5rem;
-}
 </style>
