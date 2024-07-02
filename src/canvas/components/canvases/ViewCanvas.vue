@@ -30,7 +30,7 @@
         <bx-btn
           v-if="!registryUISharedState.isGlobalRegistry"
           title="Transform Experiment"
-          @click="$emit('transformButtonClicked')"
+          @click="emits('transform-button-clicked')"
         >
           Transform Experiment
         </bx-btn>
@@ -168,6 +168,8 @@ const props = defineProps({
     default: "",
   },
 });
+
+const emits = defineEmits(["transform-button-clicked"]);
 
 const {
   onPaneReady,
