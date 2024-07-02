@@ -867,7 +867,6 @@ export default {
 .remove-btn {
   position: relative;
   height: layout.$spacing-09 !important;
-  top: layout.$spacing-05;
 }
 #loading-container {
   display: flex;
