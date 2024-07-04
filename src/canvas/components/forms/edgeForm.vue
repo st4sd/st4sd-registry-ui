@@ -29,39 +29,37 @@
         :key="index"
       >
         <cds-structured-list-cell>
-          <bx-dropdown
-            trigger-content="Select target"
+          <cds-dropdown
+            label="Select target"
             required
-            colorScheme="light"
             :value="argument.name"
-            @bx-dropdown-selected="argument.name = $event.target.value"
+            @cds-dropdown-selected="argument.name = $event.target.value"
           >
-            <bx-dropdown-item
+            <cds-dropdown-item
               v-for="(possibleArgument, key) in possibleArguments.filter(
                 (arg) =>
                   !selectedArguments.includes(arg) || arg == argument.name,
               )"
               :key="key"
               :value="possibleArgument"
-              >{{ possibleArgument }}</bx-dropdown-item
+              >{{ possibleArgument }}</cds-dropdown-item
             >
-          </bx-dropdown>
+          </cds-dropdown>
         </cds-structured-list-cell>
         <cds-structured-list-cell>
-          <bx-dropdown
-            trigger-content="Select source"
+          <cds-dropdown
+            label="Select source"
             required
-            colorScheme="light"
             :value="argument.value"
-            @bx-dropdown-selected="argument.value = $event.target.value"
+            @cds-dropdown-selected="argument.value = $event.target.value"
           >
-            <bx-dropdown-item
+            <cds-dropdown-item
               v-for="(possibleValue, key) in possibleArgumentValues"
               :key="key"
               :value="possibleValue.name"
-              >{{ possibleValue.name }}</bx-dropdown-item
+              >{{ possibleValue.name }}</cds-dropdown-item
             >
-          </bx-dropdown>
+          </cds-dropdown>
         </cds-structured-list-cell>
         <cds-structured-list-cell class="align-top">
           <cds-text-input
@@ -98,23 +96,22 @@
         :key="index"
       >
         <cds-structured-list-cell>
-          <bx-dropdown
-            trigger-content="Select an argument"
+          <cds-dropdown
+            label="Select an argument"
             required
-            colorScheme="light"
             :value="argument.name"
-            @bx-dropdown-selected="argument.name = $event.target.value"
+            @cds-dropdown-selected="argument.name = $event.target.value"
           >
-            <bx-dropdown-item
+            <cds-dropdown-item
               v-for="(possibleArgument, key) in possibleArguments.filter(
                 (arg) =>
                   !selectedArguments.includes(arg) || arg == argument.name,
               )"
               :key="key"
               :value="possibleArgument"
-              >{{ possibleArgument }}</bx-dropdown-item
+              >{{ possibleArgument }}</cds-dropdown-item
             >
-          </bx-dropdown>
+          </cds-dropdown>
         </cds-structured-list-cell>
         <cds-structured-list-cell class="align-top">
           <cds-text-input
@@ -153,7 +150,8 @@
         </cds-structured-list-cell>
       </cds-structured-list-row>
     </cds-structured-list-body>
-    <bx-btn
+    <cds-button
+      style="padding-top: 10px"
       kind="primary"
       :disabled="argumentsArray.length == possibleArguments.length"
       @click="
@@ -165,14 +163,14 @@
       "
     >
       Add
-    </bx-btn>
+    </cds-button>
   </cds-structured-list>
 </template>
 
 <script>
 import "@carbon/web-components/es/components/modal/index.js";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/dropdown/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
 
@@ -331,6 +329,4 @@ export default {
 @import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/cds-structured-list-styles.css";
-@import "@/styles/bx-accordion-styles.css";
-@import "@/styles/bx-modal-styles.css";
 </style>

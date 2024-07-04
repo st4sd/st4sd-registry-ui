@@ -38,7 +38,13 @@
       @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
-    <cds-button kind="primary" type="submit" slot="actions" @click="update">
+    <cds-button
+      :disabled="disabled"
+      kind="primary"
+      type="submit"
+      slot="actions"
+      @click="update"
+    >
       Save
     </cds-button>
   </cds-side-panel>
