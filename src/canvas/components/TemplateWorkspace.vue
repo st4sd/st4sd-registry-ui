@@ -1,43 +1,46 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <aside>
     <div id="controls">
       <div id="title">Template Workspace</div>
       <div id="buttons">
-        <bx-btn
+        <cds-button
           title="Create Component"
-          icon-layout
           @click="toggleModalVisibility('createComponentSidePanel')"
           size="sm"
+          style="padding-bottom: 5px"
         >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/plus.svg"
           />
           New Component
-        </bx-btn>
-        <bx-btn
+        </cds-button>
+        <cds-button
           v-if="isGlobalRegistryLibraryEnabled"
           title="Add Global Registry Component"
-          icon-layout
           @click="navigateToGlobalRegistryLibrary"
           size="sm"
         >
           <img
+            slot="icon"
             class="white-svg"
             width="15"
             height="15"
             src="@/assets/embed.svg"
           />
           Import Component
-        </bx-btn>
+        </cds-button>
       </div>
-      <bx-search
+      <cds-search
         placeholder="Search here"
-        @keyup="updateList"
-        @input="searchTerm = $event.target.value"
-        :value="searchTerm"
+        @cds-search-input="
+          templateQuery = $event.detail.value;
+          filterTemplates();
+        "
         class="library-search-bar"
       />
     </div>
@@ -147,6 +150,9 @@ import { registryUISharedState } from "@/stores/registryUISharedState";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
 import getDSLDefinition from "@/canvas/functions/removeEmptyValues";
+
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/search.min.js";
 
 let isGlobalRegistryLibraryEnabled = ref(
   registryUISharedState.isGlobalRegistryLibraryEnabled,
@@ -353,7 +359,7 @@ async function shareTemplate(template) {
       }
       persistedGraphs.add(entryWorkflowBlock.definition.signature.name);
       fullElements.value.push(entryWorkflowBlock);
-      updateList();
+      filterTemplates();
 
       notification = {
         kind: "success",
@@ -389,7 +395,7 @@ function removeTemplateFromTemplateWorkspace(templateLabel) {
       break;
     }
   }
-  updateList();
+  filterTemplates();
 }
 //
 
@@ -404,7 +410,7 @@ function navigateToGlobalRegistryLibrary() {
 const addComponentNode = (newComponent) => {
   newComponent.id = getId();
   fullElements.value.push(newComponent);
-  elements.value.push(newComponent);
+  filterTemplates();
   toggleModalVisibility("createComponentSidePanel");
 };
 
@@ -413,19 +419,18 @@ function onUpdateCreateComponentModalNotification(notification) {
 }
 
 //Search bar function
-let searchTerm = "";
-const updateList = () => {
-  let searchResult = [];
-  if (searchTerm.length > 0) {
-    fullElements.value.forEach((item) => {
-      if (item.label.toLowerCase().includes(searchTerm.toLowerCase())) {
-        searchResult.push(item);
-      }
-    });
-    elements.value = [...searchResult];
-  } else {
+let templateQuery = "";
+const filterTemplates = () => {
+  templateQuery = templateQuery.trim().toLowerCase();
+
+  if (templateQuery == "") {
     elements.value = [...fullElements.value];
+    return;
   }
+
+  elements.value = fullElements.value.filter((element) => {
+    return element.label.toLowerCase().includes(templateQuery);
+  });
 };
 
 let clickedNode;
