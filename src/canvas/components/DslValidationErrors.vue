@@ -1,33 +1,38 @@
 <template>
   <div>
-    <bx-inline-loading
+    <cds-inline-loading
       v-if="dslBeingValidated == 'active'"
       :status="dslBeingValidated"
-      >Validating DSL...</bx-inline-loading
+      >Validating DSL...</cds-inline-loading
     >
-    <bx-btn v-else @click="validateDsl">Re-run Validation</bx-btn>
-    <bx-inline-notification
+    <cds-button v-else @click="validateDsl" style="padding-bottom: 15px"
+      >Re-run Validation</cds-button
+    >
+    <cds-inline-notification
       id="dsl-valid"
       kind="success"
       :open="dslBeingValidated != 'active' && dslErrorsData.length == 0"
       hide-close-button
       title="DSL Valid"
     />
-    <bx-accordion data-modal-primary-focus>
-      <bx-accordion-item
+    <cds-accordion data-modal-primary-focus>
+      <cds-accordion-item
         v-for="(problem, idx) in dslErrorsData"
         :key="idx"
-        :title-text="`Problem ${idx + 1}`"
+        :title="`Problem ${idx + 1}`"
         :open="idx == 0"
       >
         <pre>{{ JSON.stringify(problem, undefined, 2) }}</pre>
-      </bx-accordion-item>
-    </bx-accordion>
+      </cds-accordion-item>
+    </cds-accordion>
   </div>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/inline-loading/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";
