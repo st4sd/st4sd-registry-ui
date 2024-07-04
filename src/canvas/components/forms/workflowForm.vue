@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <bx-accordion>
     <bx-accordion-item open title-text="Overview">
@@ -346,6 +347,4 @@ export default {
 @import "@/styles/svg.scss";
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/cds-structured-list-styles.css";
-@import "@/styles/bx-accordion-styles.css";
-@import "@/styles/bx-modal-styles.css";
 </style>
