@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <bx-accordion>
-    <bx-accordion-item open title-text="Overview">
+  <cds-accordion>
+    <cds-accordion-item open title="Overview">
       <cds-text-input
         class="cds-theme-zone-g10"
         id="createWorkflowSidePanel"
@@ -31,17 +31,17 @@
         :value="parentNode.label"
       />
       <br />
-      <bx-btn
+      <cds-button
         v-if="this.parentNode != undefined"
         kind="primary"
         @click="removeParent()"
-        >Unnest</bx-btn
+        >Unnest</cds-button
       >
-    </bx-accordion-item>
-    <bx-accordion-item
+    </cds-accordion-item>
+    <cds-accordion-item
       open
       v-if="workflow.getParameters() != undefined"
-      :title-text="'Parameters (' + workflow.getParameters().length + ')'"
+      :title="'Parameters (' + workflow.getParameters().length + ')'"
     >
       <cds-structured-list v-if="workflow.getParameters().length != 0">
         <cds-structured-list-head>
@@ -100,13 +100,24 @@
           </cds-structured-list-row>
         </cds-structured-list-body>
       </cds-structured-list>
-      <bx-btn kind="primary" @click="workflow.addParameter()">
-        Add Parameter +
-      </bx-btn>
-    </bx-accordion-item>
-    <bx-accordion-item
+      <cds-button
+        style="padding: 10px"
+        kind="primary"
+        @click="workflow.addParameter()"
+      >
+        Add Parameter
+        <img
+          slot="icon"
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/plus.svg"
+        />
+      </cds-button>
+    </cds-accordion-item>
+    <cds-accordion-item
       v-if="node != undefined"
-      :title-text="'Steps (' + workflow.getNumberOfSteps() + ')'"
+      :title="'Steps (' + workflow.getNumberOfSteps() + ')'"
     >
       <cds-structured-list v-if="workflow.getStepsArray().length != 0">
         <cds-structured-list-head>
@@ -171,15 +182,16 @@
         subtitle="Drag and drop components on the workflow to add them."
       >
       </cds-inline-notification>
-    </bx-accordion-item>
-  </bx-accordion>
+    </cds-accordion-item>
+  </cds-accordion>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/button/index.js";
 import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
