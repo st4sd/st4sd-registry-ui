@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div class="dndflow" @drop="onDrop">
     <VueFlow
@@ -15,20 +16,24 @@
       <MiniMap />
       <Controls />
       <Panel :position="PanelPosition.TopRight" class="controls">
-        <bx-btn
-          size="sm"
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           title="Reset canvas"
           @click="toggleVisibility('resetConfirmModal')"
           :disabled="!allNodes.some((node) => node.type != 'input')"
         >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/reset.svg"
           />
-        </bx-btn>
-        <bx-btn
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           title="Select Entrypoint"
           @click="toggleVisibility('selectEntryPointModal')"
           kind="primary"
@@ -37,26 +42,47 @@
           "
         >
           Select Entrypoint
-        </bx-btn>
-        <bx-btn
-          size="sm"
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/flow.svg"
+          />
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           title="Add Workflow"
           kind="primary"
           @click="toggleVisibility('createWorkflowSidePanel')"
         >
-          + Add workflow
-        </bx-btn>
-
-        <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
+          Add workflow
           <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/plus.svg"
+          />
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
+          @click="toggleTheme"
+          title="Toggle light/dark mode"
+        >
+          <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/brightness-contrast.svg"
           />
-        </bx-btn>
-        <bx-btn
-          size="sm"
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           :title="
             allNodes.find((node) => node.isEntry == true) == undefined
               ? 'Select an entrypoint to download the DSL'
@@ -66,41 +92,58 @@
           :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/download.svg"
           />
-        </bx-btn>
-        <bx-btn size="sm" title="Save canvas project" @click="saveGraph">
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
+          title="Save canvas project"
+          @click="saveGraph"
+        >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/save.svg"
           />
-        </bx-btn>
-        <bx-btn
-          size="sm"
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           title="Load canvas from file"
           @click="toggleVisibility('fileUploadModal')"
         >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/upload.svg"
           />
-        </bx-btn>
-        <bx-btn
-          size="sm"
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           title="Register experiment"
           @click="toggleVisibility('registerExperimentSidePanel')"
           kind="secondary"
           :disabled="allNodes.find((node) => node.isEntry == true) == undefined"
         >
           Register Experiment
-        </bx-btn>
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/ibm--datastage.svg"
+          />
+        </cds-button>
       </Panel>
       <template #node-component="{ label }">
         <ComponentNode :label="label" />
@@ -251,9 +294,7 @@
 </template>
 
 <script setup>
-import "@carbon/web-components/es/components/notification/index.js";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/textarea/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/button.min.js";
 
 import { nextTick, watch } from "vue";
 import {
@@ -310,7 +351,6 @@ import {
   removeNodeAndStepReference,
 } from "@/canvas/functions/stepFunctions";
 
-import "@carbon/web-components/es/components/textarea/index.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
@@ -940,4 +980,8 @@ const setDslValidationError = (dslError) => {
 @import "@/canvas/styles/main.scss";
 @import "@/styles/toast-notification-styles.scss";
 @import "@/styles/svg.scss";
+
+.cds-button-padding {
+  padding: 0 3px 0 3px;
+}
 </style>
