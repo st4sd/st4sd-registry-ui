@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div>
     <bx-accordion>
@@ -59,8 +60,8 @@
                   class="cds-theme-zone-g10"
                   :value="parameter.name"
                   @input="parameter.name = $event.target.value"
-                  :invalid="parameterNameIsDuplicate(parameter.name)"
-                  invalidText="Parameter names must be unique"
+                  :invalid="this.invalidParameters.has(index)"
+                  invalidText="Parameter names must be unique and not empty"
                   placeholder="parameter name"
                 />
               </cds-structured-list-cell>
@@ -569,8 +570,8 @@
                   type="text"
                   :value="key"
                   @input="setVariableKey(idx, $event.target.value)"
-                  :invalid="checkKeyIsDuplicate(idx, key)"
-                  invalidText="Variable names must be unique"
+                  :invalid="this.invalidVariableKeys.has(idx)"
+                  invalidText="Variable names must be unique and not empty"
                   placeholder="variable name"
                 />
               </cds-structured-list-cell>
@@ -581,6 +582,8 @@
                   type="text"
                   :value="variableValues[idx]"
                   @input="setVariableValue(idx, $event.target.value)"
+                  :invalid="this.invalidVariableValues.has(idx)"
+                  invalidText="Variables must have a value"
                   placeholder="variable value"
                 />
               </cds-structured-list-cell>
@@ -623,8 +626,6 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-
 // AP: see comment on parameterNameIsDuplicate
 // import { checkParameterNameIsDuplicate } from "@/canvas/functions/validation";
 
-let invalidVariables = {};
-
 export default {
   props: { node: Object, allNodes: Object },
   emits: ["update", "removeParent", "add", "invalid", "nameChanged"],
@@ -632,8 +633,10 @@ export default {
     return {
       contentSwitcherSelection: ref("config"),
       component: new St4sdComponent(),
-      isNameError: false,
-      isParameterError: false,
+      hasInvalidName: false,
+      hasInvalidParameterNames: false,
+      hasInvalidVariableNames: false,
+      hasInvalidVariableValues: false,
       oldName: "",
       variableKeys: [],
       variableValues: [],
@@ -656,10 +659,81 @@ export default {
       );
       return componentNode?.parentNode != undefined;
     },
+    invalidParameters() {
+      let invalid = new Set();
+      for (
+        let idx = 0;
+        idx < this.component.signature.parameters.length;
+        idx++
+      ) {
+        let currentParameter =
+          this.component.signature.parameters[idx].name.trim();
+        if (currentParameter == "") {
+          invalid.add(idx);
+          continue;
+        }
+        if (
+          this.component.signature.parameters
+            .toSpliced(idx, 1)
+            .map((parameter) => parameter.name)
+            .includes(currentParameter)
+        ) {
+          invalid.add(idx);
+        }
+      }
+      return invalid;
+    },
+    invalidVariableKeys() {
+      let invalid = new Set();
+      for (let idx = 0; idx < this.variableKeys.length; idx++) {
+        let currentVariable = this.variableKeys[idx].trim();
+        if (currentVariable == "") {
+          invalid.add(idx);
+          continue;
+        }
+        if (this.variableKeys.toSpliced(idx, 1).includes(currentVariable)) {
+          invalid.add(idx);
+        }
+      }
+      return invalid;
+    },
+    invalidVariableValues() {
+      let invalid = new Set();
+      for (let idx = 0; idx < this.variableValues.length; idx++) {
+        let currentValue = this.variableValues[idx].trim();
+        if (currentValue == "") {
+          invalid.add(idx);
+        }
+      }
+      return invalid;
+    },
+  },
+  watch: {
+    invalidParameters(invalidIndices) {
+      this.hasInvalidParameterNames = invalidIndices.size != 0;
+      this.emitValidityStatus();
+    },
+    invalidVariableKeys(invalidIndices) {
+      this.hasInvalidVariableNames = invalidIndices.size != 0;
+      this.emitValidityStatus();
+    },
+    invalidVariableValues(invalidIndices) {
+      this.hasInvalidVariableValues = invalidIndices.size != 0;
+      this.emitValidityStatus();
+    },
   },
   methods: {
+    emitValidityStatus() {
+      this.$emit(
+        "invalid",
+        this.hasInvalidParameterNames ||
+          this.hasInvalidName ||
+          this.hasInvalidVariableNames ||
+          this.hasInvalidVariableValues,
+      );
+    },
     update() {
-      if (!this.isNameError && !this.isParameterError) {
+      if (!this.hasInvalidName && !this.hasInvalidParameterNames) {
         this.setVariables();
         let newComponentNode = this.allNodes.find(
           (node) => node.id == this.node.id,
@@ -682,7 +756,7 @@ export default {
       }
     },
     add() {
-      if (!this.isNameError && !this.isParameterError) {
+      if (!this.hasInvalidName && !this.hasInvalidParameterNames) {
         this.setVariables();
         this.$emit("add", this.component.getComponentDefintion());
       }
@@ -694,53 +768,15 @@ export default {
       this.component.signature.name = newName;
       this.$emit("nameChanged", newName);
     },
-    // TODO: AP: using this function raises
-    // [Vue warn]: Maximum recursive updates exceeded.
-    // This means you have a reactive effect that is mutating its own dependencies and thus recursively triggering itself.
-    // Possible sources include component template, render function, updated hook or watcher source function.
-    // in St4sdComponent.js:319 or componentForm.vue:71
-    // parameterNameIsDuplicate(name) {
-    //   let parameterNames = this.component
-    //     .getParameters()
-    //     .map((param) => param.name);
-    //   this.isParameterError = checkParameterNameIsDuplicate(
-    //     parameterNames,
-    //     name,
-    //   );
-    //   this.$emit("invalid", this.isNameError || this.isParameterError);
-    //   return this.isParameterError;
-    // },
-    parameterNameIsDuplicate(name) {
-      let parametersNames = this.component
-        .getParameters()
-        .map((param) => param.name);
-      if (new Set(parametersNames).size != parametersNames.length) {
-        let occurrences = 0;
-        for (let parameter of parametersNames) {
-          if (parameter == name) {
-            occurrences++;
-            if (occurrences > 1) {
-              this.isParameterError = true;
-              this.$emit("invalid", true);
-              return true;
-            }
-          }
-        }
-      } else {
-        this.isParameterError = false;
-        this.$emit("invalid", this.isNameError);
-        return false;
-      }
-    },
     onFocusLost(event, item) {
-      if (item == "") {
+      if (item.trim() == "") {
         event.target.invalid = true;
-        this.isNameError = true;
+        this.hasInvalidName = true;
       } else {
-        this.isNameError = false;
+        this.hasInvalidName = false;
         event.target.invalid = false;
       }
-      this.$emit("invalid", this.isNameError);
+      this.emitValidityStatus();
     },
     addVariables() {
       this.variableKeys.push("");
@@ -767,20 +803,6 @@ export default {
             this.variableValues[i],
           );
       }
-    },
-    checkKeyIsDuplicate(idx, key) {
-      let invalid = this.variableKeys.toSpliced(idx, 1).includes(key);
-      if (invalid) {
-        invalidVariables[idx] = invalid;
-        this.$emit("invalid", invalid);
-      } else if (idx in invalidVariables) {
-        delete invalidVariables[idx];
-        // Only emit an invalidity event with "false"
-        // if the invalidVariables dictionary has no keys
-        if (Object.keys(invalidVariables).length == 0)
-          this.$emit("invalid", invalid);
-      }
-      return invalid;
     },
   },
 };
