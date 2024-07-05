@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div class="workflow">
     <NodeToolbar
@@ -5,9 +6,25 @@
       :is-visible="data.toolbarVisible"
       :position="Position.Right"
     >
-      <bx-btn @click="changeVisibility">
+      <cds-button @click="changeVisibility">
         {{ isHidden ? "Expand" : "Collapse" }}
-      </bx-btn>
+        <img
+          v-if="isHidden"
+          slot="icon"
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/maximize.svg"
+        />
+        <img
+          v-else
+          slot="icon"
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/minimize.svg"
+        />
+      </cds-button>
     </NodeToolbar>
     <NodeResizer />
     <Handle type="target" :position="Position.Top" />
@@ -17,6 +34,8 @@
 </template>
 
 <script setup>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+
 import { Handle, Position } from "@vue-flow/core";
 import { ref } from "vue";
 import { NodeResizer } from "@vue-flow/node-resizer";
