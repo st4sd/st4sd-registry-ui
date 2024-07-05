@@ -38,11 +38,11 @@
               </p>
               <br />
               <p>Click the button to go back</p>
-              <bx-btn
+              <cds-button
                 style="margin-top: 1rem; min-width: 150px"
                 @click="$router.go(-1)"
                 >Back
-              </bx-btn>
+              </cds-button>
             </div>
             <div v-else>
               <img
@@ -53,11 +53,11 @@
               <br />
               <p>{{ errorDescription }}. {{ errorStatusText }}.</p>
               <p>Click Retry to try again.</p>
-              <bx-btn
+              <cds-button
                 style="margin-top: 1rem; min-width: 150px"
                 @click="reloadPage"
                 >Retry
-              </bx-btn>
+              </cds-button>
             </div>
           </div>
         </div>
@@ -66,6 +66,7 @@
   </div>
 </template>
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 export default {
   name: "HttpErrorEmptyState",
   props: {
@@ -85,4 +86,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped src="../../styles/empty_state_styles.scss"></style>
+<style lang="scss" scoped src="@/styles/empty_state_styles.scss"></style>
