@@ -49,27 +49,35 @@
           @invalid="updateComponentInvalidityStatus"
         />
         <br />
-        <bx-btn kind="danger" @click="emitDelete">
-          Delete this component &nbsp;
-          <img
-            class="white-svg"
-            height="18"
-            width="18"
-            src="@/assets/trash-can.svg"
-          />
-        </bx-btn>
-        <bx-btn
-          kind="primary"
-          :disabled="isTemplateButtonDisabled"
-          :title="
-            isTemplateButtonDisabled
-              ? 'A template with the same name already exists in the Template Workspace'
-              : 'Add to Template Workspace'
-          "
-          @click="emitAddToTemplateWorkspace"
-        >
-          Add to Template Workspace &nbsp;
-        </bx-btn>
+        <div class="cds--subgrid--narrow">
+          <cds-button
+            class="cds--css-grid-column"
+            kind="danger"
+            @click="emitDelete"
+          >
+            Delete this component &nbsp;
+            <img
+              slot="icon"
+              class="white-svg"
+              height="18"
+              width="18"
+              src="@/assets/trash-can.svg"
+            />
+          </cds-button>
+          <cds-button
+            class="cds--css-grid-column"
+            kind="primary"
+            :disabled="isTemplateButtonDisabled"
+            :title="
+              isTemplateButtonDisabled
+                ? 'A template with the same name already exists in the Template Workspace'
+                : 'Add to Template Workspace'
+            "
+            @click="emitAddToTemplateWorkspace"
+          >
+            Add to Template Workspace &nbsp;
+          </cds-button>
+        </div>
       </div>
     </div>
     <cds-button
@@ -176,7 +184,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
-@import "@/styles/bx-accordion-styles.css";
-@import "@/styles/bx-modal-styles.css";
-@import "@/styles/toast-notification-styles.scss";
 </style>
