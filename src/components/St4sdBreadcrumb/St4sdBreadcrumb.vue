@@ -1,13 +1,15 @@
 <template>
   <div class="breadcrumb">
-    <bx-breadcrumb>
-      <bx-breadcrumb-item :key="crumb.name" v-for="crumb in breadcrumbs">
+    <cds-breadcrumb>
+      <cds-breadcrumb-item :key="crumb.name" v-for="crumb in breadcrumbs">
         <router-link :to="crumb.path">{{ crumb.name }}</router-link>
-      </bx-breadcrumb-item>
-    </bx-breadcrumb>
+      </cds-breadcrumb-item>
+    </cds-breadcrumb>
   </div>
 </template>
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/breadcrumb.min.js";
+
 export default {
   name: "St4sdBreadcrumb",
   props: {
