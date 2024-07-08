@@ -2,7 +2,7 @@
   <div>
     <template v-if="loading">
       <div class="card-row" id="experimentLoadingContainer">
-        <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
+        <cds-loading id="experimentLoadingWheel" type="overlay"></cds-loading>
       </div>
     </template>
     <template v-else>
@@ -20,16 +20,15 @@
         v-for="experiment in getPageSlice"
         :key="experiment.metadata.package.name"
       >
-        <dds-card
-          color-scheme="light"
+        <c4d-card
           border="true"
           logo
-          class="card-proportions"
+          class="card-proportions cds-theme-zone-white"
           :href="`experiment/${experiment.metadata.package.name}`"
         >
-          <dds-card-eyebrow>{{
+          <c4d-card-eyebrow>{{
             experiment.metadata.package.name
-          }}</dds-card-eyebrow>
+          }}</c4d-card-eyebrow>
           <p>
             {{ experiment.metadata.package.description }}
           </p>
@@ -72,8 +71,8 @@
               {{ label }}
             </cds-tag>
           </div>
-          <dds-card-footer> </dds-card-footer>
-        </dds-card>
+          <c4d-card-footer> </c4d-card-footer>
+        </c4d-card>
       </div>
 
       <div>
@@ -103,7 +102,9 @@ import { getAvailablePlatforms } from "@/functions/package_utilities";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/card.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
 
 export default {
   components: {
