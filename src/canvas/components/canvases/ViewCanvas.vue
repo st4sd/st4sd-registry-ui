@@ -1,7 +1,8 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <!-- Error Notification -->
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="(notification, notifIdx) in toastNotifications"
       :key="notifIdx"
       timeout="5000"
@@ -27,36 +28,48 @@
       <Controls />
 
       <Panel :position="PanelPosition.TopRight" class="controls">
-        <bx-btn
+        <cds-button
+          size="md"
           v-if="!registryUISharedState.isGlobalRegistry"
           title="Transform Experiment"
-          @click="emits('transform-button-clicked')"
+          @click="$emit('transform-button-clicked')"
         >
           Transform Experiment
-        </bx-btn>
-        <bx-btn
+        </cds-button>
+        <cds-button
+          size="md"
           v-if="doesOtherOrPresetsExist()"
           title="toggle inputs visibility"
           @click="showHideInputNodes"
         >
           {{ showHideButtonTitle }}
-        </bx-btn>
-        <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
+        </cds-button>
+        <cds-button
+          size="md"
+          @click="toggleTheme"
+          title="Toggle light/dark mode"
+        >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/brightness-contrast.svg"
           />
-        </bx-btn>
-        <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
+        </cds-button>
+        <cds-button
+          size="md"
+          title="Download DSL"
+          @click="downloadExperimentFiles"
+        >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/download.svg"
           />
-        </bx-btn>
+        </cds-button>
       </Panel>
       <template #node-component="{ label }">
         <ComponentNode :label="label" />
@@ -139,7 +152,8 @@ import {
   hide,
 } from "@/canvas/functions/hideExpand";
 
-import "@carbon/web-components/es/components/notification/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/button.min.js";
 
 import { registryUISharedState } from "@/stores/registryUISharedState";
 
@@ -273,12 +287,14 @@ const downloadExperimentFiles = () => {
   }
 };
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/canvas/styles/main.scss";
 @import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
-bx-btn::part(button) {
+cds-button::part(button) {
   padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
   margin: 0.2rem;
+  justify-content: center;
+  align-items: center;
 }
 </style>
