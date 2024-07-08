@@ -1,13 +1,13 @@
 <template>
-  <bx-checkbox
+  <cds-checkbox
     :label-text="`${this.data.name}`"
     :checked="!preset"
-    @bx-checkbox-changed="setNewDataType()"
-  ></bx-checkbox>
+    @cds-checkbox-changed="setNewDataType()"
+  ></cds-checkbox>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/checkbox/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/checkbox.min.js";
 export default {
   name: "ExperimentView",
   props: {
