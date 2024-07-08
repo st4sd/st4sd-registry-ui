@@ -1,313 +1,332 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <div>
-    <bx-accordion>
-      <bx-accordion-item title-text="Overview" open>
-        <cds-text-input
-          class="cds-theme-zone-g10"
-          label="Component name (Required)"
-          id="createComponentSidePanel"
-          :value="component.signature.name"
-          @input="updateComponentName($event.target.value)"
-          @blur="onFocusLost($event, component.signature.name)"
-          @mouseleave="onFocusLost($event, component.signature.name)"
-          placeholder="name"
-          required
-          invalidText="Name cannot be empty"
-        />
-        <br />
-        <cds-text-input
-          class="cds-theme-zone-g10"
-          label="Description:"
-          :value="component.signature.description"
-          @input="component.signature.description = $event.target.value"
-          placeholder="description"
-          required
-        />
-        <br />
-        <bx-btn
-          v-if="componentHasParent"
-          kind="tertiary"
-          @click="removeParentNode()"
-          >Unnest from workflow</bx-btn
-        >
-      </bx-accordion-item>
-      <bx-accordion-item
-        open
-        :title-text="
-          'Parameters (' + component.signature.parameters.length + ')'
-        "
+  <cds-accordion>
+    <cds-accordion-item title="Overview" open>
+      <cds-text-input
+        class="cds-theme-zone-g10"
+        label="Component name (Required)"
+        id="createComponentSidePanel"
+        :value="component.signature.name"
+        @input="updateComponentName($event.target.value)"
+        @blur="onFocusLost($event, component.signature.name)"
+        @mouseleave="onFocusLost($event, component.signature.name)"
+        placeholder="name"
+        required
+        invalidText="Name cannot be empty"
+      />
+      <br />
+      <cds-text-input
+        class="cds-theme-zone-g10"
+        label="Description:"
+        :value="component.signature.description"
+        @input="component.signature.description = $event.target.value"
+        placeholder="description"
+        required
+      />
+      <br />
+      <cds-button
+        v-if="componentHasParent"
+        kind="tertiary"
+        @click="removeParentNode()"
+        >Unnest from workflow</cds-button
       >
-        <cds-structured-list v-if="component.signature?.parameters.length != 0">
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell
-                >Name</cds-structured-list-header-cell
-              >
-              <cds-structured-list-header-cell
-                >Default: Could be string, int, number or object (currenly only
-                handles string)</cds-structured-list-header-cell
-              >
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body>
-            <cds-structured-list-row
-              v-for="(parameter, index) in component.signature.parameters"
-              :key="index"
+    </cds-accordion-item>
+    <cds-accordion-item
+      id="parameters-accordion-item"
+      open
+      :title="'Parameters (' + component.signature.parameters.length + ')'"
+    >
+      <cds-structured-list v-if="component.signature?.parameters.length != 0">
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Name</cds-structured-list-header-cell
             >
-              <cds-structured-list-cell>
-                <cds-text-input
-                  class="cds-theme-zone-g10"
-                  :value="parameter.name"
-                  @input="parameter.name = $event.target.value"
-                  :invalid="this.invalidParameters.has(index)"
-                  invalidText="Parameter names must be unique and not empty"
-                  placeholder="parameter name"
-                />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell>
-                <cds-text-input
-                  class="cds-theme-zone-g10"
-                  :value="parameter.default"
-                  @input="parameter.default = $event.target.value"
-                  placeholder="parameter default"
-                />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell class="align-top">
-                <cds-icon-button
-                  kind="danger"
-                  enter-delay-ms="1000"
-                  leave-delay-ms="0"
-                  align="bottom"
-                  @click="component.removeParameter(index)"
-                >
-                  <img
-                    slot="icon"
-                    class="white-svg"
-                    height="18"
-                    width="18"
-                    src="@/assets/remove.svg"
-                  />
-                  <p slot="tooltip-content">Remove item</p>
-                </cds-icon-button>
-              </cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-        </cds-structured-list>
-        <bx-btn kind="primary" @click="component.addParameter()">
-          Add Parameter +
-        </bx-btn>
-      </bx-accordion-item>
-      <bx-accordion-item title-text="Command">
-        <cds-text-input
-          label="Executable:"
-          class="cds-theme-zone-g10"
-          :value="component.command.executable"
-          @input="component.command.executable = $event.target.value"
-          placeholder="executable"
-        />
-        <br />
-        <cds-text-input
-          label="Arguments:"
-          class="cds-theme-zone-g10"
-          :value="component.command.arguments"
-          @input="component.command.arguments = $event.target.value"
-          placeholder="arguments"
-        />
-        <br />
-        <cds-text-input
-          label="Expand Argument:"
-          class="cds-theme-zone-g10"
-          :value="component.command.expandArguments"
-          @input="component.command.expandArguments = $event.target.value"
-          placeholder="expand argument"
-        />
-        <br />
-        <cds-text-input
-          label="Environment: String or Object(currently only handles string)"
-          class="cds-theme-zone-g10"
-          :value="component.command.environment"
-          @input="component.command.environment = $event.target.value"
-          placeholder="environment"
-        />
-      </bx-accordion-item>
-      <bx-accordion-item title-text="Workflow Attributes">
-        <cds-text-input
-          label="Replicate:"
-          class="cds-theme-zone-g10"
-          :value="component.workflowAttributes.replicate"
-          @input="component.workflowAttributes.replicate = $event.target.value"
-          placeholder="replicate"
-        />
-        <br />
-        <bx-toggle
-          :checked="component.workflowAttributes.aggregate"
-          checked-text="True"
-          label-text="Aggregate:"
-          unchecked-text="False"
-          @bx-toggle-changed="!component.workflowAttributes.aggregate"
-        ></bx-toggle>
-        <br />
-        <cds-text-input
-          label="Restart Hook File:"
-          class="cds-theme-zone-g10"
-          :value="component.workflowAttributes.restartHookFile"
-          @input="
-            component.workflowAttributes.restartHookFile = $event.target.value
-          "
-          placeholder="retstart hook file"
-        />
-        <br />
-
-        <cds-structured-list>
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell
-                >Restart Hooks: ({{
-                  component.workflowAttributes.restartHookOn.length
-                }})</cds-structured-list-header-cell
-              >
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body>
-            <cds-structured-list-row
-              v-for="(restartHook, index) in component.workflowAttributes
-                .restartHookOn"
-              :key="index"
+            <cds-structured-list-header-cell
+              >Default: Could be string, int, number or object (currenly only
+              handles string)</cds-structured-list-header-cell
             >
-              <cds-structured-list-cell>
-                <cds-text-input
-                  label="Restart Hook On:"
-                  class="cds-theme-zone-g10"
-                  :value="restartHook"
-                  @input="restartHook = $event.target.value"
-                  placeholder="restart hook name"
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
+            v-for="(parameter, index) in component.signature.parameters"
+            :key="index"
+          >
+            <cds-structured-list-cell>
+              <cds-text-input
+                class="cds-theme-zone-g10"
+                :value="parameter.name"
+                @input="parameter.name = $event.target.value"
+                :invalid="this.invalidParameters.has(index)"
+                invalidText="Parameter names must be unique"
+                placeholder="parameter name"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell>
+              <cds-text-input
+                class="cds-theme-zone-g10"
+                :value="parameter.default"
+                @input="parameter.default = $event.target.value"
+                placeholder="parameter default"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-top">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="component.removeParameter(index)"
+              >
+                <img
+                  slot="icon"
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
                 />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell class="align-bottom">
-                <cds-icon-button
-                  kind="danger"
-                  enter-delay-ms="1000"
-                  leave-delay-ms="0"
-                  align="bottom"
-                  @click="component.removeRestartHookOn(index)"
-                >
-                  <img
-                    slot="icon"
-                    class="white-svg"
-                    height="18"
-                    width="18"
-                    src="@/assets/remove.svg"
-                  />
-                  <p slot="tooltip-content">Remove item</p>
-                </cds-icon-button>
-              </cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-          <bx-btn kind="primary" @click="component.addRestartHookOn()">
-            Add
-          </bx-btn>
-        </cds-structured-list>
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+      <br />
+      <cds-button kind="primary" @click="addParam()">
+        Add Parameter
+        <img
+          slot="icon"
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/plus.svg"
+        />
+      </cds-button>
+    </cds-accordion-item>
+    <cds-accordion-item title="Command">
+      <cds-text-input
+        label="Executable:"
+        class="cds-theme-zone-g10"
+        :value="component.command.executable"
+        @input="component.command.executable = $event.target.value"
+        placeholder="executable"
+      />
+      <br />
+      <cds-text-input
+        label="Arguments:"
+        class="cds-theme-zone-g10"
+        :value="component.command.arguments"
+        @input="component.command.arguments = $event.target.value"
+        placeholder="arguments"
+      />
+      <br />
+      <cds-text-input
+        label="Expand Argument:"
+        class="cds-theme-zone-g10"
+        :value="component.command.expandArguments"
+        @input="component.command.expandArguments = $event.target.value"
+        placeholder="expand argument"
+      />
+      <br />
+      <cds-text-input
+        label="Environment: String or Object(currently only handles string)"
+        class="cds-theme-zone-g10"
+        :value="component.command.environment"
+        @input="component.command.environment = $event.target.value"
+        placeholder="environment"
+      />
+    </cds-accordion-item>
+    <cds-accordion-item id="wf-accordion-item" title="Workflow Attributes">
+      <cds-text-input
+        label="Replicate:"
+        class="cds-theme-zone-g10"
+        :value="component.workflowAttributes.replicate"
+        @input="component.workflowAttributes.replicate = $event.target.value"
+        placeholder="replicate"
+      />
+      <br />
+      <cds-toggle
+        :checked="component.workflowAttributes.aggregate"
+        labelA="True"
+        labelText="Aggregate:"
+        labelB="False"
+        @cds-toggle-changed="!component.workflowAttributes.aggregate"
+      />
+      <br /><br />
+      <cds-text-input
+        label="Restart Hook File:"
+        class="cds-theme-zone-g10"
+        :value="component.workflowAttributes.restartHookFile"
+        @input="
+          component.workflowAttributes.restartHookFile = $event.target.value
+        "
+        placeholder="retstart hook file"
+      />
+      <br />
 
-        <cds-text-input
-          label="Repeat Interval:"
-          class="cds-theme-zone-g10"
-          :value="component.workflowAttributes.repeatInterval"
-          @input="
-            component.workflowAttributes.repeatInterval = $event.target.value
-          "
-          placeholder="repeat interval"
-        />
-        <br />
-        <cds-text-input
-          label="Repeat Retries:"
-          class="cds-theme-zone-g10"
-          :value="component.workflowAttributes.repeatRetries"
-          @input="
-            component.workflowAttributes.repeatRetries = $event.target.value
-          "
-          placeholder="repeat retries"
-        />
-        <br />
-        <cds-text-input
-          label="Max Restarts:"
-          class="cds-theme-zone-g10"
-          :value="component.workflowAttributes.maxRestarts"
-          @input="
-            component.workflowAttributes.maxRestarts = $event.target.value
-          "
-          placeholder="max restarts"
-        />
-        <cds-structured-list
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Restart Hooks: ({{
+                component.workflowAttributes.restartHookOn.length
+              }})</cds-structured-list-header-cell
+            >
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
+            v-for="(restartHook, index) in component.workflowAttributes
+              .restartHookOn"
+            :key="index"
+          >
+            <cds-structured-list-cell>
+              <cds-text-input
+                label="Restart Hook On:"
+                class="cds-theme-zone-g10"
+                :value="restartHook"
+                @input="restartHook = $event.target.value"
+                placeholder="restart hook name"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-bottom">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="component.removeRestartHookOn(index)"
+              >
+                <img
+                  slot="icon"
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
+                />
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+        <br v-if="component.workflowAttributes.restartHookOn.length != 0" />
+        <cds-button kind="primary" @click="addRestartHook()">
+          Add
+          <img
+            slot="icon"
+            class="white-svg"
+            height="18"
+            width="18"
+            src="@/assets/plus.svg"
+          />
+        </cds-button>
+      </cds-structured-list>
+      <br />
+      <cds-text-input
+        label="Repeat Interval:"
+        class="cds-theme-zone-g10"
+        :value="component.workflowAttributes.repeatInterval"
+        @input="
+          component.workflowAttributes.repeatInterval = $event.target.value
+        "
+        placeholder="repeat interval"
+      />
+      <br />
+      <cds-text-input
+        label="Repeat Retries:"
+        class="cds-theme-zone-g10"
+        :value="component.workflowAttributes.repeatRetries"
+        @input="
+          component.workflowAttributes.repeatRetries = $event.target.value
+        "
+        placeholder="repeat retries"
+      />
+      <br />
+      <cds-text-input
+        label="Max Restarts:"
+        class="cds-theme-zone-g10"
+        :value="component.workflowAttributes.maxRestarts"
+        @input="component.workflowAttributes.maxRestarts = $event.target.value"
+        placeholder="max restarts"
+      />
+      <cds-structured-list
+        v-if="component.workflowAttributes.shutdownOn != undefined"
+      >
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Shutdown Hooks: ({{
+                component.workflowAttributes.shutdownOn.length
+              }})</cds-structured-list-header-cell
+            >
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body
           v-if="component.workflowAttributes.shutdownOn != undefined"
         >
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell
-                >Shutdown Hooks: ({{
-                  component.workflowAttributes.shutdownOn.length
-                }})</cds-structured-list-header-cell
+          <cds-structured-list-row
+            v-for="(shutdownOn, index) in component.workflowAttributes
+              .shutdownOn"
+            :key="index"
+          >
+            <cds-structured-list-cell>
+              <cds-text-input
+                label="Shutdown On:"
+                class="cds-theme-zone-g10"
+                :value="shutdownOn"
+                @input="shutdownOn = $event.target.value"
+                placeholder="shutdown on"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-bottom">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="component.removeShutdownOn(index)"
               >
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body
-            v-if="component.workflowAttributes.shutdownOn != undefined"
-          >
-            <cds-structured-list-row
-              v-for="(shutdownOn, index) in component.workflowAttributes
-                .shutdownOn"
-              :key="index"
-            >
-              <cds-structured-list-cell>
-                <cds-text-input
-                  label="Shutdown On:"
-                  class="cds-theme-zone-g10"
-                  :value="shutdownOn"
-                  @input="shutdownOn = $event.target.value"
-                  placeholder="shutdown on"
+                <img
+                  slot="icon"
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
                 />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell class="align-bottom">
-                <cds-icon-button
-                  kind="danger"
-                  enter-delay-ms="1000"
-                  leave-delay-ms="0"
-                  align="bottom"
-                  @click="component.removeShutdownOn(index)"
-                >
-                  <img
-                    slot="icon"
-                    class="white-svg"
-                    height="18"
-                    width="18"
-                    src="@/assets/remove.svg"
-                  />
-                  <p slot="tooltip-content">Remove item</p>
-                </cds-icon-button>
-              </cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-          <bx-btn kind="primary" @click="component.addShutdownOn()">
-            Add
-          </bx-btn>
-        </cds-structured-list>
-      </bx-accordion-item>
-      <bx-accordion-item title-text="Resource Manager">
-        <bx-content-switcher
-          value="config"
-          size="sm"
-          @bx-content-switcher-selected="
-            contentSwitcherSelection = $event.target.value
-          "
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+        <br v-if="component.workflowAttributes.shutdownOn.length != 0" />
+        <cds-button kind="primary" @click="addShutdown()">
+          Add
+          <img
+            slot="icon"
+            class="white-svg"
+            height="18"
+            width="18"
+            src="@/assets/plus.svg"
+          />
+        </cds-button>
+      </cds-structured-list>
+    </cds-accordion-item>
+    <cds-accordion-item id="rm-accordion-item" title="Resource Manager">
+      <cds-content-switcher
+        value="config"
+        size="sm"
+        @cds-content-switcher-selected="contentSwitcherChanged"
+      >
+        <cds-content-switcher-item value="config"
+          >Config</cds-content-switcher-item
         >
-          <bx-content-switcher-item value="config"
-            >Config</bx-content-switcher-item
-          >
-          <bx-content-switcher-item value="lsf">LSF</bx-content-switcher-item>
-          <bx-content-switcher-item value="kubernetes"
-            >Kubernetes</bx-content-switcher-item
-          >
-        </bx-content-switcher>
+        <cds-content-switcher-item value="lsf">LSF</cds-content-switcher-item>
+        <cds-content-switcher-item value="kubernetes"
+          >Kubernetes</cds-content-switcher-item
+        >
+      </cds-content-switcher>
+      <div class="switcherContainer">
         <template v-if="contentSwitcherSelection == 'config'">
           <br />
           <cds-text-input
@@ -489,137 +508,146 @@
             placeholder="cpu units per core"
           />
         </template>
-      </bx-accordion-item>
-      <bx-accordion-item title-text="Resource Request">
-        <cds-text-input
-          label="Number of Processes:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.numberProcesses"
-          @input="
-            component.resourceRequest.numberProcesses = $event.target.value
-          "
-          placeholder="number of processes"
-        />
-        <br />
-        <cds-text-input
-          label="Number of Thread:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.numberThreads"
-          @input="component.resourceRequest.numberThreads = $event.target.value"
-          placeholder="number of threads"
-        />
-        <br />
-        <cds-text-input
-          label="Ranks per Node:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.ranksPerNode"
-          @input="component.resourceRequest.ranksPerNode = $event.target.value"
-          placeholder="ranks per node"
-        />
-        <br />
-        <cds-text-input
-          label="Threads per Core:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.threadsPerCore"
-          @input="
-            component.resourceRequest.threadsPerCore = $event.target.value
-          "
-          placeholder="threads per core"
-        />
-        <br />
-        <cds-text-input
-          label="Memory:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.memory"
-          @input="component.resourceRequest.memory = $event.target.value"
-          placeholder="memory"
-        />
-        <br />
-        <cds-text-input
-          label="GPUs:"
-          class="cds-theme-zone-g10"
-          :value="component.resourceRequest.gpus"
-          @input="component.resourceRequest.gpus = $event.target.value"
-          placeholder="gpus"
-        />
-      </bx-accordion-item>
-      <bx-accordion-item
-        :title-text="'Variables (' + variableKeys.length + ')'"
-      >
-        <cds-structured-list v-if="variableKeys.length != 0">
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell
-                >Name</cds-structured-list-header-cell
-              >
-              <cds-structured-list-header-cell
-                >Value</cds-structured-list-header-cell
-              >
-              <cds-structured-list-header-cell></cds-structured-list-header-cell>
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body>
-            <cds-structured-list-row
-              v-for="(key, idx) in variableKeys"
-              :key="idx"
+      </div>
+    </cds-accordion-item>
+    <cds-accordion-item title="Resource Request">
+      <cds-text-input
+        label="Number of Processes:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.numberProcesses"
+        @input="component.resourceRequest.numberProcesses = $event.target.value"
+        placeholder="number of processes"
+      />
+      <br />
+      <cds-text-input
+        label="Number of Thread:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.numberThreads"
+        @input="component.resourceRequest.numberThreads = $event.target.value"
+        placeholder="number of threads"
+      />
+      <br />
+      <cds-text-input
+        label="Ranks per Node:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.ranksPerNode"
+        @input="component.resourceRequest.ranksPerNode = $event.target.value"
+        placeholder="ranks per node"
+      />
+      <br />
+      <cds-text-input
+        label="Threads per Core:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.threadsPerCore"
+        @input="component.resourceRequest.threadsPerCore = $event.target.value"
+        placeholder="threads per core"
+      />
+      <br />
+      <cds-text-input
+        label="Memory:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.memory"
+        @input="component.resourceRequest.memory = $event.target.value"
+        placeholder="memory"
+      />
+      <br />
+      <cds-text-input
+        label="GPUs:"
+        class="cds-theme-zone-g10"
+        :value="component.resourceRequest.gpus"
+        @input="component.resourceRequest.gpus = $event.target.value"
+        placeholder="gpus"
+      />
+    </cds-accordion-item>
+    <cds-accordion-item
+      id="variables-accordion-item"
+      :title="'Variables (' + variableKeys.length + ')'"
+    >
+      <cds-structured-list v-if="variableKeys.length != 0">
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell
+              >Name</cds-structured-list-header-cell
             >
-              <cds-structured-list-cell>
-                <cds-text-input
-                  class="cds-theme-zone-g10"
-                  id="add-component-variables-input"
-                  type="text"
-                  :value="key"
-                  @input="setVariableKey(idx, $event.target.value)"
-                  :invalid="this.invalidVariableKeys.has(idx)"
-                  invalidText="Variable names must be unique and not empty"
-                  placeholder="variable name"
+            <cds-structured-list-header-cell
+              >Value</cds-structured-list-header-cell
+            >
+            <cds-structured-list-header-cell></cds-structured-list-header-cell>
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row
+            v-for="(key, idx) in variableKeys"
+            :key="idx"
+          >
+            <cds-structured-list-cell>
+              <cds-text-input
+                class="cds-theme-zone-g10"
+                id="add-component-variables-input"
+                type="text"
+                :value="key"
+                @input="setVariableKey(idx, $event.target.value)"
+                :invalid="this.invalidVariableKeys.has(idx)"
+                invalidText="Variable names must be unique"
+                placeholder="variable name"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell>
+              <cds-text-input
+                class="cds-theme-zone-g10"
+                id="add-component-variables-input"
+                type="text"
+                :value="variableValues[idx]"
+                @input="setVariableValue(idx, $event.target.value)"
+                :invalid="this.invalidVariableValues.has(idx)"
+                invalidText="Variables must have a value"
+                placeholder="variable value"
+              />
+            </cds-structured-list-cell>
+            <cds-structured-list-cell class="align-top">
+              <cds-icon-button
+                kind="danger"
+                enter-delay-ms="1000"
+                leave-delay-ms="0"
+                align="bottom"
+                @click="removeVariable(idx)"
+              >
+                <img
+                  slot="icon"
+                  class="white-svg"
+                  height="18"
+                  width="18"
+                  src="@/assets/remove.svg"
                 />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell>
-                <cds-text-input
-                  class="cds-theme-zone-g10"
-                  id="add-component-variables-input"
-                  type="text"
-                  :value="variableValues[idx]"
-                  @input="setVariableValue(idx, $event.target.value)"
-                  :invalid="this.invalidVariableValues.has(idx)"
-                  invalidText="Variables must have a value"
-                  placeholder="variable value"
-                />
-              </cds-structured-list-cell>
-              <cds-structured-list-cell class="align-top">
-                <cds-icon-button
-                  kind="danger"
-                  enter-delay-ms="1000"
-                  leave-delay-ms="0"
-                  align="bottom"
-                  @click="removeVariable(idx)"
-                >
-                  <img
-                    slot="icon"
-                    class="white-svg"
-                    height="18"
-                    width="18"
-                    src="@/assets/remove.svg"
-                  />
-                  <p slot="tooltip-content">Remove item</p>
-                </cds-icon-button>
-              </cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-        </cds-structured-list>
-        <bx-btn kind="primary" @click="addVariables">Add Variable +</bx-btn>
-      </bx-accordion-item>
-    </bx-accordion>
-  </div>
+                <p slot="tooltip-content">Remove item</p>
+              </cds-icon-button>
+            </cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+      <br />
+      <cds-button kind="primary" @click="addVariables"
+        >Add Variable
+        <img
+          slot="icon"
+          class="white-svg"
+          height="18"
+          width="18"
+          src="@/assets/plus.svg"
+        />
+      </cds-button>
+    </cds-accordion-item>
+  </cds-accordion>
 </template>
 
 <script>
 import { ref } from "vue";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/toggle/index.js";
-import "@carbon/web-components/es/components/accordion/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/toggle.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/content-switcher.min.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
+import { fixAccordionStyle } from "@/functions/cds_accordion_fixes";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
@@ -732,6 +760,10 @@ export default {
           this.hasInvalidVariableValues,
       );
     },
+    contentSwitcherChanged(event) {
+      this.contentSwitcherSelection = event.target.value;
+      fixAccordionStyle("rm-accordion-item");
+    },
     update() {
       if (!this.hasInvalidName && !this.hasInvalidParameterNames) {
         this.setVariables();
@@ -778,9 +810,22 @@ export default {
       }
       this.emitValidityStatus();
     },
+    addParam() {
+      this.component.addParameter();
+      fixAccordionStyle("parameters-accordion-item");
+    },
+    addRestartHook() {
+      this.component.addRestartHookOn();
+      fixAccordionStyle("wf-accordion-item");
+    },
+    addShutdown() {
+      this.component.addShutdownOn();
+      fixAccordionStyle("wf-accordion-item");
+    },
     addVariables() {
       this.variableKeys.push("");
       this.variableValues.push("");
+      fixAccordionStyle("variables-accordion-item");
     },
     removeVariable(idx) {
       this.variableKeys.splice(idx, 1);
@@ -811,6 +856,4 @@ export default {
 @import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/svg.scss";
 @import "@/styles/cds-structured-list-styles.css";
-@import "@/styles/bx-accordion-styles.css";
-@import "@/styles/bx-modal-styles.css";
 </style>
