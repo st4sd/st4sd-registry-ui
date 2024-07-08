@@ -2,49 +2,47 @@
   <div>
     <!-- <h5>{{ variable.name }}</h5> -->
     <h5 id="heading">Choose the value for this variable:</h5>
-    <bx-radio-button-group
+    <cds-radio-button-group
       label-position="right"
       orientation="vertical"
       :name="`radio-group-${variable.name}`"
       :value="selectedValueId"
-      @bx-radio-button-group-changed="setVariableValue()"
+      @cds-radio-button-group-changed="setVariableValue()"
+      style="display: inline;"
     >
-      <bx-radio-button
+      <cds-radio-button
         label-text="Use platform default"
         :value="defaultValueId"
-      ></bx-radio-button>
-      <bx-radio-button
+      ></cds-radio-button>
+      <cds-radio-button
         label-text="Set preset value"
         :value="presetValueId"
-      ></bx-radio-button>
-      <div
+      ></cds-radio-button>
+      <cds-text-input
+      id="preset-input"
         v-if="
           getVariablePresetValue() != undefined &&
           presetInputsVisible[this.valueIndex] == true
         "
-        id="preset-input"
-      >
-        <cds-text-input
-          size="lg"
-          class="cds-theme-zone-g10"
-          :value="parameterisationOptions.presets.variables[index].value"
-          @input="setPresetValue"
-          label="Value"
-          :invalid="invalidVariables[this.valueIndex]"
-          invalidText="Value can not be an empty string"
-        />
-      </div>
-      <bx-radio-button
+        size="lg"
+        class="cds-theme-zone-g10"
+        :value="parameterisationOptions.presets.variables[index].value"
+        @input="setPresetValue"
+        label="Value"
+        :invalid="invalidVariables[this.valueIndex]"
+        invalidText="Value can not be an empty string"
+      />
+      <cds-radio-button
         label-text="Set executionOption value"
         :value="executionOptionsValueId"
-      ></bx-radio-button>
-    </bx-radio-button-group>
+      ></cds-radio-button>
+    </cds-radio-button-group>
     <div v-if="executionOptionInputsVisible[this.valueIndex] == true">
       <div class="cds--row">
         <div class="cds--col-lg-16 space-centre">
           <p>Choose variable options:</p>
-          <bx-btn kind="ghost" @click="addVariable()"
-            >Add Another Option</bx-btn
+          <cds-button kind="ghost" @click="addVariable()"
+            >Add Another Option</cds-button
           >
         </div>
       </div>
@@ -54,14 +52,13 @@
           'value' in getVariableExecutionOptionsValue()
         "
       >
-        <bx-inline-notification
+        <cds-inline-notification
           v-if="getVariableExecutionOptionsValue().value == ''"
           id="no-variable-notification"
           kind="info"
           title="No value set -"
           subtitle="If you don’t add a value, the default value will be set by the platform"
-        >
-        </bx-inline-notification>
+        />
         <div class="cds--row drag">
           <div class="cds--col-lg-14 padding-right">
             <img
@@ -78,11 +75,9 @@
             />
           </div>
           <div class="cds--col-lg-2 padding-left">
-            <bx-btn
+            <cds-button
               id="remove-button"
               kind="danger-ghost"
-              icon-layout
-              size="sm"
               title="Remove"
               :disabled="true"
             >
@@ -96,7 +91,7 @@
               >
                 <rect x="8" y="15" width="16" height="2" />
               </svg>
-            </bx-btn>
+            </cds-button>
           </div>
         </div>
       </div>
@@ -138,11 +133,9 @@
               />
             </div>
             <div class="cds--col-lg-2 padding-left">
-              <bx-btn
+              <cds-button
                 id="remove-button"
                 kind="danger-ghost"
-                icon-layout
-                size="sm"
                 @click="removeVariable(i)"
                 title="Remove"
               >
@@ -156,7 +149,7 @@
                 >
                   <rect x="8" y="15" width="16" height="2" />
                 </svg>
-              </bx-btn>
+              </cds-button>
             </div>
           </div>
         </div>
@@ -166,6 +159,8 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 import "@carbon/web-components/es/components/toggle/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
 import "@carbon/web-components/es/components/radio-button/index.js";
@@ -595,8 +590,7 @@ export default {
   width: calc(100% - layout.$spacing-05);
 }
 #preset-input {
-  width: 89%;
-  padding: layout.$spacing-05 0;
+  padding: 0 layout.$spacing-05 layout.$spacing-05;
 }
 #heading {
   margin: layout.$spacing-05 0;
@@ -610,4 +604,5 @@ export default {
   position: relative;
   top: 2rem;
 }
+
 </style>
