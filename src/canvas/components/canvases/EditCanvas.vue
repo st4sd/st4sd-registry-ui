@@ -1,7 +1,8 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <!-- Error Notification -->
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="(notification, notifIdx) in toastNotifications"
       :key="notifIdx"
       timeout="5000"
@@ -27,30 +28,59 @@
       <Controls />
 
       <Panel :position="PanelPosition.TopRight" class="controls">
-        <bx-btn
-          size="sm"
+        <cds-button
+          size="md"
+          class="cds-button-padding"
           v-if="doesOtherOrPresetsExist()"
           title="Toggle inputs visibility"
           @click="showHideInputNodes"
         >
           {{ showHideButtonTitle }}
-        </bx-btn>
-        <bx-btn size="sm" @click="toggleTheme" title="Toggle light/dark mode">
           <img
+            v-if="!inputNodesVisibility"
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/upstream.svg"
+          />
+          <img
+            v-else
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/view--off.svg"
+          />
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
+          @click="toggleTheme"
+          title="Toggle light/dark mode"
+        >
+          <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/brightness-contrast.svg"
           />
-        </bx-btn>
-        <bx-btn size="sm" title="Download DSL" @click="downloadExperimentFiles">
+        </cds-button>
+        <cds-button
+          size="md"
+          class="cds-button-padding"
+          title="Download DSL"
+          @click="downloadExperimentFiles"
+        >
           <img
+            slot="icon"
             class="white-svg"
             width="16"
             height="16"
             src="@/assets/download.svg"
           />
-        </bx-btn>
+        </cds-button>
       </Panel>
       <template #node-component="{ label }">
         <ComponentNode :label="label" />
@@ -135,7 +165,8 @@ import {
   hide,
 } from "@/canvas/functions/hideExpand";
 import TransformLibrary from "@/canvas/components/TransformLibrary.vue";
-import "@carbon/web-components/es/components/notification/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -291,4 +322,8 @@ const handleTransformSelected = (loading, transformId) => {
 @import "@/canvas/styles/main.scss";
 @import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
+
+.cds-button-padding {
+  padding: 0 3px 0 3px;
+}
 </style>
