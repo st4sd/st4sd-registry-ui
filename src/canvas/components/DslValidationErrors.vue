@@ -81,3 +81,9 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+pre {
+  white-space: pre-wrap;
+  font-size: small;
+}
+</style>

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <!-- 
   Copyright IBM Inc. All Rights Reserved.
   SPDX-License-Identifier: Apache-2.0
@@ -5,58 +6,56 @@
   Author: Alessandro Pomponio
 -->
 <template>
-  <div class="cds--row logViewFlexContainer">
+  <div class="cds--row">
     <template v-if="loading">
       <div class="cds--col-lg-12">
-        <p>
-          <bx-skeleton-text
+        <cds-tile>
+          <pre>
+          <cds-skeleton-text
             v-for="i in 3"
             :key="i"
             type="line"
-          ></bx-skeleton-text>
-        </p>
+          ></cds-skeleton-text>
+        </pre>
+        </cds-tile>
       </div>
       <div class="cds--col-lg-4">
-        <bx-btn-skeleton></bx-btn-skeleton>
+        <cds-button-skeleton></cds-button-skeleton>
       </div>
     </template>
     <template v-else>
       <div class="cds--col-lg-12">
-        <div class="logWidths" v-if="log.length != 0">
-          <div class="tableOverflowContainer">
-            <bx-code-snippet type="multi" id="logViewCodeSnippet"
-              ><p>{{ log }}</p></bx-code-snippet
-            >
-          </div>
-        </div>
-        <pre class="logWidths" v-else>
+        <cds-tile>
+          <pre v-if="log.length != 0">{{ log }}</pre>
+          <pre v-else>
 No logs available
       </pre
-        >
+          >
+        </cds-tile>
       </div>
       <div class="cds--col-lg-4">
-        <bx-btn
-          v-if="log.length != 0"
-          class="bx--btn--primary"
-          type="button"
+        <cds-button
+          :disabled="log.length == 0"
+          kind="primary"
           @click="download()"
         >
-          Download log&nbsp;
+          Download log
           <img
+            slot="icon"
             class="white-svg"
             height="18"
             width="18"
             src="../../assets/download.svg"
-        /></bx-btn>
+        /></cds-button>
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/skeleton-text/index.js";
-import "@carbon/web-components/es/components/code-snippet/index.js";
-
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/tile.min.js";
 export default {
   name: "ST4SDLogView",
   props: {
@@ -71,19 +70,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-  },
-  watch: {
-    //Watches the loading variable and when it changes adds a scroll to the code snippet if the snippet is over 5000 chars
-    loading: function () {
-      if (this.loading == false && this.log.length > 5000) {
-        setTimeout(function () {
-          //Selects the container for the code snippet and adds a Y-overflow scroll
-          let bxSnippetContainer = document.querySelector("#logViewCodeSnippet")
-            .shadowRoot.adoptedStyleSheets[0].cssRules[477];
-          bxSnippetContainer.style.overflowY = "scroll";
-        }, 1);
-      }
     },
   },
   methods: {
@@ -105,49 +91,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@use "@carbon/layout";
 @import "@/styles/svg.scss";
 
-p {
+pre {
+  font-family: monospace;
+  padding: layout.$spacing-06;
+  line-height: var(--cds-body-02-line-height, 1.5);
+  white-space: pre-wrap;
   font-size: small;
-  background-color: #f4f4f4;
-  padding: 20px;
-}
-
-#logViewCodeSnippet {
-  max-width: 100%;
-
-  p {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
 }
 
 @media screen and (max-width: 1056px) {
-  .logViewFlexContainer {
+  .cds--row {
     flex-direction: column-reverse;
   }
 
-  #logViewCodeSnippet {
-    padding-left: 0;
-    padding-right: 0;
+  cds-button, cds-button-skeleton {
+    float: right;
+    margin-bottom: layout.$spacing-05;
   }
-
-  #logViewCodeSnippet p {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-
-.logWidths {
-  min-width: 220px;
-  white-space: pre-wrap;
-  font-size: small;
-  background-color: #f4f4f4;
-  padding: 20px;
-}
-
-.bx--btn--primary {
-  margin-top: 0;
 }
 </style>
