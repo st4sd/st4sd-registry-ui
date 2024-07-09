@@ -6,7 +6,7 @@
     <div id="nodes-container">
       <div v-if="transforms == null">
         <div id="loadingContainer">
-          <bx-loading id="loadingWheel" type="overlay"></bx-loading>
+          <cds-loading id="loadingWheel" type="overlay"></cds-loading>
         </div>
       </div>
       <div v-else>
@@ -27,8 +27,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import "@carbon/web-components/es/components/dropdown/index.js";
-import "@carbon/web-components/es/components/search/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
 
 const props = defineProps({
   id: {
