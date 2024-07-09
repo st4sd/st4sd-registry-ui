@@ -1,21 +1,25 @@
 <template>
-  <div class="date-filter-container">
-    <div class="search-dropdown-container">
-      <bx-dropdown
-        labelText="Filter runs by creation date:"
+  <div class="cds--css-grid cds--css-grid--narrow cds--css-grid--full-width">
+    <div class="cds--css-grid-column cds--col-span-4 top-row-on-mobile">
+      <cds-dropdown
+        titleText="Filter runs by creation date:"
         :disabled="loading || data.length == 0"
         :value="searchSelector"
-        @bx-dropdown-selected="searchSelector = $event.target.value"
+        @cds-dropdown-selected="searchSelector = $event.target.value"
       >
-        <bx-dropdown-item
+        <cds-dropdown-item
           v-for="(searchSelector, idx) in searchSelectorArray"
           :key="idx"
           :value="searchSelector.Id"
+          :disabled="loading || data.length == 0"
           >{{ searchSelector.Name }}
-        </bx-dropdown-item>
-      </bx-dropdown>
+        </cds-dropdown-item>
+      </cds-dropdown>
     </div>
-    <div v-if="searchSelector == 'custom'" class="date-picker-container">
+    <div
+      v-if="searchSelector == 'custom'"
+      class="cds--css-grid-column cds--col-span-4"
+    >
       <cds-date-picker
         date-format="d/m/y"
         @cds-date-picker-changed="handleDatePickerChange"
@@ -39,6 +43,7 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/date-picker.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
 
 export default {
   name: "St4sdDateFilter",
@@ -124,36 +129,21 @@ export default {
 };
 </script>
 
-<style scoped>
-.date-filter-container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.search-dropdown-container {
-  padding: 0;
-  border-right: 2px;
-  border-color: #ffffff;
-}
+<style scoped lang="scss">
+@use "@carbon/layout";
 
-.date-picker-container {
+.cds--css-grid--full-width {
   padding: 0;
-  padding-top: 1.5px;
-  padding-left: 1rem;
-}
-
-bx-dropdown {
-  display: inline-block;
-  width: 18rem;
 }
 
 @media screen and (max-width: 671px) {
-  .date-filter-container {
-    flex-direction: column;
+  .cds--css-grid-column {
+    margin: 0;
   }
-  .date-picker-container {
-    padding-top: 2rem;
-    padding-left: 0;
+
+  /* AP: add some spacing between the rows on mobile*/
+  .cds--css-grid-column.top-row-on-mobile {
+    margin-bottom: layout.$spacing-05;
   }
 }
 </style>
