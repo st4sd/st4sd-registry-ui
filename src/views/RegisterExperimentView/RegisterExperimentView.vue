@@ -1,6 +1,6 @@
 <template>
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="(notification, idx) in notifications"
       :key="idx"
       :kind="notification.kind"
@@ -11,12 +11,11 @@
         (notification.code == 0 ? '' : ` (code ${notification.code})`)
       "
       timeout="5000"
-    >
-    </bx-toast-notification>
+    />
   </div>
   <St4sdBreadcrumb :breadcrumbs="getBreadcumbs()" />
   <div v-if="loading" id="loading-container">
-    <bx-loading type="overlay"></bx-loading>
+    <cds-loading></cds-loading>
   </div>
   <div v-if="!loading">
     <HttpErrorEmptyState
@@ -38,6 +37,9 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import ParameterisationContainer from "@/components/ParameterisationView/ParameterisationContainer.vue";
 //Stores
@@ -197,10 +199,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #loading-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 70vh;
 }
 </style>
