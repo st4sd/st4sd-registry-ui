@@ -1,16 +1,10 @@
 <template>
   <div>
     <div class="cds--row pad1" v-if="checkVeInterfaceIsPresent(experiment)">
-      <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-        <dds-content-block class="ve-content-block">
-          <dds-content-block-heading class="ve-heading"
-            >Virtual-experiment interface</dds-content-block-heading
-          >
-          <div class="ve-copy">
-            {{ experiment.metadata.registry.interface.description }}
-          </div>
-        </dds-content-block>
-      </div>
+      <ExperimentViewContentBlock
+        title="Virtual-experiment interface"
+        :subTitle="experiment.metadata.registry.interface.description"
+      />
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
         <cds-structured-list>
           <cds-structured-list-head>
@@ -45,11 +39,17 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
+
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 export default {
   name: "VirtualExperimentInterface",
   props: {
     experiment: Object,
+  },
+  components: {
+    ExperimentViewContentBlock,
   },
   methods: {
     checkVeInterfaceIsPresent,

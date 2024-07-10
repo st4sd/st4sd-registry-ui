@@ -1,12 +1,6 @@
 <template>
   <div class="cds--row pad1">
-    <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-      <dds-content-block class="ve-content-block">
-        <dds-content-block-heading class="ve-heading"
-          >History</dds-content-block-heading
-        >
-      </dds-content-block>
-    </div>
+    <ExperimentViewContentBlock title="History" />
     <div
       class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12"
       v-if="error.code != 0"
@@ -108,11 +102,13 @@ import {
 } from "@/functions/table_sort";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
 
 export default {
   name: "ExperimentHistory",
   components: {
     HttpErrorEmptyState,
+    ExperimentViewContentBlock,
   },
   props: {
     history: Object,

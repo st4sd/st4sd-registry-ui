@@ -1,12 +1,6 @@
 <template>
   <div class="cds--row pad1">
-    <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-      <dds-content-block class="ve-content-block">
-        <dds-content-block-heading class="ve-heading"
-          >Metadata</dds-content-block-heading
-        >
-      </dds-content-block>
-    </div>
+    <ExperimentViewContentBlock title="Metadata" />
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
       <cds-structured-list>
         <cds-structured-list-body>
@@ -113,6 +107,9 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tooltip.min.js";
+
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
+
 import { checkExperimentIsContributed } from "@/functions/origin_checks";
 export default {
   name: "PackageInfoMetadata",
@@ -120,6 +117,9 @@ export default {
     tags: Array,
     experiment: Object,
     getAvailablePlatforms: Array,
+  },
+  components: {
+    ExperimentViewContentBlock,
   },
   methods: {
     checkExperimentIsContributed,

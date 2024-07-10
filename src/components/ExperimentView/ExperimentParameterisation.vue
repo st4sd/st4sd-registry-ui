@@ -3,16 +3,10 @@
   <div>
     <!-- Experiment execution options -->
     <div class="cds--row pad1">
-      <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-        <dds-content-block class="ve-content-block">
-          <dds-content-block-heading class="ve-heading"
-            >Execution options</dds-content-block-heading
-          >
-          <div class="ve-copy">
-            These parameters can be overridden by the user
-          </div>
-        </dds-content-block>
-      </div>
+      <ExperimentViewContentBlock
+        title="Execution options"
+        subTitle="These parameters can be overridden by the user"
+      />
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
         <cds-structured-list>
           <cds-structured-list-head>
@@ -200,14 +194,10 @@
     </div>
     <!-- Experiment presets -->
     <div class="cds--row pad1">
-      <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-        <dds-content-block class="ve-content-block">
-          <dds-content-block-heading class="ve-heading"
-            >Preset parameters</dds-content-block-heading
-          >
-          <div class="ve-copy">These parameters cannot be changed</div>
-        </dds-content-block>
-      </div>
+      <ExperimentViewContentBlock
+        title="Preset parameters"
+        subTitle="These parameters cannot be changed"
+      />
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
         <cds-structured-list>
           <cds-structured-list-head>
@@ -361,11 +351,17 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
+
 export default {
   name: "ExperimentParameterisation",
   props: {
     experiment: Object,
     id: String,
+  },
+  components: {
+    ExperimentViewContentBlock,
   },
   methods: {
     allPlatformHaveSameValue(defaultValues) {

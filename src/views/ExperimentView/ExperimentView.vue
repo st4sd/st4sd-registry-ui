@@ -381,30 +381,6 @@ export default {
   }
 }
 
-.ve-content-block {
-  padding: 0;
-  padding-bottom: 0.5rem;
-}
-
-.ve-heading {
-  @media screen and (max-width: 1056px) and (min-width: 672px) {
-    font-size: calc(16px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
-    margin-bottom: 1rem;
-  }
-  @media screen and (max-width: 671px) {
-    margin-bottom: 16px;
-    margin-left: 0;
-  }
-  font-size: 1.5em;
-}
-
-.ve-copy {
-  @media screen and (max-width: 671px) {
-    margin-left: 0;
-  }
-  margin-right: 16px;
-}
-
 .pad1 {
   padding-bottom: layout.$spacing-08;
 }

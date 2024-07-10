@@ -1,13 +1,7 @@
 <template>
   <div>
     <div class="cds--row pad1">
-      <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-        <dds-content-block class="ve-content-block">
-          <dds-content-block-heading class="ve-heading"
-            >Inputs</dds-content-block-heading
-          >
-        </dds-content-block>
-      </div>
+      <ExperimentViewContentBlock title="Inputs" />
       <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
         <cds-structured-list>
           <cds-structured-list-head>
@@ -45,10 +39,16 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
+
 export default {
   name: "ExperimentInputs",
   props: {
     experiment: Object,
+  },
+  components: {
+    ExperimentViewContentBlock,
   },
 };
 </script>

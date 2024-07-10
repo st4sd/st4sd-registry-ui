@@ -1,12 +1,6 @@
 <template>
   <div class="cds--row pad1">
-    <div class="cds--col-sm-4 cds--col-md-2 cds--col-lg-4">
-      <dds-content-block class="ve-content-block">
-        <dds-content-block-heading class="ve-heading"
-          >Base</dds-content-block-heading
-        >
-      </dds-content-block>
-    </div>
+    <ExperimentViewContentBlock title="Base" />
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12">
       <div
         class="pad1"
@@ -93,10 +87,16 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+
+import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
+
 export default {
   name: "PackageInfoBase",
   props: {
     experiment: Object,
+  },
+  components: {
+    ExperimentViewContentBlock,
   },
   methods: {
     filterBasePackages(basePackages, sourceFilter) {
