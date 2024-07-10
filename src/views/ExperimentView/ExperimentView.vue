@@ -8,15 +8,14 @@
   <!-- Navigation breadcrumb -->
   <div>
     <div id="toast-notification-container">
-      <bx-toast-notification
+      <cds-toast-notification
         v-for="error in errors"
         :key="error.description"
         kind="error"
         :title="error.description"
         :caption="error.statusText + ' (error ' + error.code + ')'"
         timeout="5000"
-      >
-      </bx-toast-notification>
+      />
     </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
@@ -32,21 +31,21 @@
       <div class="cds--row pad1">
         <div class="cds--col-lg-10">
           <p style="padding: 64px"></p>
-          <bx-skeleton-text type="heading"></bx-skeleton-text>
+          <cds-skeleton-text type="heading"></cds-skeleton-text>
           <p style="padding: 10px; margin: 10px"></p>
-          <bx-skeleton-text type="line"></bx-skeleton-text>
-          <bx-skeleton-text type="line"></bx-skeleton-text>
+          <cds-skeleton-text type="line"></cds-skeleton-text>
+          <cds-skeleton-text type="line"></cds-skeleton-text>
         </div>
         <div class="cds--col" style="padding: 64px">
-          <bx-progress-indicator-skeleton
+          <cds-progress-indicator-skeleton
             class="ve-progress-indicator"
             vertical
           >
-            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-            <bx-progress-step-skeleton vertical></bx-progress-step-skeleton>
-          </bx-progress-indicator-skeleton>
+            <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+            <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+            <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+            <cds-progress-step-skeleton vertical></cds-progress-step-skeleton>
+          </cds-progress-indicator-skeleton>
         </div>
       </div>
     </template>
@@ -122,7 +121,6 @@ import "@carbon/web-components/es/components/code-snippet/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/content-block/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/cta/text-cta.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/progress-indicator/index.js";
 import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/list/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/content-item/index.js";
@@ -130,8 +128,10 @@ import "@carbon/ibmdotcom-web-components/es/components/horizontal-rule/index.js"
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 import "@carbon/web-components/es/components/pagination/index.js";
 import "@carbon/web-components/es/components/loading/index.js";
-import "@carbon/web-components/es/components/skeleton-text/index.js";
-import "@carbon/web-components/es/components/progress-indicator/index.js";
+
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/progress-indicator.min.js";
 
 import {
   checkContainerImagesHaveTagOtherThanLatest,
@@ -373,10 +373,6 @@ export default {
   min-height: 70vh;
 }
 
-bx-breadcrumb-item {
-  display: inline;
-}
-
 .ve-progress-indicator {
   margin-top: 0;
   @media screen and (max-width: 1055px) {
@@ -407,10 +403,6 @@ bx-breadcrumb-item {
     margin-left: 0;
   }
   margin-right: 16px;
-}
-
-.bx--btn--primary {
-  margin-top: layout.$spacing-05;
 }
 
 .pad1 {
