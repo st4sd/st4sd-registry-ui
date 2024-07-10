@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div class="cds--row pad1">
     <ExperimentViewContentBlock title="Description" />
@@ -11,19 +12,19 @@
         </cds-code-snippet>
       </div>
       <div class="cds--row">
-        <bx-btn
-          class="bx--btn--primary"
+        <cds-button
           type="button"
           @click="download()"
           :disabled="Object.keys(exp_no_interface).length === 0"
         >
-          Download JSON&nbsp;
+          Download JSON
           <img
+            slot="icon"
             class="white-svg"
             height="18"
             width="18"
             src="../../assets/download.svg"
-        /></bx-btn>
+        /></cds-button>
       </div>
     </div>
   </div>
