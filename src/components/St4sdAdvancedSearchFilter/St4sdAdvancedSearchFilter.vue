@@ -1,36 +1,34 @@
 <template>
-  <div class="search-container cds--row">
+  <div class="cds--css-grid cds--css-grid--condensed cds--css-grid--full-width">
     <div
-      class="cds--col-lg-4 cds--col-xlg-4 cds--col-max-4 search-dropdown-container"
+      class="cds--css-grid-column cds--lg:col-span-4 cds--md:col-span-8 cds--sm:col-span-4"
     >
-      <bx-dropdown
-        size="xl"
+      <cds-dropdown
+        size="lg"
         :value="searchSelector"
-        @bx-dropdown-selected="updateSearchSelector"
+        @cds-dropdown-selected="updateSearchSelector"
       >
-        <bx-dropdown-item
+        <cds-dropdown-item
           v-for="(searchSelector, idx) in searchSelectorArray"
           :key="idx"
           :value="searchSelector.Id"
           >{{ searchSelector.Name }}
-        </bx-dropdown-item>
-      </bx-dropdown>
+        </cds-dropdown-item>
+      </cds-dropdown>
     </div>
-    <div
-      class="cds--col-lg-12 cds--col-xlg-12 cds--col-max-12 search-bar-container"
-    >
-      <bx-search
-        size="xl"
+    <div class="cds--css-grid-column cds--col-span-12">
+      <cds-search
+        size="lg"
         id="advancedSearchBar"
-        @bx-search-input="updateSearchQuery"
-      ></bx-search>
+        @cds-search-input="updateSearchQuery"
+      ></cds-search>
     </div>
   </div>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/dropdown/index.js";
-import "@carbon/web-components/es/components/search/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/search.min.js";
 
 export default {
   name: "AdvancedSearchFilter",
@@ -57,24 +55,30 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "@carbon/grid";
 @use "@carbon/layout";
-.bx--list-box {
-  max-height: 3rem;
-  height: 3rem;
-}
+
 .card-row {
   margin-bottom: layout.$spacing-06;
 }
 
-@media screen and (min-width: 1056px) {
-  .search-bar-container {
-    padding-left: 0 !important;
-  }
+.cds--css-grid--full-width {
+  padding: 0;
+}
 
-  .search-dropdown-container {
-    padding-right: 0 !important;
-  }
+.cds--css-grid--condensed > .cds--css-grid-column {
+  margin: 0;
+}
+
+/*
+   AP:
+   The input in the shadow root of the cds-search sets box-sizing to be
+   border-box. This causes the input to appear 1px smaller than the
+   dropdown. Unsetting it fixes it
+   ref: https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11917
+*/
+cds-search::part(input) {
+  box-sizing: unset;
 }
 </style>
