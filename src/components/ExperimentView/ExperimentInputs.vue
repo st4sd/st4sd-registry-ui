@@ -14,20 +14,20 @@
           <cds-structured-list-body>
             <cds-structured-list-row>
               <cds-structured-list-cell>
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-if="experiment.metadata.registry.inputs.length == 0"
                   >
                     No inputs
-                  </bx-list-item>
-                  <bx-list-item
+                  </cds-list-item>
+                  <cds-list-item
                     v-else
                     v-for="(input, idx) in experiment.metadata.registry.inputs"
                     :key="idx"
                   >
                     <code>{{ input.name }}</code>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
           </cds-structured-list-body>
@@ -39,6 +39,7 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
 
 import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
 
