@@ -26,9 +26,9 @@
               <cds-structured-list-cell class="cds--col-sm-1"
                 >Source</cds-structured-list-cell
               ><cds-structured-list-cell class="cds--col-sm-3">
-                <bx-link :href="getUrl(basePackage.source.git)"
+                <cds-link :href="getUrl(basePackage.source.git)"
                   >{{ getUrl(basePackage.source.git) }}
-                </bx-link>
+                </cds-link>
               </cds-structured-list-cell>
             </cds-structured-list-row>
             <cds-structured-list-row
@@ -60,7 +60,7 @@
               <cds-structured-list-cell class="cds--col-sm-1"
                 >Report a problem</cds-structured-list-cell
               ><cds-structured-list-cell class="cds--col-sm-3 pad1">
-                <bx-link
+                <cds-link
                   :href="
                     createIssueForGitPackage(experiment, basePackage.source.git)
                   "
@@ -75,7 +75,7 @@
                     src="../../assets/arrow--right.svg"
                   />
                   <!-- eslint-enable -->
-                </bx-link>
+                </cds-link>
               </cds-structured-list-cell>
             </cds-structured-list-row>
           </cds-structured-list-body>
@@ -87,6 +87,7 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
 
 import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
 
