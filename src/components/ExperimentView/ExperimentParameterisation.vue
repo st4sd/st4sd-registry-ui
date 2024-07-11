@@ -30,15 +30,15 @@
                 >Data files</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="(entry, idx) in experiment.parameterisation
                       .executionOptions.data"
                     :key="idx"
                   >
                     <code>{{ entry.name }}</code>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
 
@@ -53,15 +53,15 @@
                 >Platforms</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="platform in experiment.parameterisation
                       .executionOptions.platform"
                     :key="platform"
                   >
                     <code>{{ platform }}</code>
-                  </bx-list-item>
-                </bx-unordered-list></cds-structured-list-cell
+                  </cds-list-item>
+                </cds-unordered-list></cds-structured-list-cell
               ></cds-structured-list-row
             >
 
@@ -76,15 +76,15 @@
                 >Runtime arguments</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="arg in experiment.parameterisation.executionOptions
                       .runtime.args"
                     :key="arg"
                   >
                     <code>{{ arg }}</code>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
 
@@ -123,8 +123,8 @@
                 >Variables</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="(entry, idx) in experiment.parameterisation
                       .executionOptions.variables"
                     :key="idx"
@@ -142,8 +142,8 @@
                         ).length != 0
                       "
                     >
-                      <bx-unordered-list>
-                        <bx-list-item
+                      <cds-unordered-list>
+                        <cds-list-item
                           v-if="
                             allPlatformHaveSameValue(
                               experiment.metadata.registry.executionOptionsDefaults.variables.find(
@@ -158,8 +158,8 @@
                               (item) => item.name == entry.name,
                             ).valueFrom[0].value
                           }}</code>
-                        </bx-list-item>
-                        <bx-list-item
+                        </cds-list-item>
+                        <cds-list-item
                           v-else
                           v-for="(
                             option, optIdx
@@ -170,22 +170,22 @@
                         >
                           <code>{{ option.platform }}</code
                           >: <code>{{ option.value }}</code>
-                        </bx-list-item>
-                      </bx-unordered-list>
+                        </cds-list-item>
+                      </cds-unordered-list>
                     </template>
 
                     <div v-if="'valueFrom' in entry">
-                      <bx-unordered-list>
-                        <bx-list-item
+                      <cds-unordered-list>
+                        <cds-list-item
                           v-for="(option, optIdx) in entry.valueFrom"
                           :key="optIdx"
                         >
                           <code>{{ option.value }}</code>
-                        </bx-list-item>
-                      </bx-unordered-list>
+                        </cds-list-item>
+                      </cds-unordered-list>
                     </div>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell></cds-structured-list-row
             >
           </cds-structured-list-body>
@@ -219,14 +219,14 @@
                 >Data files</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="entry in experiment.parameterisation.presets.data"
                     :key="entry"
                   >
                     {{ entry.name }}
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
 
@@ -269,15 +269,15 @@
                 >Environment variables</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="(entry, idx) in experiment.parameterisation.presets
                       .environmentVariables"
                     :key="idx"
                   >
                     {{ entry.name }}
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
 
@@ -291,15 +291,15 @@
                 >Runtime arguments</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="arg in experiment.parameterisation.presets.runtime
                       .args"
                     :key="arg"
                   >
                     <code>{{ arg }}</code>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell>
             </cds-structured-list-row>
 
@@ -330,16 +330,16 @@
                 >Variables</cds-structured-list-cell
               >
               <cds-structured-list-cell class="cds--col-sm-3">
-                <bx-unordered-list>
-                  <bx-list-item
+                <cds-unordered-list>
+                  <cds-list-item
                     v-for="(entry, idx) in experiment.parameterisation.presets
                       .variables"
                     :key="idx"
                   >
                     <code>{{ entry.name }}</code
                     >: <code>{{ entry.value }}</code>
-                  </bx-list-item>
-                </bx-unordered-list>
+                  </cds-list-item>
+                </cds-unordered-list>
               </cds-structured-list-cell></cds-structured-list-row
             >
           </cds-structured-list-body>
@@ -351,6 +351,7 @@
 
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
 
 import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
 
@@ -381,12 +382,3 @@ export default {
   scoped
   src="../../styles/structured-list-grid-column-styles.css"
 ></style>
-<style scoped>
-bx-unordered-list {
-  padding-left: 0;
-}
-
-bx-unordered-list bx-list-item {
-  padding-left: 10px;
-}
-</style>
