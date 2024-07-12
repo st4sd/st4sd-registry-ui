@@ -1,6 +1,6 @@
 <template>
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="(notification, idx) in notifications"
       :key="idx"
       :kind="notification.kind"
@@ -11,14 +11,13 @@
         (notification.code == 0 ? '' : ` (code ${notification.code})`)
       "
       timeout="5000"
-    >
-    </bx-toast-notification>
+    />
   </div>
   <St4sdBreadcrumb :breadcrumbs="getBreadcumbs()" />
 
   <div v-if="loading">
     <div id="loadingContainer">
-      <bx-loading id="loadingWheel" type="overlay"></bx-loading>
+      <cds-loading></cds-loading>
     </div>
   </div>
   <div v-else-if="fullPageError.code != null">
@@ -41,6 +40,9 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import BuildCanvas from "@/canvas/components/canvases/BuildCanvas.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
@@ -118,10 +120,5 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#loadingWheel {
-  display: inline-block;
-  animation: none;
 }
 </style>

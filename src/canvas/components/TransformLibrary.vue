@@ -6,7 +6,7 @@
     <div id="nodes-container">
       <div v-if="transforms == null">
         <div id="loadingContainer">
-          <cds-loading id="loadingWheel" type="overlay"></cds-loading>
+          <cds-loading></cds-loading>
         </div>
       </div>
       <div v-else>
@@ -72,11 +72,6 @@ const onClick = (element) => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#loadingWheel {
-  display: inline-block;
-  animation: none;
 }
 
 #controls {
