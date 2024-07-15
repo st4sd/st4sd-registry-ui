@@ -1,43 +1,42 @@
 <template>
   <div v-if="optionsLoading" id="loading-container">
-    <bx-loading type="overlay"></bx-loading>
+    <cds-loading type="overlay"></cds-loading>
   </div>
   <div v-else>
     <div v-if="parameterisation != null">
-      <bx-inline-notification
+      <cds-inline-notification
         id="cancel-notification"
         kind="warning"
         :open="cancelNotificationOpen"
         title="Are you sure?"
         subtitle="All changes that have been made will be lost - click cancel again within 10s to exit"
-      >
-      </bx-inline-notification>
+      />
       <div v-if="tabSelector == 'platforms'" class="tab">
         <div class="cds--row">
           <div class="cds--col-lg-13 cds--col-md-7">
             <h3>Platform</h3>
-            <bx-toggle
-              @bx-toggle-changed="
+            <cds-toggle
+              @cds-toggle-changed="
                 togglePlatform();
                 setPlatformType();
               "
-              checked-text="Configurable"
+              labelA="Configurable"
               :checked="!singlePlatform"
-              label-text="Choose between preset and configurable platforms"
-              unchecked-text="Preset"
+              labelText="Choose between preset and configurable platforms"
+              labelB="Preset"
             />
           </div>
           <div class="cds--col-lg-3 cds--col-md-1">
             <p>Quick Links:</p>
-            <bx-link
+            <cds-link
               v-if="singlePlatform"
               class="link-list"
               href="#single-platform"
-              >Platform</bx-link
+              >Platform</cds-link
             >
-            <bx-link v-else class="link-list" href="#multi-platform">
+            <cds-link v-else class="link-list" href="#multi-platform">
               Platform
-            </bx-link>
+            </cds-link>
           </div>
         </div>
         <div class="cds--row" v-if="singlePlatform" id="single-platform">
@@ -51,20 +50,19 @@
             class="cds--col-lg-12 cds--col-md-6 padding-right remove-btn-alignment"
           >
             <br />
-            <bx-dropdown
+            <cds-dropdown
               :value="selectedPlatform"
-              @bx-dropdown-selected="setSelectedPlatform"
-              colorScheme="light"
-              class="input-size padding-right"
+              @cds-dropdown-selected="setSelectedPlatform"
+              class="input-size padding-right cds-theme-zone-g10"
             >
-              <bx-dropdown-item
+              <cds-dropdown-item
                 v-for="(platform, idx) in platformOptions"
                 :key="idx"
                 :value="platform"
               >
                 {{ platform }}
-              </bx-dropdown-item>
-            </bx-dropdown>
+              </cds-dropdown-item>
+            </cds-dropdown>
           </div>
         </div>
         <div v-else id="multi-platform">
@@ -73,54 +71,54 @@
               class="cds--col-lg-13 cds--col-md-7 margin-horizontal space-centre padding-left"
             >
               <p>Choose platforms:</p>
-              <bx-btn
+              <cds-button
                 kind="ghost"
                 @click="addNewPlatform()"
                 v-if="availablePlatformOptions.length != 0"
-                >Add new platform</bx-btn
+                >Add new platform</cds-button
               >
             </div>
           </div>
-          <bx-modal
+          <cds-modal
             :open="addPlatform"
-            @bx-modal-closed="closeAddPlatformModal()"
+            @cds-modal-closed="closeAddPlatformModal()"
             v-if="availablePlatformOptions.length > 1"
           >
-            <bx-modal-header>
-              <bx-modal-close-button></bx-modal-close-button>
-              <bx-modal-heading>Choose New Platform</bx-modal-heading>
-            </bx-modal-header>
-            <bx-modal-body id="platform-modal">
-              <bx-radio-button-group
+            <cds-modal-header>
+              <cds-modal-close-button></cds-modal-close-button>
+              <cds-modal-heading>Choose New Platform</cds-modal-heading>
+            </cds-modal-header>
+            <cds-modal-body id="platform-modal">
+              <cds-radio-button-group
                 label-position="right"
                 orientation="vertical"
                 name="platform"
-                @bx-radio-button-group-changed="setPlatformToAdd()"
+                @cds-radio-button-group-changed="setPlatformToAdd()"
               >
-                <bx-radio-button
+                <cds-radio-button
                   class="platform-radios"
                   v-for="(platform, idx) in availablePlatformOptions"
                   :key="idx"
                   :value="platform"
                   :label-text="platform"
                   name="platform"
-                ></bx-radio-button>
-              </bx-radio-button-group>
-            </bx-modal-body>
-            <bx-modal-footer>
-              <bx-modal-footer-button
+                ></cds-radio-button>
+              </cds-radio-button-group>
+            </cds-modal-body>
+            <cds-modal-footer>
+              <cds-modal-footer-button
                 kind="secondary"
                 @click="closeAddPlatformModal()"
-                >Cancel</bx-modal-footer-button
+                >Cancel</cds-modal-footer-button
               >
-              <bx-modal-footer-button
+              <cds-modal-footer-button
                 kind="primary"
                 @click="addSelectedPlatform()"
-                >Add</bx-modal-footer-button
+                >Add</cds-modal-footer-button
               >
-            </bx-modal-footer>
-          </bx-modal>
-          <bx-inline-notification
+            </cds-modal-footer>
+          </cds-modal>
+          <cds-inline-notification
             v-if="
               parameterisation.executionOptions.platform == undefined ||
               parameterisation.executionOptions.platform.length == 0
@@ -130,7 +128,7 @@
             title="No platform set -"
             subtitle="If you don’t add any option, the default platform will be “default”"
           >
-          </bx-inline-notification>
+          </cds-inline-notification>
           <div
             v-for="(platform, idx) in parameterisation.executionOptions
               .platform"
@@ -165,11 +163,9 @@
                 />
               </div>
               <div class="cds--col-lg-1 cds--col-md-1 margin-horizontal">
-                <bx-btn
+                <cds-button
                   class="remove-btn"
                   kind="danger-ghost"
-                  icon-layout
-                  size="sm"
                   @click="removePlatform(idx)"
                   title="Remove"
                 >
@@ -183,7 +179,7 @@
                   >
                     <rect x="8" y="15" width="16" height="2" />
                   </svg>
-                </bx-btn>
+                </cds-button>
               </div>
             </div>
           </div>
@@ -201,10 +197,11 @@
                 id="variables"
               >
                 <div :id="`${variable.name}`">
-                  <bx-accordion>
-                    <bx-accordion-item
-                      :title-text="variable.name"
+                  <cds-accordion>
+                    <cds-accordion-item
+                      :title="variable.name"
                       :open="variableAccordionOpen[idx]"
+                      :id="`accordionItem-${idx}`"
                     >
                       <EditVariables
                         :parameterisationProp="parameterisation"
@@ -224,9 +221,12 @@
                           handleInvalidVariableExcutionOptions
                         "
                         @invalidPresetVariables="handleInvalidPresetVariables"
+                        @fixAccordionStyle="
+                          fixAccordionStyle(`accordionItem-${idx}`)
+                        "
                       />
-                    </bx-accordion-item>
-                  </bx-accordion>
+                    </cds-accordion-item>
+                  </cds-accordion>
                 </div>
               </div>
             </div>
@@ -234,17 +234,17 @@
           </div>
           <div class="cds--col-lg-3" v-if="variables.length != 0">
             <p class="link-list">Quick Links:</p>
-            <bx-link class="link-list" href="#variables">Variables</bx-link>
-            <bx-unordered-list class="link-list">
-              <bx-list-item v-for="(variable, idx) in variables" :key="idx">
-                <bx-link
+            <cds-link class="link-list" href="#variables">Variables</cds-link>
+            <cds-unordered-list class="link-list">
+              <cds-list-item v-for="(variable, idx) in variables" :key="idx">
+                <cds-link
                   :href="`#${variable.name}`"
                   @click="openAccordion(idx)"
                 >
                   {{ variable.name }}
-                </bx-link>
-              </bx-list-item>
-            </bx-unordered-list>
+                </cds-link>
+              </cds-list-item>
+            </cds-unordered-list>
           </div>
         </div>
       </div>
@@ -265,8 +265,8 @@
                 id="data"
               >
                 <div :id="`${file.name}`">
-                  <bx-unordered-list id="data-padding">
-                    <bx-list-item>
+                  <cds-unordered-list id="data-padding">
+                    <cds-list-item>
                       <EditData
                         :parameterisation="parameterisation"
                         :executionOptionsData="dataExecutionOptions"
@@ -274,8 +274,8 @@
                         :idx="idx"
                         @newDataType="setNewParameterisationOptions"
                       />
-                    </bx-list-item>
-                  </bx-unordered-list>
+                    </cds-list-item>
+                  </cds-unordered-list>
                 </div>
               </div>
             </div>
@@ -286,14 +286,14 @@
             v-if="dataOptions != undefined && dataOptions.length != 0"
           >
             <p>Quick Links:</p>
-            <bx-link class="link-list" href="#data">Data</bx-link>
-            <bx-unordered-list class="link-list">
-              <bx-list-item v-for="(file, idx) in dataOptions" :key="idx">
-                <bx-link :href="`#${file.name}`">
+            <cds-link class="link-list" href="#data">Data</cds-link>
+            <cds-unordered-list class="link-list">
+              <cds-list-item v-for="(file, idx) in dataOptions" :key="idx">
+                <cds-link :href="`#${file.name}`">
                   {{ file.name }}
-                </bx-link>
-              </bx-list-item>
-            </bx-unordered-list>
+                </cds-link>
+              </cds-list-item>
+            </cds-unordered-list>
           </div>
         </div>
       </div>
@@ -304,7 +304,7 @@
           </div>
           <div class="cds--col-lg-3" v-if="inputs.length != 0">
             <p>Quick Links:</p>
-            <bx-link class="link-list" href="#input">Input</bx-link>
+            <cds-link class="link-list" href="#input">Input</cds-link>
           </div>
         </div>
         <div v-if="inputs.length != 0">
@@ -332,13 +332,13 @@
           </div>
           <div class="cds--col-lg-3 cds--col-md-1">
             <p>Quick Links:</p>
-            <bx-link class="link-list" href="#runtime-args"
-              >Runtime Args</bx-link
+            <cds-link class="link-list" href="#runtime-args"
+              >Runtime Args</cds-link
             >
             <br />
             <br />
-            <bx-link class="link-list" href="#orchestrator-resources"
-              >Orchestrator Resources</bx-link
+            <cds-link class="link-list" href="#orchestrator-resources"
+              >Orchestrator Resources</cds-link
             >
           </div>
         </div>
@@ -346,8 +346,8 @@
           class="cds--col-lg-13 cds--col-md-7 margin-horizontal space-centre"
         >
           <h4 id="runtime-args">Runtime Arguments</h4>
-          <bx-btn kind="ghost" @click="addRuntimeArg()"
-            >Add Another Argument</bx-btn
+          <cds-button kind="ghost" @click="addRuntimeArg()"
+            >Add Another Argument</cds-button
           >
         </div>
         <div v-if="runtimeArgs.length != 0">
@@ -381,12 +381,10 @@
                 />
               </div>
               <div class="cds--col-lg-2 padding-left-rm-btm">
-                <bx-btn
-                  class="remove-btn"
+                <cds-button
+                  class="remove-btn runtime-remove-btn-class"
                   id="runtime-remove-btn"
                   kind="danger-ghost"
-                  icon-layout
-                  size="sm"
                   @click="removeRuntimeArg(arg, idx)"
                   title="Remove"
                 >
@@ -400,7 +398,7 @@
                   >
                     <rect x="8" y="15" width="16" height="2" />
                   </svg>
-                </bx-btn>
+                </cds-button>
               </div>
             </div>
           </div>
@@ -413,17 +411,17 @@
           class="cds--col-lg-13 cds--col-md-6 margin-horizontal space-centre"
         >
           <h4 id="orchestrator-resources">Orchestrator Resources</h4>
-          <bx-btn
+          <cds-button
             v-if="Object.keys(orchestratorResources).length == 0"
             kind="ghost"
             @click="addOrchestratorResources()"
-            >Add Orchestrator Resources</bx-btn
+            >Add Orchestrator Resources</cds-button
           >
-          <bx-btn
+          <cds-button
             v-else
             kind="danger-ghost"
             @click="removeOrchestratorResources()"
-            >Remove Orchestrator Resources</bx-btn
+            >Remove Orchestrator Resources</cds-button
           >
         </div>
         <div
@@ -470,12 +468,18 @@ import {
   setOrchestratorResourcesInvalid,
 } from "@/functions/setup_parameterisation_variables";
 
-import "@carbon/web-components/es/components/toggle/index.js";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/list/index.js";
-import "@carbon/web-components/es/components/dropdown/index.js";
-import "@carbon/web-components/es/components/radio-button/index.js";
-import "@carbon/web-components/es/components/notification/index.js";
+import { fixAccordionStyle } from "@/functions/cds_accordion_fixes";
+
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/toggle.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/radio-button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
 
 export default {
   name: "ParameterisationContainer",
@@ -614,6 +618,7 @@ export default {
     },
   },
   methods: {
+    fixAccordionStyle,
     setSinglePlatform() {
       if (this.parameterisation.presets.platform == undefined) {
         this.singlePlatform = false;
@@ -867,6 +872,9 @@ export default {
 .remove-btn {
   position: relative;
   height: layout.$spacing-09 !important;
+}
+.runtime-remove-btn-class {
+  top: 1rem;
 }
 #loading-container {
   display: flex;

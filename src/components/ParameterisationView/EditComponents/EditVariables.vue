@@ -194,6 +194,13 @@ export default {
       invalidVariables: null,
     };
   },
+  emits: [
+    "fixAccordionStyle",
+    "invalidExecutionOption",
+    "invalidPresetVariables",
+    "newOptions",
+    "enableSave",
+  ],
   watch: {
     parameterisationProp: {
       // the callback will be called immediately after the start of the observation
@@ -309,6 +316,7 @@ export default {
         this.setExecutionOptionType();
         this.$emit("enableSave");
       }
+      this.$emit("fixAccordionStyle");
     },
     setVariableValueIds() {
       this.defaultValueId = `${this.variable.name}-default`;
@@ -524,6 +532,7 @@ export default {
       ].push({ value: "" });
       this.invalidExecutionOptions[this.valueIndex].push(true);
       this.variableValues[this.valueIndex].push("");
+      this.$emit("fixAccordionStyle");
     },
     emitNewOptions() {
       this.$emit("newOptions", this.parameterisationOptions);
@@ -605,4 +614,7 @@ export default {
   top: 2rem;
 }
 
+.cds--row {
+  flex-wrap: nowrap;
+}
 </style>
