@@ -1,14 +1,13 @@
 <template>
   <div>
     <div id="toast-notification-container">
-      <bx-toast-notification
+      <cds-toast-notification
         v-if="isError"
         kind="error"
         :title="errorDescription"
         :caption="errorStatusText + ' (error ' + errorCode + ')'"
         timeout="5000"
-      >
-      </bx-toast-notification>
+      />
     </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
@@ -27,34 +26,29 @@
         },
       ]"
     />
-    <dds-content-block>
-      <dds-content-block-heading class="cds-grid-cols-lg-8">{{
-        id
-      }}</dds-content-block-heading>
-    </dds-content-block>
-
-    <bx-tabs trigger-content="Select an item" value="PropertiesTable">
-      <bx-tab
+    <p class="pvtitle">{{ id }}</p>
+    <cds-tabs trigger-content="Select an item" value="PropertiesTable">
+      <cds-tab
         id="TabForVEPropertiesTable"
         value="PropertiesTable"
         target="VEPropertiesTable"
-        >Table</bx-tab
+        >Table</cds-tab
       >
-      <bx-tab
+      <cds-tab
         id="TabForVEPropertiesLineChart"
         value="PropertiesLineChart"
         target="VEPropertiesLineChart"
         :disabled="formattedChartData.length === 0"
-        >Line Chart</bx-tab
+        >Line Chart</cds-tab
       >
-      <bx-tab
+      <cds-tab
         id="TabForVEPropertiesHistogram"
         value="PropertiesHistogram"
         target="VEPropertiesHistogram"
         :disabled="formattedChartData.length === 0"
-        >Histogram</bx-tab
+        >Histogram</cds-tab
       >
-    </bx-tabs>
+    </cds-tabs>
 
     <HttpErrorEmptyState
       :errorDescription="errorDescription"
@@ -63,7 +57,7 @@
       v-if="isError"
     />
 
-    <div class="bx-ce-demo-devenv--tab-panels" v-else>
+    <div v-else>
       <div
         id="VEPropertiesTable"
         aria-labelledby="tab-VEPropertiesTable"
@@ -113,6 +107,9 @@ import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
+
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
 
 import axios from "axios";
 
@@ -255,17 +252,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "@carbon/layout";
 
 @import "@/styles/toast-notification-styles.scss";
 
-dds-content-block-heading {
-  margin: 0;
+.pvtitle {
+  font-size: calc(32px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
+  font-weight: 300;
   padding-bottom: 1rem;
-}
-
-dds-text-cta {
-  padding-bottom: 2rem;
 }
 </style>
