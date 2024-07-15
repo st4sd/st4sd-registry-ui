@@ -1,14 +1,13 @@
 <template>
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="error in errors"
       :key="error.description"
       kind="error"
       :title="error.description"
       :caption="error.statusText + ' (error ' + error.code + ')'"
       timeout="5000"
-    >
-    </bx-toast-notification>
+    />
   </div>
   <St4sdBreadcrumb
     :breadcrumbs="[
@@ -28,7 +27,7 @@
 
   <div v-if="graphLoading">
     <div id="loadingContainer">
-      <bx-loading id="loadingWheel" type="overlay"></bx-loading>
+      <cds-loading></cds-loading>
     </div>
   </div>
   <div v-else-if="fatalGraphError.isError">
@@ -79,6 +78,9 @@
 </template>
 
 <script setup>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import ViewCanvas from "@/canvas/components/canvases/ViewCanvas.vue";
 import EditCanvas from "@/canvas/components/canvases/EditCanvas.vue";
@@ -308,11 +310,6 @@ const toggleModalVisibility = (modal) => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#loadingWheel {
-  display: inline-block;
-  animation: none;
 }
 
 #no-results-message {
