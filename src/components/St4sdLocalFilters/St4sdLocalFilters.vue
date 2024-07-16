@@ -1,122 +1,122 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <!-- <div class="filter-container"> -->
-  <div>
-    <St4sdFilterComponent
-      :experiments="experiments"
-      @updateSelectedFilters="onUpdateSelectedFilters"
-    />
-    <!--Below code commented out for easy return tp dds-filter-panel component when carbon team fixes event not firing bug-->
-
-    <!-- <dds-filter-panel-composite
-      @dds-selection-clear="passSelectedFilters"
-      @dds-checkbox-select="passSelectedFilters"
+  <div class="right-on-tablet-and-mobile">
+    <c4d-filter-panel-composite
+      id="c4d-filter-panel"
+      @c4d-selection-clear="scrubSelectedFilters"
     >
-      <dds-filter-panel-heading slot="heading" @click="findSelectedCheckbox"
-        >Filter</dds-filter-panel-heading
-      >
-      <dds-filter-group
-        v-for="(domainFilter, domainFilterIdx) in domainFilters"
-        :key="`domainFilter-${domainFilterIdx}`"
-      >
-        <dds-filter-group-item
-          :filter-for="domainFilter.filterFor"
-          :open="domainFilter.isOpen"
-          :title-text="domainFilter.displayName"
+      <c4d-filter-panel-heading slot="heading">Filter</c4d-filter-panel-heading>
+      <c4d-filter-group>
+        <c4d-filter-group-item
+          v-for="(domain, idx) in this.domainFilters"
+          :key="idx"
+          open
+          :title="domain.displayName"
         >
-          <div
-            v-for="(filter, filterIdx) in domainFilter.filters"
-            :key="`filterPanel-${filterIdx}`"
+          <c4d-filter-panel-checkbox
+            v-for="(filter, idx2) in domain.filters"
+            :key="idx2"
+            :value="filter.name"
+            @c4d-checkbox-select="
+              onUpdateSelectedFilters(domain.filterFor, filter.name)
+            "
+            >{{ filter.displayName }}</c4d-filter-panel-checkbox
           >
-            <dds-filter-panel-checkbox
-              class="filterCheckbox"
-              :value="filter.name"
-              >{{ filter.displayName }}</dds-filter-panel-checkbox
-            >
-          </div>
-        </dds-filter-group-item>
-      </dds-filter-group>
-    </dds-filter-panel-composite> -->
+        </c4d-filter-group-item>
+      </c4d-filter-group>
+    </c4d-filter-panel-composite>
   </div>
 </template>
 
 <script>
-// const domainFilters = [
-//   {
-//     filterFor: "domain",
-//     displayName: "Domain",
-//     isOpen: true,
-//     filters: [
-//       {
-//         name: "computational chemistry",
-//         displayName: "Computational Chemistry",
-//       },
-//       {
-//         name: "climate",
-//         displayName: "Climate",
-//       },
-//     ],
-//   },
-//   {
-//     filterFor: "platform",
-//     displayName: "Platform",
-//     isOpen: true,
-//     filters: [
-//       {
-//         name: "openshift",
-//         displayName: "OpenShift",
-//       },
-//       {
-//         name: "openshift-kubeflux",
-//         displayName: "Kubeflux",
-//       },
-//     ],
-//   },
-//   {
-//     filterFor: "other",
-//     displayName: "Other",
-//     isOpen: true,
-//     filters: [
-//       {
-//         name: "surrogate",
-//         displayName: "Surrogate",
-//       },
-//     ],
-//   },
-// ];
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/filter-panel.min.js";
+const domainFilters = [
+  {
+    filterFor: "domain",
+    displayName: "Domain",
+    filters: [
+      {
+        name: "computational chemistry",
+        displayName: "Computational Chemistry",
+      },
+      {
+        name: "climate",
+        displayName: "Climate",
+      },
+    ],
+  },
+  {
+    filterFor: "platform",
+    displayName: "Platform",
+    filters: [
+      {
+        name: "openshift",
+        displayName: "OpenShift",
+      },
+      {
+        name: "openshift-kubeflux",
+        displayName: "Kubeflux",
+      },
+    ],
+  },
+  {
+    filterFor: "other",
+    displayName: "Other",
+    filters: [
+      {
+        name: "surrogate",
+        displayName: "Surrogate",
+      },
+      {
+        name: "internal-experiment",
+        displayName: "Internal Experiment",
+      },
+    ],
+  },
+];
 
-import St4sdFilterComponent from "@/components/St4sdFilterComponent/St4sdFilterComponent.vue";
 export default {
-  components: {
-    St4sdFilterComponent,
+  data() {
+    return {
+      domainFilters: domainFilters,
+      selectedFilters: {
+        domain: [],
+        platform: [],
+        other: [],
+      },
+    };
   },
   props: {
     experiments: Array,
   },
   methods: {
-    onUpdateSelectedFilters(selectedFilters) {
-      this.$emit("updateSelectedFilters", selectedFilters);
+    scrubSelectedFilters() {
+      for (let domain in this.selectedFilters) {
+        this.selectedFilters[domain] = [];
+      }
     },
-    // findSelectedCheckbox() {
-    //   setTimeout(this.findShadowDomChildren(), 5000);
-    // },
-    // findShadowDomChildren() {
-    //   let elements = document.querySelectorAll(".filterCheckbox");
-    //   let shadowDomChildNodes = Array.from(elements[0].shadowRoot.childNodes);
-    // },
+    onUpdateSelectedFilters(domain, filter) {
+      let duplicate = this.selectedFilters[domain].indexOf(filter);
+      if (duplicate > -1) {
+        this.selectedFilters[domain].splice(duplicate, 1);
+      } else {
+        this.selectedFilters[domain].push(filter);
+      }
+      this.$emit("updateSelectedFilters", this.selectedFilters);
+    },
   },
 };
 </script>
 
-<style lang="scss">
-.filter-container {
-  padding-right: 1rem;
+<style scoped lang="scss">
+@use "@carbon/layout";
+
+.right-on-tablet-and-mobile {
   @media screen and (max-width: 1056px) {
-    padding-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: layout.$spacing-04;
   }
 }
-dds-filter-panel-composite {
-  @media screen and (max-width: 1056px) {
-    margin-left: -16px;
-  }
-}
+
 </style>
