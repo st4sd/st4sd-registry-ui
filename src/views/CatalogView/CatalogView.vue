@@ -7,14 +7,13 @@
 <template>
   <div>
     <div id="toast-notification-container">
-      <bx-toast-notification
+      <cds-toast-notification
         v-if="isError"
         kind="error"
         :title="errorDescription"
         :caption="errorStatusText + ' (error ' + errorCode + ')'"
         timeout="5000"
-      >
-      </bx-toast-notification>
+      />
     </div>
     <!-- Navigation breadcrumb -->
     <St4sdBreadcrumb :breadcrumbs="breadcrumbs" />
@@ -64,30 +63,16 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+
 import axios from "axios";
 import debounce from "lodash.debounce";
-
-//
-
-import "@carbon/ibmdotcom-web-components/es/components/card/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/carousel/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/filter-panel/index.js";
-
-import "@carbon/web-components/es/components/modal/index.js";
-import "@carbon/web-components/es/components/code-snippet/index.js";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/breadcrumb/index.js";
-import "@carbon/web-components/es/components/loading/index.js";
-
-//
 
 import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.vue";
 import St4sdAdvancedSearchFilter from "@/components/St4sdAdvancedSearchFilter/St4sdAdvancedSearchFilter.vue";
 import St4sdExperimentCards from "@/components/St4sdExperimentCards/St4sdExperimentCards.vue";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
-
-//
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
