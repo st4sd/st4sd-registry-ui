@@ -55,7 +55,7 @@ No logs available
 <script>
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/tile.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tile.min.js";
 export default {
   name: "ST4SDLogView",
   props: {

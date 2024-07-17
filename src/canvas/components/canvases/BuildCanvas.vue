@@ -294,7 +294,7 @@
 </template>
 
 <script setup>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.10.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 
 import { nextTick, watch } from "vue";
 import {
