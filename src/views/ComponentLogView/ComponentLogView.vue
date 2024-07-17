@@ -7,14 +7,14 @@
 <template>
   <div>
     <div id="toast-notification-container">
-      <bx-toast-notification
+      <cds-toast-notification
         v-if="isError"
         kind="error"
         :title="errorDescription"
         :caption="errorStatusText + ' (error ' + errorCode + ')'"
         timeout="5000"
       >
-      </bx-toast-notification>
+      </cds-toast-notification>
     </div>
     <St4sdBreadcrumb
       :breadcrumbs="[
@@ -55,12 +55,9 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/loading/index.js";
-import "@carbon/web-components/es/components/toggle/index.js";
-import "@carbon/web-components/es/components/code-snippet/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 import St4sdLogView from "@/components/St4sdLogView";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
-
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
 //
