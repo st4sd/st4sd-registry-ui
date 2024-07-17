@@ -35,7 +35,7 @@
           size="md"
           class="cds-button-padding"
           title="Select Entrypoint"
-          @click="toggleVisibility('selectEntryPointModal')"
+          @click="toggleVisibility('selectEntryPointSidePanel')"
           kind="primary"
           :disabled="
             allNodes.filter((node) => node.type == 'workflow').length < 1
@@ -230,12 +230,6 @@
       @done="addStep"
     />
     <!-- Experiment configuration -->
-    <selectEntryPointModal
-      v-if="componentVisibilities.selectEntryPointModal.value"
-      :allNodes="allNodes"
-      @bx-modal-closed="toggleVisibility('selectEntryPointModal')"
-      @update="toggleVisibility('selectEntryPointModal')"
-    />
     <fileUploadModal
       open
       title="Upload Files"
@@ -253,6 +247,12 @@
       :name="props.pvep"
       :allNodes="allNodes"
       :allEdges="allEdges"
+    />
+    <selectEntryPointSidePanel
+      open
+      v-if="componentVisibilities.selectEntryPointSidePanel.value"
+      @side-panel-closed="toggleVisibility('selectEntryPointSidePanel')"
+      :allNodes="allNodes"
     />
     <!-- Confirm Modals -->
     <!-- Confirm upload files-->
@@ -314,7 +314,7 @@ import updateEdgeSidePanel from "@/canvas/components/sidePanels/edges/updateEdge
 import createWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/createWorkflowSidePanel.vue";
 import updateWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/updateWorkflowSidePanel.vue";
 import nestNodeSidePanel from "@/canvas/components/sidePanels/st4sd_workflows/nestNodeSidePanel.vue";
-import selectEntryPointModal from "@/canvas/components/modals/experiment/selectEntryPointModal.vue";
+import selectEntryPointSidePanel from "@/canvas/components/sidePanels/experiment/selectEntryPointSidePanel.vue";
 import fileUploadModal from "@/canvas/components/modals/experiment/fileUploadModal.vue";
 import registerExperiment from "@/canvas/components/sidePanels/experiment/registerExperiment.vue";
 
@@ -519,7 +519,7 @@ let componentVisibilities = {
   updateWorkflowSidePanel: ref(false),
   updateComponentModal: ref(false),
   updateComponentSidePanel: ref(false),
-  selectEntryPointModal: ref(false),
+  selectEntryPointSidePanel: ref(false),
   nestNodeSidePanel: ref(false),
   stepExecuteModal: ref(false),
   deleteModal: ref(false),
