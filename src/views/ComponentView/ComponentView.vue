@@ -6,15 +6,14 @@
 -->
 <template>
   <div id="toast-notification-container">
-    <bx-toast-notification
+    <cds-toast-notification
       v-for="error in errors"
       :key="error.call"
       kind="error"
       :title="error.description"
       :caption="error.statusText + ' (error ' + error.code + ')'"
       timeout="5000"
-    >
-    </bx-toast-notification>
+    />
   </div>
   <div>
     <St4sdBreadcrumb
@@ -34,70 +33,65 @@
         },
       ]"
     />
-    <dds-content-block>
-      <dds-content-block-heading class="cds--col-xlg-8">{{
-        instance_id
-      }}</dds-content-block-heading>
-      <dds-text-cta cta-type="local">
-        <bx-link
-          :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}`"
-          >View Experiment Logs</bx-link
-        >
-      </dds-text-cta>
-    </dds-content-block>
+    <div class="hero-section">
+      <p class="cvtitle">{{ instance_id }}</p>
+      <cds-link
+        :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}`"
+        >View Experiment Logs
+        <img slot="icon" src="@/assets/arrow--right.svg" width="20" height="20"
+      /></cds-link>
+    </div>
 
-    <bx-tabs trigger-content="Select an item" value="ComponentTable">
-      <bx-tab
+    <cds-tabs trigger-content="Select an item" value="ComponentTable">
+      <cds-tab
         id="TabForRunComponentTable"
         value="ComponentTable"
         target="RunComponentTable"
-        >Component</bx-tab
+        >Component</cds-tab
       >
-      <bx-tab
+      <cds-tab
         id="TabForRunPropertiesTable"
         value="PropertiesTable"
         target="RunPropertiesTable"
-        >Properties</bx-tab
+        >Properties</cds-tab
       >
-    </bx-tabs>
+    </cds-tabs>
 
-    <div class="bx-ce-demo-devenv--tab-panels">
-      <div
-        id="RunComponentTable"
-        aria-labelledby="tab-ComponentTable"
-        role="tabpanel"
-        hidden
-      >
-        <RunComponentsTable
-          @updateComponentErrorHandling="updateComponentErrorHandling"
-          :experiment_id="experiment_id"
-          :instance_id="instance_id"
-        />
-      </div>
-      <div
-        id="RunPropertiesTable"
-        role="tabpanel"
-        aria-labelledby="tab-PropertiesTable"
-        hidden
-      >
-        <RunPropertiesTable
-          @updatePropertyErrorHandling="updatePropertyErrorHandling"
-          :experiment_id="experiment_id"
-          :rest_uid="instance_id"
-        />
-      </div>
+    <div
+      id="RunComponentTable"
+      aria-labelledby="tab-ComponentTable"
+      role="tabpanel"
+      hidden
+    >
+      <RunComponentsTable
+        @updateComponentErrorHandling="updateComponentErrorHandling"
+        :experiment_id="experiment_id"
+        :instance_id="instance_id"
+      />
+    </div>
+    <div
+      id="RunPropertiesTable"
+      role="tabpanel"
+      aria-labelledby="tab-PropertiesTable"
+      hidden
+    >
+      <RunPropertiesTable
+        @updatePropertyErrorHandling="updatePropertyErrorHandling"
+        :experiment_id="experiment_id"
+        :rest_uid="instance_id"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/loading/index.js";
-import "@carbon/web-components/es/components/tabs/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
 
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import RunComponentsTable from "@/components/ComponentView/RunComponentsTable.vue";
 import RunPropertiesTable from "@/components/ComponentView/RunPropertiesTable.vue";
-import "@carbon/ibmdotcom-web-components/es/components/cta-section/index.js";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
@@ -143,21 +137,15 @@ export default {
 
 <style lang="scss" scoped>
 @use "@carbon/layout";
-
 @import "@/styles/toast-notification-styles.scss";
 
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
-}
-
-dds-content-block-heading {
-  margin: 0;
-  padding-left: 0;
+.cvtitle {
+  font-size: calc(32px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
+  font-weight: 300;
   padding-bottom: 1rem;
 }
 
-dds-text-cta {
-  padding-bottom: 2rem;
+.hero-section {
+  margin-bottom: layout.$spacing-05;
 }
 </style>
