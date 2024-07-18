@@ -1,35 +1,20 @@
 <template>
   <div>
     <template v-if="loading">
-      <bx-table>
-        <bx-table-head>
-          <bx-table-header-row
-            ><bx-table-header-cell-skeleton
-              >Component ID</bx-table-header-cell-skeleton
-            >
-            <bx-table-header-cell-skeleton>State</bx-table-header-cell-skeleton>
-            <bx-table-header-cell-skeleton
-              >Log</bx-table-header-cell-skeleton
-            ></bx-table-header-row
-          >
-        </bx-table-head>
-        <bx-table-body
-          ><bx-table-row v-for="rowIdx in 5" :key="rowIdx">
-            <bx-table-cell-skeleton
-              v-for="cellIdx in 3"
-              :key="cellIdx"
-            ></bx-table-cell-skeleton> </bx-table-row
-        ></bx-table-body>
-      </bx-table>
-      <bx-pagination page-size="10" start="0" :total="5">
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <bx-page-sizes-select slot="page-sizes-select">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-        </bx-page-sizes-select>
-        <bx-pages-select></bx-pages-select>
-      </bx-pagination>
+      <cds-table-skeleton
+        row-count="5"
+        column-count="3"
+        :showToolbar="false"
+        :showHeader="false"
+      />
+      <cds-pagination page-size="10" total-items="5">
+        <cds-select-item
+          v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+          :value="option"
+          :key="optionIdx"
+          >{{ option }}</cds-select-item
+        >
+      </cds-pagination>
     </template>
 
     <template v-if="!loading">
@@ -44,53 +29,51 @@
         message="This run has no properties available"
       />
       <div v-else class="tableOverflowContainer">
-        <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
-          <bx-table-head>
-            <bx-table-header-row>
-              <bx-table-header-cell
+        <cds-table sort @cds-table-header-cell-sort="handleTableHeaderCellSort">
+          <cds-table-head>
+            <cds-table-header-row>
+              <cds-table-header-cell
                 data-column-id="identifier"
                 sort-direction="none"
-                >Component ID</bx-table-header-cell
+                >Component ID</cds-table-header-cell
               >
-              <bx-table-header-cell data-column-id="state" sort-direction="none"
-                >State</bx-table-header-cell
+              <cds-table-header-cell
+                data-column-id="state"
+                sort-direction="none"
+                >State</cds-table-header-cell
               >
-              <bx-table-header-cell>Log</bx-table-header-cell>
-            </bx-table-header-row>
-          </bx-table-head>
+              <cds-table-header-cell>Log</cds-table-header-cell>
+            </cds-table-header-row>
+          </cds-table-head>
 
-          <bx-table-body>
-            <bx-table-row v-for="(component, idx) in getTableSlice" :key="idx">
-              <bx-table-cell>{{ component.identifier }}</bx-table-cell>
-              <bx-table-cell>{{ component.state }}</bx-table-cell>
-              <bx-table-cell
-                ><bx-link
+          <cds-table-body>
+            <cds-table-row v-for="(component, idx) in getTableSlice" :key="idx">
+              <cds-table-cell>{{ component.identifier }}</cds-table-cell>
+              <cds-table-cell>{{ component.state }}</cds-table-cell>
+              <cds-table-cell
+                ><cds-link
                   :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}/${
                     component.identifier
                   }`"
-                  >Logs</bx-link
+                  >Logs</cds-link
                 >
-              </bx-table-cell>
-            </bx-table-row>
-          </bx-table-body>
-        </bx-table>
-
-        <bx-pagination
-          :page-size="elementsToShow"
-          :start="firstElement"
-          :total="instance_components.length"
-          @bx-pages-select-changed="handleTablePagesSelectChanged"
-          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+              </cds-table-cell>
+            </cds-table-row>
+          </cds-table-body>
+        </cds-table>
+        <cds-pagination
+          page-size="10"
+          :total-items="instance_components.length"
+          @cds-select-selected="handleTablePageSizesSelectChanged"
+          @cds-pagination-changed-current="handleTablePaginationChangedCurrent"
         >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <bx-page-sizes-select slot="page-sizes-select">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </bx-page-sizes-select>
-          <bx-pages-select></bx-pages-select>
-        </bx-pagination>
+          <cds-select-item
+            v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+            :value="option"
+            :key="optionIdx"
+            >{{ option }}</cds-select-item
+          >
+        </cds-pagination>
       </div>
     </template>
   </div>
@@ -99,6 +82,9 @@
 <script>
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
+
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import { get_sorted_elements } from "@/functions/table_sort";
@@ -133,6 +119,7 @@ export default {
       isError: false,
       errorStatusText: "",
       errorCode: 0,
+      tablePaginationPageSizeOptions: [10, 25, 50],
     };
   },
   mounted() {
@@ -173,21 +160,26 @@ export default {
   methods: {
     getDeploymentEndpoint,
     handleTablePaginationChangedCurrent(event) {
-      this.firstElement = event.detail.start;
+      this.firstElement = event.target.start;
     },
-    handleTablePagesSelectChanged(event) {
-      this.firstElement = event.detail.value * this.elementsToShow;
-    },
+    // AP: TODO FIXME:
+    // This is a hack required because CDS 2.8/2.10 pagination raises
+    // this event even when selecting the dropdown on the right side
+    // of the pagination component.
+    // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11923
     handleTablePageSizesSelectChanged(event) {
-      this.firstElement = 0;
-      this.elementsToShow = event.detail.value;
+      let newPageSize = Number(event.detail.value);
+
+      if (this.tablePaginationPageSizeOptions.includes(newPageSize)) {
+        this.elementsToShow = newPageSize;
+      }
     },
     handleTableHeaderCellSort(event) {
       this.sortColumnId = event.target.getAttribute("data-column-id");
       this.sortDirection = event.detail.sortDirection;
 
       // Reset sorting state for others
-      let headers = document.getElementsByTagName("bx-table-header-cell");
+      let headers = document.getElementsByTagName("cds-table-header-cell");
       for (let i = 0; i < headers.length; i++) {
         if (
           headers[i].getAttribute("data-column-id") !=
