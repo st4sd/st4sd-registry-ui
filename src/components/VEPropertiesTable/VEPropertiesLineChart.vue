@@ -1,30 +1,32 @@
 <template>
-  <div>
-    <div class="card-row" id="experimentLoadingContainer" v-if="loading">
-      <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
+  <div style="padding-left: 1rem">
+    <div id="experimentLoadingContainer" v-if="loading">
+      <cds-loading></cds-loading>
     </div>
 
     <div v-else class="cds--row">
       <div>
-        <bx-dropdown
+        <cds-dropdown
           label="Y-Axis Data Selector"
           :value="graphHeader"
-          @bx-dropdown-selected="graphHeader = $event.target.value"
+          @cds-dropdown-selected="graphHeader = $event.target.value"
         >
-          <bx-dropdown-item
+          <cds-dropdown-item
             v-for="(header, idx) in dynamicDataHeaders"
             v-bind:key="idx"
             v-bind:value="header"
-            >{{ header }}</bx-dropdown-item
+            >{{ header }}</cds-dropdown-item
           >
-        </bx-dropdown>
+        </cds-dropdown>
       </div>
     </div>
+    <div id="chart-area" class="cds--row"></div>
   </div>
-  <div id="chart-area" class="cds--row"></div>
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
 import "@carbon/charts/styles.css";
 import "@carbon/styles/css/styles.css";
 import { LineChart } from "@carbon/charts";
@@ -132,14 +134,6 @@ export default {
 #experimentLoadingContainer {
   width: 100%;
   height: 300px;
-}
-
-#experimentLoadingWheel {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  background-color: white;
 }
 
 cv-dropdown {
