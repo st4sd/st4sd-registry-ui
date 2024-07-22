@@ -1,34 +1,49 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div>
     <template v-if="loading">
       <div class="tableOverflowContainer">
-        <bx-table sort>
-          <bx-table-head>
-            <bx-table-header-row>
-              <bx-table-header-cell
-                sort-direction="none"
-                v-for="cellIdx in 6"
-                :key="cellIdx"
-              ></bx-table-header-cell>
-            </bx-table-header-row>
-          </bx-table-head>
-          <bx-table-body
-            ><bx-table-row v-for="rowIdx in 5" :key="rowIdx">
-              <bx-table-cell-skeleton
-                v-for="cellIdx in 6"
-                :key="cellIdx"
-              ></bx-table-cell-skeleton> </bx-table-row
-          ></bx-table-body>
-        </bx-table>
-        <bx-pagination page-size="5" start="0" :total="5">
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <bx-page-sizes-select slot="page-sizes-select">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-          </bx-page-sizes-select>
-          <bx-pages-select></bx-pages-select>
-        </bx-pagination>
+        <cds-table-toolbar>
+          <cds-table-toolbar-content>
+            <cds-table-toolbar-search
+              disabled
+              expanded
+            ></cds-table-toolbar-search>
+            <cds-button disabled kind="primary" type="button">
+              <img
+                slot="icon"
+                class="white-svg"
+                height="18"
+                width="18"
+                src="../../assets/download.svg"
+              />
+              Download
+            </cds-button>
+          </cds-table-toolbar-content>
+        </cds-table-toolbar>
+        <cds-table size="xl" sort>
+          <cds-table-head>
+            <cds-table-header-row>
+              <cds-table-header-cell v-for="rowIdx in 6" :key="rowIdx"
+                ><cds-skeleton-text width="50%"></cds-skeleton-text
+              ></cds-table-header-cell>
+            </cds-table-header-row>
+          </cds-table-head>
+          <cds-table-body
+            ><cds-table-row v-for="rowIdx in 5" :key="rowIdx">
+              <cds-table-cell v-for="cellIdx in 6" :key="cellIdx">
+                <cds-skeleton-text></cds-skeleton-text
+              ></cds-table-cell> </cds-table-row
+          ></cds-table-body>
+        </cds-table>
+        <cds-pagination page-size="10" total-items="5">
+          <cds-select-item
+            v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+            :value="option"
+            :key="optionIdx"
+            >{{ option }}</cds-select-item
+          >
+        </cds-pagination>
       </div>
     </template>
 
@@ -38,70 +53,74 @@
         message="This experiment did not produce any property or does not have a virtual experiment interface"
       />
       <div v-else>
-        <bx-table-toolbar @focusout="setExpandedOnFocusOut">
-          <bx-table-toolbar-content>
-            <bx-table-toolbar-search
+        <cds-table-toolbar @focusout="setExpandedOnFocusOut">
+          <cds-table-toolbar-content>
+            <cds-table-toolbar-search
               id="search"
               expanded
               placeholder="Search by input-id"
-              @bx-search-input="searchTable"
-            ></bx-table-toolbar-search>
-            <bx-btn
+              @cds-search-input="searchTable"
+            ></cds-table-toolbar-search>
+            <cds-button
               :disabled="propertiesArray.length == 0"
               v-if="propertiesArray.length != 0"
-              class="bx--btn--primary"
+              kind="primary"
               type="button"
               @click="download()"
             >
-              <p class="download-text">Download&nbsp;</p>
-
               <img
+                slot="icon"
                 class="white-svg"
                 height="18"
                 width="18"
                 src="../../assets/download.svg"
-            /></bx-btn>
-          </bx-table-toolbar-content>
-        </bx-table-toolbar>
+              />
+              Download
+            </cds-button>
+          </cds-table-toolbar-content>
+        </cds-table-toolbar>
 
         <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
         <div v-else class="tableOverflowContainer">
-          <bx-table sort @bx-table-header-cell-sort="handleTableHeaderCellSort">
-            <bx-table-head>
-              <bx-table-header-row>
-                <bx-table-header-cell
+          <cds-table
+            size="xl"
+            sort
+            cds-table-header-cell-sort="handleTableHeaderCellSort"
+          >
+            <cds-table-head>
+              <cds-table-header-row>
+                <cds-table-header-cell
                   sort-direction="none"
                   v-for="(header, idx) in propertyHeaders"
                   :key="idx"
                   :data-column-id="header"
-                  >{{ header }}</bx-table-header-cell
+                  >{{ header }}</cds-table-header-cell
                 >
-              </bx-table-header-row>
-            </bx-table-head>
-            <bx-table-body>
-              <bx-table-row v-for="(values, idx) in getTableSlice" :key="idx">
-                <bx-table-cell v-for="(value, idy) in values" :key="idy">{{
+              </cds-table-header-row>
+            </cds-table-head>
+            <cds-table-body>
+              <cds-table-row v-for="(values, idx) in getTableSlice" :key="idx">
+                <cds-table-cell v-for="(value, idy) in values" :key="idy">{{
                   value
-                }}</bx-table-cell>
-              </bx-table-row>
-            </bx-table-body>
-          </bx-table>
-          <bx-pagination
+                }}</cds-table-cell>
+              </cds-table-row>
+            </cds-table-body>
+          </cds-table>
+          <cds-pagination
             :page-size="elementsToShow"
-            :start="firstElement"
-            :total="dataToDisplay.length"
-            @bx-pages-select-changed="handleTablePagesSelectChanged"
-            @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-            @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+            :total-items="dataToDisplay.length"
+            @cds-select-selected="handleTablePageSizesSelectChanged"
+            @cds-pagination-changed-current="
+              handleTablePaginationChangedCurrent
+            "
           >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <bx-page-sizes-select slot="page-sizes-select">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-            </bx-page-sizes-select>
-            <bx-pages-select></bx-pages-select>
-          </bx-pagination>
+            <cds-select-item
+              v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+              :value="option"
+              :key="optionIdx"
+              >{{ option }}</cds-select-item
+            >
+          </cds-pagination>
         </div>
       </div>
     </template>
@@ -109,6 +128,8 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
@@ -128,6 +149,7 @@ export default {
       sortDirection: undefined,
       sortColumnId: "",
       collator: new Intl.Collator("en"),
+      tablePaginationPageSizeOptions: [5, 10, 25],
     };
   },
   props: {
@@ -208,21 +230,29 @@ export default {
   },
   methods: {
     handleTablePaginationChangedCurrent(event) {
-      this.firstElement = event.detail.start;
+      this.firstElement = event.target.start;
     },
     handleTablePagesSelectChanged(event) {
       this.firstElement = event.detail.value * this.elementsToShow;
     },
+    // AP: TODO FIXME:
+    // This is a hack required because CDS 2.8/2.10 pagination raises
+    // this event even when selecting the dropdown on the right side
+    // of the pagination component.
+    // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11923
     handleTablePageSizesSelectChanged(event) {
-      this.firstElement = 0;
-      this.elementsToShow = event.detail.value;
+      let newPageSize = Number(event.detail.value);
+
+      if (this.tablePaginationPageSizeOptions.includes(newPageSize)) {
+        this.elementsToShow = newPageSize;
+      }
     },
     handleTableHeaderCellSort(event) {
       this.sortColumnId = event.target.getAttribute("data-column-id");
       this.sortDirection = event.detail.sortDirection;
 
       // Reset sorting state for others
-      let headers = document.getElementsByTagName("bx-table-header-cell");
+      let headers = document.getElementsByTagName("cds-table-header-cell");
       for (let i = 0; i < headers.length; i++) {
         if (
           headers[i].getAttribute("data-column-id") !=
@@ -277,26 +307,17 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/styles/svg.scss";
 
-bx-table-cell,
-bx-table-header-cell {
-  text-align: center;
-}
-
-.bx--btn--primary {
-  margin-top: 0;
+// AP: with xl table, a 16px padding is added to the header
+// and it doesn't look good with the search bar at the top
+cds-table-header-cell:not(:has(cds-skeleton-text)) {
+  padding: 0;
 }
 
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
-}
-
-.download-icon {
-  height: 16px;
-  width: 16px;
-  filter: invert(100);
 }
 </style>
