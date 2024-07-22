@@ -1,0 +1,16 @@
+@use "@carbon/layout";
+
+#hero-section {
+    margin-bottom: layout.$spacing-05;  
+}
+
+#hero-title {
+  font-size: calc(32px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
+  font-weight: 300;
+  padding-bottom: 1rem;
+}
+
+#cta-link {
+    margin-top: layout.$spacing-05;
+    margin-bottom: layout.$spacing-07;
+}

@@ -26,7 +26,7 @@
         },
       ]"
     />
-    <p class="pvtitle">{{ id }}</p>
+    <p id="hero-title">{{ id }}</p>
     <cds-tabs trigger-content="Select an item" value="PropertiesTable">
       <cds-tab
         id="TabForVEPropertiesTable"
@@ -256,10 +256,5 @@ export default {
 @use "@carbon/layout";
 
 @import "@/styles/toast-notification-styles.scss";
-
-.pvtitle {
-  font-size: calc(32px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
-  font-weight: 300;
-  padding-bottom: 1rem;
-}
+@import "@/styles/text-cta-styles.scss";
 </style>

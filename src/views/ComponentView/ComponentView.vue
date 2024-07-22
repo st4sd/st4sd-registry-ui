@@ -33,8 +33,8 @@
         },
       ]"
     />
-    <div class="hero-section">
-      <p class="cvtitle">{{ instance_id }}</p>
+    <div id="hero-section">
+      <p id="hero-title">{{ instance_id }}</p>
       <cds-link
         :href="`${getDeploymentEndpoint()}experiment/${experiment_id}/logs/${instance_id}`"
         >View Experiment Logs
@@ -138,14 +138,5 @@ export default {
 <style lang="scss" scoped>
 @use "@carbon/layout";
 @import "@/styles/toast-notification-styles.scss";
-
-.cvtitle {
-  font-size: calc(32px + (24 - 16) * ((100vw - 42rem) / (1056 - 672)));
-  font-weight: 300;
-  padding-bottom: 1rem;
-}
-
-.hero-section {
-  margin-bottom: layout.$spacing-05;
-}
+@import "@/styles/text-cta-styles.scss";
 </style>
