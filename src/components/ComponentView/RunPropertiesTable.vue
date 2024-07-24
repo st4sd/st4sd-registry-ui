@@ -1,69 +1,79 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div>
     <template v-if="loading">
-      <bx-table-toolbar>
-        <bx-table-toolbar-search
+      <cds-table-toolbar>
+        <cds-table-toolbar-search
           expanded
+          disabled
           placeholder="Search by input-id"
-        ></bx-table-toolbar-search>
-        <bx-btn-skeleton></bx-btn-skeleton>
-      </bx-table-toolbar>
-      <bx-table>
-        <bx-table-head>
-          <bx-table-header-row
-            ><bx-table-header-cell-skeleton></bx-table-header-cell-skeleton>
-            <bx-table-header-cell-skeleton></bx-table-header-cell-skeleton>
-            <bx-table-header-cell-skeleton></bx-table-header-cell-skeleton
-          ></bx-table-header-row>
-        </bx-table-head>
-        <bx-table-body
-          ><bx-table-row v-for="rowIdx in 5" :key="rowIdx">
-            <bx-table-cell-skeleton
-              v-for="cellIdx in 3"
-              :key="cellIdx"
-            ></bx-table-cell-skeleton> </bx-table-row
-        ></bx-table-body>
-      </bx-table>
-      <bx-pagination page-size="5" start="0" :total="5">
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <bx-page-sizes-select slot="page-sizes-select">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-        </bx-page-sizes-select>
-        <bx-pages-select></bx-pages-select>
-      </bx-pagination>
+        ></cds-table-toolbar-search>
+        <cds-button disabled type="primary">
+          <img
+            slot="icon"
+            class="white-svg"
+            height="18"
+            width="18"
+            src="../../assets/download.svg"
+          />Download</cds-button
+        >
+      </cds-table-toolbar>
+      <cds-table size="lg">
+        <cds-table-head>
+          <cds-table-header-row
+            ><cds-table-header-cell v-for="cellIdx in 5" :key="cellIdx"
+              ><cds-skeleton-text
+                width="50%"
+                type="heading"
+              ></cds-skeleton-text></cds-table-header-cell
+          ></cds-table-header-row>
+        </cds-table-head>
+        <cds-table-body
+          ><cds-table-row v-for="rowIdx in 5" :key="rowIdx">
+            <cds-table-cell v-for="cellIdx in 5" :key="cellIdx"
+              ><cds-skeleton-text type="line"></cds-skeleton-text
+            ></cds-table-cell> </cds-table-row
+        ></cds-table-body>
+      </cds-table>
+      <cds-pagination page-size="10" total-items="5">
+        <cds-select-item
+          v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+          :value="option"
+          :key="optionIdx"
+          >{{ option }}</cds-select-item
+        >
+      </cds-pagination>
     </template>
 
     <template v-else>
       <div>
-        <bx-table-toolbar
+        <cds-table-toolbar
           v-if="properties.length != 0"
           @focusout="setExpandedOnFocusOut"
         >
-          <bx-table-toolbar-content>
-            <bx-table-toolbar-search
+          <cds-table-toolbar-content>
+            <cds-table-toolbar-search
               id="search"
               expanded
               placeholder="Search by input-id"
-              @bx-search-input="searchTable"
-            ></bx-table-toolbar-search>
-            <bx-btn
+              @cds-search-input="searchTable"
+            ></cds-table-toolbar-search>
+            <cds-button
               :disabled="propertiesToDisplay.length == 0"
               v-if="properties != []"
               type="primary"
               @click="download()"
             >
-              <p class="download-text">Download&nbsp;</p>
-
               <img
+                slot="icon"
                 class="white-svg"
                 height="18"
                 width="18"
                 src="../../assets/download.svg"
-            /></bx-btn>
-          </bx-table-toolbar-content>
-        </bx-table-toolbar>
+              />Download</cds-button
+            >
+          </cds-table-toolbar-content>
+        </cds-table-toolbar>
         <HttpErrorEmptyState
           errorDescription="Unable to fetch properties"
           :errorStatusText="errorStatusText"
@@ -77,41 +87,39 @@
         />
 
         <div class="tableOverflowContainer" v-else>
-          <bx-table>
-            <bx-table-head>
-              <bx-table-header-row>
-                <bx-table-header-cell
+          <cds-table size="lg">
+            <cds-table-head>
+              <cds-table-header-row>
+                <cds-table-header-cell
                   v-for="header in propertyHeaders"
                   :key="header"
-                  >{{ header }}</bx-table-header-cell
+                  >{{ header }}</cds-table-header-cell
                 >
-              </bx-table-header-row>
-            </bx-table-head>
-            <bx-table-body>
-              <bx-table-row v-for="(values, idx) in getTableSlice" :key="idx">
-                <bx-table-cell v-for="(value, idy) in values" :key="idy">{{
+              </cds-table-header-row>
+            </cds-table-head>
+            <cds-table-body>
+              <cds-table-row v-for="(values, idx) in getTableSlice" :key="idx">
+                <cds-table-cell v-for="(value, idy) in values" :key="idy">{{
                   value
-                }}</bx-table-cell>
-              </bx-table-row>
-            </bx-table-body>
-          </bx-table>
-
-          <bx-pagination
+                }}</cds-table-cell>
+              </cds-table-row>
+            </cds-table-body>
+          </cds-table>
+          <cds-pagination
             :page-size="elementsToShow"
-            :start="firstElement"
-            :total="propertiesToDisplay.length"
-            @bx-pages-select-changed="handleTablePagesSelectChanged"
-            @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-            @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+            :total-items="propertiesToDisplay.length"
+            @cds-select-selected="handleTablePageSizesSelectChanged"
+            @cds-pagination-changed-current="
+              handleTablePaginationChangedCurrent
+            "
           >
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <bx-page-sizes-select slot="page-sizes-select">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-            </bx-page-sizes-select>
-            <bx-pages-select></bx-pages-select>
-          </bx-pagination>
+            <cds-select-item
+              v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+              :value="option"
+              :key="optionIdx"
+              >{{ option }}</cds-select-item
+            >
+          </cds-pagination>
         </div>
       </div>
     </template>
@@ -119,6 +127,9 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/pagination.min.js";
 import axios from "axios";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
@@ -147,6 +158,7 @@ export default {
       isError: false,
       errorStatusText: "",
       errorCode: 0,
+      tablePaginationPageSizeOptions: [5, 10, 25],
     };
   },
   mounted() {
@@ -194,14 +206,22 @@ export default {
   },
   methods: {
     handleTablePaginationChangedCurrent(event) {
-      this.firstElement = event.detail.start;
+      this.firstElement = event.target.start;
     },
     handleTablePagesSelectChanged(event) {
       this.firstElement = event.detail.value * this.elementsToShow;
     },
+    // AP: TODO FIXME:
+    // This is a hack required because CDS 2.8/2.10 pagination raises
+    // this event even when selecting the dropdown on the right side
+    // of the pagination component.
+    // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11923
     handleTablePageSizesSelectChanged(event) {
-      this.firstElement = 0;
-      this.elementsToShow = event.detail.value;
+      let newPageSize = Number(event.detail.value);
+
+      if (this.tablePaginationPageSizeOptions.includes(newPageSize)) {
+        this.elementsToShow = newPageSize;
+      }
     },
     moveItemToFrontOfTable(item) {
       //Moves a properties header and values to the front of there respective arrays
@@ -289,24 +309,5 @@ export default {
 .tableOverflowContainer {
   width: 100%;
   overflow-x: scroll;
-}
-
-bx-table-cell,
-bx-table-header-cell {
-  text-align: center;
-}
-
-.bx--btn--primary {
-  margin-top: 0;
-}
-
-@media screen and (max-width: 671px) {
-  .download-text {
-    display: none;
-  }
-  bx-btn {
-    padding: 0;
-    width: 3rem;
-  }
 }
 </style>
