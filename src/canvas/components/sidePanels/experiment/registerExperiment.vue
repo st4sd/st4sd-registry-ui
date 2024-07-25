@@ -167,7 +167,6 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-@import "@/styles/bx-modal-styles.css";
 #loading-container {
   display: flex;
   align-items: center;

@@ -13,7 +13,10 @@
       @workflowAdded="workflowAdded"
       @validityChanged="updateIsSubmitButtonDisabled"
     />
-    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
+    <cds-button
+      slot="actions"
+      kind="secondary"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button
@@ -54,6 +57,3 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
-@import "@/styles/bx-modal-styles.css";
-</style>

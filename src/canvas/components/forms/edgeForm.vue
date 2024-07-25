@@ -327,6 +327,5 @@ export default {
 </script>
 <style lang="css" scoped>
 @import "@/styles/svg.scss";
-@import "@/styles/delete-button-icon-inside-cell-style.css";
 @import "@/styles/cds-structured-list-styles.css";
 </style>

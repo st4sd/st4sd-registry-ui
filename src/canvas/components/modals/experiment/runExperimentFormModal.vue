@@ -35,5 +35,3 @@ export default {
   },
 };
 </script>
-
-<style lang="css" scoped src="@/styles/bx-modal-styles.css"></style>
