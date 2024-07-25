@@ -20,60 +20,10 @@
         v-for="experiment in getPageSlice"
         :key="experiment.metadata.package.name"
       >
-        <dds-card
-          color-scheme="light"
-          border="true"
-          logo
-          class="card-proportions"
-          :href="`experiment/${experiment.metadata.package.name}`"
-        >
-          <dds-card-eyebrow>{{
-            experiment.metadata.package.name
-          }}</dds-card-eyebrow>
-          <p>
-            {{ experiment.metadata.package.description }}
-          </p>
-          <div class="tag-group-container">
-            <!-- VE interface -->
-            <cds-tag
-              v-if="
-                Object.keys(experiment.metadata.registry.interface).length != 0
-              "
-              type="green"
-            >
-              virtual-experiment
-            </cds-tag>
-            <!-- Platform -->
-            <cds-tag
-              v-for="(platform, platformIdx) in getAvailablePlatforms(
-                experiment,
-              )"
-              :key="`platform-${platformIdx}`"
-              type="red"
-            >
-              platform: {{ platform }}
-            </cds-tag>
-            <!-- Available tags -->
-            <cds-tag
-              v-for="(tag, tagIdx) in findTagsForPackageName(
-                experiment.metadata.package.name,
-              )"
-              :key="`tag-${tagIdx}`"
-              type="blue"
-            >
-              tag: {{ tag }}
-            </cds-tag>
-            <!-- User metadata -->
-            <cds-tag
-              v-for="label in experiment.metadata.package.keywords"
-              :key="label"
-              type="purple"
-            >
-              {{ label }}
-            </cds-tag>
-          </div>
-          <dds-card-footer> </dds-card-footer>
-        </dds-card>
+        <St4sdVirtualExperimentCard
+          :experiment="experiment"
+          :tags="findTagsForPackageName(experiment.metadata.package.name)"
+        />
       </div>
 
       <div>
@@ -100,15 +50,16 @@
 
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
+import St4sdVirtualExperimentCard from "@/components/St4sdExperimentCards/St4sdVirtualExperimentCard.vue";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
 
 export default {
   components: {
     NoSearchResultsEmptyState,
     NoDataEmptyState,
+    St4sdVirtualExperimentCard,
   },
   props: {
     searchedExperiments: Array,
