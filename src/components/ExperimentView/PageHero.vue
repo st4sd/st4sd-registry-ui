@@ -258,7 +258,7 @@ export default {
 @import "@/styles/cds-tag-styles.scss";
 
 c4d-content-block {
-  margin: 0;
+  margin: 0 0 layout.$spacing-09 0;
 }
 
 c4d-content-block-heading,
