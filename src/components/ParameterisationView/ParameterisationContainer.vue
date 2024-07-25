@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div class="cds--row white-background" id="margin-right">
     <div class="cds--col">
@@ -10,61 +11,67 @@
     </div>
     <div class="cds--col">
       <div class="buttons-container">
-        <bx-btn
+        <cds-button
           id="cancel-button"
           kind="secondary"
           @click="handleCancel"
           :disabled="cancelDisabled"
         >
           Cancel
-        </bx-btn>
-        <bx-btn id="save-button" @click="emitSave" :disabled="saveDisabled">
+        </cds-button>
+        <cds-button id="save-button" @click="emitSave" :disabled="saveDisabled">
           Save
-        </bx-btn>
+        </cds-button>
       </div>
     </div>
   </div>
   <div class="cds--row background">
     <div class="background margin height" id="left-navigation-tab-container">
-      <bx-side-nav id="side-nav" aria-label="Side navigation" expanded>
-        <bx-side-nav-items class="background">
-          <bx-side-nav-menu-item
+      <cds-side-nav
+        id="side-nav"
+        aria-label="Side navigation"
+        expanded
+        isNotChildOfHeader
+      >
+        <cds-side-nav-items class="background">
+          <cds-side-nav-menu-item
+            id="side-nav-first-item"
             href="#"
             @click="setTabSelector('platforms')"
             :active="tabSelector == 'platforms'"
           >
             Platform
-          </bx-side-nav-menu-item>
-          <bx-side-nav-menu-item
+          </cds-side-nav-menu-item>
+          <cds-side-nav-menu-item
             href="#"
             @click="setTabSelector('variables')"
             :active="tabSelector == 'variables'"
           >
             Variables
-          </bx-side-nav-menu-item>
-          <bx-side-nav-menu-item
+          </cds-side-nav-menu-item>
+          <cds-side-nav-menu-item
             href="#"
             @click="setTabSelector('data')"
             :active="tabSelector == 'data'"
           >
             Data Files
-          </bx-side-nav-menu-item>
-          <bx-side-nav-menu-item
+          </cds-side-nav-menu-item>
+          <cds-side-nav-menu-item
             href="#"
             @click="setTabSelector('input')"
             :active="tabSelector == 'input'"
           >
             Input Files
-          </bx-side-nav-menu-item>
-          <bx-side-nav-menu-item
+          </cds-side-nav-menu-item>
+          <cds-side-nav-menu-item
             href="#"
             @click="setTabSelector('runtime')"
             :active="tabSelector == 'runtime'"
           >
             Runtime
-          </bx-side-nav-menu-item>
-        </bx-side-nav-items>
-      </bx-side-nav>
+          </cds-side-nav-menu-item>
+        </cds-side-nav-items>
+      </cds-side-nav>
     </div>
     <div class="cds--col margin background height" id="right-content-container">
       <div
@@ -73,16 +80,15 @@
         :class="{ 'white-background': readView }"
       >
         <div class="cds--col" id="padding-right">
-          <bx-btn
+          <cds-button
             kind="secondary"
             id="edit-button"
-            iconLayout
             @click="toggleEditOptions"
             v-if="readView"
           >
             Edit
-            <img width="16" heigth="16" src="@/assets/edit.svg" />
-          </bx-btn>
+            <img slot="icon" width="16" heigth="16" src="@/assets/edit.svg" />
+          </cds-button>
         </div>
         <ReadParameterisationOptions
           v-if="readView"
@@ -112,10 +118,9 @@
 import ReadParameterisationOptions from "@/components/ParameterisationView/ReadParameterisationOptions.vue";
 import EditParameterisationOptions from "@/components/ParameterisationView/EditParameterisationOptions.vue";
 
-import "@carbon/web-components/es/components/ui-shell/index.js";
-import "@carbon/web-components/es/components/tabs/index.js";
-import "@carbon/web-components/es/components/toggle/index.js";
-import "@carbon/web-components/es/components/button/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/ui-shell.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
 
 export default {
   name: "ParameterisationContainer",
@@ -173,6 +178,14 @@ export default {
       },
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      document
+        .getElementById("side-nav")
+        .shadowRoot.querySelector(".cds--side-nav__navigation").style.display =
+        "contents";
+    });
+  },
   methods: {
     setTabSelector(option) {
       this.tabSelector = option;
@@ -227,6 +240,7 @@ h5 {
 }
 
 #left-navigation-tab-container {
+  width: 256px;
   padding-left: 0;
   padding-right: layout.$spacing-07;
 }
@@ -236,7 +250,7 @@ h5 {
   padding-right: layout.$spacing-06;
 }
 
-bx-side-nav-items {
+cds-side-nav-items {
   padding-top: 0;
 }
 
