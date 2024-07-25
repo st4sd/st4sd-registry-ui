@@ -143,8 +143,6 @@ import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflow
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import createComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/createComponentSidePanel.vue";
 import confirmModal from "@/canvas/components/modals/confirm-modal/confirmModal.vue";
-import "@carbon/web-components/es/components/dropdown/index.js";
-import "@carbon/web-components/es/components/search/index.js";
 import router from "@/router";
 import { registryUISharedState } from "@/stores/registryUISharedState";
 import { getDeploymentEndpoint } from "@/functions/public_path";

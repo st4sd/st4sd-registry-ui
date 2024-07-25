@@ -697,11 +697,12 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/accordion/index.js";
-import "@carbon/web-components/es/components/textarea/index.js";
-import "@carbon/web-components/es/components/tabs/index.js";
-import "@carbon/web-components/es/components/toggle/index.js";
-import "@carbon/web-components/es/components/dropdown/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/accordion.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/textarea.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/tabs.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/toggle.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/dropdown.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/text-input.min.js";
 
 export default {
   name: "RunExperimentForm",

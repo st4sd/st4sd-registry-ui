@@ -117,18 +117,6 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/code-snippet/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/content-block/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/cta/text-cta.js";
-import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/data-table/index.js";
-import "@carbon/web-components/es/components/list/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/content-item/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/horizontal-rule/index.js";
-import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
-import "@carbon/web-components/es/components/pagination/index.js";
-import "@carbon/web-components/es/components/loading/index.js";
-
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/progress-indicator.min.js";

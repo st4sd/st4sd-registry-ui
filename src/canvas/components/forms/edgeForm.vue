@@ -168,7 +168,6 @@
 </template>
 
 <script>
-import "@carbon/web-components/es/components/modal/index.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";

@@ -54,6 +54,7 @@ import St4sdVirtualExperimentCard from "@/components/St4sdExperimentCards/St4sdV
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 import "@carbon/web-components/es/components/pagination/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
 
 export default {
   components: {
