@@ -266,85 +266,78 @@
       </div>
     </div>
   </div>
-  <div v-if="tabSelector == 'runtime'" class="tab">
-    <div class="cds--row">
-      <div
-        v-if="runtimeArgs != undefined && runtimeArgs.length != 0"
-        class="cds--col-lg-14 cds--col-md-6"
-      >
-        <h3>Runtime Args</h3>
-        <cds-structured-list>
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell class="list-spacing"
-                >Name</cds-structured-list-header-cell
-              >
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body>
-            <cds-structured-list-row
-              v-for="(arg, idx) in runtimeArgs"
-              :key="idx"
+  <div v-if="tabSelector == 'runtime'" class="cds--row tab">
+    <div
+      v-if="runtimeArgs != undefined && runtimeArgs.length != 0"
+      class="cds--col-lg-14 cds--col-md-6"
+    >
+      <h3>Runtime Args</h3>
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >Name</cds-structured-list-header-cell
             >
-              <cds-structured-list-cell class="list-spacing">{{
-                arg
-              }}</cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-        </cds-structured-list>
-      </div>
-      <div v-else>
-        <div class="cds--col-lg-16 cds--col-md-8">
-          <h3 id="orchestrator-resources">Runtime Args</h3>
-          <p>No Runtime Args</p>
-        </div>
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row v-for="(arg, idx) in runtimeArgs" :key="idx">
+            <cds-structured-list-cell class="list-spacing">{{
+              arg
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+    </div>
+    <div v-else>
+      <div class="cds--col-lg-16 cds--col-md-8">
+        <h3>Runtime Args</h3>
+        <p>No Runtime Args</p>
       </div>
     </div>
-    <div class="cds--row">
-      <div
-        v-if="
-          orchestratorResources != undefined &&
-          Object.keys(orchestratorResources).length != 0
-        "
-        class="cds--col-lg-14 cds--col-md-6"
-      >
+    <div
+      v-if="
+        orchestratorResources != undefined &&
+        Object.keys(orchestratorResources).length != 0
+      "
+      class="cds--col-lg-14 cds--col-md-6"
+    >
+      <h3 id="orchestrator-resources">Orchestrator Resources</h3>
+      <cds-structured-list>
+        <cds-structured-list-head>
+          <cds-structured-list-header-row>
+            <cds-structured-list-header-cell class="list-spacing"
+              >Resource</cds-structured-list-header-cell
+            >
+            <cds-structured-list-header-cell
+              >Value</cds-structured-list-header-cell
+            >
+          </cds-structured-list-header-row>
+        </cds-structured-list-head>
+        <cds-structured-list-body>
+          <cds-structured-list-row>
+            <cds-structured-list-cell class="list-spacing"
+              >CPU</cds-structured-list-cell
+            >
+            <cds-structured-list-cell>{{
+              orchestratorResources.cpu
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+          <cds-structured-list-row>
+            <cds-structured-list-cell class="list-spacing"
+              >Memory</cds-structured-list-cell
+            >
+            <cds-structured-list-cell>{{
+              orchestratorResources.memory
+            }}</cds-structured-list-cell>
+          </cds-structured-list-row>
+        </cds-structured-list-body>
+      </cds-structured-list>
+    </div>
+    <div v-else>
+      <div class="cds--col-lg-16 cds--col-md-8">
         <h3 id="orchestrator-resources">Orchestrator Resources</h3>
-        <cds-structured-list>
-          <cds-structured-list-head>
-            <cds-structured-list-header-row>
-              <cds-structured-list-header-cell class="list-spacing"
-                >Resource</cds-structured-list-header-cell
-              >
-              <cds-structured-list-header-cell
-                >Value</cds-structured-list-header-cell
-              >
-            </cds-structured-list-header-row>
-          </cds-structured-list-head>
-          <cds-structured-list-body>
-            <cds-structured-list-row>
-              <cds-structured-list-cell class="list-spacing"
-                >CPU</cds-structured-list-cell
-              >
-              <cds-structured-list-cell>{{
-                orchestratorResources.cpu
-              }}</cds-structured-list-cell>
-            </cds-structured-list-row>
-            <cds-structured-list-row>
-              <cds-structured-list-cell class="list-spacing"
-                >Memory</cds-structured-list-cell
-              >
-              <cds-structured-list-cell>{{
-                orchestratorResources.memory
-              }}</cds-structured-list-cell>
-            </cds-structured-list-row>
-          </cds-structured-list-body>
-        </cds-structured-list>
-      </div>
-      <div v-else>
-        <div class="cds--col-lg-16 cds--col-md-8">
-          <h3 id="orchestrator-resources">Orchestrator Resources</h3>
-          <p>No Orchestrator Resources</p>
-        </div>
+        <p>No Orchestrator Resources</p>
       </div>
     </div>
   </div>
