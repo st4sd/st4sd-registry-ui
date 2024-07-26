@@ -1,8 +1,11 @@
 <template>
   <div>
     <template v-if="loading">
-      <div class="card-row" id="experimentLoadingContainer">
-        <bx-loading id="experimentLoadingWheel" type="overlay"></bx-loading>
+      <div class="card-row" v-for="i in 3" :key="i">
+        <St4sdSkeletonVirtualExperimentCard />
+      </div>
+      <div>
+        <cds-pagination page-size="5" total-items="3"> </cds-pagination>
       </div>
     </template>
     <template v-else>
@@ -25,24 +28,20 @@
           :tags="findTagsForPackageName(experiment.metadata.package.name)"
         />
       </div>
-
       <div>
-        <bx-pagination
-          :page-size="elementsToShow"
-          :start="firstElement"
-          :total="experimentsToShow.length"
-          @bx-pages-select-changed="handleTablePagesSelectChanged"
-          @bx-pagination-changed-current="handleTablePaginationChangedCurrent"
-          @bx-page-sizes-select-changed="handleTablePageSizesSelectChanged"
+        <cds-pagination
+          page-size="10"
+          :total-items="experimentsToShow.length"
+          @cds-select-selected="handleTablePageSizesSelectChanged"
+          @cds-pagination-changed-current="handleTablePaginationChangedCurrent"
         >
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <bx-page-sizes-select slot="page-sizes-select">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-          </bx-page-sizes-select>
-          <bx-pages-select></bx-pages-select>
-        </bx-pagination>
+          <cds-select-item
+            v-for="(option, optionIdx) in tablePaginationPageSizeOptions"
+            :value="option"
+            :key="optionIdx"
+            >{{ option }}</cds-select-item
+          >
+        </cds-pagination>
       </div>
     </template>
   </div>
@@ -50,17 +49,18 @@
 
 <script>
 import { getAvailablePlatforms } from "@/functions/package_utilities";
+import St4sdSkeletonVirtualExperimentCard from "@/components/St4sdExperimentCards/St4sdSkeletonVirtualExperimentCard.vue";
 import St4sdVirtualExperimentCard from "@/components/St4sdExperimentCards/St4sdVirtualExperimentCard.vue";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
-import "@carbon/web-components/es/components/pagination/index.js";
-import "@carbon/web-components/es/components/loading/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/pagination.min.js";
 
 export default {
   components: {
     NoSearchResultsEmptyState,
     NoDataEmptyState,
     St4sdVirtualExperimentCard,
+    St4sdSkeletonVirtualExperimentCard,
   },
   props: {
     searchedExperiments: Array,
@@ -72,6 +72,7 @@ export default {
     return {
       firstElement: 0,
       elementsToShow: 5,
+      tablePaginationPageSizeOptions: [10, 25, 50],
     };
   },
   computed: {
@@ -129,59 +130,29 @@ export default {
       this.firstElement = 0;
     },
     handleTablePaginationChangedCurrent(event) {
-      this.firstElement = event.detail.start;
+      this.firstElement = event.target.start;
     },
-    handleTablePagesSelectChanged(event) {
-      this.firstElement = event.detail.value * this.elementsToShow;
-    },
+    // AP: TODO FIXME:
+    // This is a hack required because CDS 2.8/2.10 pagination raises
+    // this event even when selecting the dropdown on the right side
+    // of the pagination component.
+    // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11923
     handleTablePageSizesSelectChanged(event) {
-      this.firstElement = 0;
-      this.elementsToShow = event.detail.value;
+      let newPageSize = Number(event.detail.value);
+
+      if (this.tablePaginationPageSizeOptions.includes(newPageSize)) {
+        this.elementsToShow = newPageSize;
+      }
     },
   },
 };
 </script>
 
-<style lang="scss">
-@use "@carbon/grid";
+<style scoped lang="scss">
 @use "@carbon/layout";
-
 @import "@/styles/empty_state_styles.scss";
-@import "@/styles/cds-tag-styles.scss";
 
 .card-row {
   margin-top: layout.$spacing-05;
-}
-
-.card-proportions {
-  max-height: 300px;
-}
-
-@media screen and (max-width: 750px) {
-  .card-proportions {
-    max-height: 350px;
-  }
-}
-
-@media screen and (max-width: 671px) {
-  .card-proportions {
-    max-height: none;
-  }
-  .bx--link {
-    overflow-wrap: anywhere;
-  }
-}
-
-#experimentLoadingContainer {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  padding-top: 100px;
-}
-
-#experimentLoadingWheel {
-  display: inline-block;
-  animation: none;
 }
 </style>

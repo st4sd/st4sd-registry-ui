@@ -70,36 +70,5 @@ export default {
 <style scoped lang="scss">
 @use "@carbon/layout";
 @import "@/styles/cds-tag-styles.scss";
-
-.card-outer-container {
-  pointer-events: none;
-  min-height: 275px;
-  max-height: 300px;
-  height: calc(100vw / 3);
-  border: 1px solid rgb(224, 224, 224);
-
-  @media screen and (max-width: 750px) {
-    height: fit-content;
-    max-height: 350px;
-  }
-
-  @media screen and (max-width: 671px) {
-    height: fit-content;
-    max-height: none;
-  }
-}
-
-.card-inner-container {
-  padding: layout.$spacing-05;
-  max-width: 650px;
-}
-
-p {
-  padding-bottom: layout.$spacing-05;
-}
-
-a {
-  text-decoration: none;
-  color: black;
-}
+@import "@/styles/st4sd-virtual-experiment-card-styles.scss";
 </style>
