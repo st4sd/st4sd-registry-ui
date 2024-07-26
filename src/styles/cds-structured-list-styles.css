@@ -22,3 +22,17 @@ cds-structured-list-cell.align-top {
 cds-structured-list-cell.align-bottom {
   vertical-align: bottom;
 }
+
+/* 
+  AP: we need to emulate c4d groups as we are unable to import
+  both cds and c4d versions of structured lists due to redefinition errors 
+*/
+cds-structured-list-row.cds-list-group {
+  background-color: var(--cds-ui-03, #e0e0e0);
+}
+
+cds-structured-list-row.cds-list-group > cds-structured-list-cell {
+  color: var(--cds-text-primary, #161616);
+  font-size: var(--cds-heading-compact-01-font-size, 0.875rem);
+  font-weight: var(--cds-heading-compact-01-font-weight, 600);
+}

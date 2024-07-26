@@ -229,10 +229,12 @@
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="componentWFAttributes.restartHookOn.length != 0"
+              class="cds-list-group"
             >
               <cds-structured-list-cell>
-                >>Restart Hooks
+                Restart Hooks
               </cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
 
             <cds-structured-list-row
@@ -257,10 +259,10 @@
                 componentWFAttributes.memoization.disable.strong != undefined ||
                 componentWFAttributes.memoization.embeddingFunction != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell>
-                >>Memoization
-              </cds-structured-list-cell>
+              <cds-structured-list-cell>Memoization</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
 
             <cds-structured-list-row
@@ -268,8 +270,10 @@
                 componentWFAttributes.memoization.disable.fuzzy != undefined ||
                 componentWFAttributes.memoization.disable.strong != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell> >>Disable </cds-structured-list-cell>
+              <cds-structured-list-cell>Disable</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
 
             <cds-structured-list-row
@@ -316,8 +320,10 @@
                   undefined ||
                 componentWFAttributes.optimizer.exploitTargetLow != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell> >>Optimizer </cds-structured-list-cell>
+              <cds-structured-list-cell>Optimizer</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
 
             <cds-structured-list-row
@@ -403,10 +409,12 @@
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="componentWFAttributes.shutdownOn.length != 0"
+              class="cds-list-group"
             >
               <cds-structured-list-cell>
-                >>Shutdown Hooks
+                Shutdown Hooks
               </cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
 
             <cds-structured-list-row
@@ -462,8 +470,10 @@
                 componentResourceManager.config.backend != undefined ||
                 componentResourceManager.config.walltime != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell>>>Config</cds-structured-list-cell>
+              <cds-structured-list-cell>Config</cds-structured-list-cell
+              ><cds-structured-list-cell />
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="componentResourceManager.config.backend != undefined"
@@ -488,8 +498,10 @@
                 componentResourceManager.docker.imagePullPolicy != undefined ||
                 componentResourceManager.docker.platform != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell>>>Docker</cds-structured-list-cell>
+              <cds-structured-list-cell>Docker</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="componentResourceManager.docker.image != undefined"
@@ -529,8 +541,10 @@
                 componentResourceManager.lsf.dockerImage != undefined ||
                 componentResourceManager.lsf.dockerProfileApp != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell>>>LSF</cds-structured-list-cell>
+              <cds-structured-list-cell>LSF</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="
@@ -607,8 +621,10 @@
                 componentResourceManager.kubernetes.host != undefined ||
                 componentResourceManager.kubernetes.namespace != undefined
               "
+              class="cds-list-group"
             >
-              <cds-structured-list-cell>>>Kubernetes</cds-structured-list-cell>
+              <cds-structured-list-cell>Kubernetes</cds-structured-list-cell>
+              <cds-structured-list-cell />
             </cds-structured-list-row>
             <cds-structured-list-row
               v-if="componentResourceManager.kubernetes.image != undefined"
@@ -973,4 +989,5 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/inline-loading-style.css";
+@import "@/styles/cds-structured-list-styles.css";
 </style>

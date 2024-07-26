@@ -93,51 +93,38 @@
       </cds-accordion-item>
 
       <cds-accordion-item title="Execute">
+        <h6>Target Name</h6>
+        <br />
         <cds-structured-list>
           <cds-structured-list-head>
             <cds-structured-list-header-row>
               <cds-structured-list-header-cell
-                >Target Name</cds-structured-list-header-cell
+                >Argument Name</cds-structured-list-header-cell
+              >
+              <cds-structured-list-header-cell
+                >Definition</cds-structured-list-header-cell
               >
             </cds-structured-list-header-row>
           </cds-structured-list-head>
           <cds-structured-list-body>
             <template v-for="execute in workflowExecute" :key="execute.target">
-              <cds-structured-list-row>
+              <cds-structured-list-row class="cds-list-group">
                 <cds-structured-list-cell>{{
                   execute.target
-                }}</cds-structured-list-cell>
+                }}</cds-structured-list-cell
+                ><cds-structured-list-cell />
               </cds-structured-list-row>
-              <cds-structured-list-row>
-                <cds-structured-list>
-                  <cds-structured-list-head>
-                    <cds-structured-list-header-row>
-                      <cds-structured-list-header-cell
-                        >>></cds-structured-list-header-cell
-                      >
-                      <cds-structured-list-header-cell
-                        >Argument name</cds-structured-list-header-cell
-                      >
-                      <cds-structured-list-header-cell
-                        >Definition</cds-structured-list-header-cell
-                      >
-                    </cds-structured-list-header-row>
-                  </cds-structured-list-head>
-                  <cds-structured-list-body>
-                    <cds-structured-list-row
-                      v-for="(argRef, argName) in execute.args"
-                      :key="argName"
-                    >
-                      <cds-structured-list-cell></cds-structured-list-cell>
-                      <cds-structured-list-cell>{{
-                        argName
-                      }}</cds-structured-list-cell>
-                      <cds-structured-list-cell>{{
-                        argRef
-                      }}</cds-structured-list-cell>
-                    </cds-structured-list-row>
-                  </cds-structured-list-body>
-                </cds-structured-list>
+              <cds-structured-list-row> </cds-structured-list-row>
+              <cds-structured-list-row
+                v-for="(argRef, argName) in execute.args"
+                :key="argName"
+              >
+                <cds-structured-list-cell>{{
+                  argName
+                }}</cds-structured-list-cell>
+                <cds-structured-list-cell>{{
+                  argRef
+                }}</cds-structured-list-cell>
               </cds-structured-list-row>
             </template>
           </cds-structured-list-body>
@@ -253,4 +240,5 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/inline-loading-style.css";
+@import "@/styles/cds-structured-list-styles.css";
 </style>
