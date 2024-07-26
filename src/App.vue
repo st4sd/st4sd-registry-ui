@@ -10,13 +10,12 @@
     <div id="main-content" class="bx--grid">
       <router-view />
     </div>
-    <dds-back-to-top></dds-back-to-top>
+    <c4d-back-to-top></c4d-back-to-top>
   </div>
 </template>
 
 <script>
-import "@carbon/ibmdotcom-web-components/es/components/back-to-top/index.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/text-input.min.js";
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/back-to-top.min.js";
 import St4sdHeader from "./components/St4sdHeader";
 
 export default {
