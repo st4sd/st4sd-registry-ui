@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/modal.min.js";
 export default {
   props: ["title", "parameterisationLoading"],
   setup(props, { emit }) {

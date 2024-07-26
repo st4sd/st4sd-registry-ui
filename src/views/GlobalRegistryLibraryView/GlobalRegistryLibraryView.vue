@@ -154,7 +154,12 @@ import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
-import "@carbon/web-components/es/components/tile/index.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/button.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/tile.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/loading.min.js";
+import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/notification.min.js";
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v1.42.0/card.min.js";
+import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v1.42.0/content-block.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
 
 import axios from "axios";
