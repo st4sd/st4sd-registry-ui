@@ -373,10 +373,6 @@ export default {
   padding-bottom: layout.$spacing-08;
 }
 
-.horizontal-line-spacing {
-  margin-bottom: layout.$spacing-08;
-}
-
 .no-padding {
   padding: 0;
 }
