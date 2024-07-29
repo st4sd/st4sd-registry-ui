@@ -117,9 +117,9 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/progress-indicator.min.js";
+import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/skeleton-text/index.js";
+import "@carbon/web-components/es/components/progress-indicator/index.js";
 
 import {
   checkContainerImagesHaveTagOtherThanLatest,

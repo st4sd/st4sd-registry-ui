@@ -81,9 +81,9 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "@carbon/web-components/es/components/modal/index.js";
+import "@carbon/web-components/es/components/inline-loading/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";

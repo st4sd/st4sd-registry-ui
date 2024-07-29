@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/side-panel.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/web-components/es/components/button/index.js";
 import componentForm from "@/canvas/components/forms/componentForm.vue";
 
 export default {

@@ -118,9 +118,9 @@
 import ReadParameterisationOptions from "@/components/ParameterisationView/ReadParameterisationOptions.vue";
 import EditParameterisationOptions from "@/components/ParameterisationView/EditParameterisationOptions.vue";
 
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/ui-shell.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/skeleton-text.min.js";
+import "@carbon/web-components/es/components/ui-shell/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/skeleton-text/index.js";
 
 export default {
   name: "ParameterisationContainer",

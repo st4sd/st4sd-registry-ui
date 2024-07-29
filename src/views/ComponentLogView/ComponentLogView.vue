@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "@carbon/web-components/es/components/notification/index.js";
 import St4sdLogView from "@/components/St4sdLogView";
 import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";

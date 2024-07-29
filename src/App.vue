@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/back-to-top.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/back-to-top/index.js";
 import St4sdHeader from "./components/St4sdHeader";
 
 export default {

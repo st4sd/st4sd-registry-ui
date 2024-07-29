@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/content-item.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/content-item/index.js";
 export default {
   name: "ExperimentViewContentBlock",
   props: {

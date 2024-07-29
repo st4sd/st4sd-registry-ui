@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/checkbox.min.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
 export default {
   name: "ExperimentView",
   props: {

@@ -36,7 +36,8 @@
               tag: {{ tag }}
             </cds-tag>
             <!-- Digest -->
-            <cds-tag type="blue">
+            <!-- AP: cds-tag has a set max-inline-size value which force the component to take multiple lines -->
+            <cds-tag type="blue" style="max-inline-size: fit-content">
               digest: {{ experiment.metadata.registry.digest }}
             </cds-tag>
           </div>
@@ -150,9 +151,9 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/content-block.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/link-list.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/content-block/index.js";
+import "@carbon/web-components/es/components/tag/index.js";
+import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
 import runExperimentFormModal from "@/canvas/components/modals/experiment/runExperimentFormModal.vue";

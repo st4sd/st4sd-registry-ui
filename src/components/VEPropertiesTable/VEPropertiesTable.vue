@@ -128,8 +128,8 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/button/index.js";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 

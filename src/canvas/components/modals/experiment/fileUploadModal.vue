@@ -84,10 +84,10 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/file-uploader.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
+import "@carbon/web-components/es/components/file-uploader/index.js";
+import "@carbon/web-components/es/components/tabs/index.js";
+import "@carbon/web-components/es/components/modal/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
 
 export default {
   props: { title: String },

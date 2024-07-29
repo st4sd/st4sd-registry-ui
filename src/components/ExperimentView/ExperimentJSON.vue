@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/code-snippet.min.js";
+import "@carbon/web-components/es/components/code-snippet/index.js";
 
 import ExperimentViewContentBlock from "./ExperimentViewContentBlock.vue";
 

@@ -702,7 +702,7 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/text
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/tabs.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/toggle.min.js";
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/dropdown.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/text-input.min.js";
+import "@carbon/web-components/es/components/text-input/index.js";
 
 export default {
   name: "RunExperimentForm",

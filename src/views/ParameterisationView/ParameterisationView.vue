@@ -48,8 +48,8 @@ import St4sdBreadcrumb from "@/components/St4sdBreadcrumb/St4sdBreadcrumb.vue";
 import ParameterisationContainer from "@/components/ParameterisationView/ParameterisationContainer.vue";
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 
 import axios from "axios";
 

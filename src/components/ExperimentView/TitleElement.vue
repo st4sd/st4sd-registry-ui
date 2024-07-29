@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/horizontal-rule.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/horizontal-rule/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 export default {
   name: "TitleElement",

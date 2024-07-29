@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
+import "@carbon/web-components/es/components/inline-loading/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";

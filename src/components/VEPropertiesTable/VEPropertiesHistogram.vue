@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/charts/styles.css";
 import "@carbon/styles/css/styles.css";
 import { HistogramChart } from "@carbon/charts";

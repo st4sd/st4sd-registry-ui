@@ -30,8 +30,8 @@
   </c4d-expressive-modal>
 </template>
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/expressive-modal.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/expressive-modal/index.js";
+import "@carbon/web-components/es/components/button/index.js";
 export default {
   props: {
     title: String,

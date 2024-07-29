@@ -180,11 +180,11 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/side-panel.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/inline-loading.min.js";
+import "@carbon/web-components/es/components/structured-list/index.js";
+import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/inline-loading/index.js";
 export default {
   props: {
     title: String,

@@ -108,8 +108,8 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tabs.min.js";
+import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/tabs/index.js";
 
 import axios from "axios";
 

@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/ui-shell.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
+import "@carbon/web-components/es/components/ui-shell/index.js";
+import "@carbon/web-components/es/components/link/index.js";
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import St4sdLoginModal from "@/components/St4sdHeader/St4sdLoginModal.vue";
 import { registryUISharedState } from "@/stores/registryUISharedState";

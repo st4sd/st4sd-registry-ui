@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v2.8.0/filter-panel.min.js";
+import "@carbon/ibmdotcom-web-components/es/components/filter-panel/index.js";
 const domainFilters = [
   {
     filterFor: "domain",

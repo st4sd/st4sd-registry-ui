@@ -90,10 +90,10 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/pagination.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/select.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
+import "@carbon/web-components/es/components/pagination/index.js";
+import "@carbon/web-components/es/components/select/index.js";
+import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/link/index.js";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import {

@@ -642,15 +642,15 @@
 
 <script>
 import { ref } from "vue";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/toggle.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/content-switcher.min.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/toggle/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
+import "@carbon/web-components/es/components/content-switcher/index.js";
 import St4sdComponent from "@/canvas/classes/St4sdComponent.js";
 import { fixAccordionStyle } from "@/functions/cds_accordion_fixes";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/structured-list.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/icon-button.min.js";
+import "@carbon/web-components/es/components/structured-list/index.js";
+import "@carbon/web-components/es/components/icon-button/index.js";
 // AP: see comment on parameterNameIsDuplicate
 // import { checkParameterNameIsDuplicate } from "@/canvas/functions/validation";
 

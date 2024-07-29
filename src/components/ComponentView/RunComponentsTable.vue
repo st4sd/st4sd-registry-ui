@@ -83,8 +83,8 @@
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/data-table.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
+import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/list/index.js";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 import { get_sorted_elements } from "@/functions/table_sort";

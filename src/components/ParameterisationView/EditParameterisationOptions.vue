@@ -470,16 +470,16 @@ import {
 
 import { fixAccordionStyle } from "@/functions/cds_accordion_fixes";
 
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/toggle.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/link.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/accordion.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/list.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/dropdown.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/radio-button.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/notification.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/modal.min.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/toggle/index.js";
+import "@carbon/web-components/es/components/link/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
+import "@carbon/web-components/es/components/list/index.js";
+import "@carbon/web-components/es/components/dropdown/index.js";
+import "@carbon/web-components/es/components/radio-button/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/modal/index.js";
 
 export default {
   name: "ParameterisationContainer",

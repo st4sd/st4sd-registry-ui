@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
+import "@carbon/web-components/es/components/tag/index.js";
 import { getAvailablePlatforms } from "@/functions/package_utilities";
 export default {
   name: "St4sdVirtualExperimentCard",

@@ -160,7 +160,7 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/load
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/notification.min.js";
 import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v1.42.0/card.min.js";
 import "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/version/v1.42.0/content-block.min.js";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/tag.min.js";
+import "@carbon/web-components/es/components/tag/index.js";
 
 import axios from "axios";
 

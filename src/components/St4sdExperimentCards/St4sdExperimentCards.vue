@@ -53,7 +53,7 @@ import St4sdSkeletonVirtualExperimentCard from "@/components/St4sdExperimentCard
 import St4sdVirtualExperimentCard from "@/components/St4sdExperimentCards/St4sdVirtualExperimentCard.vue";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/pagination.min.js";
+import "@carbon/web-components/es/components/pagination/index.js";
 
 export default {
   components: {

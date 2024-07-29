@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/loading.min.js";
+import "@carbon/web-components/es/components/loading/index.js";
 
 const props = defineProps({
   id: {

@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/breadcrumb.min.js";
+import "@carbon/web-components/es/components/breadcrumb/index.js";
 
 export default {
   name: "St4sdBreadcrumb",
