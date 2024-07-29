@@ -35,6 +35,13 @@
           @click="$emit('transform-button-clicked')"
         >
           Transform Experiment
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/network--3--reference.svg"
+          />
         </cds-button>
         <cds-button
           size="md"
@@ -43,6 +50,22 @@
           @click="showHideInputNodes"
         >
           {{ showHideButtonTitle }}
+          <img
+            v-if="!inputNodesVisibility"
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/upstream.svg"
+          />
+          <img
+            v-else
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/view--off.svg"
+          />
         </cds-button>
         <cds-button
           size="md"
@@ -201,16 +224,16 @@ const doesOtherOrPresetsExist = () => {
 };
 
 let showHideButtonTitle = ref("Show all inputs");
-let inputNodesVisability = ref(false);
+let inputNodesVisibility = ref(false);
 const showHideInputNodes = () => {
-  inputNodesVisability.value = !inputNodesVisability.value;
+  inputNodesVisibility.value = !inputNodesVisibility.value;
   let Other = nodes.value.find((a) => a.id == "other");
   if (Other != undefined) {
-    Other.hidden = !inputNodesVisability.value;
+    Other.hidden = !inputNodesVisibility.value;
   }
   let Presets = nodes.value.find((a) => a.id == "presets");
   if (Presets != undefined) {
-    Presets.hidden = !inputNodesVisability.value;
+    Presets.hidden = !inputNodesVisibility.value;
   }
   showHideButtonTitle.value =
     showHideButtonTitle.value == "Hide presets & other"
@@ -291,10 +314,8 @@ const downloadExperimentFiles = () => {
 @import "@/canvas/styles/main.scss";
 @import "@/styles/svg.scss";
 @import "@/styles/toast-notification-styles.scss";
-cds-button::part(button) {
-  padding: calc(0.375rem - 3px) 0.5rem calc(0.375rem - 3px) 0.5rem;
-  margin: 0.2rem;
-  justify-content: center;
-  align-items: center;
+
+cds-button {
+  padding: 0 3px 0 3px;
 }
 </style>
