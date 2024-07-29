@@ -30,7 +30,7 @@
       </div>
       <div>
         <cds-pagination
-          page-size="10"
+          page-size="5"
           :total-items="experimentsToShow.length"
           @cds-select-selected="handleTablePageSizesSelectChanged"
           @cds-pagination-changed-current="handleTablePaginationChangedCurrent"
@@ -72,7 +72,7 @@ export default {
     return {
       firstElement: 0,
       elementsToShow: 5,
-      tablePaginationPageSizeOptions: [10, 25, 50],
+      tablePaginationPageSizeOptions: [5, 10, 25],
     };
   },
   computed: {
