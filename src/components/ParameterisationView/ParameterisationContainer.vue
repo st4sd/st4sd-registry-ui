@@ -1,39 +1,43 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <div class="cds--row white-background" id="margin-right">
+  <div id="parameterisation-hero" class="cds--row">
     <div class="cds--col">
       <h1>Parameterisation Options</h1>
     </div>
   </div>
-  <div class="cds--row background" id="padding-top" v-if="!readView">
+  <div id="parameterisation-edit-title" class="cds--row" v-if="!readView">
     <div class="cds--col">
       <h3>Editing {{ tabSelector }} properties</h3>
     </div>
     <div class="cds--col">
       <div class="buttons-container">
         <cds-button
-          id="cancel-button"
+          class="cancel-button"
           kind="secondary"
           @click="handleCancel"
           :disabled="cancelDisabled"
         >
           Cancel
         </cds-button>
-        <cds-button id="save-button" @click="emitSave" :disabled="saveDisabled">
+        <cds-button
+          class="save-button"
+          @click="emitSave"
+          :disabled="saveDisabled"
+        >
           Save
         </cds-button>
       </div>
     </div>
   </div>
-  <div class="cds--row background">
-    <div class="background margin height" id="left-navigation-tab-container">
+  <div id="parameterisation-content" class="cds--row">
+    <div id="parameterisation-left-column">
       <cds-side-nav
         id="side-nav"
         aria-label="Side navigation"
         expanded
         isNotChildOfHeader
       >
-        <cds-side-nav-items class="background">
+        <cds-side-nav-items>
           <cds-side-nav-menu-item
             id="side-nav-first-item"
             href="#"
@@ -73,16 +77,18 @@
         </cds-side-nav-items>
       </cds-side-nav>
     </div>
-    <div class="cds--col margin background height" id="right-content-container">
-      <div
-        id="margin-right"
-        class="height"
-        :class="{ 'white-background': readView }"
-      >
-        <div class="cds--col" id="padding-right">
+    <div
+      id="parameterisation-right-column"
+      class="cds--col right-content-container"
+    >
+      <div :class="{ 'white-background': readView }">
+        <div
+          id="parameterisation-read-view-edit-button-container"
+          class="cds--col"
+        >
           <cds-button
             kind="secondary"
-            id="edit-button"
+            class="edit-button"
             @click="toggleEditOptions"
             v-if="readView"
           >
@@ -235,73 +241,59 @@ h1 {
   padding-bottom: layout.$spacing-07;
 }
 
-h5 {
-  padding: 0 0 1rem 1rem;
-}
-
-#left-navigation-tab-container {
-  width: 256px;
-  padding-left: 0;
-  padding-right: layout.$spacing-07;
-}
-
-#right-content-container {
-  padding-left: 0;
-  padding-right: layout.$spacing-06;
-}
-
-cds-side-nav-items {
-  padding-top: 0;
-}
-
-#main-content {
-  margin-left: 0 !important;
-}
-
-#side-nav {
-  position: relative;
-  top: 0px;
-}
-#edit-button {
-  position: relative;
+cds-button {
   width: 8rem;
-  left: calc(100% - 8rem);
 }
+
 .buttons-container {
   position: relative;
   left: calc(100% - 16.5rem);
   width: 16.5rem;
 }
-#cancel-button {
-  width: 8rem;
+
+.edit-button {
+  position: relative;
+  left: calc(100% - 8rem);
+}
+
+.cancel-button {
   margin-right: 0.5rem;
-}
-#save-button {
-  width: 8rem;
-}
-.margin {
-  margin-top: layout.$spacing-05;
-}
-#padding-top {
-  padding-top: 1rem;
-}
-#padding {
-  padding-left: 2rem;
-}
-.background {
-  background-color: #f4f4f4;
 }
 
 .white-background {
-  background-color: white !important;
+  background-color: white;
 }
-.height {
-  min-height: 80vh;
+
+#parameterisation-edit-title {
+  padding-top: layout.$spacing-05;
+  background-color: #f4f4f4;
 }
-#margin-right {
-  margin-right: 0;
+
+#parameterisation-content {
+  padding-top: layout.$spacing-05;
+  background-color: #f4f4f4;
+
+  div:not(#parameterisation-read-view-edit-button-container) {
+    min-height: 80vh;
+  }
+
+  #parameterisation-read-view-edit-button-container {
+    padding-right: 0;
+  }
 }
-#padding-right {
-  padding-right: 0 !important;
+
+#parameterisation-left-column {
+  width: 256px;
+  padding-left: 0;
+  padding-right: layout.$spacing-07;
+
+  cds-side-nav {
+    position: relative;
+    top: 0px;
+  }
+}
+
+#parameterisation-right-column {
+  padding-left: 0;
 }
 </style>
