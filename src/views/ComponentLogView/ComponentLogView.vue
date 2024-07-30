@@ -13,8 +13,8 @@
         :title="errorDescription"
         :caption="errorStatusText + ' (error ' + errorCode + ')'"
         timeout="5000"
-      >
-      </cds-toast-notification>
+        lowContrast
+      />
     </div>
     <St4sdBreadcrumb
       :breadcrumbs="[

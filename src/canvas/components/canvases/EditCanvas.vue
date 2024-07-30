@@ -10,6 +10,7 @@
       :title="notification.title"
       :subtitle="notification.subtitle"
       :caption="notification.caption"
+      lowContrast
     />
   </div>
   <!--  https://vueflow.dev/examples/dnd.html -->

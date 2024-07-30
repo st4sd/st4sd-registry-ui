@@ -175,13 +175,12 @@
       </cds-structured-list>
       <cds-inline-notification
         v-else
-        low-contrast
         hide-close-button
         kind="info"
         title="No components in this workflow"
         subtitle="Drag and drop components on the workflow to add them."
-      >
-      </cds-inline-notification>
+        lowContrast
+      />
     </cds-accordion-item>
   </cds-accordion>
 </template>

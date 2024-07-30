@@ -10,6 +10,7 @@
         :open="cancelNotificationOpen"
         title="Are you sure?"
         subtitle="All changes that have been made will be lost - click cancel again within 10s to exit"
+        lowContrast
       />
       <div v-if="tabSelector == 'platforms'" class="tab">
         <div class="cds--row">
@@ -127,8 +128,8 @@
             kind="info"
             title="No platform set -"
             subtitle="If you don’t add any option, the default platform will be “default”"
-          >
-          </cds-inline-notification>
+            lowContrast
+          />
           <div
             v-for="(platform, idx) in parameterisation.executionOptions
               .platform"

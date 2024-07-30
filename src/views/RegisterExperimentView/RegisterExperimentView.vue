@@ -11,6 +11,7 @@
         (notification.code == 0 ? '' : ` (code ${notification.code})`)
       "
       timeout="5000"
+      lowContrast
     />
   </div>
   <St4sdBreadcrumb :breadcrumbs="getBreadcumbs()" />

@@ -27,10 +27,10 @@
       <cds-inline-notification
         id="dsl-valid"
         kind="success"
-        lowContrast
         :open="dslBeingValidated != 'active' && !dslInvalid"
         hide-close-button
         title="DSL Valid"
+        lowContrast
       />
       <cds-actionable-notification
         id="dsl-invalid-notification"

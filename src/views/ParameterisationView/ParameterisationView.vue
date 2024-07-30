@@ -20,6 +20,7 @@
       :title="error.description"
       :caption="error.statusText + ' (error ' + error.code + ')'"
       timeout="5000"
+      lowContrast
     />
   </div>
   <div v-if="parameterisationOptionsLoading" id="loading-container">

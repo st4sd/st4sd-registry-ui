@@ -8,7 +8,7 @@
       :name="`radio-group-${variable.name}`"
       :value="selectedValueId"
       @cds-radio-button-group-changed="setVariableValue()"
-      style="display: inline;"
+      style="display: inline"
     >
       <cds-radio-button
         label-text="Use platform default"
@@ -19,7 +19,7 @@
         :value="presetValueId"
       ></cds-radio-button>
       <cds-text-input
-      id="preset-input"
+        id="preset-input"
         v-if="
           getVariablePresetValue() != undefined &&
           presetInputsVisible[this.valueIndex] == true
@@ -58,6 +58,7 @@
           kind="info"
           title="No value set -"
           subtitle="If you don’t add a value, the default value will be set by the platform"
+          lowContrast
         />
         <div class="cds--row drag">
           <div class="cds--col-lg-14 padding-right">

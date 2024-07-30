@@ -14,6 +14,7 @@
       :open="dslBeingValidated != 'active' && dslErrorsData.length == 0"
       hide-close-button
       title="DSL Valid"
+      lowContrast
     />
     <cds-accordion data-modal-primary-focus>
       <cds-accordion-item

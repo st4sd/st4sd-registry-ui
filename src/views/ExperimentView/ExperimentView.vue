@@ -15,6 +15,7 @@
         :title="error.description"
         :caption="error.statusText + ' (error ' + error.code + ')'"
         timeout="5000"
+        lowContrast
       />
     </div>
     <St4sdBreadcrumb
