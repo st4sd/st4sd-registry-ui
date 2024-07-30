@@ -67,8 +67,8 @@
                 placeholder="parameter name"
                 :value="parameter.name"
                 @input="parameter.name = $event.target.value"
-                :invalid="parameterNameIsDuplicate(parameter.name)"
-                invalidText="Parameter names must be unique"
+                :invalid="this.invalidParameters.has(index)"
+                invalidText="Parameter names must be unique and not empty"
               />
             </cds-structured-list-cell>
             <cds-structured-list-cell>
@@ -210,8 +210,8 @@ export default {
     return {
       workflow: new St4sdWorkflow(),
       childrenNodes: [],
-      isNameError: false,
-      isParameterError: false,
+      hasInvalidName: false,
+      hasInvalidParameterNames: false,
       oldName: "",
       removedSteps: [],
     };
@@ -227,7 +227,42 @@ export default {
       this.workflow.setStepsNodeIDs(this.childrenNodes);
     }
   },
+  computed: {
+    invalidParameters() {
+      let invalid = new Set();
+      for (
+        let idx = 0;
+        idx < this.workflow.signature.parameters.length;
+        idx++
+      ) {
+        let currentParameter =
+          this.workflow.signature.parameters[idx].name.trim();
+        if (currentParameter == "") {
+          invalid.add(idx);
+          continue;
+        }
+        if (
+          this.workflow.signature.parameters
+            .toSpliced(idx, 1)
+            .map((parameter) => parameter.name)
+            .includes(currentParameter)
+        ) {
+          invalid.add(idx);
+        }
+      }
+      return invalid;
+    },
+  },
+  watch: {
+    invalidParameters(invalidIndices) {
+      this.hasInvalidParameterNames = invalidIndices.size != 0;
+      this.emitValidityStatus();
+    },
+  },
   methods: {
+    emitValidityStatus() {
+      this.$emit("validityChanged", this.hasInvalidParameterNames);
+    },
     removeParent() {
       this.$emit("removeParent");
     },
@@ -255,7 +290,7 @@ export default {
       });
     },
     add() {
-      if (!this.isNameError && !this.isParameterError) {
+      if (!this.hasInvalidName && !this.hasInvalidParameterNames) {
         //Each workflow will generate a workflow node and an input node  for that workflow
         let { workflowNode, inputNode } = createWorkflowNode(
           this.workflow.getName(),
@@ -266,7 +301,7 @@ export default {
       }
     },
     update() {
-      if (!this.isNameError && !this.isParameterError) {
+      if (!this.hasInvalidName && !this.hasInvalidParameterNames) {
         if (this.workflow.areStepsUnique()) {
           this.applyStepRemoval();
           this.checkStepsChanges();
@@ -319,38 +354,18 @@ export default {
         ).label = `${tobeUpdatedNode.label} inputs`;
       }
     },
-    // TODO: AP: see warning on parameterNameIsDuplicate in componentForm.vue
-    parameterNameIsDuplicate(name) {
-      let parametersNames = this.workflow
-        .getParameters()
-        .map((param) => param.name);
-      if (new Set(parametersNames).size != parametersNames.length) {
-        let occurrences = 0;
-        for (let parameter of parametersNames) {
-          if (parameter == name) {
-            occurrences++;
-            if (occurrences > 1) {
-              this.isParameterError = true;
-              this.$emit("validityChanged", true);
-              return true;
-            }
-          }
-        }
-      } else {
-        this.isParameterError = false;
-        this.$emit("validityChanged", this.isNameError);
-        return false;
-      }
-    },
     onFocusLost(event, item) {
       if (item == "") {
         event.target.invalid = true;
-        this.isNameError = true;
+        this.hasInvalidName = true;
       } else {
-        this.isNameError = false;
+        this.hasInvalidName = false;
         event.target.invalid = false;
       }
-      this.$emit("validityChanged", this.isNameError || this.isParameterError);
+      this.$emit(
+        "validityChanged",
+        this.hasInvalidName || this.hasInvalidParameterNames,
+      );
     },
   },
 };

@@ -59,7 +59,7 @@
                 :value="parameter.name"
                 @input="parameter.name = $event.target.value"
                 :invalid="this.invalidParameters.has(index)"
-                invalidText="Parameter names must be unique"
+                invalidText="Parameter names must be unique and not empty"
                 placeholder="parameter name"
               />
             </cds-structured-list-cell>
@@ -588,7 +588,7 @@
                 :value="key"
                 @input="setVariableKey(idx, $event.target.value)"
                 :invalid="this.invalidVariableKeys.has(idx)"
-                invalidText="Variable names must be unique"
+                invalidText="Variable names must be unique and not empty"
                 placeholder="variable name"
               />
             </cds-structured-list-cell>
