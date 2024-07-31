@@ -17,10 +17,8 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-@use "@carbon/grid";
+<style scoped lang="scss">
 @use "@carbon/layout";
-@include grid.flex-grid();
 .breadcrumb {
   padding-bottom: layout.$spacing-07;
 }

@@ -351,31 +351,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.success-green {
-  // Simulate color of IBM success icon
-  // Source: https://codepen.io/sosuke/pen/Pjoqqp
-  // Input: #198038
-  filter: invert(23%) sepia(54%) saturate(4018%) hue-rotate(136deg)
-    brightness(90%) contrast(80%);
-}
-
-.fail-red {
-  // Simulate color of IBM failure icon
-  // Source: https://codepen.io/sosuke/pen/Pjoqqp
-  // Input: #da1e28
-  filter: invert(12%) sepia(82%) saturate(4571%) hue-rotate(349deg)
-    brightness(113%) contrast(90%);
-}
-
-.warning-yellow {
-  // Simulate color of IBM failure icon
-  // Source: https://codepen.io/sosuke/pen/Pjoqqp
-  // Input: #f1c21b
-  filter: invert(69%) sepia(82%) saturate(455%) hue-rotate(2deg) brightness(98%)
-    contrast(94%);
-}
-
+<style scoped lang="scss">
+@import "@/styles/ve-progress-indicator-styles.css";
 // AP: required because of
 // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11890
 cds-progress-step {

@@ -324,7 +324,7 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 @import "@/styles/svg.scss";
 @import "@/styles/cds-structured-list-styles.css";
 </style>

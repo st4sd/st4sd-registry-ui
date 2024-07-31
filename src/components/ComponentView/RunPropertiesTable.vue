@@ -86,7 +86,7 @@
           message="This run has no properties available"
         />
 
-        <div class="tableOverflowContainer" v-else>
+        <div class="table-overflow-container" v-else>
           <cds-table size="lg">
             <cds-table-head>
               <cds-table-header-row>
@@ -305,9 +305,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
-
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
-}
+@import "@/styles/cds-table-styles.scss";
 </style>

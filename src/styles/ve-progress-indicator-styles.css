@@ -1,0 +1,7 @@
+.ve-progress-indicator {
+  margin-top: 0;
+  @media screen and (max-width: 1055px) {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+}

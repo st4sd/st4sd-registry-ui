@@ -52,7 +52,7 @@
       </div>
     </div>
     <template v-if="loading">
-      <div class="tableOverflowContainer">
+      <div class="table-overflow-container">
         <cds-table-toolbar>
           <cds-table-toolbar-search
             expanded
@@ -120,7 +120,7 @@
           :errorCode="errorCode"
           v-if="isError"
         />
-        <div class="tableOverflowContainer" v-else>
+        <div class="table-overflow-container" v-else>
           <cds-table
             size="xl"
             sort
@@ -402,11 +402,7 @@ export default {
 
 @import "@/styles/toast-notification-styles.scss";
 @import "@/styles/text-cta-styles.scss";
-
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
-}
+@import "@/styles/cds-table-styles.scss";
 
 .wrap-text {
   overflow-wrap: anywhere;

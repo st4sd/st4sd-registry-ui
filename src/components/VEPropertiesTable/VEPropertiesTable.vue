@@ -2,7 +2,7 @@
 <template>
   <div>
     <template v-if="loading">
-      <div class="tableOverflowContainer">
+      <div class="table-overflow-container">
         <cds-table-toolbar>
           <cds-table-toolbar-content>
             <cds-table-toolbar-search
@@ -81,7 +81,7 @@
         </cds-table-toolbar>
 
         <NoSearchResultsEmptyState v-if="dataToDisplay.length == 0" />
-        <div v-else class="tableOverflowContainer">
+        <div v-else class="table-overflow-container">
           <cds-table
             size="xl"
             sort
@@ -309,15 +309,11 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/svg.scss";
+@import "@/styles/cds-table-styles.scss";
 
 // AP: with xl table, a 16px padding is added to the header
 // and it doesn't look good with the search bar at the top
 cds-table-header-cell:not(:has(cds-skeleton-text)) {
   padding: 0;
-}
-
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
 }
 </style>

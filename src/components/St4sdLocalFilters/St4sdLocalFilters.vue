@@ -118,5 +118,4 @@ export default {
     margin-top: layout.$spacing-04;
   }
 }
-
 </style>

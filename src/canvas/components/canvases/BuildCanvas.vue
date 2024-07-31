@@ -976,12 +976,8 @@ const setDslValidationError = (dslError) => {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/canvas/styles/main.scss";
 @import "@/styles/toast-notification-styles.scss";
 @import "@/styles/svg.scss";
-
-.cds-button-padding {
-  padding: 0 3px 0 3px;
-}
 </style>

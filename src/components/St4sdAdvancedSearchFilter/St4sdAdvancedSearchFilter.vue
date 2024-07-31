@@ -56,7 +56,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "@carbon/grid";
 @use "@carbon/layout";
 
 .card-row {

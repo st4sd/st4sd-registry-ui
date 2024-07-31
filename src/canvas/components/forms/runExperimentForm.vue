@@ -960,7 +960,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tab-panels {
   padding-top: 1rem;
 }

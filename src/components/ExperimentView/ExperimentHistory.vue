@@ -13,7 +13,7 @@
       />
     </div>
     <div class="cds--col-sm-4 cds--col-md-6 cds--col-lg-12" v-else>
-      <div class="tableOverflowContainer">
+      <div class="table-overflow-container">
         <cds-table sort @cds-table-header-cell-sort="handleTableHeaderCellSort">
           <cds-table-head>
             <cds-table-header-row>
@@ -196,8 +196,5 @@ export default {
 </script>
 
 <style scoped>
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
-}
+@import "@/styles/cds-table-styles.scss";
 </style>

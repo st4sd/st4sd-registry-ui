@@ -114,8 +114,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@use "@carbon/layout";
-
+<style scoped lang="scss">
 @import "@/styles/toast-notification-styles.scss";
 </style>

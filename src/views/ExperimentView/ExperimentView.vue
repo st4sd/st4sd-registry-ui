@@ -347,11 +347,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@use "@carbon/grid";
+<style scoped lang="scss">
 @use "@carbon/layout";
 @use "@carbon/colors";
 
+@import "@/styles/ve-progress-indicator-styles.css";
 @import "@/styles/toast-notification-styles.scss";
 
 .empty-state {
@@ -360,14 +360,6 @@ export default {
 
 #http-error-empty-state {
   min-height: 70vh;
-}
-
-.ve-progress-indicator {
-  margin-top: 0;
-  @media screen and (max-width: 1055px) {
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
-  }
 }
 
 .pad1 {

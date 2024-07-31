@@ -171,11 +171,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@use "@carbon/grid";
+<style scoped lang="scss">
 @use "@carbon/layout";
-@include grid.flex-grid();
-
 @import "@/styles/toast-notification-styles.scss";
 
 #http-error-empty-state {

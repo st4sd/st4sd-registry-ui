@@ -29,9 +29,15 @@ export default {
 };
 </script>
 
-<style>
-@import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/themes.css";
+<style lang="scss">
+@use "@carbon/grid";
+@include grid.flex-grid();
 
+@import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/themes.css";
+@import "@/styles/svg.scss";
+</style>
+
+<style scoped>
 #main-content {
   margin: 2rem;
 }

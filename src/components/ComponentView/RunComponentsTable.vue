@@ -28,7 +28,7 @@
         v-else-if="data.length == 0"
         message="This run has no properties available"
       />
-      <div v-else class="tableOverflowContainer">
+      <div v-else class="table-overflow-container">
         <cds-table sort @cds-table-header-cell-sort="handleTableHeaderCellSort">
           <cds-table-head>
             <cds-table-header-row>
@@ -196,9 +196,6 @@ export default {
 };
 </script>
 
-<style>
-.tableOverflowContainer {
-  width: 100%;
-  overflow-x: scroll;
-}
+<style scoped>
+@import "@/styles/cds-table-styles.scss";
 </style>

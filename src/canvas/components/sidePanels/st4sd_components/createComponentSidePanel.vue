@@ -13,7 +13,10 @@
       @add="addComponent"
       @invalid="submitDisabled"
     />
-    <cds-button slot="actions" kind="secondary" @click="$emit('side-panel-closed')"
+    <cds-button
+      slot="actions"
+      kind="secondary"
+      @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
     <cds-button
