@@ -79,11 +79,11 @@ export default {
   data() {
     return {
       domainFilters: domainFilters,
-      selectedFilters: {
-        domain: [],
-        platform: [],
-        other: [],
-      },
+      selectedFiltersMap: new Map([
+        ["domain", new Set()],
+        ["platform", new Set()],
+        ["other", new Set()],
+      ]),
     };
   },
   props: {
@@ -91,18 +91,18 @@ export default {
   },
   methods: {
     scrubSelectedFilters() {
-      for (let domain in this.selectedFilters) {
-        this.selectedFilters[domain] = [];
+      for (const key of this.selectedFiltersMap.keys()) {
+        this.selectedFiltersMap.get(key).clear();
       }
     },
     onUpdateSelectedFilters(domain, filter) {
-      let duplicate = this.selectedFilters[domain].indexOf(filter);
-      if (duplicate > -1) {
-        this.selectedFilters[domain].splice(duplicate, 1);
+      let domainSet = this.selectedFiltersMap.get(domain);
+      if (domainSet.has(filter)) {
+        domainSet.delete(filter);
       } else {
-        this.selectedFilters[domain].push(filter);
+        domainSet.add(filter);
       }
-      this.$emit("updateSelectedFilters", this.selectedFilters);
+      this.$emit("updateSelectedFilters", this.selectedFiltersMap);
     },
   },
 };

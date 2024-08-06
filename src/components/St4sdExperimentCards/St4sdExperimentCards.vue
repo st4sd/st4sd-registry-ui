@@ -93,22 +93,22 @@ export default {
     },
     experimentsToShow() {
       let toShow = this.experimentsTaggedLatest;
-      for (const filterName in this.selectedFilters) {
-        const selectedFilter = this.selectedFilters[filterName];
-        // Platform has to be treated differently
-        if (filterName == "platform") {
+      if (this.selectedFilters.size > 0) {
+        for (let [domain, filter] of this.selectedFilters) {
+          let selectedFilter = Array.from(filter);
+          if (domain == "platform") {
+            toShow = toShow.filter(function (element) {
+              let platforms = getAvailablePlatforms(element);
+              return selectedFilter.every((p) => platforms.includes(p));
+            });
+            continue;
+          }
           toShow = toShow.filter(function (element) {
-            let platforms = getAvailablePlatforms(element);
-            return selectedFilter.every((p) => platforms.includes(p));
+            return selectedFilter.every((d) =>
+              element.metadata.package.keywords.includes(d),
+            );
           });
-          continue;
         }
-        //
-        toShow = toShow.filter(function (element) {
-          return selectedFilter.every((d) =>
-            element.metadata.package.keywords.includes(d),
-          );
-        });
       }
       this.handleFilterSelect();
       return toShow;
