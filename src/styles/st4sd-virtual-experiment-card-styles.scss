@@ -1,31 +1,31 @@
 .card-outer-container {
-    pointer-events: none;
-    min-height: 275px;
-    max-height: 300px;
-    height: calc(100vw / 3);
-    border: 1px solid rgb(224, 224, 224);
-  
-    @media screen and (max-width: 750px) {
-      height: fit-content;
-      max-height: 350px;
-    }
-  
-    @media screen and (max-width: 671px) {
-      height: fit-content;
-      max-height: none;
-    }
+  pointer-events: none;
+  min-height: 275px;
+  max-height: 300px;
+  height: calc(100vw / 3);
+  border: 1px solid rgb(224, 224, 224);
+
+  @media screen and (max-width: 750px) {
+    height: fit-content;
+    max-height: 350px;
   }
-  
-  .card-inner-container {
-    padding: layout.$spacing-05;
-    max-width: 650px;
+
+  @media screen and (max-width: 671px) {
+    height: fit-content;
+    max-height: none;
   }
-  
-  p {
-    padding-bottom: layout.$spacing-05;
-  }
-  
-  a {
-    text-decoration: none;
-    color: black;
-  }
+}
+
+.card-inner-container {
+  padding: layout.$spacing-05;
+  max-width: 650px;
+}
+
+p {
+  padding-bottom: layout.$spacing-05;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}

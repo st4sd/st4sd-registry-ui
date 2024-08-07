@@ -7,6 +7,8 @@ cache:
     - node_modules
 
 stages:
+  - name: "Check code formatting with Prettier"
+    if: tag is blank
   - name: "Build test image non-pr"
     if: tag is blank AND branch != main AND type != pull_request
   - name: "Build test image pr"
@@ -36,6 +38,12 @@ after_success:
 
 jobs:
   include:
+    - stage: "Check code formatting with Prettier"
+      os: linux
+      script:
+        - npm install prettier && npx prettier src --check
+      after_success: 
+        - echo "Done!"
     - stage: "Build test image non-pr"
       os: linux
       services:

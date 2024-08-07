@@ -107,7 +107,8 @@ pre {
     flex-direction: column-reverse;
   }
 
-  cds-button, cds-button-skeleton {
+  cds-button,
+  cds-button-skeleton {
     float: right;
     margin-bottom: layout.$spacing-05;
   }

@@ -5,7 +5,6 @@
     Author: Alessandro Pomponio
 */
 export function getDeploymentEndpoint() {
-  let publicPath =
-  import.meta.env.PROD ? "/registry-ui/" : "/";
+  let publicPath = import.meta.env.PROD ? "/registry-ui/" : "/";
   return window.location.origin + publicPath;
 }

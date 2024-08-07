@@ -3,11 +3,11 @@
 @use "@carbon/layout";
 
 .tag-group-container {
-    display: flex;
-    flex-flow: row wrap;
-    gap: layout.$spacing-03;
+  display: flex;
+  flex-flow: row wrap;
+  gap: layout.$spacing-03;
 }
 
 cds-tag {
   margin: 0 !important;
-} 
+}
