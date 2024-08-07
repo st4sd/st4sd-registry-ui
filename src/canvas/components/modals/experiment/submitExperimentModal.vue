@@ -2,6 +2,7 @@
   <cds-modal
     :preventClose="submitting"
     :preventCloseOnClickOutside="submitting"
+    @cds-modal-closed="this.$emit('cancel')"
   >
     <cds-modal-header>
       <cds-modal-close-button></cds-modal-close-button>
@@ -27,6 +28,7 @@
     <cds-modal-footer>
       <cds-modal-footer-button
         kind="secondary"
+        @click="this.$emit('cancel')"
         data-modal-close
         :disabled="submitting"
         >Cancel</cds-modal-footer-button
@@ -59,6 +61,7 @@ export default {
       submitting: false,
     };
   },
+  emits: ["submit", "cancel"],
   methods: {
     validateExperimentName(event) {
       this.experimentName = event.target.value;

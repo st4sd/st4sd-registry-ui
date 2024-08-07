@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div id="toast-notification-container">
     <cds-toast-notification
@@ -24,7 +25,20 @@
     ]"
   />
 
-  <span v-if="isPreview" class="preview">This is a preview</span>
+  <cds-actionable-notification
+    v-if="isPreview"
+    kind="info"
+    title="This is a preview"
+    subtitle="Click the button to save this experiment"
+    hideCloseButton
+    lowContrast
+  >
+    <cds-actionable-notification-button
+      @click="toggleModalVisibility('submitExperimentModal')"
+      slot="action"
+      >Register Transformed Experiment</cds-actionable-notification-button
+    >
+  </cds-actionable-notification>
 
   <div v-if="graphLoading">
     <div id="loadingContainer">
@@ -57,16 +71,6 @@
         :transformApplied="isPreview"
         @transform-selected="handleTransformSelected"
       />
-      <div id="button-container">
-        <button
-          id="submit-button"
-          v-if="isPreview"
-          title="Register Experiment"
-          @click="toggleModalVisibility('submitExperimentModal')"
-        >
-          Register Transformed Experiment
-        </button>
-      </div>
       <submitExperimentModal
         v-if="modalVisibilities.submitExperimentModal.value"
         @cancel="toggleModalVisibility('submitExperimentModal')"
@@ -322,31 +326,13 @@ const toggleModalVisibility = (modal) => {
   text-align: center;
 }
 
-.preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.875rem;
-
-  color: red;
-  outline: 2px solid red;
+cds-actionable-notification {
+  max-width: 100%;
+  margin-bottom: layout.$spacing-03;
 }
 
-#submit-button {
-  border-radius: 0 !important;
-  color: white;
-  background-color: #0e61fe;
-  border: none;
-  margin: 4px !important;
-  padding: 12px !important;
-  box-shadow: none !important;
-  font-weight: 600;
-}
-
-#button-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+cds-actionable-notification-button {
+  padding-top: layout.$spacing-05;
+  padding-right: layout.$spacing-06;
 }
 </style>
