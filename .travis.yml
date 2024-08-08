@@ -41,7 +41,7 @@ jobs:
     - stage: "Check code formatting with Prettier"
       os: linux
       script:
-        - npm install prettier && npx prettier src --check
+        - npm install prettier && npx prettier src --check || travis_terminate 1
       after_success: 
         - echo "Done!"
     - stage: "Build test image non-pr"

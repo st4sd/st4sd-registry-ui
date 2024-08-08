@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
   <div class="cds--css-grid cds--css-grid--condensed cds--css-grid--full-width">
     <div

@@ -35,14 +35,31 @@
           Import Component
         </cds-button>
       </div>
-      <cds-search
-        placeholder="Search here"
-        @cds-search-input="
-          templateQuery = $event.detail.value;
-          filterTemplates();
-        "
-        class="library-search-bar"
-      />
+      <div style="display: flex">
+        <cds-search
+          placeholder="Search here"
+          @cds-search-input="
+            templateQuery = $event.detail.value;
+            filterTemplates();
+          "
+          class="library-search-bar"
+        />
+        <cds-overflow-menu
+          leave-delay-ms="0"
+          enter-delay-ms="100000"
+          class="overflow-menu-container"
+        >
+          <img slot="icon" width="16" height="16" src="@/assets/settings.svg" />
+          <cds-overflow-menu-body :flipped="true">
+            <cds-overflow-menu-item>
+              <cds-checkbox
+                @cds-checkbox-changed="caseSensitive = !caseSensitive"
+                >Case Sensitive</cds-checkbox
+              >
+            </cds-overflow-menu-item>
+          </cds-overflow-menu-body>
+        </cds-overflow-menu>
+      </div>
     </div>
     <div id="nodes-container">
       <div
@@ -135,7 +152,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
 import { canvasStore } from "@/canvas/stores/canvasStore";
@@ -197,6 +214,14 @@ async function getNodesFromUrls() {
     });
   return nodes;
 }
+
+let caseSensitive = ref(false);
+
+watch(caseSensitive, () => {
+  if (templateQuery) {
+    filterTemplates();
+  }
+});
 
 const elements = ref([]);
 const fullElements = ref([]);
@@ -419,16 +444,22 @@ function onUpdateCreateComponentModalNotification(notification) {
 //Search bar function
 let templateQuery = "";
 const filterTemplates = () => {
-  templateQuery = templateQuery.trim().toLowerCase();
+  caseSensitive.value
+    ? (templateQuery = templateQuery.trim())
+    : (templateQuery = templateQuery.trim().toLowerCase());
 
   if (templateQuery == "") {
     elements.value = [...fullElements.value];
     return;
   }
 
-  elements.value = fullElements.value.filter((element) => {
-    return element.label.toLowerCase().includes(templateQuery);
-  });
+  elements.value = caseSensitive.value
+    ? fullElements.value.filter((element) => {
+        return element.label.includes(templateQuery);
+      })
+    : fullElements.value.filter((element) => {
+        return element.label.toLowerCase().includes(templateQuery);
+      });
 };
 
 let clickedNode;
@@ -444,6 +475,7 @@ const onDoubleClick = (node) => {
 
 <style scoped lang="scss">
 @import "@/styles/svg.scss";
+@import "@/styles/overflow-menu-checkbox-styles.scss";
 
 .title {
   padding-top: 1.5rem;
@@ -458,5 +490,14 @@ const onDoubleClick = (node) => {
 }
 .node {
   margin-bottom: 0.5rem;
+}
+
+.overflow-menu-container {
+  background-color: white;
+  border-bottom: 1px solid grey;
+}
+
+.overflow-menu-container:hover {
+  border: none;
 }
 </style>

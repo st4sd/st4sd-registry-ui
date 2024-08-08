@@ -3,11 +3,15 @@
   <div>
     <template v-if="loading">
       <cds-table-toolbar>
-        <cds-table-toolbar-search
-          expanded
+        <cds-table-toolbar-search expanded disabled></cds-table-toolbar-search>
+        <cds-overflow-menu
+          leave-delay-ms="0"
+          enter-delay-ms="100000"
           disabled
-          placeholder="Search by input-id"
-        ></cds-table-toolbar-search>
+          toolbar-action
+        >
+          <img slot="icon" width="16" height="16" src="@/assets/settings.svg" />
+        </cds-overflow-menu>
         <cds-button disabled type="primary">
           <img
             slot="icon"
@@ -56,8 +60,29 @@
               id="search"
               expanded
               placeholder="Search by input-id"
-              @cds-search-input="searchTable"
+              @cds-search-input="searchTable($event.detail.value)"
             ></cds-table-toolbar-search>
+            <cds-overflow-menu
+              leave-delay-ms="0"
+              enter-delay-ms="100000"
+              toolbar-action
+            >
+              <img
+                slot="icon"
+                width="16"
+                height="16"
+                src="@/assets/settings.svg"
+              />
+              <cds-overflow-menu-body>
+                <cds-overflow-menu-item>
+                  <cds-checkbox
+                    checked
+                    @cds-checkbox-changed="caseSensitive = !caseSensitive"
+                    >Case Sensitive</cds-checkbox
+                  >
+                </cds-overflow-menu-item>
+              </cds-overflow-menu-body>
+            </cds-overflow-menu>
             <cds-button
               :disabled="propertiesToDisplay.length == 0"
               v-if="properties != []"
@@ -130,6 +155,7 @@
 import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/pagination/index.js";
+import "@carbon/web-components/es/components/overflow-menu/index.js";
 import axios from "axios";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
@@ -159,6 +185,7 @@ export default {
       errorStatusText: "",
       errorCode: 0,
       tablePaginationPageSizeOptions: [5, 10, 25],
+      caseSensitive: true,
     };
   },
   mounted() {
@@ -195,6 +222,11 @@ export default {
       .finally(() => {
         this.loading = false;
       });
+  },
+  watch: {
+    caseSensitive() {
+      this.searchTable();
+    },
   },
   computed: {
     getTableSlice() {
@@ -256,14 +288,20 @@ export default {
       }
       return propertiesArray;
     },
-    searchTable(event) {
+    searchTable(query) {
       this.firstElement = 0;
-      this.searchQuery = event.detail.value;
+      if (query != undefined) this.searchQuery = query;
       this.propertiesToDisplay = [];
+      query = this.caseSensitive
+        ? this.searchQuery
+        : this.searchQuery.toLowerCase();
       for (let i in this.properties) {
-        if (this.properties[i][0].includes(this.searchQuery)) {
+        let inputID = this.caseSensitive
+          ? this.properties[i][0]
+          : this.properties[i][0].toLowerCase();
+
+        if (inputID.includes(query))
           this.propertiesToDisplay.push(this.properties[i]);
-        }
       }
     },
     setExpandedOnFocusOut() {
@@ -305,5 +343,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/svg.scss";
+@import "@/styles/overflow-menu-checkbox-styles.scss";
 @import "@/styles/cds-table-styles.scss";
 </style>

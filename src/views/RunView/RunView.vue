@@ -56,7 +56,7 @@
         <cds-table-toolbar>
           <cds-table-toolbar-search
             expanded
-            placeholder="Search by REST UID"
+            disabled
           ></cds-table-toolbar-search>
         </cds-table-toolbar>
         <cds-table>

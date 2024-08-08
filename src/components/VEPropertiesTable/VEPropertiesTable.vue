@@ -9,6 +9,19 @@
               disabled
               expanded
             ></cds-table-toolbar-search>
+            <cds-overflow-menu
+              leave-delay-ms="0"
+              enter-delay-ms="100000"
+              disabled
+              toolbar-action
+            >
+              <img
+                slot="icon"
+                width="16"
+                height="16"
+                src="@/assets/settings.svg"
+              />
+            </cds-overflow-menu>
             <cds-button disabled kind="primary" type="button">
               <img
                 slot="icon"
@@ -59,8 +72,29 @@
               id="search"
               expanded
               placeholder="Search by input-id"
-              @cds-search-input="searchTable"
+              @cds-search-input="searchTable($event.detail.value)"
             ></cds-table-toolbar-search>
+            <cds-overflow-menu
+              leave-delay-ms="0"
+              enter-delay-ms="100000"
+              toolbar-action
+            >
+              <img
+                slot="icon"
+                width="16"
+                height="16"
+                src="@/assets/settings.svg"
+              />
+              <cds-overflow-menu-body>
+                <cds-overflow-menu-item>
+                  <cds-checkbox
+                    checked
+                    @cds-checkbox-changed="caseSensitive = !caseSensitive"
+                    >Case Sensitive</cds-checkbox
+                  >
+                </cds-overflow-menu-item>
+              </cds-overflow-menu-body>
+            </cds-overflow-menu>
             <cds-button
               :disabled="propertiesArray.length == 0"
               v-if="propertiesArray.length != 0"
@@ -130,6 +164,8 @@
 <script>
 import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
+import "@carbon/web-components/es/components/overflow-menu/index.js";
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
@@ -150,6 +186,7 @@ export default {
       sortColumnId: "",
       collator: new Intl.Collator("en"),
       tablePaginationPageSizeOptions: [5, 10, 25],
+      caseSensitive: true,
     };
   },
   props: {
@@ -180,6 +217,9 @@ export default {
         }
       },
       deep: true,
+    },
+    caseSensitive() {
+      this.searchTable();
     },
   },
   computed: {
@@ -262,14 +302,20 @@ export default {
           headers[i].sortDirection = "none";
       }
     },
-    searchTable(event) {
+    searchTable(query) {
       this.firstElement = 0;
-      this.searchQuery = event.detail.value;
+      if (query != undefined) this.searchQuery = query;
       this.dataToDisplay = [];
+      query = this.caseSensitive
+        ? this.searchQuery
+        : this.searchQuery.toLowerCase();
       for (let i in this.propertiesArray) {
-        if (this.propertiesArray[i][1].includes(this.searchQuery)) {
+        let inputID = this.caseSensitive
+          ? this.propertiesArray[i][1]
+          : this.propertiesArray[i][1].toLowerCase();
+
+        if (inputID.includes(query))
           this.dataToDisplay.push(this.propertiesArray[i]);
-        }
       }
     },
     setExpandedOnFocusOut() {
@@ -309,6 +355,7 @@ export default {
 
 <style scoped lang="scss">
 @import "@/styles/svg.scss";
+@import "@/styles/overflow-menu-checkbox-styles.scss";
 @import "@/styles/cds-table-styles.scss";
 
 // AP: with xl table, a 16px padding is added to the header
