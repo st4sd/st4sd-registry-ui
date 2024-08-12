@@ -66,6 +66,8 @@ const onClick = (element) => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/canvas/styles/aside-styles.scss";
+
 #loadingContainer {
   width: 100%;
   height: 100%;
