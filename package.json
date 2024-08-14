@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "serve": "vite",
+    "serve": "vite --force",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -19,21 +19,21 @@
     "@vue-flow/core": "^1.39.3",
     "@vue-flow/node-resizer": "^1.4.0",
     "@vue-flow/node-toolbar": "^1.1.0",
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "d3": "^7.9.0",
     "process": "^0.11.10"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
-    "eslint": "^8.57.0",
+    "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-vue": "^9.27.0",
     "prettier": "^3.3.3",
     "sass": "^1.77.8",
-    "typescript": "~5.4.5",
-    "vite": "^5.3.5",
-    "vue": "3.4.21",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.0",
+    "vue": "3.4.37",
     "vue-router": "^4.4.3"
   },
   "eslintConfig": {
