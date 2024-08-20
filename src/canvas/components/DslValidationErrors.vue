@@ -5,9 +5,14 @@
       :status="dslBeingValidated"
       >Validating DSL...</cds-inline-loading
     >
-    <cds-button v-else @click="validateDsl" style="padding-bottom: 15px"
-      >Re-run Validation</cds-button
-    >
+    <div class="validationOptions" v-else>
+      <cds-button @click="validateDsl">Validate experiment</cds-button>
+      <cds-checkbox
+        @cds-checkbox-changed="changeAutoDslValidationValue"
+        :checked="this.autoDslValidation"
+        >Run validation automatically</cds-checkbox
+      >
+    </div>
     <cds-inline-notification
       id="dsl-valid"
       kind="success"
@@ -34,9 +39,11 @@ import "@carbon/web-components/es/components/inline-loading/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 
 export default {
   data() {
@@ -47,6 +54,7 @@ export default {
       dslMessage: "",
       dslBeingValidated: "finished",
       dslErrorsData: null,
+      autoDslValidation: false,
     };
   },
   props: {
@@ -66,8 +74,21 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.autoDslValidation = canvasStore.validateDslAutomatically;
+    if (this.autoDslValidation) {
+      this.validateDsl();
+    }
+  },
   methods: {
     postDslForValidation,
+    changeAutoDslValidationValue() {
+      this.autoDslValidation = !this.autoDslValidation;
+      canvasStore.setAutomaticDslValidation(this.autoDslValidation);
+      if (this.autoDslValidation) {
+        this.validateDsl();
+      }
+    },
     validateDsl() {
       this.dslBeingValidated = "active";
       this.dslErrorsData = [];
@@ -83,8 +104,24 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@use "@carbon/layout";
+
 pre {
   white-space: pre-wrap;
   font-size: small;
+}
+
+.validationOptions {
+  display: inline-flex;
+  align-items: baseline;
+
+  cds-button {
+    padding-bottom: layout.$spacing-05;
+    padding-top: layout.$spacing-05;
+  }
+
+  cds-checkbox {
+    padding-left: layout.$spacing-05;
+  }
 }
 </style>

@@ -6,7 +6,15 @@ export const canvasStore = reactive({
   pvep: JSON.parse(window.sessionStorage.getItem("pvep")) || {},
   graph: JSON.parse(window.sessionStorage.getItem("graph")) || {},
   dsl: JSON.parse(window.sessionStorage.getItem("dsl")) || {},
+  validateDslAutomatically:
+    JSON.parse(window.localStorage.getItem("dslAutoValidation")) || true,
 
+  setAutomaticDslValidation(obj) {
+    window.localStorage.setItem("dslAutoValidation", JSON.stringify(obj));
+    this.validateDslAutomatically = JSON.parse(
+      window.localStorage.getItem("dslAutoValidation"),
+    );
+  },
   setNode(obj) {
     this.node = obj;
   },
