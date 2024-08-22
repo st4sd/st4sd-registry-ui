@@ -2,14 +2,15 @@
 <template>
   <div class="dndflow" @drop="onDrop">
     <VueFlow
+      id="vue-flow-build-canvas"
       :class="{ dark }"
       :default-zoom="1"
-      :elevate-edges-on-select="true"
       :delete-key-code="false"
       :min-zoom="0.2"
       :max-zoom="4"
       class="basicflow"
       fit-view-on-init
+      elevate-edges-on-select
       @dragover="onDragOver"
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
@@ -371,7 +372,6 @@ const emit = defineEmits([
   "updateFatalError",
 ]);
 const localPVEP = ref();
-let elements = {};
 
 const {
   onNodeDragStop,
@@ -388,8 +388,8 @@ const {
   vueFlowRef,
   nodes,
   edges,
-} = useVueFlow(elements);
-setupInputs(elements);
+} = useVueFlow("vue-flow-build-canvas");
+setupInputs(canvasStore.graph);
 
 async function fetchData(id) {
   try {
@@ -492,7 +492,7 @@ function setupCanvas() {
   if (props.pvep != "") {
     fetchData(props.pvep);
   } else {
-    elements.elevateEdgesOnSelect = true;
+    canvasStore.graph.elevateEdgesOnSelect = true;
     emit("updateLoading", false);
     canvasStore.clearDsl();
     canvasStore.clearPVEP();
@@ -620,7 +620,7 @@ function applyUploadedFiles() {
 function resetCanvas() {
   nodes.value = [];
   edges.value = [];
-  setupInputs(elements);
+  setupInputs(canvasStore.graph);
   if (componentVisibilities.resetConfirmModal.value) {
     toggleVisibility("resetConfirmModal");
   }

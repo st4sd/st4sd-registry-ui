@@ -16,6 +16,9 @@
   <!--  https://vueflow.dev/examples/dnd.html -->
   <div class="dndflow">
     <VueFlow
+      id="vue-flow-view-canvas"
+      :nodes="elements.nodes"
+      :edges="elements.edges"
       :class="{ dark }"
       class="basicflow"
       :delete-key-code="false"
@@ -23,6 +26,7 @@
       :min-zoom="0.2"
       :max-zoom="4"
       fit-view-on-init
+      elevate-edges-on-select
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
@@ -218,7 +222,7 @@ const {
   removeEdges,
   nodes,
   edges,
-} = useVueFlow(elements.value);
+} = useVueFlow("vue-flow-view-canvas");
 
 const doesOtherOrPresetsExist = () => {
   return nodes.value.some((node) => node.id == "other" || node.id == "presets");

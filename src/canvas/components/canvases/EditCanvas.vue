@@ -16,6 +16,9 @@
   <!--  https://vueflow.dev/examples/dnd.html -->
   <div class="dndflow">
     <VueFlow
+      id="vue-flow-edit-canvas"
+      :nodes="elements.nodes"
+      :edges="elements.edges"
       class="basicflow"
       :delete-key-code="false"
       :class="{ dark }"
@@ -23,6 +26,7 @@
       :min-zoom="0.2"
       :max-zoom="4"
       fit-view-on-init
+      elevate-edges-on-select
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
@@ -186,7 +190,7 @@ const {
   removeEdges,
   nodes,
   edges,
-} = useVueFlow(elements.value);
+} = useVueFlow("vue-flow-edit-canvas");
 
 //Variable declaration
 let clickedNode;
