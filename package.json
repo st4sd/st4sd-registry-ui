@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "vite --force",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "npx prettier src --write"
   },
   "dependencies": {
     "@carbon/charts": "^1.19.2",
