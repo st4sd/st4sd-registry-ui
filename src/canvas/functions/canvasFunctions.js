@@ -147,6 +147,11 @@ export function createWorkflowNode(
   return { workflowNode, inputNode };
 }
 
+// This function finds a node in an array given its name
+export function findNodeByName(nodeName, nodes) {
+  return nodes.find((node) => node.definition.signature?.name == nodeName);
+}
+
 //This functions takes the newly created workflow node and adds it to canvas
 export function addWorkflowNode(
   workflow,

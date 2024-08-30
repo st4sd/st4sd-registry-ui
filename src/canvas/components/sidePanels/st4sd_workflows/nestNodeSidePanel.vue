@@ -111,7 +111,10 @@ export default {
         if (this.selectedWorkflowId == "") {
           alert("please make a selection");
         } else {
-          if (this.isUnique(this.stepName)) {
+          if (
+            this.isUnique(this.stepName) &&
+            this.stepName.trim().length >= 1
+          ) {
             let nestedNode = this.allNodes.find(
               (n) => n.id == this.toBeNestedNode.id,
             );
@@ -133,7 +136,11 @@ export default {
               nestedNode.definition.signature.name;
             this.$emit("done");
           } else {
-            alert("Please choose a unique step name");
+            if (this.isUnique(this.stepName)) {
+              alert("Step name must be 1 charaters or longer");
+            } else {
+              alert("Please choose a unique step name");
+            }
           }
         }
       }

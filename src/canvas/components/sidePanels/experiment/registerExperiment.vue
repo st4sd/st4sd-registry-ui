@@ -88,6 +88,7 @@ import "@carbon/web-components/es/components/notification/index.js";
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { validateExperimentName } from "@/canvas/functions/validateExperimentName";
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 
 import DslValidationErrors from "@/canvas/components/DslValidationErrors.vue";
 
@@ -137,6 +138,7 @@ export default {
     validateDsl() {
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);
+        canvasStore.setLatestValidatedDsl(this.dsl);
         this.postDslForValidation(true);
         return true;
       } catch (error) {

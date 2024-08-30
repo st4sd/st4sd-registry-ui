@@ -28,7 +28,18 @@
         :title="`Problem ${idx + 1}`"
         :open="idx == 0"
       >
-        <pre>{{ JSON.stringify(problem, undefined, 2) }}</pre>
+        <pre
+          id="dsl-error-human-readable"
+          v-if="dslErrorToString(problem, allNodes) != undefined"
+          >{{ dslErrorToString(problem, allNodes) }}
+        </pre>
+        <pre>{{
+          JSON.stringify(
+            errorLocationToHumanReadable(problem, allNodes),
+            undefined,
+            2,
+          )
+        }}</pre>
       </cds-accordion-item>
     </cds-accordion>
   </div>
@@ -43,7 +54,12 @@ import "@carbon/web-components/es/components/checkbox/index.js";
 
 import { getDsl } from "@/canvas/functions/downloadJSON";
 import { postDslForValidation } from "@/functions/post_dsl_for_validation";
+import { findNodeByName } from "@/canvas/functions/canvasFunctions";
 import { canvasStore } from "@/canvas/stores/canvasStore";
+import {
+  errorLocationToHumanReadable,
+  dslErrorToString,
+} from "@/canvas/functions/dslErrors";
 
 export default {
   data() {
@@ -82,6 +98,9 @@ export default {
   },
   methods: {
     postDslForValidation,
+    findNodeByName,
+    dslErrorToString,
+    errorLocationToHumanReadable,
     changeAutoDslValidationValue() {
       this.autoDslValidation = !this.autoDslValidation;
       canvasStore.setAutomaticDslValidation(this.autoDslValidation);
@@ -94,6 +113,7 @@ export default {
       this.dslErrorsData = [];
       try {
         this.dsl = getDsl(this.allNodes, this.allEdges);
+        canvasStore.setLatestValidatedDsl(this.dsl);
         this.postDslForValidation();
       } catch (error) {
         this.dslInvalid = true;
@@ -123,5 +143,9 @@ pre {
   cds-checkbox {
     padding-left: layout.$spacing-05;
   }
+}
+
+#dsl-error-human-readable {
+  font-style: italic;
 }
 </style>

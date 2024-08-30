@@ -6,6 +6,8 @@ export const canvasStore = reactive({
   pvep: JSON.parse(window.sessionStorage.getItem("pvep")) || {},
   graph: JSON.parse(window.sessionStorage.getItem("graph")) || {},
   dsl: JSON.parse(window.sessionStorage.getItem("dsl")) || {},
+  latestValidatedDsl:
+    JSON.parse(window.localStorage.getItem("latestValidatedDsl")) || {},
   validateDslAutomatically:
     JSON.parse(window.localStorage.getItem("dslAutoValidation")) || true,
 
@@ -40,6 +42,12 @@ export const canvasStore = reactive({
   setDsl(obj) {
     window.sessionStorage.setItem("dsl", JSON.stringify(obj));
     this.dsl = JSON.parse(window.sessionStorage.getItem("dsl"));
+  },
+  setLatestValidatedDsl(obj) {
+    window.localStorage.setItem("latestValidatedDsl", JSON.stringify(obj));
+    this.latestValidatedDsl = JSON.parse(
+      window.localStorage.getItem("latestValidatedDsl"),
+    );
   },
   clearDsl() {
     window.sessionStorage.removeItem("dsl");
