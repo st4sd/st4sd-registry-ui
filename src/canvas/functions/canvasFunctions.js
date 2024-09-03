@@ -2,6 +2,7 @@ import { createWorkflowDAG } from "@/canvas/functions/createDAG";
 import { getTextWidth } from "@/canvas/functions/getTextWidth";
 import { MarkerType } from "@vue-flow/core";
 import { ref } from "vue";
+import { resolveTemplateByLocationArray } from "./dslErrors";
 
 //This function will make sure the canvas always starts with 3 input Nodes
 //The nodes will be hidden by default and can be accessed/updated using
@@ -314,4 +315,32 @@ function doesShareParent(node1, node2, findNode) {
     }
   }
   return areSharing;
+}
+
+// This function resets all nodes to their default colours
+export function resetCanvasHighlighting(allNodes) {
+  // Set all nodes to default colours
+  for (let i = 0; i < allNodes.length; i++) {
+    allNodes[i].style = {
+      ...allNodes[i].style,
+      backgroundColor:
+        allNodes[i].type == "component" ? "white" : "rgba(16, 185, 129, 0.5)",
+    };
+  }
+}
+
+// This function highlights nodes which have DSL errors
+export function highlightCanvasErrors(allNodes, dslErrorsData) {
+  for (let errorEntry of dslErrorsData) {
+    let templateWithError = resolveTemplateByLocationArray(
+      errorEntry?.location,
+      allNodes,
+    );
+    templateWithError.style = {
+      ...templateWithError.style,
+      // Colour problematic nodes $support-caution-major
+      // from https://carbondesignsystem.com/elements/color/tokens
+      backgroundColor: "rgba(255, 131, 43, 0.7)",
+    };
+  }
 }
