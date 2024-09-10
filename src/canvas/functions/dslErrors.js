@@ -127,9 +127,25 @@ export function resolveLocationArray(locationArray, nodes) {
 }
 
 export function resolveTemplateByLocationArray(locationArray, nodes) {
-  let template =
-    canvasStore.latestValidatedDsl[locationArray[0]][locationArray[1]];
-  return findNodeByName(template.signature.name, nodes);
+  let type;
+
+  switch (locationArray[0]) {
+    case "workflows":
+      type = "workflow";
+      break;
+    case "components":
+      type = "component";
+      break;
+    default:
+      type = locationArray[0];
+  }
+
+  // AP 09/09/24:
+  // This works by mimicking the way we construct the DSL.
+  // By filtering the nodes first, we can then access them via
+  // the id contained in the location array returned by the backend
+  let filteredNodes = nodes.filter((node) => node.type == type);
+  return filteredNodes[locationArray[1]];
 }
 
 export function errorLocationToHumanReadable(errorObject, nodes) {
