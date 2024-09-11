@@ -7,11 +7,10 @@
         id="createWorkflowSidePanel"
         label="Workflow name (Required)"
         placeholder="Workflow name"
-        @blur="onFocusLost($event, workflow.getName())"
-        @mouseleave="onFocusLost($event, workflow.getName())"
         :value="workflow.getName()"
         @input="updateWorkflowName($event.target.value)"
-        invalidText="Name cannot be empty"
+        :invalidText="nameErrorText"
+        :invalid="invalidName"
         required
       />
       <br />
@@ -73,6 +72,7 @@
             </cds-structured-list-cell>
             <cds-structured-list-cell>
               <cds-text-input
+                :id="`${node.id}-signature-parameters-${index}`"
                 class="cds-theme-zone-g10"
                 placeholder="parameter default"
                 :value="parameter.default"
@@ -189,11 +189,13 @@
 import St4sdWorkflow from "@/canvas/classes/St4sdWorkflow.js";
 import { createWorkflowNode } from "@/canvas/functions/canvasFunctions";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
+import { canvasStore } from "@/canvas/stores/canvasStore";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/icon-button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
+import { applyErrorsToForm } from "@/canvas/functions/dslErrors.js";
 
 export default {
   props: { node: Object, parentNode: Object, allNodes: Object },
@@ -213,6 +215,8 @@ export default {
       hasInvalidParameterNames: false,
       oldName: "",
       removedSteps: [],
+      errorArr: canvasStore.formErrors,
+      nameErrorText: "",
     };
   },
   mounted() {
@@ -225,8 +229,23 @@ export default {
       );
       this.workflow.setStepsNodeIDs(this.childrenNodes);
     }
+    this.$nextTick(() => {
+      applyErrorsToForm(this.errorArr);
+    });
   },
   computed: {
+    invalidName() {
+      let result = false;
+      this.hasInvalidName = false;
+      this.nameErrorText = "Name is invalid";
+      if (this.workflow.signature.name?.trim() == "") {
+        this.nameErrorText = "Name cannot be empty";
+        this.hasInvalidName = true;
+        result = true;
+      }
+      this.emitValidityStatus();
+      return result;
+    },
     invalidParameters() {
       let invalid = new Set();
       for (
@@ -259,8 +278,12 @@ export default {
     },
   },
   methods: {
+    applyErrorsToForm,
     emitValidityStatus() {
-      this.$emit("validityChanged", this.hasInvalidParameterNames);
+      this.$emit(
+        "validityChanged",
+        this.hasInvalidName || this.hasInvalidParameterNames,
+      );
     },
     removeParent() {
       this.$emit("removeParent");
@@ -352,19 +375,6 @@ export default {
             node.parentNode == tobeUpdatedNode.id,
         ).label = `${tobeUpdatedNode.label} inputs`;
       }
-    },
-    onFocusLost(event, item) {
-      if (item == "") {
-        event.target.invalid = true;
-        this.hasInvalidName = true;
-      } else {
-        this.hasInvalidName = false;
-        event.target.invalid = false;
-      }
-      this.$emit(
-        "validityChanged",
-        this.hasInvalidName || this.hasInvalidParameterNames,
-      );
     },
   },
 };

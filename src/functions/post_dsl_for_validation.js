@@ -4,6 +4,7 @@ import {
   resetCanvasHighlighting,
 } from "@/canvas/functions/canvasFunctions";
 import { canvasStore } from "@/canvas/stores/canvasStore";
+import { setFormErrors } from "@/canvas/functions/dslErrors";
 import axios from "axios";
 
 export function postDslForValidation(saveResultToCanvasStore = false) {
@@ -16,6 +17,7 @@ export function postDslForValidation(saveResultToCanvasStore = false) {
       .then((response) => {
         if (response.status == 200) {
           resetCanvasHighlighting(this.allNodes);
+          setFormErrors(this.allNodes, []);
           this.dslBeingValidated = "finished";
           this.dslInvalid = false;
           if (saveResultToCanvasStore) {
@@ -38,6 +40,7 @@ export function postDslForValidation(saveResultToCanvasStore = false) {
         this.dslErrorsData = error.response.data.problems;
         resetCanvasHighlighting(this.allNodes);
         highlightCanvasErrors(this.allNodes, this.dslErrorsData);
+        setFormErrors(this.allNodes, this.dslErrorsData);
         this.$emit("dslValidationError", this.dslErrorsData);
       });
   }

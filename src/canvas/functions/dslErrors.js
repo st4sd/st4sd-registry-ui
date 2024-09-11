@@ -70,6 +70,8 @@ function extractAppropriateValue(element) {
 }
 
 export function resolveLocationArray(locationArray, nodes) {
+  if (!locationArray) return;
+
   // AP: we create a copy of the location array
   // the `location` array will be returned from this function
   // the `tempLocation` array will be manipulated in this function
@@ -169,4 +171,53 @@ function humanReadableLocationToPrintable(location) {
     }
     return item;
   });
+}
+
+export function setFormErrors(nodes, errorsFromBackend) {
+  let processedErrors = [];
+  for (let i = 0; i < errorsFromBackend.length; i++) {
+    // AP: we can only do something about errors for which
+    // we have the location and that are specific enough to
+    // match something (i.e., we can't invalidate a field if
+    // we are just given a workflow)
+    if (
+      !errorsFromBackend[i].location ||
+      errorsFromBackend[i].location.length <= 2
+    )
+      continue;
+
+    // The id in the template is generated based on the second part
+    // of the location array (i.e., without the first two fields)
+    let locationInTemplate = errorsFromBackend[i].location.slice(2);
+
+    // We need to get the template to use its id
+    let template = resolveTemplateByLocationArray(
+      errorsFromBackend[i].location,
+      nodes,
+    );
+
+    // AP: Unfortunately we can't use document.getElementById in here
+    // because our v-ifs remove the elements from the document, meaning
+    // we would not find the elements from here.
+    processedErrors.push({
+      id: `${template.id}-${locationInTemplate.join("-")}`,
+      message: errorsFromBackend[i].message
+        ? errorsFromBackend[i].message
+        : "Invalid - check error panel",
+    });
+  }
+
+  canvasStore.setFormErrors(processedErrors);
+}
+
+export function applyErrorsToForm(errors) {
+  if (!errors) return;
+
+  for (let error of errors) {
+    let element = document.getElementById(error.id);
+    if (!element) continue;
+
+    element.setAttribute("invalid-text", error.message);
+    element.setAttribute("invalid", true);
+  }
 }

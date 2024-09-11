@@ -10,12 +10,16 @@ export const canvasStore = reactive({
     JSON.parse(window.localStorage.getItem("latestValidatedDsl")) || {},
   validateDslAutomatically:
     JSON.parse(window.localStorage.getItem("dslAutoValidation")) || true,
+  formErrors: JSON.parse(window.localStorage.getItem("formErrors")) || [],
 
   setAutomaticDslValidation(obj) {
     window.localStorage.setItem("dslAutoValidation", JSON.stringify(obj));
     this.validateDslAutomatically = JSON.parse(
       window.localStorage.getItem("dslAutoValidation"),
     );
+  },
+  setFormErrors(arr) {
+    this.formErrors = arr;
   },
   setNode(obj) {
     this.node = obj;

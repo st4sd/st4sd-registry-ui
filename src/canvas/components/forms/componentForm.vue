@@ -3,16 +3,15 @@
   <cds-accordion>
     <cds-accordion-item title="Overview" open>
       <cds-text-input
-        class="cds-theme-zone-g10"
+        class="cds-theme-zone-g10 createComponentSidePanel"
         label="Component name (Required)"
-        id="createComponentSidePanel"
+        :id="`${node?.id}-signature-name`"
         :value="component.signature.name"
         @input="updateComponentName($event.target.value)"
-        @blur="onFocusLost($event, component.signature.name)"
-        @mouseleave="onFocusLost($event, component.signature.name)"
         placeholder="name"
         required
-        invalidText="Name cannot be empty"
+        :invalid="invalidName"
+        :invalidText="nameErrorText"
       />
       <br />
       <cds-text-input
@@ -106,6 +105,7 @@
     </cds-accordion-item>
     <cds-accordion-item title="Command">
       <cds-text-input
+        :id="`${node?.id}-command-executable`"
         label="Executable:"
         class="cds-theme-zone-g10"
         :value="component.command.executable"
@@ -651,6 +651,8 @@ import { fixAccordionStyle } from "@/functions/cds_accordion_fixes";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import "@carbon/web-components/es/components/structured-list/index.js";
 import "@carbon/web-components/es/components/icon-button/index.js";
+import { canvasStore } from "@/canvas/stores/canvasStore";
+import { applyErrorsToForm } from "@/canvas/functions/dslErrors.js";
 // AP: see comment on parameterNameIsDuplicate
 // import { checkParameterNameIsDuplicate } from "@/canvas/functions/validation";
 
@@ -668,6 +670,7 @@ export default {
       oldName: "",
       variableKeys: [],
       variableValues: [],
+      errorArr: canvasStore.formErrors,
     };
   },
   mounted() {
@@ -679,8 +682,23 @@ export default {
         this.variableValues = Object.values(this.node.definition.variables);
       }
     }
+    this.$nextTick(() => {
+      applyErrorsToForm(this.errorArr);
+    });
   },
   computed: {
+    invalidName() {
+      let result = false;
+      this.hasInvalidName = false;
+      this.nameErrorText = "Name is invalid";
+      if (this.component.signature.name?.trim() == "") {
+        this.nameErrorText = "Name cannot be empty";
+        this.hasInvalidName = true;
+        result = true;
+      }
+      this.emitValidityStatus();
+      return result;
+    },
     componentHasParent() {
       let componentNode = this.allNodes?.find(
         (node) => node.id == this.node.id,
@@ -751,6 +769,7 @@ export default {
     },
   },
   methods: {
+    applyErrorsToForm,
     emitValidityStatus() {
       this.$emit(
         "invalid",
@@ -799,16 +818,6 @@ export default {
     updateComponentName(newName) {
       this.component.signature.name = newName;
       this.$emit("nameChanged", newName);
-    },
-    onFocusLost(event, item) {
-      if (item.trim() == "") {
-        event.target.invalid = true;
-        this.hasInvalidName = true;
-      } else {
-        this.hasInvalidName = false;
-        event.target.invalid = false;
-      }
-      this.emitValidityStatus();
     },
     addParam() {
       this.component.addParameter();

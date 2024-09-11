@@ -5,7 +5,7 @@
     size="lg"
     includeOverlay="true"
     title="Create component"
-    selector-initial-focus="#createComponentSidePanel"
+    selector-initial-focus=".createComponentSidePanel"
     @cds-side-panel-closed="$emit('side-panel-closed')"
   >
     <componentForm
