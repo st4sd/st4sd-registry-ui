@@ -585,23 +585,35 @@ function applyUploadedFiles() {
       //Canvas is wiped clean
       nodes.value = [];
       edges.value = [];
-      addNodes(uploadedFilesConents.graph.nodes);
-      addEdges(uploadedFilesConents.graph.edges);
-      // Find if one entrypoint or more exist in this canvas project file
-      let entrypoints = nodes.value.filter(
-        (node) => node.type == "workflow" && node.isEntry == true,
-      );
-      // If there is 1 or no entrypoints, set one
-      if (entrypoints.length == 1) {
-        setEntrypointAndNotify(entrypoints[0].id);
-      }
-      //If more than 1 nodes are marked as entrypoint, we keep only one as entrypoint
-      else if (entrypoints.length > 1) {
-        entrypoints.map((node) => {
-          findNode(node.id).isEntry = false;
-        });
-        setEntrypointAndNotify(entrypoints[0].id);
-      }
+      /* 
+      AP (16/09/24): We're adding a delay of 10ms due to this issue: 
+      https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
+      We're resetting the values referenced by the refs nodes, edges.
+      This probably notifies VueFlow and if we re-add the nodes too quickly
+      it leads to the issue above.
+      */
+      setTimeout(function () {
+        addNodes(uploadedFilesConents.graph.nodes);
+        addEdges(uploadedFilesConents.graph.edges);
+
+        // Find if one entrypoint or more exist in this canvas project file
+        let entrypoints = nodes.value.filter(
+          (node) => node.type == "workflow" && node.isEntry == true,
+        );
+        // If there is 1 or no entrypoints, set one
+        if (entrypoints.length == 1) {
+          setEntrypointAndNotify(entrypoints[0].id);
+        }
+        //If more than 1 nodes are marked as entrypoint, we keep only one as entrypoint
+        else if (entrypoints.length > 1) {
+          entrypoints.map((node) => {
+            findNode(node.id).isEntry = false;
+          });
+          setEntrypointAndNotify(entrypoints[0].id);
+        }
+        componentVisibilities["confirmUploadModal"].value = false;
+      }, 10);
+      return;
     } else {
       let notification = {
         kind: "error",
