@@ -325,6 +325,7 @@ export function highlightCanvasErrors(allNodes, dslErrorsData) {
       errorEntry?.location,
       allNodes,
     );
-    templateWithError?.class = "errorOrange";
+    if (!templateWithError) continue;
+    templateWithError.class = "errorOrange";
   }
 }
