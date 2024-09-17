@@ -63,6 +63,11 @@
   background-color: rgb(255, 255, 255);
 }
 
+.vue-flow__node-workflow.errorOrange,
+.vue-flow__node-component.errorOrange {
+  background-color: rgba(255, 131, 43, 0.7) !important;
+}
+
 .vue-flow__node-workflow.errored-template,
 .vue-flow__node-component.errored-template {
   background-color: rgb(215, 57, 65);

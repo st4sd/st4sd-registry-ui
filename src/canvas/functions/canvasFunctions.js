@@ -317,30 +317,14 @@ function doesShareParent(node1, node2, findNode) {
   return areSharing;
 }
 
-// This function resets all nodes to their default colours
-export function resetCanvasHighlighting(allNodes) {
-  // Set all nodes to default colours
-  for (let i = 0; i < allNodes.length; i++) {
-    allNodes[i].style = {
-      ...allNodes[i].style,
-      backgroundColor:
-        allNodes[i].type == "component" ? "white" : "rgba(16, 185, 129, 0.5)",
-    };
-  }
-}
-
 // This function highlights nodes which have DSL errors
 export function highlightCanvasErrors(allNodes, dslErrorsData) {
+  allNodes.forEach((node) => (node.class = ""));
   for (let errorEntry of dslErrorsData) {
     let templateWithError = resolveTemplateByLocationArray(
       errorEntry?.location,
       allNodes,
     );
-    templateWithError.style = {
-      ...templateWithError.style,
-      // Colour problematic nodes $support-caution-major
-      // from https://carbondesignsystem.com/elements/color/tokens
-      backgroundColor: "rgba(255, 131, 43, 0.7)",
-    };
+    templateWithError?.class = "errorOrange";
   }
 }
