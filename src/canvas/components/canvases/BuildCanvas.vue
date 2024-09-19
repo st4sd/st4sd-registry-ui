@@ -658,6 +658,8 @@ const toggleVisibility = (modal) => {
   componentVisibilities[modal].value = !componentVisibilities[modal].value;
 };
 
+let nestingNode = {};
+let nestingWFs = [];
 const onDrop = (event) => {
   //copy the element so we do not change the source
   const newNode = JSON.parse(JSON.stringify(canvasStore.node));
@@ -721,6 +723,16 @@ const onDrop = (event) => {
       },
       { deep: true, flush: "post" },
     );
+    let { isNesting, nestingWorkflows } = isNestingValid(
+      node,
+      getIntersectingNodes(node),
+      nodes.value,
+    );
+    if (isNesting) {
+      nestingNode = { ...node };
+      nestingWFs = nestingWorkflows;
+      toggleVisibility("nestNodeSidePanel");
+    }
   });
 };
 
@@ -747,8 +759,6 @@ const addWorkflow = (workflow, input) => {
   toggleVisibility("createWorkflowSidePanel");
 };
 
-let nestingNode = {};
-let nestingWFs = [];
 onNodeDragStop((event) => {
   let { isNesting, nestingWorkflows } = isNestingValid(
     event.node,
