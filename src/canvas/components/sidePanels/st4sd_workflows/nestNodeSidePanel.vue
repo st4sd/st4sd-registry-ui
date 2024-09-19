@@ -38,7 +38,9 @@
           label="Step name"
           :value="stepName"
           @input="stepName = $event.target.value"
-          @blur="onFocusLost($event, stepName)"
+          required
+          :invalidText="templateInvalidityString(stepName)"
+          :invalid="invalidName"
         />
         <br />
         <p>
@@ -62,7 +64,13 @@
       @click="$emit('side-panel-closed')"
       >Cancel</cds-button
     >
-    <cds-button kind="primary" type="submit" slot="actions" @click="nest">
+    <cds-button
+      :disabled="submitDisabled"
+      kind="primary"
+      type="submit"
+      slot="actions"
+      @click="nest"
+    >
       Submit
     </cds-button>
   </cds-side-panel>
@@ -81,7 +89,13 @@ export default {
     toBeNestedNode: Object,
     allNodes: Object,
   },
-  emits: ["done", "nestedNode", "updatedWorkflow", "side-panel-closed"],
+  emits: [
+    "done",
+    "nestedNode",
+    "updatedWorkflow",
+    "side-panel-closed",
+    "nest-node-failure",
+  ],
   data() {
     return {
       allSteps: null,
@@ -90,7 +104,7 @@ export default {
       stepExecuteModalActive: false,
       edge: "",
       stepName: "",
-      isError: false,
+      submitDisabled: true,
     };
   },
   mounted() {
@@ -98,7 +112,22 @@ export default {
       this.selectedWorkflowId = this.nestingWorkflows[0].id;
     }
   },
+  computed: {
+    invalidName() {
+      this.submitDisabled =
+        this.stepName.trim().length < 1 || !this.isUnique(this.stepName);
+      return this.submitDisabled;
+    },
+  },
   methods: {
+    templateInvalidityString(stepName) {
+      if (stepName.trim().length < 1) {
+        return "Step name must be 1 character or longer";
+      }
+      if (!this.isUnique(stepName)) {
+        return "Please choose a unique step name";
+      }
+    },
     getSelectedWorkflow() {
       this.selectedWorkflow = this.allNodes.find(
         (n) => n.id == this.selectedWorkflowId,
@@ -107,42 +136,34 @@ export default {
       return this.selectedWorkflow;
     },
     nest() {
-      if (!this.isError) {
-        if (this.selectedWorkflowId == "") {
-          alert("please make a selection");
-        } else {
-          if (
-            this.isUnique(this.stepName) &&
-            this.stepName.trim().length >= 1
-          ) {
-            let nestedNode = this.allNodes.find(
-              (n) => n.id == this.toBeNestedNode.id,
-            );
-            //nestedNode.extent is used as a way to preserve the node position after nesting
-            nestedNode.extent = "parent";
-            nestedNode.expandParent = true;
-            nestedNode.parentNode = this.selectedWorkflow.id;
-            nestedNode.stepId = this.stepName;
-            updateNodeLabel(nestedNode);
-            if (nestedNode.type == "workflow") {
-              //change workflow input node name
-              this.allNodes.find(
-                (node) =>
-                  node.type == "workflow-input" &&
-                  node.parentNode == nestedNode.id,
-              ).label = `${nestedNode.label} inputs`;
-            }
-            this.selectedWorkflow.definition.steps[this.stepName] =
-              nestedNode.definition.signature.name;
-            this.$emit("done");
-          } else {
-            if (this.isUnique(this.stepName)) {
-              alert("Step name must be 1 charaters or longer");
-            } else {
-              alert("Please choose a unique step name");
-            }
-          }
+      if (this.selectedWorkflowId == "") {
+        this.notifyNestNodeFailure("Please select a workflow");
+        return;
+      }
+      if (this.isUnique(this.stepName) && this.stepName.trim().length >= 1) {
+        let nestedNode = this.allNodes.find(
+          (n) => n.id == this.toBeNestedNode.id,
+        );
+        //nestedNode.extent is used as a way to preserve the node position after nesting
+        nestedNode.extent = "parent";
+        nestedNode.expandParent = true;
+        nestedNode.parentNode = this.selectedWorkflow.id;
+        nestedNode.stepId = this.stepName;
+        updateNodeLabel(nestedNode);
+        if (nestedNode.type == "workflow") {
+          //change workflow input node name
+          this.allNodes.find(
+            (node) =>
+              node.type == "workflow-input" && node.parentNode == nestedNode.id,
+          ).label = `${nestedNode.label} inputs`;
         }
+        this.selectedWorkflow.definition.steps[this.stepName] =
+          nestedNode.definition.signature.name;
+        this.$emit("done");
+      } else {
+        this.notifyNestNodeFailure(
+          "Name is not unique or is not 1 character or longer",
+        );
       }
     },
     isUnique(step) {
@@ -155,14 +176,13 @@ export default {
         return true;
       }
     },
-    onFocusLost(event, item) {
-      if (item == "") {
-        event.target.invalid = true;
-        this.isError = true;
-      } else {
-        this.isError = false;
-        event.target.invalid = false;
-      }
+    notifyNestNodeFailure(title) {
+      let notification = {
+        kind: "error",
+        title,
+        code: 400,
+      };
+      this.$emit("nest-node-failure", notification);
     },
   },
 };

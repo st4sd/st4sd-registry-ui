@@ -228,6 +228,7 @@
       :nestingWorkflows="nestingWFs"
       :allNodes="allNodes"
       @side-panel-closed="toggleVisibility('nestNodeSidePanel')"
+      @nest-node-failure="updateBuildCanvasNotifications"
       @done="addStep"
     />
     <!-- Experiment configuration -->
