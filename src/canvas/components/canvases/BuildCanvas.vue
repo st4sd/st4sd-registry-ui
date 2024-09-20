@@ -385,6 +385,7 @@ const {
   removeEdges,
   removeNodes,
   findNode,
+  fitView,
   project,
   vueFlowRef,
   nodes,
@@ -571,6 +572,14 @@ function applyUploadedFiles() {
       // Since we clear the canvas before applying uploaded files,
       // we are sure that this is the first workflow added to the canvas
       setEntrypointAndNotify(id);
+      /*
+        AP (18/09/24): 
+        Fix timing issues in a similar way to what was done for applyUploadedFiles
+        ref: https://github.ibm.com/st4sd/st4sd-registry-ui/pull/820
+      */
+      setTimeout(function () {
+        fitView({ padding: 0.4 });
+      }, 20);
     } else {
       let notification = {
         kind: "error",
@@ -587,8 +596,12 @@ function applyUploadedFiles() {
       nodes.value = [];
       edges.value = [];
       /* 
-      AP (16/09/24): We're adding a delay of 10ms due to this issue: 
+      AP (16/09/24): 
+      We're adding a delay of 20ms due to this issue: 
       https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
+      AP: 20/09/24: 
+      The delay was originally 10ms but was bumped to 20 in:
+      https://github.ibm.com/st4sd/st4sd-registry-ui/pull/820#issuecomment-91519950
       We're resetting the values referenced by the refs nodes, edges.
       This probably notifies VueFlow and if we re-add the nodes too quickly
       it leads to the issue above.
@@ -613,7 +626,8 @@ function applyUploadedFiles() {
           setEntrypointAndNotify(entrypoints[0].id);
         }
         componentVisibilities["confirmUploadModal"].value = false;
-      }, 10);
+        fitView({ padding: 0.4 });
+      }, 20);
       return;
     } else {
       let notification = {
