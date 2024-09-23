@@ -3,8 +3,8 @@
   <cds-accordion>
     <cds-accordion-item open title="Overview">
       <cds-text-input
-        class="cds-theme-zone-g10"
-        id="createWorkflowSidePanel"
+        class="cds-theme-zone-g10 createWorkflowSidePanel"
+        :id="`${node?.id}-signature-name`"
         label="Workflow name (Required)"
         placeholder="Workflow name"
         :value="workflow.getName()"

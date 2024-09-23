@@ -6,7 +6,7 @@
     includeOverlay="true"
     title="Create workflow"
     @cds-side-panel-closed="$emit('side-panel-closed')"
-    selector-initial-focus="#createWorkflowSidePanel"
+    selector-initial-focus=".createWorkflowSidePanel"
   >
     <workflowForm
       ref="workflowForm"
