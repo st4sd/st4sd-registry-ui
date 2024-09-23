@@ -82,7 +82,9 @@
             </c4d-link-list-item>
             <c4d-link-list-item
               v-if="isRunExperimentEnabled"
-              @click="toggleModalVisibility('runExperimentFormModal')"
+              @click="
+                toggleModalVisibility('runExperimentFormTearsheetVisibility')
+              "
             >
               Run Experiment
               <img
@@ -135,18 +137,15 @@
         :experiment="experiment"
       />
     </div>
-    <runExperimentFormModal
-      v-if="runExperimentFormModal"
-      @submit="toggleRunExperimentFormEmit"
-      @bx-modal-closed="toggleModalVisibility('runExperimentFormModal')"
-      open="true"
-      title="Run Experiment"
-    >
-      <runExperimentForm
-        :formEmit="runExperimentFormEmit"
-        @post-experiment-run="setRunExperimentFormPayload"
-      />
-    </runExperimentFormModal>
+    <runExperimentFormTearsheet
+      :open="runExperimentFormTearsheetVisibility"
+      :runExperimentFormEmit="runExperimentFormEmit"
+      :postExperimentRun="setRunExperimentFormPayload"
+      @cds-tearsheet-closed="
+        toggleModalVisibility('runExperimentFormTearsheetVisibility')
+      "
+      @st4sd-experiment-run-submitted="toggleRunExperimentFormEmit"
+    />
   </div>
 </template>
 
@@ -156,8 +155,7 @@ import "@carbon/web-components/es/components/tag/index.js";
 import "@carbon/ibmdotcom-web-components/es/components/link-list/index.js";
 
 import St4sdBestPracticesProgressIndicator from "@/components/St4sdBestPracticesProgressIndicator";
-import runExperimentFormModal from "@/canvas/components/modals/experiment/runExperimentFormModal.vue";
-import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
+import runExperimentFormTearsheet from "@/canvas/components/tearsheets/runExperimentFormTearsheet.vue";
 
 import { checkVeInterfaceIsPresent } from "@/functions/ve_interface";
 import { getDeploymentEndpoint } from "@/functions/public_path";
@@ -169,8 +167,7 @@ export default {
   name: "PageHero",
   components: {
     St4sdBestPracticesProgressIndicator,
-    runExperimentFormModal,
-    runExperimentForm,
+    runExperimentFormTearsheet,
   },
   props: {
     experiment: Object,
@@ -190,7 +187,7 @@ export default {
       runExperimentFormEmit: false,
       formDataCollected: false,
       runExperimentPayload: {},
-      runExperimentFormModal: false,
+      runExperimentFormTearsheetVisibility: false,
     };
   },
   methods: {

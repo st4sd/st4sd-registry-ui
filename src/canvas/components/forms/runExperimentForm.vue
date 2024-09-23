@@ -1,185 +1,214 @@
 <template>
-  <bx-tabs trigger-content="Select an item" value="inputs">
-    <bx-tab id="tab-inputs" target="panel-inputs" value="inputs">Inputs</bx-tab>
-    <bx-tab id="tab-options" target="panel-options" value="options"
-      >Options</bx-tab
-    >
-    <bx-tab id="tab-outputs" target="panel-outputs" value="oututs"
-      >Store Outputs</bx-tab
-    >
-  </bx-tabs>
-  <div class="bx-ce-demo-devenv--tab-panels">
-    <div
-      id="panel-inputs"
-      role="tabpanel"
-      aria-labelledby="tab-inputs"
-      hidden
-      class="tab-panels"
-    >
-      <h4>Inputs</h4>
-      <p>Choose the input type:</p>
-      <bx-tabs trigger-content="Select an item" value="file">
-        <bx-tab id="tab-file" target="panel-file" value="file"
-          >File Upload</bx-tab
-        >
-        <bx-tab id="tab-s3" target="panel-s3" value="s3">S3 Bucket</bx-tab>
-        <bx-tab id="tab-datashim" target="panel-datashim" value="datashim"
-          >Datashim</bx-tab
-        >
-      </bx-tabs>
-      <div class="bx-ce-demo-devenv--tab-panels tab-panel">
-        <div
-          id="panel-file"
-          role="tabpanel"
-          aria-labelledby="tab-file"
-          hidden
-          class="tab-panels"
-        >
-          <div v-if="runExperimentPayload.inputs != undefined">
-            <div v-for="(input, idx) in runExperimentPayload.inputs" :key="idx">
-              <cds-text-input
-                @input="input.filename = $event.target.value"
-                :value="input.filename"
-                label="Filename"
-                class="cds-theme-zone-g10"
-              />
-              <bx-textarea
-                rows="4"
-                cols="50"
-                @input="input.content = $event.target.value"
-                :value="input.content"
-                label-text="File contents"
-              ></bx-textarea>
-              <button @click="removeFromArray('inputs', idx)">X</button>
-            </div>
-          </div>
-          <h4>Add Inputs</h4>
-          <cds-text-input
-            @input="input.filename = $event.target.value"
-            :value="input.filename"
-            label="Filename"
-            class="cds-theme-zone-g10"
-          />
-          <bx-textarea
-            rows="4"
-            cols="50"
-            @input="input.content = $event.target.value"
-            :value="input.content"
-            label-text="File contents"
-            colorScheme="light"
-          ></bx-textarea>
-          <button
-            @click.once="addKeyToPayload('inputs', [])"
-            @click="addToPayloadArray('inputs', { ...input })"
-          >
-            Add
-          </button>
-          <h4>Data</h4>
-          <p>
-            Optional- overrides contents of data files, similarly to providing
-            inputs is not allowed in cases where data is defined in
-            parameterisation presets
-          </p>
-          <div
-            v-for="(option, idx) in runExperimentPayload.data"
-            v-bind:key="idx"
-          >
+  <div v-if="pageNo == 0" class="tab-panels">
+    <h4>Inputs</h4>
+    <p>Choose the input type:</p>
+    <bx-tabs trigger-content="Select an item" value="file">
+      <bx-tab id="tab-file" target="panel-file" value="file"
+        >File Upload</bx-tab
+      >
+      <bx-tab id="tab-s3" target="panel-s3" value="s3">S3 Bucket</bx-tab>
+      <bx-tab id="tab-datashim" target="panel-datashim" value="datashim"
+        >Datashim</bx-tab
+      >
+    </bx-tabs>
+    <div class="bx-ce-demo-devenv--tab-panels tab-panel">
+      <div
+        id="panel-file"
+        role="tabpanel"
+        aria-labelledby="tab-file"
+        hidden
+        class="tab-panels"
+      >
+        <div v-if="runExperimentPayload.inputs != undefined">
+          <div v-for="(input, idx) in runExperimentPayload.inputs" :key="idx">
             <cds-text-input
-              @input="option.name = $event.target.value"
-              :value="option.name"
+              @input="input.filename = $event.target.value"
+              :value="input.filename"
               label="Filename"
               class="cds-theme-zone-g10"
             />
-            <cds-text-input
-              @input="option.value = $event.target.value"
-              :value="option.value"
-              label="Content"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeFromArray('data', idx)">X</button>
+            <bx-textarea
+              rows="4"
+              cols="50"
+              @input="input.content = $event.target.value"
+              :value="input.content"
+              label-text="File contents"
+            ></bx-textarea>
+            <button @click="removeFromArray('inputs', idx)">X</button>
           </div>
-          <br />
-          <p>Add Data:</p>
+        </div>
+        <h4>Add Inputs</h4>
+        <cds-text-input
+          @input="input.filename = $event.target.value"
+          :value="input.filename"
+          label="Filename"
+          class="cds-theme-zone-g10"
+        />
+        <bx-textarea
+          rows="4"
+          cols="50"
+          @input="input.content = $event.target.value"
+          :value="input.content"
+          label-text="File contents"
+          colorScheme="light"
+        ></bx-textarea>
+        <button
+          @click.once="addKeyToPayload('inputs', [])"
+          @click="addToPayloadArray('inputs', { ...input })"
+        >
+          Add
+        </button>
+        <h4>Data</h4>
+        <p>
+          Optional- overrides contents of data files, similarly to providing
+          inputs is not allowed in cases where data is defined in
+          parameterisation presets
+        </p>
+        <div
+          v-for="(option, idx) in runExperimentPayload.data"
+          v-bind:key="idx"
+        >
           <cds-text-input
-            @input="data.name = $event.target.value"
-            :value="data.name"
+            @input="option.name = $event.target.value"
+            :value="option.name"
             label="Filename"
             class="cds-theme-zone-g10"
           />
           <cds-text-input
-            @input="data.value = $event.target.value"
-            :value="data.value"
+            @input="option.value = $event.target.value"
+            :value="option.value"
             label="Content"
             class="cds-theme-zone-g10"
           />
-          <button
-            @click.once="addKeyToPayload('data', [])"
-            @click="addToPayloadArray('data', { ...data })"
-          >
-            Add
-          </button>
+          <button @click="removeFromArray('data', idx)">X</button>
         </div>
-
-        <div
-          id="panel-s3"
-          role="tabpanel"
-          aria-labelledby="tab-s3"
-          hidden
-          class="tab-panels"
+        <br />
+        <p>Add Data:</p>
+        <cds-text-input
+          @input="data.name = $event.target.value"
+          :value="data.name"
+          label="Filename"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          @input="data.value = $event.target.value"
+          :value="data.value"
+          label="Content"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('data', [])"
+          @click="addToPayloadArray('data', { ...data })"
         >
-          <h4>Inputs for S3</h4>
+          Add
+        </button>
+      </div>
+
+      <div
+        id="panel-s3"
+        role="tabpanel"
+        aria-labelledby="tab-s3"
+        hidden
+        class="tab-panels"
+      >
+        <h4>Inputs for S3</h4>
+        <cds-text-input
+          @input="
+            s3.accessKey = $event.target.value;
+            addS3KeyToPayload();
+            addS3ObjectToPayload('accessKey', s3.accessKey);
+          "
+          :value="s3.accessKey"
+          label="S3 accessKey"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          @input="
+            s3.secretAccessKey = $event.target.value;
+            addS3KeyToPayload();
+            addS3ObjectToPayload('secretAccessKey', s3.secretAccessKey);
+          "
+          :value="s3.secretAccessKey"
+          label="S3 secretAccessKey"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          @input="
+            s3.bucket = $event.target.value;
+            addS3KeyToPayload();
+            addS3ObjectToPayload('bucket', s3.bucket);
+          "
+          :value="s3.bucket"
+          label="S3 bucket"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          @input="
+            s3.endpoint = $event.target.value;
+            addS3KeyToPayload();
+            addS3ObjectToPayload('endpoint', s3.endpoint);
+          "
+          :value="s3.endpoint"
+          label="S3 endpoint"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          @input="
+            s3.region = $event.target.value;
+            addS3KeyToPayload();
+            addS3ObjectToPayload('region', s3.region);
+          "
+          :value="s3.region"
+          label="S3 region"
+          class="cds-theme-zone-g10"
+        />
+        <h4>Data</h4>
+        <p>The contents of this data fill will be read from S3</p>
+        <div
+          v-for="(option, idx) in runExperimentPayload.data"
+          v-bind:key="idx"
+        >
           <cds-text-input
-            @input="
-              s3.accessKey = $event.target.value;
-              addS3KeyToPayload();
-              addS3ObjectToPayload('accessKey', s3.accessKey);
-            "
-            :value="s3.accessKey"
-            label="S3 accessKey"
+            @input="option.name = $event.target.value"
+            :value="option.name"
+            label="Filename"
             class="cds-theme-zone-g10"
           />
-          <cds-text-input
-            @input="
-              s3.secretAccessKey = $event.target.value;
-              addS3KeyToPayload();
-              addS3ObjectToPayload('secretAccessKey', s3.secretAccessKey);
-            "
-            :value="s3.secretAccessKey"
-            label="S3 secretAccessKey"
-            class="cds-theme-zone-g10"
-          />
-          <cds-text-input
-            @input="
-              s3.bucket = $event.target.value;
-              addS3KeyToPayload();
-              addS3ObjectToPayload('bucket', s3.bucket);
-            "
-            :value="s3.bucket"
-            label="S3 bucket"
-            class="cds-theme-zone-g10"
-          />
-          <cds-text-input
-            @input="
-              s3.endpoint = $event.target.value;
-              addS3KeyToPayload();
-              addS3ObjectToPayload('endpoint', s3.endpoint);
-            "
-            :value="s3.endpoint"
-            label="S3 endpoint"
-            class="cds-theme-zone-g10"
-          />
-          <cds-text-input
-            @input="
-              s3.region = $event.target.value;
-              addS3KeyToPayload();
-              addS3ObjectToPayload('region', s3.region);
-            "
-            :value="s3.region"
-            label="S3 region"
-            class="cds-theme-zone-g10"
-          />
+          <button @click="removeFromArray('data', idx)">X</button>
+        </div>
+        <br />
+        <p>Add Data:</p>
+        <cds-text-input
+          @input="data.name = $event.target.value"
+          :value="data.name"
+          label="Filename"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('data', [])"
+          @click="addToPayloadArray('data', { ...data })"
+        >
+          Add
+        </button>
+      </div>
+      <div
+        id="panel-datashim"
+        role="tabpanel"
+        aria-labelledby="tab-datashim"
+        hidden
+        class="tab-panels"
+      >
+        <h4>Inputs for Datashim</h4>
+        <cds-text-input
+          @input="s3.dataset = $event.target.value"
+          :value="s3.dataset"
+          label="S3 dataset"
+          class="cds-theme-zone-g10"
+        />
+        <div>
           <h4>Data</h4>
-          <p>The contents of this data fill will be read from S3</p>
+          The contents of this data fill will be read from the S3 bucket that
+          the dataset proxies
           <div
             v-for="(option, idx) in runExperimentPayload.data"
             v-bind:key="idx"
@@ -192,363 +221,269 @@
             />
             <button @click="removeFromArray('data', idx)">X</button>
           </div>
-          <br />
-          <p>Add Data:</p>
-          <cds-text-input
-            @input="data.name = $event.target.value"
-            :value="data.name"
-            label="Filename"
-            class="cds-theme-zone-g10"
-          />
-          <button
-            @click.once="addKeyToPayload('data', [])"
-            @click="addToPayloadArray('data', { ...data })"
-          >
-            Add
-          </button>
         </div>
-        <div
-          id="panel-datashim"
-          role="tabpanel"
-          aria-labelledby="tab-datashim"
-          hidden
-          class="tab-panels"
+        <br />
+        <p>Add Data:</p>
+        <cds-text-input
+          @input="data.name = $event.target.value"
+          :value="data.name"
+          label="Filename"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('data', [])"
+          @click="addToPayloadArray('data', { ...data })"
         >
-          <h4>Inputs for Datashim</h4>
-          <cds-text-input
-            @input="s3.dataset = $event.target.value"
-            :value="s3.dataset"
-            label="S3 dataset"
-            class="cds-theme-zone-g10"
-          />
-          <div>
-            <h4>Data</h4>
-            The contents of this data fill will be read from the S3 bucket that
-            the dataset proxies
-            <div
-              v-for="(option, idx) in runExperimentPayload.data"
-              v-bind:key="idx"
-            >
-              <cds-text-input
-                @input="option.name = $event.target.value"
-                :value="option.name"
-                label="Filename"
-                class="cds-theme-zone-g10"
-              />
-              <button @click="removeFromArray('data', idx)">X</button>
-            </div>
-          </div>
-          <br />
-          <p>Add Data:</p>
-          <cds-text-input
-            @input="data.name = $event.target.value"
-            :value="data.name"
-            label="Filename"
-            class="cds-theme-zone-g10"
-          />
-          <button
-            @click.once="addKeyToPayload('data', [])"
-            @click="addToPayloadArray('data', { ...data })"
-          >
-            Add
-          </button>
-        </div>
+          Add
+        </button>
       </div>
     </div>
-    <div
-      id="panel-options"
-      role="tabpanel"
-      aria-labelledby="tab-options"
-      hidden
-      class="tab-panels"
-    >
-      <h4>Options</h4>
-      <bx-accordion>
-        <bx-accordion-item title-text="Platform">
+  </div>
+  <div v-if="pageNo == 1" class="tab-panels">
+    <h4>Options</h4>
+    <bx-accordion>
+      <bx-accordion-item title-text="Platform">
+        <cds-text-input
+          @input="
+            platform = $event.target.value;
+            addPlatformToPayload();
+          "
+          :value="platform"
+          label="Platform Name"
+          class="cds-theme-zone-g10"
+        />
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Variables">
+        <div
+          v-for="(variable, key, idx) in runExperimentPayload.variables"
+          v-bind:key="idx"
+        >
           <cds-text-input
-            @input="
-              platform = $event.target.value;
-              addPlatformToPayload();
-            "
-            :value="platform"
-            label="Platform Name"
-            class="cds-theme-zone-g10"
-          />
-        </bx-accordion-item>
-        <bx-accordion-item title-text="Variables">
-          <div
-            v-for="(variable, key, idx) in runExperimentPayload.variables"
-            v-bind:key="idx"
-          >
-            <cds-text-input
-              :value="key"
-              @input="key = $event.target.value"
-              label="Name"
-              class="cds-theme-zone-g10"
-            />
-            <cds-text-input
-              :value="variable"
-              @input="variable = $event.target.value"
-              label="Value"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeFromObject('variables', key)">X</button>
-          </div>
-
-          <p>Add Variable</p>
-          <cds-text-input
-            :value="variable.name"
-            @input="variable.name = $event.target.value"
+            :value="key"
+            @input="key = $event.target.value"
             label="Name"
             class="cds-theme-zone-g10"
           />
           <cds-text-input
-            :value="variable.value"
-            @input="variable.value = $event.target.value"
+            :value="variable"
+            @input="variable = $event.target.value"
             label="Value"
             class="cds-theme-zone-g10"
           />
-          <button
-            @click.once="addKeyToPayload('variables', {})"
-            @click="
-              addObjectToPayload('variables', {
-                ...variable,
-              })
-            "
-          >
-            Add
-          </button>
-        </bx-accordion-item>
-        <bx-accordion-item title-text="Additional Options">
-          <div
-            v-for="(option, idx) in runExperimentPayload.additionalOptions"
-            v-bind:key="idx"
-          >
-            <cds-text-input
-              :value="runExperimentPayload.additionalOptions[idx]"
-              @input="
-                runExperimentPayload.additionalOptions[idx] =
-                  $event.target.value
-              "
-              label="Option"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeString('additionalOptions', idx)">X</button>
-          </div>
-          <p>Add Option</p>
+          <button @click="removeFromObject('variables', key)">X</button>
+        </div>
+
+        <p>Add Variable</p>
+        <cds-text-input
+          :value="variable.name"
+          @input="variable.name = $event.target.value"
+          label="Name"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          :value="variable.value"
+          @input="variable.value = $event.target.value"
+          label="Value"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('variables', {})"
+          @click="
+            addObjectToPayload('variables', {
+              ...variable,
+            })
+          "
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Additional Options">
+        <div
+          v-for="(option, idx) in runExperimentPayload.additionalOptions"
+          v-bind:key="idx"
+        >
           <cds-text-input
-            :value="additionalOption"
-            @input="additionalOption = $event.target.value"
+            :value="runExperimentPayload.additionalOptions[idx]"
+            @input="
+              runExperimentPayload.additionalOptions[idx] = $event.target.value
+            "
             label="Option"
             class="cds-theme-zone-g10"
           />
-          <button
-            @click.once="addKeyToPayload('additionalOptions', [])"
-            @click="addToPayloadArray('additionalOptions', additionalOption)"
-          >
-            Add
-          </button>
-        </bx-accordion-item>
-        <bx-accordion-item title-text="Environmental Variables">
-          <div
-            v-for="(
-              option, key, idx
-            ) in runExperimentPayload.environmentalVariables"
-            v-bind:key="idx"
-            colorScheme="light"
-          >
-            <cds-text-input
-              :value="key"
-              @input="key = $event.target.value"
-              label="Name"
-              class="cds-theme-zone-g10"
-            />
-            <cds-text-input
-              :value="option"
-              @input="option = $event.target.value"
-              label="Value"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeFromObject('environmentalVariables', key)">
-              X
-            </button>
-          </div>
-          <p>Add Config Key & Value</p>
+          <button @click="removeString('additionalOptions', idx)">X</button>
+        </div>
+        <p>Add Option</p>
+        <cds-text-input
+          :value="additionalOption"
+          @input="additionalOption = $event.target.value"
+          label="Option"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('additionalOptions', [])"
+          @click="addToPayloadArray('additionalOptions', additionalOption)"
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Environmental Variables">
+        <div
+          v-for="(
+            option, key, idx
+          ) in runExperimentPayload.environmentalVariables"
+          v-bind:key="idx"
+          colorScheme="light"
+        >
           <cds-text-input
-            :value="environmentalVariable.name"
-            @input="environmentalVariable.name = $event.target.value"
-            label="Key"
-            class="cds-theme-zone-g10"
-          />
-          <cds-text-input
-            :value="environmentalVariable.value"
-            @input="environmentalVariable.value = $event.target.value"
-            label="Value"
-            class="cds-theme-zone-g10"
-          />
-          <button
-            @click.once="addKeyToPayload('environmentalVariables', {})"
-            @click="
-              addObjectToPayload('environmentalVariables', {
-                ...environmentalVariable,
-              })
-            "
-          >
-            Add
-          </button>
-        </bx-accordion-item>
-        <bx-accordion-item title-text="Metadata">
-          <div
-            v-for="(metadata, key, idx) in runExperimentPayload.metadata"
-            v-bind:key="idx"
-          >
-            <cds-text-input
-              :value="key"
-              @input="key = $event.target.value"
-              label="Name"
-              class="cds-theme-zone-g10"
-            />
-            <cds-text-input
-              :value="metadata"
-              @input="metadata = $event.target.value"
-              label="Value"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeFromObject('metadata', key)">X</button>
-          </div>
-          <p>Add Metadata Name & Value</p>
-          <cds-text-input
-            :value="metadata.name"
-            @input="metadata.name = $event.target.value"
+            :value="key"
+            @input="key = $event.target.value"
             label="Name"
             class="cds-theme-zone-g10"
           />
           <cds-text-input
-            :value="metadata.value"
-            @input="metadata.value = $event.target.value"
+            :value="option"
+            @input="option = $event.target.value"
             label="Value"
             class="cds-theme-zone-g10"
           />
-          <button
-            @click.once="addKeyToPayload('metadata', {})"
-            @click="addObjectToPayload('metadata', { ...metadata })"
-          >
-            Add
+          <button @click="removeFromObject('environmentalVariables', key)">
+            X
           </button>
-        </bx-accordion-item>
-        <bx-accordion-item title-text="Runtime Policy">
+        </div>
+        <p>Add Config Key & Value</p>
+        <cds-text-input
+          :value="environmentalVariable.name"
+          @input="environmentalVariable.name = $event.target.value"
+          label="Key"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          :value="environmentalVariable.value"
+          @input="environmentalVariable.value = $event.target.value"
+          label="Value"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('environmentalVariables', {})"
+          @click="
+            addObjectToPayload('environmentalVariables', {
+              ...environmentalVariable,
+            })
+          "
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Metadata">
+        <div
+          v-for="(metadata, key, idx) in runExperimentPayload.metadata"
+          v-bind:key="idx"
+        >
           <cds-text-input
-            @input="
-              runtimePolicy.name = $event.target.value;
-              addRunTimePolicyKeyToPayload();
-              addRuntimePolicyNameToPayload('name', runtimePolicy.name);
-            "
-            :value="runtimePolicy.name"
+            :value="key"
+            @input="key = $event.target.value"
             label="Name"
             class="cds-theme-zone-g10"
           />
-          <p>Config</p>
-          <div v-if="runExperimentPayload.runtimePolicy != undefined">
-            <div v-if="runExperimentPayload.runtimePolicy.config != undefined">
-              <div
-                v-for="(value, key, idx) in runExperimentPayload.runtimePolicy
-                  .config"
-                v-bind:key="idx"
-              >
-                <cds-text-input
-                  :value="key"
-                  @input="key = $event.target.value"
-                  label="Key"
-                  class="cds-theme-zone-g10"
-                />
-                <cds-text-input
-                  :value="value"
-                  @input="value = $event.target.value"
-                  label="Value"
-                  class="cds-theme-zone-g10"
-                />
-                <button @click="removeFromObject('runtimePolicy.config', key)">
-                  X
-                </button>
-              </div>
+          <cds-text-input
+            :value="metadata"
+            @input="metadata = $event.target.value"
+            label="Value"
+            class="cds-theme-zone-g10"
+          />
+          <button @click="removeFromObject('metadata', key)">X</button>
+        </div>
+        <p>Add Metadata Name & Value</p>
+        <cds-text-input
+          :value="metadata.name"
+          @input="metadata.name = $event.target.value"
+          label="Name"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          :value="metadata.value"
+          @input="metadata.value = $event.target.value"
+          label="Value"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click.once="addKeyToPayload('metadata', {})"
+          @click="addObjectToPayload('metadata', { ...metadata })"
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Runtime Policy">
+        <cds-text-input
+          @input="
+            runtimePolicy.name = $event.target.value;
+            addRunTimePolicyKeyToPayload();
+            addRuntimePolicyNameToPayload('name', runtimePolicy.name);
+          "
+          :value="runtimePolicy.name"
+          label="Name"
+          class="cds-theme-zone-g10"
+        />
+        <p>Config</p>
+        <div v-if="runExperimentPayload.runtimePolicy != undefined">
+          <div v-if="runExperimentPayload.runtimePolicy.config != undefined">
+            <div
+              v-for="(value, key, idx) in runExperimentPayload.runtimePolicy
+                .config"
+              v-bind:key="idx"
+            >
+              <cds-text-input
+                :value="key"
+                @input="key = $event.target.value"
+                label="Key"
+                class="cds-theme-zone-g10"
+              />
+              <cds-text-input
+                :value="value"
+                @input="value = $event.target.value"
+                label="Value"
+                class="cds-theme-zone-g10"
+              />
+              <button @click="removeFromObject('runtimePolicy.config', key)">
+                X
+              </button>
             </div>
           </div>
-          <p>Add Config Key & Value</p>
-          <cds-text-input
-            :value="runtimePolicyConfigKey"
-            @input="runtimePolicyConfigKey = $event.target.value"
-            label="Key"
-            class="cds-theme-zone-g10"
-          />
-          <cds-text-input
-            :value="runtimePolicyConfigValue"
-            @input="runtimePolicyConfigValue = $event.target.value"
-            label="Value"
-            class="cds-theme-zone-g10"
-          />
-          <button
-            @click="
-              addRunTimePolicyKeyToPayload();
-              addRuntimePolicyConfigToPayload(
-                'config',
-                runtimePolicyConfigKey,
-                runtimePolicyConfigValue,
-              );
-            "
-          >
-            Add
-          </button>
-        </bx-accordion-item>
-      </bx-accordion>
-      <h4>Mount Kubernetes Objects</h4>
-      <bx-accordion>
-        <bx-accordion-item title-text="Volumes">
-          <div
-            v-for="(volume, idx) in runExperimentPayload.volumes"
-            v-bind:key="idx"
-          >
-            <bx-dropdown
-              value="persistentVolumeClaim"
-              label-text="Volume Type"
-              @bx-dropdown-selected="handleVolumeDropdownSelect"
-              class="dropdown"
-            >
-              <bx-dropdown-item value="persistentVolumeClaim"
-                >persistentVolumeClaim</bx-dropdown-item
-              >
-              <bx-dropdown-item value="dataset">dataset</bx-dropdown-item>
-              <bx-dropdown-item value="configMap">configMap</bx-dropdown-item>
-              <bx-dropdown-item value="secret">secret</bx-dropdown-item>
-            </bx-dropdown>
-            <cds-text-input
-              :value="runExperimentPayload.volumes[idx].type[volumeTypeKey]"
-              @input="
-                runExperimentPayload.volumes[idx].type[volumeTypeKey] =
-                  $event.target.value
-              "
-              label="Volume Type Value"
-              class="cds-theme-zone-g10"
-            />
-            <cds-text-input
-              :value="runExperimentPayload.volumes[idx].applicationDependency"
-              @input="
-                runExperimentPayload.volumes[idx].applicationDependency =
-                  $event.target.value
-              "
-              label="Volume Application Dependancy"
-              class="cds-theme-zone-g10"
-            />
-            <cds-text-input
-              :value="runExperimentPayload.volumes[idx].subPath"
-              @input="
-                runExperimentPayload.volumes[idx].subPath = $event.target.value
-              "
-              label="Volume SubPath"
-              class="cds-theme-zone-g10"
-            />
-            <button @click="removeFromArray('volumes', idx)">X</button>
-          </div>
-          <p>Add Volume</p>
+        </div>
+        <p>Add Config Key & Value</p>
+        <cds-text-input
+          :value="runtimePolicyConfigKey"
+          @input="runtimePolicyConfigKey = $event.target.value"
+          label="Key"
+          class="cds-theme-zone-g10"
+        />
+        <cds-text-input
+          :value="runtimePolicyConfigValue"
+          @input="runtimePolicyConfigValue = $event.target.value"
+          label="Value"
+          class="cds-theme-zone-g10"
+        />
+        <button
+          @click="
+            addRunTimePolicyKeyToPayload();
+            addRuntimePolicyConfigToPayload(
+              'config',
+              runtimePolicyConfigKey,
+              runtimePolicyConfigValue,
+            );
+          "
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+    </bx-accordion>
+    <h4>Mount Kubernetes Objects</h4>
+    <bx-accordion>
+      <bx-accordion-item title-text="Volumes">
+        <div
+          v-for="(volume, idx) in runExperimentPayload.volumes"
+          v-bind:key="idx"
+        >
           <bx-dropdown
             value="persistentVolumeClaim"
             label-text="Volume Type"
@@ -563,136 +498,165 @@
             <bx-dropdown-item value="secret">secret</bx-dropdown-item>
           </bx-dropdown>
           <cds-text-input
-            :value="volume.type[volumeTypeKey]"
-            @input="volume.type[volumeTypeKey] = $event.target.value"
+            :value="runExperimentPayload.volumes[idx].type[volumeTypeKey]"
+            @input="
+              runExperimentPayload.volumes[idx].type[volumeTypeKey] =
+                $event.target.value
+            "
             label="Volume Type Value"
             class="cds-theme-zone-g10"
           />
           <cds-text-input
-            :value="volume.applicationDependency"
-            @input="volume.applicationDependency = $event.target.value"
+            :value="runExperimentPayload.volumes[idx].applicationDependency"
+            @input="
+              runExperimentPayload.volumes[idx].applicationDependency =
+                $event.target.value
+            "
             label="Volume Application Dependancy"
             class="cds-theme-zone-g10"
           />
           <cds-text-input
-            :value="volume.subPath"
-            @input="volume.subPath = $event.target.value"
+            :value="runExperimentPayload.volumes[idx].subPath"
+            @input="
+              runExperimentPayload.volumes[idx].subPath = $event.target.value
+            "
             label="Volume SubPath"
             class="cds-theme-zone-g10"
           />
-          <button
-            @click.once="addKeyToPayload('volumes', [])"
-            @click="addToPayloadArray('volumes', { ...volume })"
+          <button @click="removeFromArray('volumes', idx)">X</button>
+        </div>
+        <p>Add Volume</p>
+        <bx-dropdown
+          value="persistentVolumeClaim"
+          label-text="Volume Type"
+          @bx-dropdown-selected="handleVolumeDropdownSelect"
+          class="dropdown"
+        >
+          <bx-dropdown-item value="persistentVolumeClaim"
+            >persistentVolumeClaim</bx-dropdown-item
           >
-            Add
-          </button>
-        </bx-accordion-item>
-      </bx-accordion>
-    </div>
-    <div
-      id="panel-outputs"
-      role="tabpanel"
-      aria-labelledby="tab-outputs"
-      hidden
-      class="tab-panels"
-    >
-      <h4>Choose your output store</h4>
-      <bx-toggle
-        id="store-toggle"
-        checked-text="S3"
-        unchecked-text="Datashim"
-        checked
-        @bx-toggle-changed="handleStoreToggle(event)"
-      ></bx-toggle>
-      <div v-if="storeIns3Bucket">
+          <bx-dropdown-item value="dataset">dataset</bx-dropdown-item>
+          <bx-dropdown-item value="configMap">configMap</bx-dropdown-item>
+          <bx-dropdown-item value="secret">secret</bx-dropdown-item>
+        </bx-dropdown>
         <cds-text-input
-          @input="
-            s3Store.bucketPath = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreObjectToPayload('bucketPath', s3Store.bucketPath);
-          "
-          :value="s3Store.bucketPath"
-          label="Bucket Path"
+          :value="volume.type[volumeTypeKey]"
+          @input="volume.type[volumeTypeKey] = $event.target.value"
+          label="Volume Type Value"
           class="cds-theme-zone-g10"
         />
         <cds-text-input
-          @input="
-            s3Store.credentials.accessKey = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreCredentialsToPayload(
-              'accessKey',
-              s3Store.credentials.accessKey,
-            );
-          "
-          :value="s3Store.credentials.accessKey"
-          label="S3 accessKey"
+          :value="volume.applicationDependency"
+          @input="volume.applicationDependency = $event.target.value"
+          label="Volume Application Dependancy"
           class="cds-theme-zone-g10"
         />
         <cds-text-input
-          @input="
-            s3Store.credentials.secretAccessKey = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreCredentialsToPayload(
-              'secretAccessKey',
-              s3Store.credentials.secretAccessKey,
-            );
-          "
-          :value="s3Store.credentials.secretAccessKey"
-          label="S3 secretAccessKey"
+          :value="volume.subPath"
+          @input="volume.subPath = $event.target.value"
+          label="Volume SubPath"
           class="cds-theme-zone-g10"
         />
-        <cds-text-input
-          @input="
-            s3Store.credentials.bucket = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreCredentialsToPayload(
-              'bucket',
-              s3Store.credentials.bucket,
-            );
-          "
-          :value="s3Store.credentials.bucket"
-          label="S3 bucket"
-          class="cds-theme-zone-g10"
-        />
-        <cds-text-input
-          @input="
-            s3Store.credentials.endpoint = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreCredentialsToPayload(
-              'endpoint',
-              s3Store.credentials.endpoint,
-            );
-          "
-          :value="s3Store.credentials.endpoint"
-          label="S3 endpoint"
-          class="cds-theme-zone-g10"
-        />
-        <cds-text-input
-          @input="
-            s3Store.credentials.region = $event.target.value;
-            addS3StoreKeyToPayload();
-            addS3StoreCredentialsToPayload(
-              'region',
-              s3Store.credentials.region,
-            );
-          "
-          :value="s3Store.credentials.region"
-          label="S3 region"
-          class="cds-theme-zone-g10"
-        />
-      </div>
+        <button
+          @click.once="addKeyToPayload('volumes', [])"
+          @click="addToPayloadArray('volumes', { ...volume })"
+        >
+          Add
+        </button>
+      </bx-accordion-item>
+    </bx-accordion>
+  </div>
+  <div v-if="pageNo == 2" class="tab-panels">
+    <h4>Choose your output store</h4>
+    <bx-toggle
+      id="store-toggle"
+      checked-text="S3"
+      unchecked-text="Datashim"
+      checked
+      @bx-toggle-changed="handleStoreToggle(event)"
+    ></bx-toggle>
+    <div v-if="storeIns3Bucket">
       <cds-text-input
-        v-else
         @input="
-          s3Store.datasetStoreURI = $event.target.value;
+          s3Store.bucketPath = $event.target.value;
           addS3StoreKeyToPayload();
-          addS3StoreObjectToPayload('datasetStoreURI', s3Store.datasetStoreURI);
+          addS3StoreObjectToPayload('bucketPath', s3Store.bucketPath);
         "
-        :value="s3Store.datasetStoreURI"
-        label="Dataset Store URI"
+        :value="s3Store.bucketPath"
+        label="Bucket Path"
+        class="cds-theme-zone-g10"
+      />
+      <cds-text-input
+        @input="
+          s3Store.credentials.accessKey = $event.target.value;
+          addS3StoreKeyToPayload();
+          addS3StoreCredentialsToPayload(
+            'accessKey',
+            s3Store.credentials.accessKey,
+          );
+        "
+        :value="s3Store.credentials.accessKey"
+        label="S3 accessKey"
+        class="cds-theme-zone-g10"
+      />
+      <cds-text-input
+        @input="
+          s3Store.credentials.secretAccessKey = $event.target.value;
+          addS3StoreKeyToPayload();
+          addS3StoreCredentialsToPayload(
+            'secretAccessKey',
+            s3Store.credentials.secretAccessKey,
+          );
+        "
+        :value="s3Store.credentials.secretAccessKey"
+        label="S3 secretAccessKey"
+        class="cds-theme-zone-g10"
+      />
+      <cds-text-input
+        @input="
+          s3Store.credentials.bucket = $event.target.value;
+          addS3StoreKeyToPayload();
+          addS3StoreCredentialsToPayload('bucket', s3Store.credentials.bucket);
+        "
+        :value="s3Store.credentials.bucket"
+        label="S3 bucket"
+        class="cds-theme-zone-g10"
+      />
+      <cds-text-input
+        @input="
+          s3Store.credentials.endpoint = $event.target.value;
+          addS3StoreKeyToPayload();
+          addS3StoreCredentialsToPayload(
+            'endpoint',
+            s3Store.credentials.endpoint,
+          );
+        "
+        :value="s3Store.credentials.endpoint"
+        label="S3 endpoint"
+        class="cds-theme-zone-g10"
+      />
+      <cds-text-input
+        @input="
+          s3Store.credentials.region = $event.target.value;
+          addS3StoreKeyToPayload();
+          addS3StoreCredentialsToPayload('region', s3Store.credentials.region);
+        "
+        :value="s3Store.credentials.region"
+        label="S3 region"
         class="cds-theme-zone-g10"
       />
     </div>
+    <cds-text-input
+      v-else
+      @input="
+        s3Store.datasetStoreURI = $event.target.value;
+        addS3StoreKeyToPayload();
+        addS3StoreObjectToPayload('datasetStoreURI', s3Store.datasetStoreURI);
+      "
+      :value="s3Store.datasetStoreURI"
+      label="Dataset Store URI"
+      class="cds-theme-zone-g10"
+    />
   </div>
 </template>
 
@@ -708,6 +672,8 @@ export default {
   name: "RunExperimentForm",
   props: {
     formEmit: Boolean,
+    title: String,
+    pageNo: Number,
   },
   watch: {
     formEmit(newValue) {
@@ -716,7 +682,7 @@ export default {
       }
     },
   },
-  emits: ["postExperimentRun"],
+  emits: ["post-experiment-run"],
   data() {
     return {
       storeIns3Bucket: true,
@@ -946,7 +912,7 @@ export default {
       this.runExperimentPayload.s3Store.credentials[key] = value;
     },
     emitRunExperimentPayload() {
-      this.$emit("postExperimentRun", this.runExperimentPayload);
+      this.$emit("post-experiment-run", this.runExperimentPayload);
     },
     addLightColorThemeToDropdown() {
       [...document.getElementsByClassName("dropdown")].forEach((dropdown) => {
