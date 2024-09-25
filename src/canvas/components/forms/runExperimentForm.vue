@@ -1,5 +1,8 @@
 <template>
   <div v-if="pageNo == 0" class="tab-panels">
+    <RunExperimentFiles />
+  </div>
+  <div v-if="pageNo == 1" class="tab-panels">
     <h4>Inputs</h4>
     <p>Choose the input type:</p>
     <bx-tabs trigger-content="Select an item" value="file">
@@ -239,7 +242,7 @@
       </div>
     </div>
   </div>
-  <div v-if="pageNo == 1" class="tab-panels">
+  <div v-if="pageNo == 2" class="tab-panels">
     <h4>Options</h4>
     <bx-accordion>
       <bx-accordion-item title-text="Platform">
@@ -566,7 +569,7 @@
       </bx-accordion-item>
     </bx-accordion>
   </div>
-  <div v-if="pageNo == 2" class="tab-panels">
+  <div v-if="pageNo == 3" class="tab-panels">
     <h4>Choose your output store</h4>
     <bx-toggle
       id="store-toggle"
@@ -668,6 +671,8 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/togg
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/dropdown.min.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 
+import RunExperimentFiles from "@/components/ExperimentView/RunExperimentFiles.vue";
+
 export default {
   name: "RunExperimentForm",
   props: {
@@ -683,6 +688,9 @@ export default {
     },
   },
   emits: ["post-experiment-run"],
+  components: {
+    RunExperimentFiles,
+  },
   data() {
     return {
       storeIns3Bucket: true,

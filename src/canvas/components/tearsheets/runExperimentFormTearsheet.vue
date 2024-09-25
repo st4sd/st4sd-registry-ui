@@ -12,19 +12,24 @@
       vertical
     >
       <cds-progress-step
+        id="runExperimentFilesStep"
+        label="Provide Files"
+        @click="pageNo = 0"
+      ></cds-progress-step>
+      <cds-progress-step
         id="runExperimentFormInputsStep"
         label="Inputs"
-        @click="pageNo = 0"
+        @click="pageNo = 1"
       ></cds-progress-step>
       <cds-progress-step
         id="runExperimentFormOptionsStep"
         label="Options"
-        @click="pageNo = 1"
+        @click="pageNo = 2"
       ></cds-progress-step>
       <cds-progress-step
         id="runExperimentFormOutputsStep"
         label="Store Outputs"
-        @click="pageNo = 2"
+        @click="pageNo = 3"
       ></cds-progress-step>
     </cds-progress-indicator>
     <runExperimentForm
@@ -46,7 +51,7 @@
       >Back</cds-button
     >
     <cds-button
-      v-if="pageNo < 2"
+      v-if="pageNo < 3"
       slot="actions"
       kind="primary"
       @click="pageNo++"
@@ -90,11 +95,12 @@ export default {
       be set normally.
     */
     document
-      .getElementById("runExperimentFormInputsStep")
+      .getElementById("runExperimentFilesStep")
       .setAttribute("state", "current");
   },
   watch: {
     pageNo(page) {
+      let inputFilesElement = document.getElementById("runExperimentFilesStep");
       let inputsElement = document.getElementById(
         "runExperimentFormInputsStep",
       );
@@ -112,16 +118,25 @@ export default {
       */
       switch (page) {
         case 0:
-          inputsElement.setAttribute("state", "current");
+          inputFilesElement.setAttribute("state", "current");
+          inputsElement.setAttribute("state", "incomplete");
           optionsElement.setAttribute("state", "incomplete");
           storeOutputsElement.setAttribute("state", "incomplete");
           break;
         case 1:
+          inputFilesElement.setAttribute("state", "complete");
+          inputsElement.setAttribute("state", "current");
+          optionsElement.setAttribute("state", "incomplete");
+          storeOutputsElement.setAttribute("state", "incomplete");
+          break;
+        case 2:
+          inputFilesElement.setAttribute("state", "complete");
           inputsElement.setAttribute("state", "complete");
           optionsElement.setAttribute("state", "current");
           storeOutputsElement.setAttribute("state", "incomplete");
           break;
-        case 2:
+        case 3:
+          inputFilesElement.setAttribute("state", "complete");
           inputsElement.setAttribute("state", "complete");
           optionsElement.setAttribute("state", "complete");
           storeOutputsElement.setAttribute("state", "current");
