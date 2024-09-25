@@ -33,14 +33,17 @@
       @post-experiment-run="postExperimentRun()"
     />
     <cds-button
-      v-if="pageNo == 0"
       slot="actions"
-      kind="secondary"
-      @click="$emit('cds-tearsheet-closed')"
+      kind="ghost"
+      @click="$emit('cds-tearsheet-closed'), (pageNo = 0)"
       >Cancel</cds-button
     >
-    <cds-button v-else slot="actions" kind="secondary" @click="pageNo--"
-      >Previous</cds-button
+    <cds-button
+      :disabled="pageNo == 0"
+      slot="actions"
+      kind="secondary"
+      @click="pageNo--"
+      >Back</cds-button
     >
     <cds-button
       v-if="pageNo < 2"
