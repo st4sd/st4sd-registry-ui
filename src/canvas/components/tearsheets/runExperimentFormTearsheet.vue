@@ -33,6 +33,7 @@
       ></cds-progress-step>
     </cds-progress-indicator>
     <runExperimentForm
+      :experiment="experiment"
       :formEmit="runExperimentFormEmit"
       :pageNo="pageNo"
       @post-experiment-run="postExperimentRun()"
@@ -75,6 +76,7 @@ import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
 export default {
   name: "runExperimentFormTearsheet",
   props: {
+    experiment: Object,
     postExperimentRun: Function,
     runExperimentFormEmit: Boolean,
   },

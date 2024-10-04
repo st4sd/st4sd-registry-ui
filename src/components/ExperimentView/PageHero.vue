@@ -138,6 +138,7 @@
       />
     </div>
     <runExperimentFormTearsheet
+      :experiment="experiment"
       :open="runExperimentFormTearsheetVisibility"
       :runExperimentFormEmit="runExperimentFormEmit"
       :postExperimentRun="setRunExperimentFormPayload"

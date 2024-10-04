@@ -1,6 +1,7 @@
 <template>
   <div v-if="pageNo == 0" class="tab-panels">
     <RunExperimentFiles />
+    <FilesTable :experiment="experiment" />
   </div>
   <div v-if="pageNo == 1" class="tab-panels">
     <h4>Inputs</h4>
@@ -671,11 +672,13 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/togg
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/dropdown.min.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 
-import RunExperimentFiles from "@/components/ExperimentView/RunExperimentFiles.vue";
+import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
+import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.vue";
 
 export default {
   name: "RunExperimentForm",
   props: {
+    experiment: Object,
     formEmit: Boolean,
     title: String,
     pageNo: Number,
@@ -689,6 +692,7 @@ export default {
   },
   emits: ["post-experiment-run"],
   components: {
+    FilesTable,
     RunExperimentFiles,
   },
   data() {
