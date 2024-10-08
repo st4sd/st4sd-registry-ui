@@ -1,6 +1,6 @@
 <template>
   <h4>Provide Files</h4>
-  <p style="font-weight: 700">Use the table to provide files to the workflow</p>
+  <p><strong>Use the table to provide files to the workflow</strong></p>
   <p>
     Click on the rows to disclose additional information for each file.
     Configure and edit files in the disclosed section or use the three-dot menu
@@ -13,3 +13,11 @@ export default {
   name: "RunExperimentFiles",
 };
 </script>
+
+<style scoped lang="scss">
+@use "@carbon/layout";
+
+h4 {
+  padding-bottom: layout.$spacing-03;
+}
+</style>

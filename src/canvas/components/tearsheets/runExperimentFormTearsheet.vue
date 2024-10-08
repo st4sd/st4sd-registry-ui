@@ -1,5 +1,6 @@
 <template>
   <cds-tearsheet
+    class="cds-theme-zone-g10"
     hasCloseIcon
     width="wide"
     influencerPlacement="left"
@@ -17,19 +18,9 @@
         @click="pageNo = 0"
       ></cds-progress-step>
       <cds-progress-step
-        id="runExperimentFormInputsStep"
-        label="Inputs"
+        id="runExperimentVariablesStep"
+        label="Variables"
         @click="pageNo = 1"
-      ></cds-progress-step>
-      <cds-progress-step
-        id="runExperimentFormOptionsStep"
-        label="Options"
-        @click="pageNo = 2"
-      ></cds-progress-step>
-      <cds-progress-step
-        id="runExperimentFormOutputsStep"
-        label="Store Outputs"
-        @click="pageNo = 3"
       ></cds-progress-step>
     </cds-progress-indicator>
     <runExperimentForm
@@ -52,7 +43,7 @@
       >Back</cds-button
     >
     <cds-button
-      v-if="pageNo < 3"
+      v-if="pageNo < 1"
       slot="actions"
       kind="primary"
       @click="pageNo++"
@@ -103,14 +94,8 @@ export default {
   watch: {
     pageNo(page) {
       let inputFilesElement = document.getElementById("runExperimentFilesStep");
-      let inputsElement = document.getElementById(
-        "runExperimentFormInputsStep",
-      );
-      let optionsElement = document.getElementById(
-        "runExperimentFormOptionsStep",
-      );
-      let storeOutputsElement = document.getElementById(
-        "runExperimentFormOutputsStep",
+      let variablesElement = document.getElementById(
+        "runExperimentVariablesStep",
       );
       /*
         AP (20/09/24): This is required because of
@@ -121,27 +106,11 @@ export default {
       switch (page) {
         case 0:
           inputFilesElement.setAttribute("state", "current");
-          inputsElement.setAttribute("state", "incomplete");
-          optionsElement.setAttribute("state", "incomplete");
-          storeOutputsElement.setAttribute("state", "incomplete");
+          variablesElement.setAttribute("state", "incomplete");
           break;
         case 1:
           inputFilesElement.setAttribute("state", "complete");
-          inputsElement.setAttribute("state", "current");
-          optionsElement.setAttribute("state", "incomplete");
-          storeOutputsElement.setAttribute("state", "incomplete");
-          break;
-        case 2:
-          inputFilesElement.setAttribute("state", "complete");
-          inputsElement.setAttribute("state", "complete");
-          optionsElement.setAttribute("state", "current");
-          storeOutputsElement.setAttribute("state", "incomplete");
-          break;
-        case 3:
-          inputFilesElement.setAttribute("state", "complete");
-          inputsElement.setAttribute("state", "complete");
-          optionsElement.setAttribute("state", "complete");
-          storeOutputsElement.setAttribute("state", "current");
+          variablesElement.setAttribute("state", "current");
           break;
       }
     },
