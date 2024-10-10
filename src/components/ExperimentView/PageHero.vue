@@ -137,6 +137,13 @@
         :experiment="experiment"
       />
     </div>
+    <FileConfigurationTearsheet
+      :isOpen="openFileConfigurationTearsheet"
+      @cds-tearsheet-closed="
+        openFileConfigurationTearsheet = !openFileConfigurationTearsheet
+      "
+      :fileInfo="fileConfigTearsheetFileInfo"
+    />
     <runExperimentFormTearsheet
       :experiment="experiment"
       :open="runExperimentFormTearsheetVisibility"
@@ -145,6 +152,7 @@
       @cds-tearsheet-closed="
         toggleModalVisibility('runExperimentFormTearsheetVisibility')
       "
+      @openFileConfigTearsheet="fileConfigTearsheetConfig"
       @st4sd-experiment-run-submitted="toggleRunExperimentFormEmit"
     />
   </div>
@@ -163,12 +171,14 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 
 import axios from "axios";
 import router from "@/router";
+import FileConfigurationTearsheet from "@/components/ExperimentView/FileConfigurationTearsheet.vue";
 
 export default {
   name: "PageHero",
   components: {
     St4sdBestPracticesProgressIndicator,
     runExperimentFormTearsheet,
+    FileConfigurationTearsheet,
   },
   props: {
     experiment: Object,
@@ -189,11 +199,21 @@ export default {
       formDataCollected: false,
       runExperimentPayload: {},
       runExperimentFormTearsheetVisibility: false,
+      openFileConfigurationTearsheet: false,
+      fileConfigTearsheetFileInfo: {
+        file: { name: "UNKNOWN" },
+        type: "UNKNOWN",
+      },
     };
   },
   methods: {
     checkVeInterfaceIsPresent,
     getDeploymentEndpoint,
+    fileConfigTearsheetConfig(event) {
+      this.openFileConfigurationTearsheet =
+        !this.openFileConfigurationTearsheet;
+      this.fileConfigTearsheetFileInfo = event;
+    },
     toggleModalVisibility(modal) {
       this[modal] = !this[modal];
     },

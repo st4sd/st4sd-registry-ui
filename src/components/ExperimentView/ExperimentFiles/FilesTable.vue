@@ -11,27 +11,38 @@
     <cds-table-body>
       <cds-table-row v-for="inputFile in inputFiles">
         <cds-table-cell>{{ inputFile.name }}</cds-table-cell>
-        <cds-table-cell>Input (Required)</cds-table-cell>
+        <cds-table-cell>{{ inputTypeEnums.INPUT }}</cds-table-cell>
         <cds-table-cell><FilesTableStatus type="fail" /></cds-table-cell>
         <cds-table-cell
-          ><FilesTableOverflow @fileChanged="fileChanged($event, inputFile)"
+          ><FilesTableOverflow
+            @file-being-configured="
+              fileChanged(inputFile, inputTypeEnums.INPUT)
+            "
+            @file-being-removed="removeFile(inputFile)"
         /></cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="executionOptionFile in executionOptionFiles">
         <cds-table-cell>{{ executionOptionFile.name }}</cds-table-cell>
-        <cds-table-cell>Execution Option (Optional)</cds-table-cell>
+        <cds-table-cell>{{ inputTypeEnums.EXECUTION_OPTION }}</cds-table-cell>
         <cds-table-cell><FilesTableStatus type="" /></cds-table-cell>
         <cds-table-cell
           ><FilesTableOverflow
-            @fileChanged="fileChanged($event, executionOptionFile)"
+            @file-being-configured="
+              fileChanged(executionOptionFile, inputTypeEnums.EXECUTION_OPTION)
+            "
+            @file-being-removed="removeFile(executionOptionFile)"
         /></cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="presetFile in presetFiles">
         <cds-table-cell>{{ presetFile.name }}</cds-table-cell>
-        <cds-table-cell>Preset</cds-table-cell>
+        <cds-table-cell>{{ inputTypeEnums.PRESET }}</cds-table-cell>
         <cds-table-cell><FilesTableStatus type="success" /></cds-table-cell>
         <cds-table-cell
-          ><FilesTableOverflow @fileChanged="fileChanged($event, presetFile)"
+          ><FilesTableOverflow
+            @file-being-configured="
+              fileChanged(presetFile, inputTypeEnums.PRESET)
+            "
+            @file-being-removed="removeFile(presetFile)"
         /></cds-table-cell>
       </cds-table-row>
     </cds-table-body>
@@ -44,14 +55,22 @@ import "@carbon/web-components/es/components/data-table/index.js";
 import FilesTableOverflow from "@/components/ExperimentView/ExperimentFiles/FilesTableOverflow.vue";
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
 
+import inputTypeEnums from "@/enums/inputTypeEnums.js";
+
 export default {
   name: "FilesTable",
+  emits: ["configure-file"],
   props: {
     experiment: Object,
   },
   components: {
     FilesTableOverflow,
     FilesTableStatus,
+  },
+  data() {
+    return {
+      inputTypeEnums,
+    };
   },
   computed: {
     inputFiles() {
@@ -67,8 +86,11 @@ export default {
     },
   },
   methods: {
-    fileChanged(event, file) {
-      alert(`${file.name} - file has been ${event ? "provided" : "removed"}.`);
+    fileChanged(file, type) {
+      this.$emit("configure-file", { file, type });
+    },
+    removeFile(file) {
+      console.log(file);
     },
   },
 };

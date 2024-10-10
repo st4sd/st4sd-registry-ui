@@ -8,11 +8,11 @@
     />
     <!-- z-index required due to tearsheet z-index (9000) -->
     <cds-overflow-menu-body style="z-index: 10000">
-      <cds-overflow-menu-item @click="$emit('fileChanged', true)"
+      <cds-overflow-menu-item @click="$emit('file-being-configured')"
         >Provide file</cds-overflow-menu-item
       >
       <cds-overflow-menu-item>Edit file</cds-overflow-menu-item>
-      <cds-overflow-menu-item danger @click="$emit('fileChanged', false)"
+      <cds-overflow-menu-item danger @click="$emit('file-being-removed')"
         >Remove provided file</cds-overflow-menu-item
       >
     </cds-overflow-menu-body>
@@ -24,6 +24,6 @@ import "@carbon/web-components/es/components/overflow-menu/index.js";
 
 export default {
   name: "FilesTableOverflow",
-  emits: ["fileChanged"],
+  emits: ["file-being-configured", "file-being-removed"],
 };
 </script>

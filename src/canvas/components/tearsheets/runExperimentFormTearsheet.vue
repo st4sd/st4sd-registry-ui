@@ -1,5 +1,6 @@
 <template>
   <cds-tearsheet
+    data-index="one"
     class="cds-theme-zone-g10"
     hasCloseIcon
     width="wide"
@@ -23,12 +24,16 @@
         @click="pageNo = 1"
       ></cds-progress-step>
     </cds-progress-indicator>
-    <runExperimentForm
-      :experiment="experiment"
-      :formEmit="runExperimentFormEmit"
-      :pageNo="pageNo"
-      @post-experiment-run="postExperimentRun()"
-    />
+    <div v-if="pageNo == 0" class="tab-panels">
+      <RunExperimentFiles />
+      <FilesTable
+        @configure-file="fileConfigTearsheetTransition"
+        :experiment="experiment"
+      />
+    </div>
+    <div v-if="pageNo == 1" class="tab-panels">
+      <RunExperimentVariables :experiment="experiment" />
+    </div>
     <cds-button
       slot="actions"
       kind="ghost"
@@ -62,7 +67,10 @@
 <script>
 import "@carbon/web-components/es/components/tearsheet/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import runExperimentForm from "@/canvas/components/forms/runExperimentForm.vue";
+
+import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.vue";
+import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
+import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
 
 export default {
   name: "runExperimentFormTearsheet",
@@ -71,9 +79,20 @@ export default {
     postExperimentRun: Function,
     runExperimentFormEmit: Boolean,
   },
-  emits: ["st4sd-experiment-run-submitted", "cds-tearsheet-closed"],
+  emits: [
+    "st4sd-experiment-run-submitted",
+    "cds-tearsheet-closed",
+    "openFileConfigTearsheet",
+  ],
   components: {
-    runExperimentForm,
+    FilesTable,
+    RunExperimentFiles,
+    RunExperimentVariables,
+  },
+  methods: {
+    fileConfigTearsheetTransition(event) {
+      this.$emit("openFileConfigTearsheet", event);
+    },
   },
   data() {
     return {
