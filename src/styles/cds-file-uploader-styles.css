@@ -1,0 +1,4 @@
+.file-uploader-container {
+  display: flex;
+  flex-direction: row;
+}

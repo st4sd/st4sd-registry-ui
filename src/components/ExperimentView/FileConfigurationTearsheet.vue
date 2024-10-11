@@ -18,7 +18,7 @@
         }}</cds-tab>
       </cds-tabs>
     </div>
-    {{ fileInfo.type }}
+    <InputConfigurationFileUploadForm />
   </cds-tearsheet>
 </template>
 
@@ -26,6 +26,7 @@
 import "@carbon/web-components/es/components/tearsheet/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
+import InputConfigurationFileUploadForm from "@/components/ExperimentView/InputConfigurationFileUploadForm.vue";
 
 export default {
   name: "FileConfigurationTearsheet",
@@ -34,9 +35,13 @@ export default {
     isOpen: Boolean,
   },
   emits: ["cds-tearsheet-closed"],
+  components: {
+    InputConfigurationFileUploadForm,
+  },
   data() {
     return {
       options: ["Upload", "S3", "PVC", "Datashim", "Application Dependencies"],
+      file: null,
     };
   },
 };

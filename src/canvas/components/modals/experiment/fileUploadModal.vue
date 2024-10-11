@@ -124,10 +124,7 @@ export default {
 </script>
 
 <style scoped>
-.file-uploader-container {
-  display: flex;
-  flex-direction: row;
-}
+@import "@/styles/cds-file-uploader-styles.css";
 
 cds-file-uploader {
   padding-top: 1rem;
