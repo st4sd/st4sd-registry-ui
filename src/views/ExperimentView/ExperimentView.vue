@@ -74,6 +74,7 @@
         :isBuildCanvasEditingEnabled="isBuildCanvasEditingEnabled"
         :id="id"
         :getAvailablePlatforms="getAvailablePlatforms()"
+        @push-to-toast-errors="errors.push($event)"
       />
 
       <VirtualExperimentInterfaceVue :experiment="experiment" />

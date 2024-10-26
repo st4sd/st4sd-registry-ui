@@ -27,7 +27,7 @@
     <div v-if="pageNo == 0" class="tab-panels">
       <RunExperimentFiles />
       <FilesTable
-        @configure-file="fileConfigTearsheetTransition"
+        @file-being-configured="$emit('file-being-configured', $event)"
         :experiment="experiment"
       />
     </div>
@@ -82,17 +82,12 @@ export default {
   emits: [
     "st4sd-experiment-run-submitted",
     "cds-tearsheet-closed",
-    "openFileConfigTearsheet",
+    "file-being-configured",
   ],
   components: {
     FilesTable,
     RunExperimentFiles,
     RunExperimentVariables,
-  },
-  methods: {
-    fileConfigTearsheetTransition(event) {
-      this.$emit("openFileConfigTearsheet", event);
-    },
   },
   data() {
     return {

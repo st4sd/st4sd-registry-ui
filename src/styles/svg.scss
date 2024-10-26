@@ -8,6 +8,11 @@
   filter: brightness(0) saturate(100%) invert(0.99);
 }
 
+.black-svg {
+  -webkit-filter: brightness(0) saturate(100%) invert(0);
+  filter: brightness(0) saturate(100%) invert(0);
+}
+
 .success-green {
   // Simulate color of IBM success icon
   // Source: https://codepen.io/sosuke/pen/Pjoqqp
@@ -30,4 +35,12 @@
   // Input: #f1c21b
   filter: invert(69%) sepia(82%) saturate(455%) hue-rotate(2deg) brightness(98%)
     contrast(94%);
+}
+
+.interactive-blue {
+  // Simulate color of IBM border-interactive
+  // Source: https://codepen.io/sosuke/pen/Pjoqqp
+  // Input: #0f62fe
+  filter: invert(32%) sepia(70%) saturate(6128%) hue-rotate(217deg)
+    brightness(101%) contrast(98%);
 }

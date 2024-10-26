@@ -142,7 +142,9 @@
       @cds-tearsheet-closed="
         openFileConfigurationTearsheet = !openFileConfigurationTearsheet
       "
-      :fileInfo="fileConfigTearsheetFileInfo"
+      :fileName="fileName"
+      :fileConfiguration="fileConfiguration"
+      @push-to-toast-errors="$emit('push-to-toast-errors', $event)"
     />
     <runExperimentFormTearsheet
       :experiment="experiment"
@@ -152,7 +154,7 @@
       @cds-tearsheet-closed="
         toggleModalVisibility('runExperimentFormTearsheetVisibility')
       "
-      @openFileConfigTearsheet="fileConfigTearsheetConfig"
+      @file-being-configured="startFileConfiguration"
       @st4sd-experiment-run-submitted="toggleRunExperimentFormEmit"
     />
   </div>
@@ -172,6 +174,8 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 import axios from "axios";
 import router from "@/router";
 import FileConfigurationTearsheet from "@/components/ExperimentView/FileConfigurationTearsheet.vue";
+import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+import { FileConfiguration } from "@/classes/FileConfiguration.js";
 
 export default {
   name: "PageHero",
@@ -200,19 +204,21 @@ export default {
       runExperimentPayload: {},
       runExperimentFormTearsheetVisibility: false,
       openFileConfigurationTearsheet: false,
-      fileConfigTearsheetFileInfo: {
-        file: { name: "UNKNOWN" },
-        type: "UNKNOWN",
-      },
+
+      //
+      fileName: "",
+      fileConfiguration: new FileConfiguration(),
     };
   },
+  emits: ["push-to-toast-errors"],
   methods: {
     checkVeInterfaceIsPresent,
     getDeploymentEndpoint,
-    fileConfigTearsheetConfig(event) {
+    startFileConfiguration(event) {
       this.openFileConfigurationTearsheet =
         !this.openFileConfigurationTearsheet;
-      this.fileConfigTearsheetFileInfo = event;
+      this.fileName = event;
+      this.fileConfiguration = tearsheetsSharedState.files.get(this.fileName);
     },
     toggleModalVisibility(modal) {
       this[modal] = !this[modal];

@@ -16,6 +16,7 @@ import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/togg
 import "https://1.www.s81c.com/common/carbon/web-components/version/v1.42.0/dropdown.min.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 
+import InputConfigurationS3Form from "@/components/ExperimentView/InputConfigurationS3Form.vue";
 import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
 import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
 import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.vue";
@@ -39,6 +40,7 @@ export default {
   components: {
     FilesTable,
     RunExperimentFiles,
+    InputConfigurationS3Form,
     RunExperimentVariables,
   },
   data() {

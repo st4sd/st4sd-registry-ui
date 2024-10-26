@@ -12,38 +12,54 @@
       <cds-table-row v-for="inputFile in inputFiles">
         <cds-table-cell>{{ inputFile.name }}</cds-table-cell>
         <cds-table-cell>{{ inputTypeEnums.INPUT }}</cds-table-cell>
-        <cds-table-cell><FilesTableStatus type="fail" /></cds-table-cell>
+        <cds-table-cell
+          ><FilesTableStatus
+            :type="
+              tearsheetsSharedState.files.has(inputFile.name)
+                ? 'success'
+                : 'fail'
+            "
+        /></cds-table-cell>
         <cds-table-cell
           ><FilesTableOverflow
+            :fileName="inputFile.name"
             @file-being-configured="
-              fileChanged(inputFile, inputTypeEnums.INPUT)
+              $emit('file-being-configured', inputFile.name)
             "
-            @file-being-removed="removeFile(inputFile)"
+            @file-being-removed="
+              tearsheetsSharedState.removeConfigurationForFile(inputFile.name)
+            "
         /></cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="executionOptionFile in executionOptionFiles">
         <cds-table-cell>{{ executionOptionFile.name }}</cds-table-cell>
         <cds-table-cell>{{ inputTypeEnums.EXECUTION_OPTION }}</cds-table-cell>
-        <cds-table-cell><FilesTableStatus type="" /></cds-table-cell>
+        <cds-table-cell
+          ><FilesTableStatus
+            :type="
+              tearsheetsSharedState.files.has(executionOptionFile.name)
+                ? 'success'
+                : ''
+            "
+        /></cds-table-cell>
         <cds-table-cell
           ><FilesTableOverflow
+            :fileName="executionOptionFile.name"
             @file-being-configured="
-              fileChanged(executionOptionFile, inputTypeEnums.EXECUTION_OPTION)
+              $emit('file-being-configured', executionOptionFile.name)
             "
-            @file-being-removed="removeFile(executionOptionFile)"
+            @file-being-removed="
+              tearsheetsSharedState.removeConfigurationForFile(
+                executionOptionFile.name,
+              )
+            "
         /></cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="presetFile in presetFiles">
         <cds-table-cell>{{ presetFile.name }}</cds-table-cell>
         <cds-table-cell>{{ inputTypeEnums.PRESET }}</cds-table-cell>
         <cds-table-cell><FilesTableStatus type="success" /></cds-table-cell>
-        <cds-table-cell
-          ><FilesTableOverflow
-            @file-being-configured="
-              fileChanged(presetFile, inputTypeEnums.PRESET)
-            "
-            @file-being-removed="removeFile(presetFile)"
-        /></cds-table-cell>
+        <cds-table-cell></cds-table-cell>
       </cds-table-row>
     </cds-table-body>
   </cds-table>
@@ -54,12 +70,13 @@ import "@carbon/web-components/es/components/data-table/index.js";
 
 import FilesTableOverflow from "@/components/ExperimentView/ExperimentFiles/FilesTableOverflow.vue";
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
+import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
 
 import inputTypeEnums from "@/enums/inputTypeEnums.js";
 
 export default {
   name: "FilesTable",
-  emits: ["configure-file"],
+  emits: ["file-being-configured"],
   props: {
     experiment: Object,
   },
@@ -70,6 +87,7 @@ export default {
   data() {
     return {
       inputTypeEnums,
+      tearsheetsSharedState,
     };
   },
   computed: {
@@ -83,14 +101,6 @@ export default {
       return this.experiment.metadata.registry.data.filter(
         (file) => !this.executionOptionFiles.some((f) => f.name == file.name),
       );
-    },
-  },
-  methods: {
-    fileChanged(file, type) {
-      this.$emit("configure-file", { file, type });
-    },
-    removeFile(file) {
-      console.log(file);
     },
   },
 };
