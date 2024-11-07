@@ -117,6 +117,8 @@
       <cds-text-input
         :value="s3Uri"
         @input="s3Uri = $event.target.value"
+        :invalid="!isS3UriValid"
+        :invalidText="`Format: s3://${lastSelectedEndpointTile.bucket}/[<path>/]<file>`"
         class="s3UriInput"
         label="S3 URI"
       />
@@ -164,6 +166,7 @@ export default {
   },
   data() {
     return {
+      isS3UriValid: true,
       pageNumber: this.pageNo,
       loading: true,
       isInEdit: false,
@@ -208,11 +211,20 @@ export default {
       } else {
         // On page 1 (where the user provides an S3 URI)
         // The primary button should be "Submit" and it should be enabled if
-        // - The S3URI, when trimmed, is not empty (more checks to be added later)
+        // - The S3URI, when trimmed, is not empty
+        // - When validated using a RegEx, it has the correct fields, namely:
+        //     - bucket
+        //     - path (optional, not validated here)
+        //     - file
         // The secondary button should always be enabled.
-        let isS3UriValid = this.s3Uri?.trim() != "";
+        let s3UriValidation = tearsheetsSharedState.s3UriRegex.exec(this.s3Uri);
+        this.isS3UriValid =
+          this.s3Uri?.trim() != "" &&
+          s3UriValidation?.groups.bucket ==
+            this.lastSelectedEndpointTile.bucket &&
+          s3UriValidation?.groups.file;
         primaryActionTextValue = true;
-        disableTearsheetPrimaryActionValue = !isS3UriValid;
+        disableTearsheetPrimaryActionValue = !this.isS3UriValid;
         disableTearsheetSecondaryActionValue = false;
       }
 
@@ -326,8 +338,13 @@ export default {
     s3Uri: {
       immediate: true,
       handler(newUri) {
+        let s3UriValidation = tearsheetsSharedState.s3UriRegex.exec(this.s3Uri);
         // Emit updates every time we get a new value for the URI
-        if (newUri?.trim() != "") {
+        if (
+          newUri?.trim() != "" &&
+          s3UriValidation?.groups.bucket &&
+          s3UriValidation?.groups.file
+        ) {
           this.$emit(
             "input-configuration-update",
             new FileConfigurationFromS3(

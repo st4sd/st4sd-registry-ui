@@ -116,7 +116,6 @@ import {
   FileConfigurationFromUpload,
   FileConfigurationFromS3,
 } from "@/classes/FileConfiguration.js";
-import S3Configuration from "@/classes/S3Configuration";
 
 export default {
   name: "FileConfigurationTearsheet",

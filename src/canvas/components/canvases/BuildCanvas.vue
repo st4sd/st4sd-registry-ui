@@ -353,6 +353,8 @@ import {
   removeNodeAndStepReference,
 } from "@/canvas/functions/stepFunctions";
 
+import readFile from "@/functions/read_file.js";
+
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
@@ -536,12 +538,12 @@ const uploadFiles = async (files) => {
   //set the object here to avoid saved files from prev uploads
   uploadedFilesConents = { dsl: "", graph: "" };
   if (files.length == 2) {
-    uploadedFilesConents.dsl = await readFile(files[0]);
+    uploadedFilesConents.dsl = JSON.parse(await readFile(files[0]));
     if (files[1] != null) {
-      localPVEP.value = await readFile(files[1]);
+      localPVEP.value = JSON.parse(await readFile(files[1]));
     }
   } else {
-    uploadedFilesConents.graph = await readFile(files);
+    uploadedFilesConents.graph = JSON.parse(await readFile(files));
   }
   toggleVisibility("fileUploadModal");
 
@@ -651,21 +653,6 @@ function resetCanvas() {
   if (componentVisibilities.resetConfirmModal.value) {
     toggleVisibility("resetConfirmModal");
   }
-}
-
-function readFile(file) {
-  return new Promise((resolve, reject) => {
-    try {
-      var fileReader = new FileReader();
-      fileReader.onload = (f) => {
-        const contents = JSON.parse(f.target.result);
-        resolve(contents);
-      };
-      fileReader.readAsText(file);
-    } catch (error) {
-      reject(error);
-    }
-  });
 }
 
 const toggleVisibility = (modal) => {

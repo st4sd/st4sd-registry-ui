@@ -5,14 +5,21 @@
       :value="configuration.name"
       :disabled="disableForm"
       @input="configuration.name = $event.target.value"
-      label="Name (required)"
+      label="Name"
     />
     <br />
     <cds-text-input
       :value="configuration.endpoint"
       :disabled="disableForm"
       @input="configuration.endpoint = $event.target.value"
-      label="Endpoint (required)"
+      label="Endpoint"
+    />
+    <br />
+    <cds-text-input
+      :value="configuration.bucket"
+      :disabled="disableForm"
+      @input="configuration.bucket = $event.target.value"
+      label="Bucket"
     />
     <br />
     <cds-text-input
@@ -31,10 +38,10 @@
     />
     <br />
     <cds-text-input
-      :value="configuration.endpointRegion"
+      :value="configuration.region"
       :disabled="disableForm"
-      @input="configuration.endpointRegion = $event.target.value"
-      label="Region"
+      @input="configuration.region = $event.target.value"
+      label="Region (optional)"
     />
     <br />
     <div>

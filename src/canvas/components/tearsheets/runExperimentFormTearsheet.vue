@@ -72,11 +72,12 @@ import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.v
 import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
 import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
 
+import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+
 export default {
   name: "runExperimentFormTearsheet",
   props: {
     experiment: Object,
-    postExperimentRun: Function,
     runExperimentFormEmit: Boolean,
   },
   emits: [

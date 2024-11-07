@@ -150,12 +150,11 @@
       :experiment="experiment"
       :open="runExperimentFormTearsheetVisibility"
       :runExperimentFormEmit="runExperimentFormEmit"
-      :postExperimentRun="setRunExperimentFormPayload"
       @cds-tearsheet-closed="
         toggleModalVisibility('runExperimentFormTearsheetVisibility')
       "
       @file-being-configured="startFileConfiguration"
-      @st4sd-experiment-run-submitted="toggleRunExperimentFormEmit"
+      @st4sd-experiment-run-submitted="postRunExperimentForm"
     />
   </div>
 </template>
@@ -200,7 +199,6 @@ export default {
       modalActive: false,
       runModalActive: false,
       runExperimentFormEmit: false,
-      formDataCollected: false,
       runExperimentPayload: {},
       runExperimentFormTearsheetVisibility: false,
       openFileConfigurationTearsheet: false,
@@ -226,45 +224,37 @@ export default {
     toggleRunExperimentFormEmit() {
       this.runExperimentFormEmit = !this.runExperimentFormEmit;
     },
-    setRunExperimentFormPayload(runExperimentPayload) {
-      this.runExperimentPayload = runExperimentPayload;
-      this.formDataCollected = true;
-
-      this.postRunExperimentForm();
-    },
-    postRunExperimentForm() {
-      let data;
-      if (this.formDataCollected) {
-        data = { ...this.runExperimentPayload };
-        data = JSON.stringify(data);
-        axios
-          .post(
-            window.location.origin +
-              `/registry-ui/backend/experiments/${this.id}/start`,
-            data,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
+    async postRunExperimentForm() {
+      let data = await tearsheetsSharedState.generateExperimentPayload(
+        this.experiment,
+      );
+      axios
+        .post(
+          window.location.origin +
+            `/registry-ui/backend/experiments/${this.id}/start`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
             },
-          )
-          .then((response) => {
-            if (response.status == 200) {
-              router.push({
-                path: `/experiment/${this.id}/runs/`,
-              });
-            }
-          })
-          .catch((error) => {
-            if (error.response.status == 400) {
-              alert(`${error.response.data.message}`);
-            } else {
-              alert(
-                "Experiment not found or internal error while creating experiment",
-              );
-            }
-          });
-      }
+          },
+        )
+        .then((response) => {
+          if (response.status == 200) {
+            router.push({
+              path: `/experiment/${this.id}/runs/`,
+            });
+          }
+        })
+        .catch((error) => {
+          if (error.response.status == 400) {
+            alert(`${error.response.data.message}`);
+          } else {
+            alert(
+              "Experiment not found or internal error while creating experiment",
+            );
+          }
+        });
       this.toggleRunExperimentFormEmit();
     },
     filterResponseReason(reason) {

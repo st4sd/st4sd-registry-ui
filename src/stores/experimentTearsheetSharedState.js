@@ -9,6 +9,36 @@ export const tearsheetsSharedState = reactive({
   files: new Map(),
   s3Endpoints: [],
   s3References: new Map(),
+  s3UriRegex: new RegExp(
+    "^s3://(?<bucket>[^/]+)/(?<path>.*?)/?(?<file>[^/]+)$",
+    "i",
+  ),
+
+  async generateExperimentPayload(experiment) {
+    let experimentPayload = {};
+    experimentPayload["inputs"] = [];
+    // experimentPayload["variables"] = {};
+    // if (experiment.parameterisation.executionOptions.variables.length > 0) {
+    //   for (let exeOptVariable of experiment.parameterisation.executionOptions
+    //     .variables) {
+    //     if (exeOptVariable.value) {
+    //       experimentPayload["variables"][exeOptVariable.name] =
+    //         exeOptVariable.value;
+    //     }
+    //   }
+    // }
+    for (let [key, value] of this.files.entries()) {
+      let payload = await value.toPayload(key);
+      experimentPayload["inputs"].push(payload);
+    }
+
+    let s3Endpoint = this.getS3Endpoint();
+    if (s3Endpoint) {
+      experimentPayload["s3"] = s3Endpoint;
+    }
+
+    return experimentPayload;
+  },
 
   updateS3Endpoint(s3Configuration) {
     for (let i = 0; i < this.s3Endpoints.length; i++) {
@@ -24,6 +54,28 @@ export const tearsheetsSharedState = reactive({
     this.s3References = new Map();
   },
 
+  getS3Endpoint() {
+    if (this.s3References.size == 0) {
+      return;
+    }
+
+    let endpointID = this.s3References.keys().next().value;
+    let fileReferences = this.s3References.get(endpointID);
+    if (fileReferences.size == 0) {
+      return;
+    }
+
+    let endpoint = this.findS3EndpointById(endpointID);
+
+    return {
+      accessKeyID: endpoint.accessKey,
+      secretAccessKey: endpoint.secretAccessKey,
+      bucket: endpoint.bucket,
+      endpoint: endpoint.endpoint,
+      region: endpoint.region,
+    };
+  },
+
   addS3Endpoint(s3Configuration) {
     this.s3Endpoints.push(s3Configuration);
     this.s3References.set(s3Configuration.id, new Set());
@@ -33,6 +85,10 @@ export const tearsheetsSharedState = reactive({
     let id = this.s3Endpoints[index].id;
     this.s3Endpoints.splice(index, 1);
     this.s3References.delete(id);
+  },
+
+  findS3EndpointById(id) {
+    return this.s3Endpoints.find((endpoint) => endpoint.id == id);
   },
 
   setConfigurationForFile(name, fileConfiguration) {
