@@ -17,6 +17,9 @@
         <cds-dropdown
           v-if="executionOptionVariable?.valueFrom"
           :value="executionOptionVariable.valueFrom[0].value"
+          @cds-dropdown-selected="
+            executionOptionVariable.value = $event.target.value
+          "
         >
           <cds-dropdown-item
             v-for="valueFrom in executionOptionVariable.valueFrom"
@@ -27,6 +30,7 @@
         <cds-text-input
           :value="executionOptionVariable?.value"
           placeholder="Leave blank to use platform defaults"
+          @input="executionOptionVariable.value = $event.target.value"
           v-else
         ></cds-text-input>
       </cds-accordion-item>

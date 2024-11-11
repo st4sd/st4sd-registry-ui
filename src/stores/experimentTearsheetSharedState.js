@@ -17,26 +17,24 @@ export const tearsheetsSharedState = reactive({
   async generateExperimentPayload(experiment) {
     let experimentPayload = {};
     experimentPayload["inputs"] = [];
-    // experimentPayload["variables"] = {};
-    // if (experiment.parameterisation.executionOptions.variables.length > 0) {
-    //   for (let exeOptVariable of experiment.parameterisation.executionOptions
-    //     .variables) {
-    //     if (exeOptVariable.value) {
-    //       experimentPayload["variables"][exeOptVariable.name] =
-    //         exeOptVariable.value;
-    //     }
-    //   }
-    // }
+    if (experiment.parameterisation.executionOptions.variables.length > 0) {
+      experimentPayload["variables"] = {};
+      for (let exeOptVariable of experiment.parameterisation.executionOptions
+        .variables) {
+        if (exeOptVariable.value) {
+          experimentPayload["variables"][exeOptVariable.name] =
+            exeOptVariable.value;
+        }
+      }
+    }
     for (let [key, value] of this.files.entries()) {
       let payload = await value.toPayload(key);
       experimentPayload["inputs"].push(payload);
     }
-
     let s3Endpoint = this.getS3Endpoint();
     if (s3Endpoint) {
       experimentPayload["s3"] = s3Endpoint;
     }
-
     return experimentPayload;
   },
 
