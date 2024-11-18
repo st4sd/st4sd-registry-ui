@@ -13,6 +13,11 @@
   filter: brightness(0) saturate(100%) invert(0);
 }
 
+.drak-gray-svg {
+  -webkit-filter: brightness(0) saturate(100%) invert(0.3);
+  filter: brightness(0) saturate(100%) invert(0.3);
+}
+
 .success-green {
   // Simulate color of IBM success icon
   // Source: https://codepen.io/sosuke/pen/Pjoqqp

@@ -12,10 +12,10 @@
   <cds-table>
     <cds-table-head>
       <cds-table-header-row>
-        <cds-table-header-cell>Name</cds-table-header-cell>
-        <cds-table-header-cell>Type</cds-table-header-cell>
-        <cds-table-header-cell>Status</cds-table-header-cell>
-        <cds-table-header-cell></cds-table-header-cell>
+        <cds-table-header-cell isSortable>Name</cds-table-header-cell>
+        <cds-table-header-cell isSortable>Type</cds-table-header-cell>
+        <cds-table-header-cell isSortable>Status</cds-table-header-cell>
+        <cds-table-header-cell>File actions</cds-table-header-cell>
       </cds-table-header-row>
     </cds-table-head>
     <cds-table-body>
@@ -30,8 +30,8 @@
                 : 'fail'
             "
         /></cds-table-cell>
-        <cds-table-cell
-          ><FilesTableOverflow
+        <cds-table-cell>
+          <FilesTableRowButtons
             :fileName="inputFile.name"
             @file-being-configured="
               $emit('file-being-configured', inputFile.name)
@@ -39,7 +39,8 @@
             @file-being-removed="
               tearsheetsSharedState.removeConfigurationForFile(inputFile.name)
             "
-        /></cds-table-cell>
+          />
+        </cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="executionOptionFile in executionOptionFiles">
         <cds-table-cell>{{ executionOptionFile.name }}</cds-table-cell>
@@ -51,9 +52,10 @@
                 ? 'success'
                 : ''
             "
-        /></cds-table-cell>
-        <cds-table-cell
-          ><FilesTableOverflow
+          />
+        </cds-table-cell>
+        <cds-table-cell>
+          <FilesTableRowButtons
             :fileName="executionOptionFile.name"
             @file-being-configured="
               $emit('file-being-configured', executionOptionFile.name)
@@ -63,7 +65,8 @@
                 executionOptionFile.name,
               )
             "
-        /></cds-table-cell>
+          />
+        </cds-table-cell>
       </cds-table-row>
       <cds-table-row v-for="presetFile in presetFiles">
         <cds-table-cell>{{ presetFile.name }}</cds-table-cell>
@@ -79,8 +82,8 @@
 import "@carbon/web-components/es/components/data-table/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 
-import FilesTableOverflow from "@/components/ExperimentView/ExperimentFiles/FilesTableOverflow.vue";
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
+import FilesTableRowButtons from "@/components/ExperimentView/ExperimentFiles/FilesTableRowButtons.vue";
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
 
 import inputTypeEnums from "@/enums/inputTypeEnums.js";
@@ -92,8 +95,8 @@ export default {
     experiment: Object,
   },
   components: {
-    FilesTableOverflow,
     FilesTableStatus,
+    FilesTableRowButtons,
   },
   data() {
     return {
