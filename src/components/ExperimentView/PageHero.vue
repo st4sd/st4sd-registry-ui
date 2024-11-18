@@ -213,10 +213,16 @@ export default {
     checkVeInterfaceIsPresent,
     getDeploymentEndpoint,
     startFileConfiguration(event) {
+      this.fileName = event;
+      // AP 18/11/24:
+      // We need to set the file configuration based on whether we have
+      // it in the files or not. This is to ensure the file configuration
+      // panels have the correct data
+      this.fileConfiguration = tearsheetsSharedState.files.has(this.fileName)
+        ? tearsheetsSharedState.files.get(this.fileName)
+        : new FileConfiguration();
       this.openFileConfigurationTearsheet =
         !this.openFileConfigurationTearsheet;
-      this.fileName = event;
-      this.fileConfiguration = tearsheetsSharedState.files.get(this.fileName);
     },
     toggleModalVisibility(modal) {
       this[modal] = !this[modal];

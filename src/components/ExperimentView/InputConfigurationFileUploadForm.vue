@@ -40,6 +40,18 @@ export default {
     };
   },
   watch: {
+    // AP 18/11/24:
+    // We need to make sure that we update the currentFileConfiguration
+    // based on what the fileConfiguration passed by the props is.
+    // If this is not the case, we would not show the file when it
+    // has been configured in a previous session (i.e,. now we are editing)
+    // or if the file configuration has been removed
+    fileConfiguration: {
+      immediate: true,
+      handler(newPropFileConfiguration) {
+        this.currentFileConfiguration = newPropFileConfiguration;
+      },
+    },
     currentFileConfiguration: {
       immediate: true,
       deep: true,
