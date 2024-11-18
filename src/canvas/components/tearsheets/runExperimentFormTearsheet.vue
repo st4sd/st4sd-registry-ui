@@ -23,6 +23,11 @@
         label="Variables"
         @click="pageNo = 1"
       ></cds-progress-step>
+      <cds-progress-step
+        id="runExperimentPlatformsStep"
+        label="Platforms"
+        @click="pageNo = 2"
+      ></cds-progress-step>
     </cds-progress-indicator>
     <div v-if="pageNo == 0" class="tab-panels">
       <RunExperimentFiles />
@@ -33,6 +38,9 @@
     </div>
     <div v-if="pageNo == 1" class="tab-panels">
       <RunExperimentVariables :experiment="experiment" />
+    </div>
+    <div v-if="pageNo == 2" class="tab-panels">
+      <RunExperimentPlatforms :experiment="experiment" />
     </div>
     <cds-button
       slot="actions"
@@ -48,7 +56,7 @@
       >Back</cds-button
     >
     <cds-button
-      v-if="pageNo < 1"
+      v-if="pageNo < 2"
       slot="actions"
       kind="primary"
       @click="pageNo++"
@@ -71,8 +79,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.vue";
 import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
 import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
-
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import RunExperimentPlatforms from "@/components/ExperimentView/RunExperimentPlatforms.vue";
 
 export default {
   name: "runExperimentFormTearsheet",
@@ -89,10 +96,16 @@ export default {
     FilesTable,
     RunExperimentFiles,
     RunExperimentVariables,
+    RunExperimentPlatforms,
   },
   data() {
     return {
       pageNo: 0,
+      tabs: [
+        { name: "runExperimentFilesStep", index: 0 },
+        { name: "runExperimentVariablesStep", index: 1 },
+        { name: "runExperimentPlatformsStep", index: 2 },
+      ],
     };
   },
   mounted() {
@@ -102,31 +115,32 @@ export default {
       Due to the nature of the issue, states for progress indicators cannot
       be set normally.
     */
-    document
-      .getElementById("runExperimentFilesStep")
-      .setAttribute("state", "current");
+    document.getElementById(this.tabs[0].name).setAttribute("state", "current");
+  },
+  methods: {
+    setProgressIndicatorStatus(pageNo, index) {
+      if (pageNo == index) {
+        return "current";
+      }
+      return pageNo > index ? "complete" : "incomplete";
+    },
   },
   watch: {
     pageNo(page) {
-      let inputFilesElement = document.getElementById("runExperimentFilesStep");
-      let variablesElement = document.getElementById(
-        "runExperimentVariablesStep",
-      );
       /*
         AP (20/09/24): This is required because of
         https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11891
         Due to the nature of the issue, states for progress indicators cannot
         be set normally.
       */
-      switch (page) {
-        case 0:
-          inputFilesElement.setAttribute("state", "current");
-          variablesElement.setAttribute("state", "incomplete");
-          break;
-        case 1:
-          inputFilesElement.setAttribute("state", "complete");
-          variablesElement.setAttribute("state", "current");
-          break;
+
+      for (let i = 0; i < this.tabs.length; i++) {
+        document
+          .getElementById(this.tabs[i].name)
+          .setAttribute(
+            "state",
+            this.setProgressIndicatorStatus(page, this.tabs[i].index),
+          );
       }
     },
   },

@@ -1,10 +1,11 @@
 <template>
   <h4>Variables</h4>
   <p>
-    Use this page to view and override the values of the experiment variables.
-    Disclose items in the <strong>Configurable</strong> section to override
-    defaults. Inspect unmodifiable values in the
-    <strong>Preset</strong> section.
+    <strong>View and override the values of the experiment variables</strong>
+  </p>
+  <p>
+    Disclose items in the Configurable section to override defaults. Inspect
+    unmodifiable values in the Preset section.
   </p>
   <div v-if="experiment.parameterisation.executionOptions.variables.length > 0">
     <h5>Configurable</h5>

@@ -16,26 +16,41 @@ export const tearsheetsSharedState = reactive({
 
   async generateExperimentPayload(experiment) {
     let experimentPayload = {};
-    experimentPayload["inputs"] = [];
     if (experiment.parameterisation.executionOptions.variables.length > 0) {
-      experimentPayload["variables"] = {};
-      for (let exeOptVariable of experiment.parameterisation.executionOptions
-        .variables) {
-        if (exeOptVariable.value) {
-          experimentPayload["variables"][exeOptVariable.name] =
-            exeOptVariable.value;
-        }
-      }
+      experimentPayload["variables"] = this.generatePayloadVariables(
+        experiment.parameterisation.executionOptions.variables,
+      );
     }
-    for (let [key, value] of this.files.entries()) {
-      let payload = await value.toPayload(key);
-      experimentPayload["inputs"].push(payload);
-    }
+    experimentPayload["platform"] = this.generatePayloadPlatform(experiment);
+    experimentPayload["inputs"] = await this.generatePayloadInputs();
     let s3Endpoint = this.getS3Endpoint();
     if (s3Endpoint) {
       experimentPayload["s3"] = s3Endpoint;
     }
     return experimentPayload;
+  },
+
+  async generatePayloadInputs() {
+    let inputsPayload = [];
+    for (let [key, value] of this.files.entries()) {
+      let payload = await value.toPayload(key);
+      inputsPayload.push(payload);
+    }
+    return inputsPayload;
+  },
+
+  generatePayloadVariables(variables) {
+    let variablesPayload = {};
+    for (let exeOptVariable of variables) {
+      if (exeOptVariable.value) {
+        variablesPayload[exeOptVariable.name] = exeOptVariable.value;
+      }
+    }
+    return variablesPayload;
+  },
+
+  generatePayloadPlatform(experiment) {
+    return experiment.parameterisation.executionOptions?.selectedPlatform;
   },
 
   updateS3Endpoint(s3Configuration) {
