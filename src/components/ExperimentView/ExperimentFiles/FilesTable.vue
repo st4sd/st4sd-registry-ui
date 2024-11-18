@@ -1,4 +1,14 @@
 <template>
+  <cds-inline-notification
+    v-if="!requiredFilesAreConfigured"
+    class="inline-notification-style"
+    lowContrast
+    hideCloseButton
+    kind="warning"
+    title="Not all required files are configured"
+    subtitle="All files marked as Missing must be configured."
+  >
+  </cds-inline-notification>
   <cds-table>
     <cds-table-head>
       <cds-table-header-row>
@@ -67,6 +77,7 @@
 
 <script>
 import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
 
 import FilesTableOverflow from "@/components/ExperimentView/ExperimentFiles/FilesTableOverflow.vue";
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
@@ -102,6 +113,11 @@ export default {
         (file) => !this.executionOptionFiles.some((f) => f.name == file.name),
       );
     },
+    requiredFilesAreConfigured() {
+      return this.inputFiles.every((input) =>
+        tearsheetsSharedState.files.has(input.name),
+      );
+    },
   },
 };
 </script>
@@ -110,5 +126,9 @@ export default {
 @use "@carbon/layout";
 cds-table {
   margin-top: layout.$spacing-05;
+}
+
+.inline-notification-style {
+  margin: layout.$spacing-03 0;
 }
 </style>
