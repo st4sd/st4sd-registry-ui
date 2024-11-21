@@ -9,7 +9,30 @@
     subtitle="All files marked as Missing must be configured."
   >
   </cds-inline-notification>
-  <cds-table>
+  <cds-table-toolbar>
+    <cds-table-toolbar-content>
+      <cds-table-toolbar-search
+        id="search"
+        persistent
+        placeholder="Search by name"
+        @cds-search-input="searchQuery = $event.detail.value"
+      ></cds-table-toolbar-search>
+    </cds-table-toolbar-content>
+    <FilesTableFilter
+      @filter-status-selection-updated="allowedFileStatuses = $event"
+      @filter-type-selection-updated="allowedFileTypes = $event"
+    />
+  </cds-table-toolbar>
+  <!-- AP 21/11/24
+    Due to the way the cds-table's sorting works, we would end up
+    with a lot of duplicated rows if we searched and then clicked
+    on a header for sorting the table. This would happen even if 
+    we were returning the correct data.
+    By adding a variable that we update and adding it as a key on
+    the table-body, we force it to re-render, preventing these ghost
+    rows from appearing
+  -->
+  <cds-table @cds-table-header-cell-sort="sortTrigger++">
     <cds-table-head>
       <cds-table-header-row>
         <cds-table-header-cell isSortable>Name</cds-table-header-cell>
@@ -18,61 +41,24 @@
         <cds-table-header-cell>File actions</cds-table-header-cell>
       </cds-table-header-row>
     </cds-table-head>
-    <cds-table-body>
-      <cds-table-row v-for="inputFile in inputFiles">
-        <cds-table-cell>{{ inputFile.name }}</cds-table-cell>
-        <cds-table-cell>{{ inputTypeEnums.INPUT }}</cds-table-cell>
+    <cds-table-body :key="sortTrigger">
+      <cds-table-row v-for="file in filesMatchingQuery">
+        <cds-table-cell>{{ file.entry.name }}</cds-table-cell>
+        <cds-table-cell>{{ file.type }}</cds-table-cell>
         <cds-table-cell
-          ><FilesTableStatus
-            :type="
-              tearsheetsSharedState.files.has(inputFile.name)
-                ? 'success'
-                : 'fail'
+          ><FilesTableStatus :type="statusForFile(file)"
+        /></cds-table-cell>
+        <cds-table-cell
+          ><FilesTableRowButtons
+            v-if="file.type != inputTypeEnums.PRESET"
+            :fileName="file.entry.name"
+            @file-being-configured="
+              $emit('file-being-configured', file.entry.name)
+            "
+            @file-being-removed="
+              tearsheetsSharedState.removeConfigurationForFile(file.entry.name)
             "
         /></cds-table-cell>
-        <cds-table-cell>
-          <FilesTableRowButtons
-            :fileName="inputFile.name"
-            @file-being-configured="
-              $emit('file-being-configured', inputFile.name)
-            "
-            @file-being-removed="
-              tearsheetsSharedState.removeConfigurationForFile(inputFile.name)
-            "
-          />
-        </cds-table-cell>
-      </cds-table-row>
-      <cds-table-row v-for="executionOptionFile in executionOptionFiles">
-        <cds-table-cell>{{ executionOptionFile.name }}</cds-table-cell>
-        <cds-table-cell>{{ inputTypeEnums.EXECUTION_OPTION }}</cds-table-cell>
-        <cds-table-cell
-          ><FilesTableStatus
-            :type="
-              tearsheetsSharedState.files.has(executionOptionFile.name)
-                ? 'success'
-                : ''
-            "
-          />
-        </cds-table-cell>
-        <cds-table-cell>
-          <FilesTableRowButtons
-            :fileName="executionOptionFile.name"
-            @file-being-configured="
-              $emit('file-being-configured', executionOptionFile.name)
-            "
-            @file-being-removed="
-              tearsheetsSharedState.removeConfigurationForFile(
-                executionOptionFile.name,
-              )
-            "
-          />
-        </cds-table-cell>
-      </cds-table-row>
-      <cds-table-row v-for="presetFile in presetFiles">
-        <cds-table-cell>{{ presetFile.name }}</cds-table-cell>
-        <cds-table-cell>{{ inputTypeEnums.PRESET }}</cds-table-cell>
-        <cds-table-cell><FilesTableStatus type="success" /></cds-table-cell>
-        <cds-table-cell></cds-table-cell>
       </cds-table-row>
     </cds-table-body>
   </cds-table>
@@ -80,13 +66,17 @@
 
 <script>
 import "@carbon/web-components/es/components/data-table/index.js";
+import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
 import FilesTableRowButtons from "@/components/ExperimentView/ExperimentFiles/FilesTableRowButtons.vue";
+import FilesTableFilter from "@/components/ExperimentView/ExperimentFiles/FilesTableFilter.vue";
+
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
 
 import inputTypeEnums from "@/enums/inputTypeEnums.js";
+import statusTypeEnums from "@/enums/statusTypeEnums";
 
 export default {
   name: "FilesTable",
@@ -97,11 +87,25 @@ export default {
   components: {
     FilesTableStatus,
     FilesTableRowButtons,
+    FilesTableFilter,
   },
   data() {
     return {
+      sortTrigger: 0,
       inputTypeEnums,
+      statusTypeEnums,
       tearsheetsSharedState,
+      allowedFileTypes: new Set([
+        inputTypeEnums.INPUT,
+        inputTypeEnums.EXECUTION_OPTION,
+        inputTypeEnums.PRESET,
+      ]),
+      allowedFileStatuses: new Set([
+        statusTypeEnums.MISSING,
+        statusTypeEnums.SET,
+        statusTypeEnums.UNSET,
+      ]),
+      searchQuery: "",
     };
   },
   computed: {
@@ -116,10 +120,59 @@ export default {
         (file) => !this.executionOptionFiles.some((f) => f.name == file.name),
       );
     },
+    allFiles() {
+      let mappedInputFiles = this.inputFiles.map((file) => {
+        return { entry: file, type: inputTypeEnums.INPUT };
+      });
+      let mappedExecutionOptions = this.executionOptionFiles.map((file) => {
+        return { entry: file, type: inputTypeEnums.EXECUTION_OPTION };
+      });
+
+      let mappedPresets = this.presetFiles.map((file) => {
+        return { entry: file, type: inputTypeEnums.PRESET };
+      });
+
+      return mappedInputFiles
+        .concat(mappedExecutionOptions)
+        .concat(mappedPresets);
+    },
+    filesMatchingFilters() {
+      return this.allFiles.filter(
+        (file) =>
+          this.allowedFileTypes.has(file.type) &&
+          this.allowedFileStatuses.has(this.statusForFile(file)),
+      );
+    },
+    filesMatchingQuery() {
+      let query = this.searchQuery.trim().toLowerCase();
+      if (query == "") {
+        return this.filesMatchingFilters;
+      }
+
+      return this.filesMatchingFilters.filter((file) =>
+        file.entry.name.toLowerCase().includes(query),
+      );
+    },
     requiredFilesAreConfigured() {
       return this.inputFiles.every((input) =>
         tearsheetsSharedState.files.has(input.name),
       );
+    },
+  },
+  methods: {
+    statusForFile(file) {
+      switch (file.type) {
+        case inputTypeEnums.PRESET:
+          return statusTypeEnums.SET;
+        case inputTypeEnums.EXECUTION_OPTION:
+          return tearsheetsSharedState.files.has(file.entry.name)
+            ? statusTypeEnums.SET
+            : statusTypeEnums.UNSET;
+        case inputTypeEnums.INPUT:
+          return tearsheetsSharedState.files.has(file.entry.name)
+            ? statusTypeEnums.SET
+            : statusTypeEnums.MISSING;
+      }
     },
   },
 };
@@ -127,7 +180,8 @@ export default {
 
 <style lang="scss" scoped>
 @use "@carbon/layout";
-cds-table {
+
+cds-table-toolbar {
   margin-top: layout.$spacing-05;
 }
 
