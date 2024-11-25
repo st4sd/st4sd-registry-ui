@@ -74,6 +74,7 @@ export default {
   props: {
     experiment: Object,
   },
+  emits: ["required-configuration-complete"],
   mounted() {
     if (
       this.experiment.parameterisation.executionOptions?.platform.length > 0 &&
@@ -82,6 +83,7 @@ export default {
       this.experiment.parameterisation.executionOptions.selectedPlatform =
         this.experiment.parameterisation.executionOptions.platform[0];
     }
+    this.$emit("required-configuration-complete", true);
   },
 };
 </script>

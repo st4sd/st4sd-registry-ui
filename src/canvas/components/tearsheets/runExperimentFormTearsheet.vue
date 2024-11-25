@@ -33,14 +33,27 @@
       <RunExperimentFiles />
       <FilesTable
         @file-being-configured="$emit('file-being-configured', $event)"
+        @required-configuration-complete="
+          requiredStepConfigurationComplete[0] = $event
+        "
         :experiment="experiment"
       />
     </div>
     <div v-if="pageNo == 1" class="tab-panels">
-      <RunExperimentVariables :experiment="experiment" />
+      <RunExperimentVariables
+        @required-configuration-complete="
+          requiredStepConfigurationComplete[1] = $event
+        "
+        :experiment="experiment"
+      />
     </div>
     <div v-if="pageNo == 2" class="tab-panels">
-      <RunExperimentPlatforms :experiment="experiment" />
+      <RunExperimentPlatforms
+        @required-configuration-complete="
+          requiredStepConfigurationComplete[2] = $event
+        "
+        :experiment="experiment"
+      />
     </div>
     <cds-button
       slot="actions"
@@ -66,6 +79,9 @@
       v-else
       slot="actions"
       kind="primary"
+      :disabled="
+        !requiredStepConfigurationComplete.every((isComplete) => isComplete)
+      "
       @click="$emit('st4sd-experiment-run-submitted')"
       >Submit</cds-button
     >
@@ -100,6 +116,7 @@ export default {
   },
   data() {
     return {
+      requiredStepConfigurationComplete: [false, false, false],
       pageNo: 0,
       tabs: [
         { name: "runExperimentFilesStep", index: 0 },
@@ -119,10 +136,14 @@ export default {
   },
   methods: {
     setProgressIndicatorStatus(pageNo, index) {
-      if (pageNo == index) {
+      if (index == pageNo) {
         return "current";
+      } else if (index > pageNo) {
+        return "incomplete";
       }
-      return pageNo > index ? "complete" : "incomplete";
+      return this.requiredStepConfigurationComplete[index]
+        ? "complete"
+        : "invalid";
     },
   },
   watch: {

@@ -68,6 +68,10 @@ export default {
   props: {
     experiment: Object,
   },
+  emits: ["required-configuration-complete"],
+  mounted() {
+    this.$emit("required-configuration-complete", true);
+  },
 };
 </script>
 

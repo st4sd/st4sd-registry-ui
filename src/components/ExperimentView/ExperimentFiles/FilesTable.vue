@@ -87,7 +87,7 @@ import statusTypeEnums from "@/enums/statusTypeEnums";
 
 export default {
   name: "FilesTable",
-  emits: ["file-being-configured"],
+  emits: ["file-being-configured", "required-configuration-complete"],
   props: {
     experiment: Object,
   },
@@ -163,9 +163,11 @@ export default {
       );
     },
     requiredFilesAreConfigured() {
-      return this.inputFiles.every((input) =>
+      let result = this.inputFiles.every((input) =>
         tearsheetsSharedState.files.has(input.name),
       );
+      this.$emit("required-configuration-complete", result);
+      return result;
     },
   },
   methods: {
