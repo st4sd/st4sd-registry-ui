@@ -62,6 +62,11 @@
       </cds-table-row>
     </cds-table-body>
   </cds-table>
+  <NoDataEmptyState v-if="allFiles.length == 0" theme="cds-theme-zone-g10" />
+  <NoSearchResultsEmptyState
+    v-else-if="filesMatchingQuery.length == 0"
+    theme="cds-theme-zone-g10"
+  />
 </template>
 
 <script>
@@ -72,6 +77,8 @@ import "@carbon/web-components/es/components/notification/index.js";
 import FilesTableStatus from "@/components/ExperimentView/ExperimentFiles/FilesTableStatus.vue";
 import FilesTableRowButtons from "@/components/ExperimentView/ExperimentFiles/FilesTableRowButtons.vue";
 import FilesTableFilter from "@/components/ExperimentView/ExperimentFiles/FilesTableFilter.vue";
+import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
+import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
 
@@ -88,6 +95,8 @@ export default {
     FilesTableStatus,
     FilesTableRowButtons,
     FilesTableFilter,
+    NoDataEmptyState,
+    NoSearchResultsEmptyState,
   },
   data() {
     return {
