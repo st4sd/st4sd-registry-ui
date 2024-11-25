@@ -44,6 +44,30 @@
                 >Back
               </cds-button>
             </div>
+            <div v-else-if="errorCode == 425">
+              <img
+                class="empty-state-icon"
+                src="@/assets/empty-state-bright-magnifying-glass.svg"
+              />
+              <h3>Whoops! Not found... yet?</h3>
+              <br />
+              <p>The item you are looking for does not exist.</p>
+              <p style="max-width: 400px">
+                It's possible it hasn't been registered to the database yet.
+                Refresh the page in a few seconds or go back.
+              </p>
+              <cds-button
+                style="margin-top: 1rem; min-width: 150px"
+                @click="reloadPage"
+                >Reload
+              </cds-button>
+              <cds-link
+                style="display: block; margin-top: 1rem"
+                @click="$router.go(-1)"
+              >
+                Go back
+              </cds-link>
+            </div>
             <div v-else>
               <img
                 class="empty-state-icon"
@@ -67,6 +91,7 @@
 </template>
 <script>
 import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/link/index.js";
 export default {
   name: "HttpErrorEmptyState",
   props: {

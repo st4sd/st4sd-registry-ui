@@ -248,7 +248,7 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             router.push({
-              path: `/experiment/${this.id}/runs/`,
+              path: `/experiment/${this.id}/runs/${response.data.run_id}`,
             });
           }
         })
