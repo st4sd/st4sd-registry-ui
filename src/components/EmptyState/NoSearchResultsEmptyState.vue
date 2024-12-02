@@ -1,15 +1,13 @@
 <template>
   <cds-tile :class="theme">
-    <div>
-      <div>
-        <div class="empty-state">
+    <div class="empty-state">
+      <div class="cds--subgrid cds--subgrid--narrow">
+        <div class="cds--css-grid-column cds--col-span-5">
           <img
             class="empty-state-icon"
             src="@/assets/empty-state-bright-magnifying-glass.svg"
           />
-          <div>
-            <h3>Hmm, your search didn’t return any results</h3>
-          </div>
+          <h3>Hmm, your search didn’t return any results</h3>
         </div>
       </div>
     </div>

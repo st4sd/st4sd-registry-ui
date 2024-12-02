@@ -5,7 +5,7 @@
     hasCloseIcon
     width="wide"
     influencerPlacement="left"
-    @cds-tearsheet-closed="$emit('cds-tearsheet-closed'), (pageNo = 0)"
+    @cds-tearsheet-closed="($emit('cds-tearsheet-closed'), (pageNo = 0))"
   >
     <h3 slot="title">Run Experiment</h3>
     <cds-progress-indicator
@@ -58,7 +58,7 @@
     <cds-button
       slot="actions"
       kind="ghost"
-      @click="$emit('cds-tearsheet-closed'), (pageNo = 0)"
+      @click="($emit('cds-tearsheet-closed'), (pageNo = 0))"
       >Cancel</cds-button
     >
     <cds-button

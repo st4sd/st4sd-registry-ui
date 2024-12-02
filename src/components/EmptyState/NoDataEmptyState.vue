@@ -1,17 +1,15 @@
 <template>
   <cds-tile :class="theme">
-    <div>
-      <div>
-        <div class="empty-state">
+    <div class="empty-state">
+      <div class="cds--subgrid cds--subgrid--narrow">
+        <div class="cds--css-grid-column cds--col-span-5">
           <img
             class="empty-state-icon"
             src="@/assets/empty-state-bright-box.svg"
           />
-          <div>
-            <h3>{{ title }}</h3>
-            <br />
-            <p>{{ message }}</p>
-          </div>
+          <h3>{{ title }}</h3>
+          <br />
+          <p>{{ message }}</p>
         </div>
       </div>
     </div>

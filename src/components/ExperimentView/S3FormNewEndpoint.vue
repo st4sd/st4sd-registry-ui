@@ -50,7 +50,7 @@
         size="md"
         title="Cancel edits"
         kind="tertiary"
-        @click="resetForm(), $emit('cancel-edit')"
+        @click="(resetForm(), $emit('cancel-edit'))"
         >Cancel edit
       </cds-button>
       <cds-button
