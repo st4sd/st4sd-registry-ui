@@ -158,8 +158,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/empty_state_styles.scss";
-@import "@/styles/toast-notification-styles.scss";
+@use "@/styles/empty_state_styles.scss";
+@use "@/styles/toast-notification-styles.scss";
 
 #loading-container {
   display: flex;

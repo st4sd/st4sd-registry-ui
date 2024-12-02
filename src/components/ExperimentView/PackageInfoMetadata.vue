@@ -127,6 +127,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/structured-list-grid-column-styles.css";
-@import "@/styles/svg.scss";
+@use "@/styles/structured-list-grid-column-styles.css";
+@use "@/styles/svg.scss";
 </style>

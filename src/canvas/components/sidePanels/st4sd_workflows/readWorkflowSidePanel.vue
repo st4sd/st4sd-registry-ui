@@ -238,7 +238,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/svg.scss";
-@import "@/styles/inline-loading-style.css";
-@import "@/styles/cds-structured-list-styles.css";
+@use "@/styles/svg.scss";
+@use "@/styles/inline-loading-style.css";
+@use "@/styles/cds-structured-list-styles.css";
 </style>

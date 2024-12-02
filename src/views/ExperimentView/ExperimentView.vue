@@ -351,9 +351,8 @@ export default {
 <style scoped lang="scss">
 @use "@carbon/layout";
 @use "@carbon/colors";
-
-@import "@/styles/ve-progress-indicator-styles.css";
-@import "@/styles/toast-notification-styles.scss";
+@use "@/styles/ve-progress-indicator-styles.css";
+@use "@/styles/toast-notification-styles.scss";
 
 .empty-state {
   margin: 1rem 0;

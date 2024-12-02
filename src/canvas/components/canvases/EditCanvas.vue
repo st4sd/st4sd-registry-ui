@@ -324,7 +324,7 @@ const handleTransformSelected = (loading, transformId) => {
 };
 </script>
 <style scoped lang="scss">
-@import "@/canvas/styles/main.scss";
-@import "@/styles/svg.scss";
-@import "@/styles/toast-notification-styles.scss";
+@use "@/canvas/styles/main.scss";
+@use "@/styles/svg.scss";
+@use "@/styles/toast-notification-styles.scss";
 </style>

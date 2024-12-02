@@ -570,6 +570,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
+
 .padding {
   padding-top: layout.$spacing-05;
 }

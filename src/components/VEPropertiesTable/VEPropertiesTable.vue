@@ -354,9 +354,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/svg.scss";
-@import "@/styles/overflow-menu-checkbox-styles.scss";
-@import "@/styles/cds-table-styles.scss";
+@use "@/styles/svg.scss";
+@use "@/styles/overflow-menu-checkbox-styles.scss";
+@use "@/styles/cds-table-styles.scss";
 
 // AP: with xl table, a 16px padding is added to the header
 // and it doesn't look good with the search bar at the top

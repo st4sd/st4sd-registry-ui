@@ -115,5 +115,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/toast-notification-styles.scss";
+@use "@/styles/toast-notification-styles.scss";
 </style>

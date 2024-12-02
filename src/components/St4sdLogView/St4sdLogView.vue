@@ -92,7 +92,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
-@import "@/styles/svg.scss";
+@use "@/styles/svg.scss";
 
 pre {
   font-family: monospace;

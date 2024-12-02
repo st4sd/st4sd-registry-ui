@@ -42,7 +42,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/svg.scss";
+@use "@/styles/svg.scss";
+
 img {
   vertical-align: middle;
 }

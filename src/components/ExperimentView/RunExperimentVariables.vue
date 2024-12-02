@@ -77,6 +77,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
+
 h4 {
   padding-bottom: layout.$spacing-03;
 }

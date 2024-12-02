@@ -123,8 +123,8 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "@/styles/cds-file-uploader-styles.css";
+<style lang="scss" scoped>
+@use "@/styles/cds-file-uploader-styles.css";
 
 cds-file-uploader {
   padding-top: 1rem;

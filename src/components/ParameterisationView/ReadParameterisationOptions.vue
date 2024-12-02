@@ -429,6 +429,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
+
 p {
   font-size: 0.875rem;
 }

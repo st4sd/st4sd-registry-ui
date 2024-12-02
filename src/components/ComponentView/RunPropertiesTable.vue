@@ -342,7 +342,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/svg.scss";
-@import "@/styles/overflow-menu-checkbox-styles.scss";
-@import "@/styles/cds-table-styles.scss";
+@use "@/styles/svg.scss";
+@use "@/styles/overflow-menu-checkbox-styles.scss";
+@use "@/styles/cds-table-styles.scss";
 </style>

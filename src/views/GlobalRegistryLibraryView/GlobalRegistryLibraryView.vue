@@ -255,11 +255,10 @@ export default {
 
 <style lang="scss" scoped>
 @use "@carbon/layout";
-
-@import "@/styles/svg.scss";
-@import "@/styles/toast-notification-styles.scss";
-@import "@/styles/empty_state_styles.scss";
-@import "@/styles/cds-tag-styles.scss";
+@use "@/styles/cds-tag-styles.scss";
+@use "@/styles/svg.scss";
+@use "@/styles/toast-notification-styles.scss";
+@use "@/styles/empty_state_styles.scss";
 
 .cds--col-lg-13 {
   height: fit-content;

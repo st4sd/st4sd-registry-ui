@@ -147,7 +147,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "@carbon/layout";
-@import "@/styles/svg.scss";
+@use "@/styles/svg.scss";
 
 .popover-content-div {
   padding: layout.$spacing-05;

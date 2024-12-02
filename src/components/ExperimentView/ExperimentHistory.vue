@@ -195,6 +195,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@import "@/styles/cds-table-styles.scss";
+<style lang="scss" scoped>
+@use "@/styles/cds-table-styles.scss";
 </style>

@@ -826,6 +826,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
+
 .tab {
   padding: layout.$spacing-05;
 }

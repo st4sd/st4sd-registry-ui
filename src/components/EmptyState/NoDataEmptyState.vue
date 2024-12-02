@@ -33,4 +33,6 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped src="@/styles/empty_state_styles.scss"></style>
+<style lang="scss" scoped>
+@use "@/styles/empty_state_styles.scss";
+</style>

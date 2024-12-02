@@ -117,6 +117,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped src="@/styles/empty_state_styles.scss">
+<style lang="scss" scoped>
 @use "@carbon/grid";
+@use "@/styles/empty_state_styles.scss";
 </style>

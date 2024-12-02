@@ -862,6 +862,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/svg.scss";
-@import "@/styles/cds-structured-list-styles.css";
+@use "@/styles/svg.scss";
+@use "@/styles/cds-structured-list-styles.css";
 </style>

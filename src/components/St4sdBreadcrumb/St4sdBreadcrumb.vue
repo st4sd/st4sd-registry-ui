@@ -19,6 +19,7 @@ export default {
 </script>
 <style scoped lang="scss">
 @use "@carbon/layout";
+
 .breadcrumb {
   padding-bottom: layout.$spacing-07;
 }

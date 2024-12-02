@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/svg.scss";
+@use "@/styles/svg.scss";
 
 .download-icon {
   height: 16px;

@@ -352,7 +352,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/ve-progress-indicator-styles.css";
+@use "@/styles/ve-progress-indicator-styles.css";
 // AP: required because of
 // https://github.com/carbon-design-system/carbon-for-ibm-dotcom/issues/11890
 cds-progress-step {

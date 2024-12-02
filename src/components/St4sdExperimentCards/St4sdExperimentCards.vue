@@ -150,7 +150,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
-@import "@/styles/empty_state_styles.scss";
+@use "@/styles/empty_state_styles.scss";
 
 .card-row {
   margin-top: layout.$spacing-05;

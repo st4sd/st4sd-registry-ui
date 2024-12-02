@@ -139,6 +139,6 @@ export default {
 
 <style lang="scss" scoped>
 @use "@carbon/layout";
-@import "@/styles/toast-notification-styles.scss";
-@import "@/styles/text-cta-styles.scss";
+@use "@/styles/toast-notification-styles.scss";
+@use "@/styles/text-cta-styles.scss";
 </style>

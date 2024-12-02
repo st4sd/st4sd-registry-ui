@@ -26,8 +26,8 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
-@import "@/styles/cds-tag-styles.scss";
-@import "@/styles/st4sd-virtual-experiment-card-styles.scss";
+@use "@/styles/cds-tag-styles.scss";
+@use "@/styles/st4sd-virtual-experiment-card-styles.scss";
 
 .card-inner-container {
   max-width: 96%;

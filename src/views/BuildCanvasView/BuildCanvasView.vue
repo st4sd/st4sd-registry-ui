@@ -110,10 +110,8 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
-
-@import "@/styles/toast-notification-styles.scss";
-
-@import "@/styles/empty_state_styles.scss";
+@use "@/styles/toast-notification-styles.scss";
+@use "@/styles/empty_state_styles.scss";
 
 #loadingContainer {
   width: 100%;

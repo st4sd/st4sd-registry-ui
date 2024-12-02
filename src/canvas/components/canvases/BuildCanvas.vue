@@ -1001,7 +1001,7 @@ const setDslValidationError = (dslError) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/canvas/styles/main.scss";
-@import "@/styles/toast-notification-styles.scss";
-@import "@/styles/svg.scss";
+@use "@/canvas/styles/main.scss";
+@use "@/styles/toast-notification-styles.scss";
+@use "@/styles/svg.scss";
 </style>

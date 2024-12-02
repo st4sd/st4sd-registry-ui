@@ -71,8 +71,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/svg.scss";
-@import "@/styles/hidden-on-mobile.css";
+@use "@/styles/svg.scss";
+@use "@/styles/hidden-on-mobile.css";
 
 .position-reset {
   position: unset;

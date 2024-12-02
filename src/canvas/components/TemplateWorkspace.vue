@@ -474,9 +474,9 @@ const onDoubleClick = (node) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/svg.scss";
-@import "@/styles/overflow-menu-checkbox-styles.scss";
-@import "@/canvas/styles/aside-styles.scss";
+@use "@/styles/svg.scss";
+@use "@/styles/overflow-menu-checkbox-styles.scss";
+@use "@/canvas/styles/aside-styles.scss";
 
 .title {
   padding-top: 1.5rem;

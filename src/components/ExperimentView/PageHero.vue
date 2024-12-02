@@ -276,7 +276,7 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
-@import "@/styles/cds-tag-styles.scss";
+@use "@/styles/cds-tag-styles.scss";
 
 c4d-content-block {
   margin: 0 0 layout.$spacing-09 0;
