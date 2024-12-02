@@ -1,24 +1,28 @@
 <template>
   <div v-if="loading">LOADING</div>
-  <div v-else style="width: inherit">
-    <cds-progress-indicator spaceEqually>
-      <cds-progress-step
-        id="addConnectionsStep"
-        label="Add connections"
-        @click="pageNumber = 0"
-      ></cds-progress-step>
-      <cds-progress-step
-        id="s3EndpointStep"
-        label="S3 Endpoint"
-        :disabled="!lastSelectedEndpointTile.isValid()"
-        @click="pageNumber = 1"
-      ></cds-progress-step>
-    </cds-progress-indicator>
-    <div
-      v-if="pageNumber == 0"
-      style="padding-top: 20px; display: flex; gap: 1rem"
-    >
-      <div style="width: 50%">
+  <div v-else>
+    <div class="cds--subgrid">
+      <cds-progress-indicator
+        spaceEqually
+        class="cds--css-grid-column cds--col-span-100"
+      >
+        <cds-progress-step
+          id="addConnectionsStep"
+          label="Add connections"
+          @click="pageNumber = 0"
+        ></cds-progress-step>
+        <cds-progress-step
+          id="s3EndpointStep"
+          label="S3 Endpoint"
+          :disabled="!lastSelectedEndpointTile.isValid()"
+          @click="pageNumber = 1"
+        ></cds-progress-step>
+      </cds-progress-indicator>
+    </div>
+    <div v-if="pageNumber == 0" class="cds--subgrid cds--subgrid--wide">
+      <div
+        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
+      >
         <cds-tile class="cds-theme-zone-white" v-if="s3Endpoints.length == 0">
           <p><strong> No S3 endpoints configured.</strong></p>
           <p>Add a new S3 endpoint to continue.</p>
@@ -69,7 +73,9 @@
           >
         </div>
       </div>
-      <div style="width: 50%">
+      <div
+        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
+      >
         <cds-tile>
           <p>{{ isInEdit ? "Edit S3 Endpoint" : "Add a new S3 Endpoint" }}</p>
 
@@ -103,25 +109,32 @@
         </cds-tile>
       </div>
     </div>
-    <div v-else>
-      <cds-tile-group>
-        <cds-radio-tile
-          style="width: 300px"
-          selected
-          :value="lastSelectedEndpointTile"
-          >Endpoint: {{ lastSelectedEndpointTile.endpoint }}
-          <br />
-          Name: {{ lastSelectedEndpointTile.name }}</cds-radio-tile
-        >
-      </cds-tile-group>
-      <cds-text-input
-        :value="s3Uri"
-        @input="s3Uri = $event.target.value"
-        :invalid="!isS3UriValid"
-        :invalidText="`Format: s3://${lastSelectedEndpointTile.bucket}/[<path>/]<file>`"
-        class="s3UriInput"
-        label="S3 URI"
-      />
+    <div class="cds--subgrid cds--subgrid--wide" v-else>
+      <div
+        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
+      >
+        <cds-tile-group>
+          <cds-radio-tile selected :value="lastSelectedEndpointTile"
+            >Endpoint: {{ lastSelectedEndpointTile.endpoint }}
+            <br />
+            Name: {{ lastSelectedEndpointTile.name }}</cds-radio-tile
+          >
+        </cds-tile-group>
+      </div>
+      <cds-tile
+        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
+        style="padding-bottom: 32px"
+      >
+        <p>Provide an S3 URI</p>
+        <cds-text-input
+          :value="s3Uri"
+          @input="s3Uri = $event.target.value"
+          :invalid="!isS3UriValid"
+          :invalidText="`Format: s3://${lastSelectedEndpointTile.bucket}/[<path>/]<file>`"
+          class="s3UriInput"
+          label="S3 URI"
+        />
+      </cds-tile>
     </div>
   </div>
 </template>
@@ -134,12 +147,13 @@ import "@carbon/web-components/es/components/progress-indicator/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
 import S3FormNewEndpoint from "./S3FormNewEndpoint.vue";
 import S3Configuration from "@/classes/S3Configuration";
 import {
   FileConfiguration,
   FileConfigurationFromS3,
-} from "../../classes/FileConfiguration";
+} from "@/classes/FileConfiguration";
 
 export default {
   name: "InputConfigurationS3Form",
@@ -184,11 +198,7 @@ export default {
         AP (08/10/2024): Hack required due to overflow hiding text even when spaced equally
         Issue: https://github.ibm.com/st4sd/st4sd-registry-ui/issues/832
       */
-      document
-        .getElementById("addConnectionsStep")
-        .shadowRoot.querySelector("div")
-        .querySelector("slot")
-        .querySelector("p").style.overflow = "visible";
+      progressStepOverflowFix("addConnectionsStep");
     });
     this.loading = false;
   },
@@ -373,6 +383,11 @@ export default {
 
 <style scoped lang="scss">
 @use "@carbon/layout";
+@use "@carbon/grid";
+
+cds-progress-indicator {
+  padding-bottom: layout.$spacing-05;
+}
 
 cds-inline-notification {
   margin-top: layout.$spacing-05;
@@ -383,9 +398,7 @@ cds-text-input {
 }
 
 .s3UriInput {
-  position: absolute;
-  width: 300px;
-  top: 65px;
-  right: 700px;
+  position: relative;
+  top: 22px;
 }
 </style>

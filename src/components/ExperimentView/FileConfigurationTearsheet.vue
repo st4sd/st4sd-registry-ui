@@ -62,7 +62,16 @@
       v-else-if="activePanel == experimentTearsheetTabEnums.PVC"
       role="tabpanel"
     >
-      PVC TAB
+      <InputConfigurationPVCForm
+        :fileConfiguration="fileConfiguration"
+        :pageNo="pvcFormPage"
+        @toggle-primary-action-text="primaryButtonIsSubmit = $event"
+        @disable-tearsheet-primary-action="primaryButtonDisabled = $event"
+        @disable-tearsheet-secondary-action="secondaryButtonDisabled = $event"
+        @input-configuration-update="userFileConfiguration = $event"
+        @push-to-toast-errors="$emit('push-to-toast-errors', $event)"
+        @form-page-update="pvcFormPage = $event"
+      />
     </div>
     <div
       v-else-if="activePanel == experimentTearsheetTabEnums.DATASHIM"
@@ -105,8 +114,11 @@
 import "@carbon/web-components/es/components/tearsheet/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
+
 import InputConfigurationS3Form from "@/components/ExperimentView/InputConfigurationS3Form.vue";
 import InputConfigurationFileUploadForm from "@/components/ExperimentView/InputConfigurationFileUploadForm.vue";
+import InputConfigurationPVCForm from "@/components/ExperimentView/InputConfigurationPVCForm.vue";
+
 import experimentTearsheetTabEnums from "@/enums/experimentTearsheetTabEnums";
 
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
@@ -115,6 +127,7 @@ import {
   FileConfiguration,
   FileConfigurationFromUpload,
   FileConfigurationFromS3,
+  FileConfigurationFromPVC,
 } from "@/classes/FileConfiguration.js";
 
 export default {
@@ -131,6 +144,7 @@ export default {
   components: {
     InputConfigurationFileUploadForm,
     InputConfigurationS3Form,
+    InputConfigurationPVCForm,
   },
   data() {
     return {
@@ -150,8 +164,8 @@ export default {
         },
         {
           option: experimentTearsheetTabEnums.PVC,
-          isDisabled: true,
-          hasSingleStep: true,
+          isDisabled: false,
+          hasSingleStep: false,
         },
         {
           option: experimentTearsheetTabEnums.DATASHIM,
@@ -168,11 +182,8 @@ export default {
       primaryButtonDisabled: true,
       activePanel: this.getOpenTab(),
       s3FormPage: 0,
+      pvcFormPage: 0,
     };
-  },
-  components: {
-    InputConfigurationS3Form,
-    InputConfigurationFileUploadForm,
   },
   watch: {
     activePanel(panel) {
@@ -185,15 +196,14 @@ export default {
     },
   },
   methods: {
-    handlePageUpdate(event) {
-      this.s3FormPage = event;
-    },
     getOpenTab() {
       switch (this.fileConfiguration.constructor) {
         case FileConfigurationFromUpload:
           return experimentTearsheetTabEnums.UPLOAD;
         case FileConfigurationFromS3:
           return experimentTearsheetTabEnums.S3;
+        case FileConfigurationFromPVC:
+          return experimentTearsheetTabEnums.PVC;
         default:
           return experimentTearsheetTabEnums.UPLOAD;
       }
@@ -222,11 +232,27 @@ export default {
           }
           this.s3FormPage = this.s3FormPage == 0 ? 1 : 0;
           return;
+        case experimentTearsheetTabEnums.PVC:
+          if (
+            this.pvcFormPage == 1 &&
+            this.userFileConfiguration instanceof FileConfigurationFromPVC
+          ) {
+            tearsheetsSharedState.setConfigurationForFile(
+              this.fileName,
+              this.userFileConfiguration,
+            );
+            this.$emit("cds-tearsheet-closed");
+          }
+          this.pvcFormPage = this.pvcFormPage == 0 ? 1 : 0;
+          return;
       }
     },
     secondaryButtonClicked() {
       if (this.activePanel == experimentTearsheetTabEnums.S3) {
         this.s3FormPage = 0;
+      }
+      if (this.activePanel == experimentTearsheetTabEnums.PVC) {
+        this.pvcFormPage = 0;
       }
     },
   },

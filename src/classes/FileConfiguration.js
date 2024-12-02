@@ -11,7 +11,7 @@ export class FileConfigurationFromUpload extends FileConfiguration {
     this.file = file;
   }
 
-  async toPayload(key) {
+  async toInputsPayload(key) {
     let result = await readFile(this.file);
     return {
       content: result,
@@ -27,7 +27,7 @@ export class FileConfigurationFromS3 extends FileConfiguration {
     this.uri = uri;
   }
 
-  toPayload(originalFileName) {
+  toInputsPayload(originalFileName) {
     let s3UriGroups = tearsheetsSharedState.s3UriRegex.exec(this.uri);
     let path = s3UriGroups.groups.path ? `${s3UriGroups.groups.path}/` : "";
     let file = s3UriGroups.groups.file;
@@ -37,6 +37,37 @@ export class FileConfigurationFromS3 extends FileConfiguration {
     }
     return {
       filename,
+    };
+  }
+}
+
+export class FileConfigurationFromPVC extends FileConfiguration {
+  constructor(pvcName, fileName, subPath) {
+    super();
+    this.pvcName = pvcName;
+    this.fileName = fileName;
+    this.subPath = subPath;
+    this.volumeID = crypto.randomUUID();
+  }
+
+  toInputsPayload(originalFileName) {
+    let filename = this.fileName;
+    if (filename != originalFileName) {
+      filename += `:${originalFileName}`;
+    }
+    return {
+      filename,
+      volume: this.volumeID,
+    };
+  }
+
+  toVolumesPayload() {
+    return {
+      identifier: this.volumeID,
+      type: {
+        persistentVolumeClaim: this.pvcName,
+      },
+      subPath: this.subPath,
     };
   }
 }

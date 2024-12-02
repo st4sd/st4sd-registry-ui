@@ -1,6 +1,5 @@
 <template>
-  <cds-form-group>
-    <br />
+  <cds-form-group class="cds--grid">
     <cds-text-input
       :value="configuration.name"
       :disabled="disableForm"
@@ -124,8 +123,11 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 @use "@carbon/layout";
+@use "@carbon/grid";
+
 cds-button {
   padding-right: layout.$spacing-03;
 }
