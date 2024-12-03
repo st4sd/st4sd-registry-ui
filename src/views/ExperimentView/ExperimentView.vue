@@ -159,6 +159,8 @@ import axios from "axios";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
+import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+
 export default {
   name: "ExperimentView",
   components: {
@@ -300,6 +302,8 @@ export default {
     this.isGlobalRegistry = registryUISharedState.isGlobalRegistry;
     this.isBuildCanvasEditingEnabled =
       registryUISharedState.isBuildCanvasEditingEnabled;
+    tearsheetsSharedState.initializeS3ReferencesSet();
+    tearsheetsSharedState.initializePVCReferencesSet();
     this.loading--;
   },
   methods: {

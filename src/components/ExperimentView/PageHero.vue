@@ -262,6 +262,7 @@ export default {
           }
         });
       this.toggleRunExperimentFormEmit();
+      tearsheetsSharedState.clear();
     },
     filterResponseReason(reason) {
       let strArr = reason.split("");

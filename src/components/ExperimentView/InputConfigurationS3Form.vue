@@ -12,8 +12,8 @@
           @click="pageNumber = 0"
         ></cds-progress-step>
         <cds-progress-step
-          id="s3EndpointStep"
-          label="S3 Endpoint"
+          id="s3ConfigurationStep"
+          label="S3 Configuration"
           :disabled="!lastSelectedEndpointTile.isValid()"
           @click="pageNumber = 1"
         ></cds-progress-step>
@@ -23,16 +23,19 @@
       <div
         class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
       >
-        <cds-tile class="cds-theme-zone-white" v-if="s3Endpoints.length == 0">
-          <p><strong> No S3 endpoints configured.</strong></p>
-          <p>Add a new S3 endpoint to continue.</p>
+        <cds-tile
+          class="cds-theme-zone-white"
+          v-if="s3Configurations.length == 0"
+        >
+          <p><strong> No S3 connections configured.</strong></p>
+          <p>Add a new S3 configuration to continue.</p>
         </cds-tile>
         <div v-else>
           <cds-tile-group
             @cds-current-radio-tile-selection="updateRadioTileGroupSelection"
           >
             <cds-radio-tile
-              v-for="(endpoint, idx) in s3Endpoints"
+              v-for="(endpoint, idx) in s3Configurations"
               :value="endpoint"
               :selected="endpoint.id == lastSelectedEndpointTile.id"
             >
@@ -77,12 +80,16 @@
         class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
       >
         <cds-tile>
-          <p>{{ isInEdit ? "Edit S3 Endpoint" : "Add a new S3 Endpoint" }}</p>
+          <p>
+            {{
+              isInEdit ? "Edit S3 Configuration" : "Add a new S3 Configuration"
+            }}
+          </p>
 
           <cds-inline-notification
-            v-if="s3Endpoints.length != 0 && !isInEdit"
-            title="Only one endpoint is allowed."
-            subtitle="You can only delete or edit the available endpoint."
+            v-if="s3Configurations.length != 0 && !isInEdit"
+            title="Only one S3 configuration is allowed."
+            subtitle="You can only delete or edit the available configuration."
             low-contrast
             hide-close-button
             kind="warning"
@@ -91,7 +98,7 @@
           <cds-inline-notification
             v-else-if="isInEdit"
             title="Be careful."
-            subtitle="Changing the endpoint data here will change it for all files referencing it."
+            subtitle="Changing the S3 configuration here will change it for all files referencing it."
             low-contrast
             hide-close-button
             kind="warning"
@@ -101,7 +108,7 @@
           <S3FormNewEndpoint
             :isInEditMode="isInEdit"
             :s3EditEndpoint="endpointToEdit"
-            :disableForm="s3Endpoints.length != 0 && !isInEdit"
+            :disableForm="s3Configurations.length != 0 && !isInEdit"
             @add-new-s3-endpoint="addNewS3Connection($event)"
             @edit-s3-endpoint="updateS3Connection($event, idx)"
             @cancel-edit="isInEdit = false"
@@ -185,11 +192,11 @@ export default {
       loading: true,
       isInEdit: false,
       s3Uri: "",
-      s3Endpoints: tearsheetsSharedState.s3Endpoints,
+      s3Configurations: tearsheetsSharedState.s3Configurations,
       endpointToEdit: new S3Configuration(),
       lastSelectedEndpointTile: new S3Configuration(),
       endpointConfigurationFormOpen:
-        tearsheetsSharedState.s3Endpoints.length == 0,
+        tearsheetsSharedState.s3Configurations.length == 0,
     };
   },
   mounted() {
@@ -209,7 +216,7 @@ export default {
       let disableTearsheetSecondaryActionValue = false;
 
       if (this.pageNumber == 0) {
-        // On page 0 (where the user can create/edit/select S3 endpoints)
+        // On page 0 (where the user can create/edit/select S3 configuration)
         // The primary button should be "Next" and it should be enabled only if:
         // - The user has selected an endpoint
         // - The endpoint selected is valid
@@ -256,13 +263,13 @@ export default {
         be set normally.
       */
       let addConnectionStep = document.getElementById("addConnectionsStep");
-      let s3EndpointStep = document.getElementById("s3EndpointStep");
+      let s3ConfigurationStep = document.getElementById("s3ConfigurationStep");
       if (this.pageNumber == 0) {
         addConnectionStep.setAttribute("state", "current");
-        s3EndpointStep.setAttribute("state", "incomplete");
+        s3ConfigurationStep.setAttribute("state", "incomplete");
       } else {
         addConnectionStep.setAttribute("state", "complete");
-        s3EndpointStep.setAttribute("state", "current");
+        s3ConfigurationStep.setAttribute("state", "current");
       }
     },
     updateRadioTileGroupSelection(event) {
@@ -287,7 +294,7 @@ export default {
     deleteS3Connection(idx) {
       let fileReferencesForEndpoint =
         tearsheetsSharedState.getFileReferencesForS3Endpoint(
-          this.s3Endpoints[idx].id,
+          this.s3Configurations[idx].id,
         );
 
       if (fileReferencesForEndpoint.size == 0) {
@@ -324,14 +331,14 @@ export default {
         // Directly show 2nd page if we are editing
         if (newFileConfiguration instanceof FileConfigurationFromS3) {
           this.lastSelectedEndpointTile =
-            tearsheetsSharedState.s3Endpoints.find(
+            tearsheetsSharedState.s3Configurations.find(
               (endpoint) => endpoint.id == newFileConfiguration.endpointId,
             );
           this.s3Uri = newFileConfiguration.uri;
           this.pageNumber = 1;
         } else {
           this.pageNumber = 0;
-          this.s3Endpoints = tearsheetsSharedState.s3Endpoints;
+          this.s3Configurations = tearsheetsSharedState.s3Configurations;
           this.lastSelectedEndpointTile = new S3Configuration();
         }
 

@@ -23,7 +23,10 @@
       <div
         class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
       >
-        <cds-tile class="cds-theme-zone-white" v-if="pvcEntries.length == 0">
+        <cds-tile
+          class="cds-theme-zone-white"
+          v-if="pvcConfigurations.length == 0"
+        >
           <p><strong> No PVC entries configured.</strong></p>
           <p>Add a new PVC entry to continue.</p>
         </cds-tile>
@@ -32,7 +35,7 @@
             @cds-current-radio-tile-selection="updateRadioTileGroupSelection"
           >
             <cds-radio-tile
-              v-for="(entry, idx) in pvcEntries"
+              v-for="(entry, idx) in pvcConfigurations"
               :value="entry"
               :selected="entry.id == lastSelectedPVCTile.id"
             >
@@ -169,7 +172,7 @@ export default {
   ],
   data() {
     return {
-      pvcEntries: tearsheetsSharedState.pvcEntries,
+      pvcConfigurations: tearsheetsSharedState.pvcConfigurations,
       pageNumber: this.pageNo,
       pvcToEdit: new PVCConfiguration(),
       lastSelectedPVCTile: new PVCConfiguration(),
@@ -178,7 +181,8 @@ export default {
       pvcValid: false,
       loading: true,
       fileName: "",
-      pvcConfigurationFormOpen: tearsheetsSharedState.pvcEntries.length == 0,
+      pvcConfigurationFormOpen:
+        tearsheetsSharedState.pvcConfigurations.length == 0,
     };
   },
   mounted() {
@@ -209,15 +213,16 @@ export default {
       handler(newFileConfiguration) {
         // Directly show 2nd page if we are editing
         if (newFileConfiguration instanceof FileConfigurationFromPVC) {
-          this.lastSelectedPVCTile = tearsheetsSharedState.pvcEntries.find(
-            (entry) => entry.name == newFileConfiguration.pvcName,
-          );
+          this.lastSelectedPVCTile =
+            tearsheetsSharedState.pvcConfigurations.find(
+              (entry) => entry.name == newFileConfiguration.pvcName,
+            );
           this.fileName = newFileConfiguration.fileName;
           this.subPath = newFileConfiguration.subPath;
           this.pageNumber = 1;
         } else {
           this.pageNumber = 0;
-          this.pvcEntries = tearsheetsSharedState.pvcEntries;
+          this.pvcConfigurations = tearsheetsSharedState.pvcConfigurations;
           this.lastSelectedPVCTile = new PVCConfiguration();
         }
 
@@ -353,7 +358,7 @@ export default {
     deletePVCEntry(idx) {
       let fileReferencesForEntry =
         tearsheetsSharedState.getFileReferencesForPVCEntry(
-          this.pvcEntries[idx].name,
+          this.pvcConfigurations[idx].name,
         );
 
       if (fileReferencesForEntry.size == 0) {
