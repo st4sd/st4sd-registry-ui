@@ -35,7 +35,7 @@ export default {
 
 @include grid.flex-grid();
 
-@import "https://1.www.s81c.com/common/carbon/web-components/version/v2.8.0/themes.css";
+@import "https://1.www.s81c.com/common/carbon/web-components/version/v2.13.0/themes.css";
 </style>
 
 <style scoped>
