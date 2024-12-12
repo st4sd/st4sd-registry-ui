@@ -77,7 +77,16 @@
       v-else-if="activePanel == experimentTearsheetTabEnums.DATASHIM"
       role="tabpanel"
     >
-      DATASHIM TAB
+      <InputConfigurationDatashimForm
+        :fileConfiguration="fileConfiguration"
+        :pageNo="datashimFormPage"
+        @toggle-primary-action-text="primaryButtonIsSubmit = $event"
+        @disable-tearsheet-primary-action="primaryButtonDisabled = $event"
+        @disable-tearsheet-secondary-action="secondaryButtonDisabled = $event"
+        @input-configuration-update="userFileConfiguration = $event"
+        @push-to-toast-errors="$emit('push-to-toast-errors', $event)"
+        @form-page-update="datashimFormPage = $event"
+      />
     </div>
     <div
       v-else-if="
@@ -118,6 +127,7 @@ import "@carbon/web-components/es/components/tabs/index.js";
 import InputConfigurationS3Form from "@/components/ExperimentView/InputConfigurationS3Form.vue";
 import InputConfigurationFileUploadForm from "@/components/ExperimentView/InputConfigurationFileUploadForm.vue";
 import InputConfigurationPVCForm from "@/components/ExperimentView/InputConfigurationPVCForm.vue";
+import InputConfigurationDatashimForm from "@/components/ExperimentView/InputConfigurationDatashimForm.vue";
 
 import experimentTearsheetTabEnums from "@/enums/experimentTearsheetTabEnums";
 
@@ -128,6 +138,7 @@ import {
   FileConfigurationFromUpload,
   FileConfigurationFromS3,
   FileConfigurationFromPVC,
+  FileConfigurationFromDatashim,
 } from "@/classes/FileConfiguration.js";
 
 export default {
@@ -145,6 +156,7 @@ export default {
     InputConfigurationFileUploadForm,
     InputConfigurationS3Form,
     InputConfigurationPVCForm,
+    InputConfigurationDatashimForm,
   },
   data() {
     return {
@@ -169,8 +181,8 @@ export default {
         },
         {
           option: experimentTearsheetTabEnums.DATASHIM,
-          isDisabled: true,
-          hasSingleStep: true,
+          isDisabled: false,
+          hasSingleStep: false,
         },
         {
           option: experimentTearsheetTabEnums.APPLICATION_DEPENDENCIES,
@@ -183,6 +195,7 @@ export default {
       activePanel: this.getOpenTab(),
       s3FormPage: 0,
       pvcFormPage: 0,
+      datashimFormPage: 0,
     };
   },
   watch: {
@@ -192,10 +205,47 @@ export default {
       ).hasSingleStep;
     },
     isOpen() {
+      this.ensureDatashimAndS3TabsMutuallyExclusive();
       this.activePanel = this.getOpenTab();
     },
   },
   methods: {
+    ensureDatashimAndS3TabsMutuallyExclusive() {
+      const S3_TAB_IDX = 1;
+      const DATASHIM_TAB_IDX = 3;
+
+      let filesConfiguredFromS3 = [];
+      let filesConfiguredFromDatashim = [];
+      for (let file of Array.from(tearsheetsSharedState.files.values())) {
+        if (file instanceof FileConfigurationFromS3)
+          filesConfiguredFromS3.push(file);
+        else if (file instanceof FileConfigurationFromDatashim)
+          filesConfiguredFromDatashim.push(file);
+      }
+
+      // There are three cases in which both the S3 and the Datashim tabs are enabled:
+      // - There are no files configured to use S3 or Datashim
+      // - The current file is of type S3 and no other file is from S3
+      // - The current file is of type Datashim and no other file is from Datashim
+      if (
+        (filesConfiguredFromDatashim.length == 0 &&
+          filesConfiguredFromS3.length == 0) ||
+        (this.fileConfiguration instanceof FileConfigurationFromS3 &&
+          filesConfiguredFromS3.length == 1) ||
+        (this.fileConfiguration instanceof FileConfigurationFromDatashim &&
+          filesConfiguredFromDatashim.length == 1)
+      ) {
+        this.options[DATASHIM_TAB_IDX].isDisabled = false;
+        this.options[S3_TAB_IDX].isDisabled = false;
+        return;
+      }
+
+      // Now that there is no case where both tabs should be enabled.
+      if (filesConfiguredFromS3.length > 0)
+        this.options[DATASHIM_TAB_IDX].isDisabled = true;
+      else if (filesConfiguredFromDatashim.length > 0)
+        this.options[S3_TAB_IDX].isDisabled = true;
+    },
     getOpenTab() {
       switch (this.fileConfiguration.constructor) {
         case FileConfigurationFromUpload:
@@ -204,6 +254,8 @@ export default {
           return experimentTearsheetTabEnums.S3;
         case FileConfigurationFromPVC:
           return experimentTearsheetTabEnums.PVC;
+        case FileConfigurationFromDatashim:
+          return experimentTearsheetTabEnums.DATASHIM;
         default:
           return experimentTearsheetTabEnums.UPLOAD;
       }
@@ -245,14 +297,27 @@ export default {
           }
           this.pvcFormPage = this.pvcFormPage == 0 ? 1 : 0;
           return;
+        case experimentTearsheetTabEnums.DATASHIM:
+          if (
+            this.datashimFormPage == 1 &&
+            this.userFileConfiguration instanceof FileConfigurationFromDatashim
+          ) {
+            tearsheetsSharedState.setConfigurationForFile(
+              this.fileName,
+              this.userFileConfiguration,
+            );
+            this.$emit("cds-tearsheet-closed");
+          }
+          this.datashimFormPage = this.datashimFormPage == 0 ? 1 : 0;
       }
     },
     secondaryButtonClicked() {
       if (this.activePanel == experimentTearsheetTabEnums.S3) {
         this.s3FormPage = 0;
-      }
-      if (this.activePanel == experimentTearsheetTabEnums.PVC) {
+      } else if (this.activePanel == experimentTearsheetTabEnums.PVC) {
         this.pvcFormPage = 0;
+      } else if (this.activePanel == experimentTearsheetTabEnums.DATASHIM) {
+        this.datashimFormPage = 0;
       }
     },
   },

@@ -304,6 +304,7 @@ export default {
       registryUISharedState.isBuildCanvasEditingEnabled;
     tearsheetsSharedState.initializeS3ReferencesSet();
     tearsheetsSharedState.initializePVCReferencesSet();
+    tearsheetsSharedState.initializeDatashimDatasetReferencesSet();
     this.loading--;
   },
   methods: {

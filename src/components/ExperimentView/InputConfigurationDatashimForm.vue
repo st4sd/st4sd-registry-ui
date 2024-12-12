@@ -7,14 +7,14 @@
         class="cds--css-grid-column cds--col-span-100"
       >
         <cds-progress-step
-          id="addConnectionsStep"
-          label="Add connections"
+          id="addDatasetsStep"
+          label="Add datasets"
           @click="pageNumber = 0"
         ></cds-progress-step>
         <cds-progress-step
-          id="s3ConfigurationStep"
-          label="S3 Configuration"
-          :disabled="!lastSelectedEndpointTile.isValid()"
+          id="datasetConfigurationStep"
+          label="Dataset Configuration"
+          :disabled="!lastSelectedDatashimTile.isValid()"
           @click="pageNumber = 1"
         ></cds-progress-step>
       </cds-progress-indicator>
@@ -25,26 +25,26 @@
       >
         <cds-tile
           class="cds-theme-zone-white"
-          v-if="s3Configurations.length == 0"
+          v-if="datasetConfigurations.length == 0"
         >
-          <p><strong> No S3 connections configured.</strong></p>
-          <p>Add a new S3 configuration to continue.</p>
+          <p><strong>No Datasets configured.</strong></p>
+          <p>Add a new Dataset to continue.</p>
         </cds-tile>
         <div v-else>
           <cds-tile-group
             @cds-current-radio-tile-selection="updateRadioTileGroupSelection"
           >
             <cds-radio-tile
-              v-for="(endpoint, idx) in s3Configurations"
-              :value="endpoint"
-              :selected="endpoint.id == lastSelectedEndpointTile.id"
+              v-for="(dataset, idx) in datasetConfigurations"
+              :value="dataset"
+              :selected="dataset.id == lastSelectedDatashimTile.id"
             >
               <cds-button
                 size="md"
                 kind="danger-ghost"
-                style="position: absolute; right: 100px"
-                title="Delete endpoint"
-                @click="deleteS3Connection(idx)"
+                style="position: absolute; bottom: 10px; right: 100px"
+                title="Remove Dataset"
+                @click="deleteDatasetEntry(idx)"
               >
                 <img
                   slot="icon"
@@ -56,10 +56,10 @@
               <cds-button
                 size="md"
                 kind="ghost"
-                style="position: absolute; right: 150px"
-                title="Edit endpoint"
+                style="position: absolute; bottom: 10px; right: 150px"
+                title="Edit Dataset"
                 :disabled="this.isInEdit"
-                @click="editS3Connection(endpoint)"
+                @click="editDatasetEntry(dataset)"
               >
                 <img
                   slot="icon"
@@ -69,9 +69,7 @@
                   src="@/assets/edit.svg"
                 />
               </cds-button>
-              Endpoint: {{ endpoint.endpoint }}
-              <br />
-              Name: {{ endpoint.name }}
+              Name: {{ dataset.name }}
             </cds-radio-tile></cds-tile-group
           >
         </div>
@@ -82,13 +80,15 @@
         <cds-tile>
           <p>
             {{
-              isInEdit ? "Edit S3 Configuration" : "Add a new S3 Configuration"
+              isInEdit
+                ? "Edit Dataset Configuration"
+                : "Add a new Dataset Configuration"
             }}
           </p>
 
           <cds-inline-notification
-            v-if="s3Configurations.length != 0 && !isInEdit"
-            title="Only one S3 configuration is allowed."
+            v-if="datasetConfigurations.length != 0 && !isInEdit"
+            title="Only one Dataset is allowed."
             subtitle="You can only delete or edit the available configuration."
             low-contrast
             hide-close-button
@@ -98,19 +98,19 @@
           <cds-inline-notification
             v-else-if="isInEdit"
             title="Be careful."
-            subtitle="Changing the S3 configuration here will change it for all files referencing it."
+            subtitle="Changing the Dataset here will change it for all files referencing it."
             low-contrast
             hide-close-button
             kind="warning"
           >
           </cds-inline-notification>
 
-          <S3FormNewEndpoint
+          <DatashimFormNewEntry
             :isInEditMode="isInEdit"
-            :s3EditEndpoint="endpointToEdit"
-            :disableForm="s3Configurations.length != 0 && !isInEdit"
-            @add-new-s3-endpoint="addNewS3Connection($event)"
-            @edit-s3-endpoint="updateS3Connection($event, idx)"
+            :datasetEditConfiguration="datasetToEdit"
+            :disableForm="datasetConfigurations.length != 0 && !isInEdit"
+            @add-new-datashim-entry="addNewDatasetEntry($event)"
+            @edit-datashim-entry="updateDatasetConfiguration($event, idx)"
             @cancel-edit="isInEdit = false"
           />
         </cds-tile>
@@ -121,10 +121,8 @@
         class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
       >
         <cds-tile-group>
-          <cds-radio-tile selected :value="lastSelectedEndpointTile"
-            >Endpoint: {{ lastSelectedEndpointTile.endpoint }}
-            <br />
-            Name: {{ lastSelectedEndpointTile.name }}</cds-radio-tile
+          <cds-radio-tile selected :value="lastSelectedDatashimTile">
+            Name: {{ lastSelectedDatashimTile.name }}</cds-radio-tile
           >
         </cds-tile-group>
       </div>
@@ -132,15 +130,15 @@
         class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
         style="padding-bottom: 32px"
       >
-        <p>Provide an S3 URI</p>
-        <cds-text-input
-          :value="s3Uri"
-          @input="s3Uri = $event.target.value"
-          :invalid="!isS3UriValid"
-          :invalidText="`Format: s3://${lastSelectedEndpointTile.bucket}/[<path>/]<file>`"
-          class="s3UriInput"
-          label="S3 URI"
-        />
+        <p>Provide a file name</p>
+        <cds-form-group>
+          <cds-text-input
+            :value="fileName"
+            @input="fileName = $event.target.value"
+            class="fileNameInput"
+            label="File name"
+          />
+        </cds-form-group>
       </cds-tile>
     </div>
   </div>
@@ -155,15 +153,15 @@ import "@carbon/web-components/es/components/notification/index.js";
 
 import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
 import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
-import S3FormNewEndpoint from "./S3FormNewEndpoint.vue";
-import S3Configuration from "@/classes/S3Configuration";
+import DatashimFormNewEntry from "@/components/ExperimentView/DatashimFormNewEntry.vue";
+import { DatashimDatasetConfiguration } from "@/classes/DatashimDatasetConfiguration.js";
 import {
   FileConfiguration,
-  FileConfigurationFromS3,
+  FileConfigurationFromDatashim,
 } from "@/classes/FileConfiguration";
 
 export default {
-  name: "InputConfigurationS3Form",
+  name: "InputConfigurationDatashimForm",
   emits: [
     "disable-tearsheet-primary-action",
     "disable-tearsheet-secondary-action",
@@ -183,20 +181,20 @@ export default {
     },
   },
   components: {
-    S3FormNewEndpoint,
+    DatashimFormNewEntry,
   },
   data() {
     return {
-      isS3UriValid: true,
       pageNumber: this.pageNo,
       loading: true,
       isInEdit: false,
-      s3Uri: "",
-      s3Configurations: tearsheetsSharedState.s3Configurations,
-      endpointToEdit: new S3Configuration(),
-      lastSelectedEndpointTile: new S3Configuration(),
+      fileName: "",
+      datasetConfigurations:
+        tearsheetsSharedState.datashimDatasetConfigurations,
+      datasetToEdit: new DatashimDatasetConfiguration(),
+      lastSelectedDatashimTile: new DatashimDatasetConfiguration(),
       endpointConfigurationFormOpen:
-        tearsheetsSharedState.s3Configurations.length == 0,
+        tearsheetsSharedState.datashimDatasetConfigurations.length == 0,
     };
   },
   mounted() {
@@ -205,8 +203,8 @@ export default {
         AP (08/10/2024): Hack required due to overflow hiding text even when spaced equally
         Issue: https://github.ibm.com/st4sd/st4sd-registry-ui/issues/832
       */
-      progressStepOverflowFix("addConnectionsStep");
-      progressStepOverflowFix("s3ConfigurationStep");
+      progressStepOverflowFix("addDatasetsStep");
+      progressStepOverflowFix("datasetConfigurationStep");
     });
     this.loading = false;
   },
@@ -217,32 +215,21 @@ export default {
       let disableTearsheetSecondaryActionValue = false;
 
       if (this.pageNumber == 0) {
-        // On page 0 (where the user can create/edit/select S3 configuration)
+        // On page 0 (where the user can create/edit/select Dataset configuration)
         // The primary button should be "Next" and it should be enabled only if:
-        // - The user has selected an endpoint
-        // - The endpoint selected is valid
+        // - The user has selected a dataset configuration
+        // - The dataset selected is valid
         // The secondary button should not be enabled
         primaryActionTextValue = false;
         disableTearsheetPrimaryActionValue =
-          !this.lastSelectedEndpointTile.isValid();
+          !this.lastSelectedDatashimTile.isValid();
         disableTearsheetSecondaryActionValue = true;
       } else {
-        // On page 1 (where the user provides an S3 URI)
-        // The primary button should be "Submit" and it should be enabled if
-        // - The S3URI, when trimmed, is not empty
-        // - When validated using a RegEx, it has the correct fields, namely:
-        //     - bucket
-        //     - path (optional, not validated here)
-        //     - file
-        // The secondary button should always be enabled.
-        let s3UriValidation = tearsheetsSharedState.s3UriRegex.exec(this.s3Uri);
-        this.isS3UriValid =
-          this.s3Uri?.trim() != "" &&
-          s3UriValidation?.groups.bucket ==
-            this.lastSelectedEndpointTile.bucket &&
-          s3UriValidation?.groups.file;
+        // On page 1 (where the user provides a file name)
+        // The secondary button should be enabled.
+        // The primary button should be "Submit" and it should be enabled
         primaryActionTextValue = true;
-        disableTearsheetPrimaryActionValue = !this.isS3UriValid;
+        disableTearsheetPrimaryActionValue = !this.fileName?.trim() != "";
         disableTearsheetSecondaryActionValue = false;
       }
 
@@ -263,14 +250,16 @@ export default {
         Due to the nature of the issue, states for progress indicators cannot
         be set normally.
       */
-      let addConnectionStep = document.getElementById("addConnectionsStep");
-      let s3ConfigurationStep = document.getElementById("s3ConfigurationStep");
+      let addConnectionStep = document.getElementById("addDatasetsStep");
+      let datasetConfigurationStep = document.getElementById(
+        "datasetConfigurationStep",
+      );
       if (this.pageNumber == 0) {
         addConnectionStep.setAttribute("state", "current");
-        s3ConfigurationStep.setAttribute("state", "incomplete");
+        datasetConfigurationStep.setAttribute("state", "incomplete");
       } else {
         addConnectionStep.setAttribute("state", "complete");
-        s3ConfigurationStep.setAttribute("state", "current");
+        datasetConfigurationStep.setAttribute("state", "current");
       }
     },
     updateRadioTileGroupSelection(event) {
@@ -278,38 +267,38 @@ export default {
       // but outside of the tile will have undefined as value.
       // This would break our validation
       if (event.detail.target.value) {
-        this.lastSelectedEndpointTile = event.detail.target.value;
+        this.lastSelectedDatashimTile = event.detail.target.value;
       }
     },
-    updateS3Connection(endpoint) {
-      tearsheetsSharedState.updateS3Endpoint(endpoint);
+    updateDatasetConfiguration(datashim) {
+      tearsheetsSharedState.updateDatashimDatasetConfiguration(datashim);
       this.isInEdit = false;
     },
-    editS3Connection(endpoint) {
-      this.endpointToEdit = endpoint;
+    editDatasetEntry(datashim) {
+      this.datasetToEdit = datashim;
       this.isInEdit = true;
     },
-    addNewS3Connection(obj) {
-      tearsheetsSharedState.addS3Endpoint(obj);
+    addNewDatasetEntry(obj) {
+      tearsheetsSharedState.addDatashimDatasetConfiguration(obj);
     },
-    deleteS3Connection(idx) {
-      let fileReferencesForEndpoint =
-        tearsheetsSharedState.getFileReferencesForS3Endpoint(
-          this.s3Configurations[idx].id,
+    deleteDatasetEntry(idx) {
+      let fileReferencesForDatashim =
+        tearsheetsSharedState.getFileReferencesForDatashimDatasetConfiguration(
+          this.datasetConfigurations[idx].id,
         );
 
-      if (fileReferencesForEndpoint.size == 0) {
+      if (fileReferencesForDatashim.size == 0) {
         this.isInEdit = false;
-        tearsheetsSharedState.removeS3EndpointByIndex(idx);
-        this.lastSelectedEndpointTile = new S3Configuration();
+        tearsheetsSharedState.removeDatashimDatasetConfigurationByIndex(idx);
+        this.lastSelectedDatashimTile = new DatashimDatasetConfiguration();
         return;
       }
 
       this.$emit("push-to-toast-errors", {
         description:
-          "ERROR: Cannot remove an endpoint that is referenced by one or more files.",
+          "ERROR: Cannot remove a Dataset that is referenced by one or more files.",
         statusText:
-          "References: " + Array.from(fileReferencesForEndpoint).join(", "),
+          "References: " + Array.from(fileReferencesForDatashim).join(", "),
         code: 403,
       });
     },
@@ -330,17 +319,20 @@ export default {
       immediate: true,
       handler(newFileConfiguration) {
         // Directly show 2nd page if we are editing
-        if (newFileConfiguration instanceof FileConfigurationFromS3) {
-          this.lastSelectedEndpointTile =
-            tearsheetsSharedState.s3Configurations.find(
-              (endpoint) => endpoint.id == newFileConfiguration.endpointId,
+        if (newFileConfiguration instanceof FileConfigurationFromDatashim) {
+          this.lastSelectedDatashimTile =
+            tearsheetsSharedState.datashimDatasetConfigurations.find(
+              (datashim) => {
+                return datashim.id == newFileConfiguration.datasetId;
+              },
             );
-          this.s3Uri = newFileConfiguration.uri;
+          this.fileName = newFileConfiguration.fileName;
           this.pageNumber = 1;
         } else {
           this.pageNumber = 0;
-          this.s3Configurations = tearsheetsSharedState.s3Configurations;
-          this.lastSelectedEndpointTile = new S3Configuration();
+          this.datasetConfigurations =
+            tearsheetsSharedState.datashimDatasetConfigurations;
+          this.lastSelectedDatashimTile = new DatashimDatasetConfiguration();
         }
 
         // As we might change the page we are showing based on the file configuration
@@ -353,21 +345,17 @@ export default {
         });
       },
     },
-    s3Uri: {
+    fileName: {
       immediate: true,
-      handler(newUri) {
-        let s3UriValidation = tearsheetsSharedState.s3UriRegex.exec(this.s3Uri);
-        // Emit updates every time we get a new value for the URI
-        if (
-          newUri?.trim() != "" &&
-          s3UriValidation?.groups.bucket &&
-          s3UriValidation?.groups.file
-        ) {
+      handler(newFileName) {
+        // Emit updates every time we get a new value for the file name
+        if (newFileName?.trim() != "") {
           this.$emit(
             "input-configuration-update",
-            new FileConfigurationFromS3(
-              this.lastSelectedEndpointTile.id,
-              newUri,
+            new FileConfigurationFromDatashim(
+              this.lastSelectedDatashimTile.id,
+              this.lastSelectedDatashimTile.name,
+              newFileName,
             ),
           );
         } else {
@@ -379,8 +367,8 @@ export default {
         });
       },
     },
-    lastSelectedEndpointTile(endpoint) {
-      this.$emit("disable-tearsheet-primary-action", !endpoint.isValid());
+    lastSelectedDatashimTile(datashim) {
+      this.$emit("disable-tearsheet-primary-action", !datashim.isValid());
     },
     pageNumber(page) {
       this.$emit("form-page-update", page);
@@ -403,10 +391,5 @@ cds-inline-notification {
 
 cds-text-input {
   padding: layout.$spacing-05 0;
-}
-
-.s3UriInput {
-  position: relative;
-  top: 22px;
 }
 </style>

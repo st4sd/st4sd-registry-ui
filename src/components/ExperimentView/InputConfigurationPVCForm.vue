@@ -214,8 +214,8 @@ export default {
         // Directly show 2nd page if we are editing
         if (newFileConfiguration instanceof FileConfigurationFromPVC) {
           this.lastSelectedPVCTile =
-            tearsheetsSharedState.pvcConfigurations.find(
-              (entry) => entry.name == newFileConfiguration.pvcName,
+            tearsheetsSharedState.pvcConfigurations.get(
+              newFileConfiguration.pvcId,
             );
           this.fileName = newFileConfiguration.fileName;
           this.subPath = newFileConfiguration.subPath;
@@ -243,6 +243,7 @@ export default {
           this.$emit(
             "input-configuration-update",
             new FileConfigurationFromPVC(
+              this.lastSelectedPVCTile.id,
               this.lastSelectedPVCTile.name,
               this.fileName,
               path,
@@ -264,6 +265,7 @@ export default {
           this.$emit(
             "input-configuration-update",
             new FileConfigurationFromPVC(
+              this.lastSelectedPVCTile.id,
               this.lastSelectedPVCTile.name,
               name,
               this.subPath,
@@ -297,9 +299,9 @@ export default {
         // - The user has selected an PVC entry
         // - The PVC entry selected is valid
         // The secondary button should not be enabled
-        let isSelectedPVCEntryValid = this.lastSelectedPVCTile.isValid();
         primaryActionTextValue = false;
-        disableTearsheetPrimaryActionValue = !isSelectedPVCEntryValid;
+        disableTearsheetPrimaryActionValue =
+          !this.lastSelectedPVCTile.isValid();
         disableTearsheetSecondaryActionValue = true;
       } else {
         // On page 1 (where the user provides an optional sub path)
@@ -358,7 +360,7 @@ export default {
     deletePVCEntry(idx) {
       let fileReferencesForEntry =
         tearsheetsSharedState.getFileReferencesForPVCEntry(
-          this.pvcConfigurations[idx].name,
+          this.pvcConfigurations[idx].id,
         );
 
       if (fileReferencesForEntry.size == 0) {

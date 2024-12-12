@@ -42,8 +42,9 @@ export class FileConfigurationFromS3 extends FileConfiguration {
 }
 
 export class FileConfigurationFromPVC extends FileConfiguration {
-  constructor(pvcName, fileName, subPath) {
+  constructor(pvcId, pvcName, fileName, subPath) {
     super();
+    this.pvcId = pvcId;
     this.pvcName = pvcName;
     this.fileName = fileName;
     this.subPath = subPath;
@@ -68,6 +69,31 @@ export class FileConfigurationFromPVC extends FileConfiguration {
         persistentVolumeClaim: this.pvcName,
       },
       subPath: this.subPath,
+    };
+  }
+}
+
+export class FileConfigurationFromDatashim extends FileConfiguration {
+  constructor(datasetId, datasetName, fileName) {
+    super();
+    this.datasetId = datasetId;
+    this.datasetName = datasetName;
+    this.fileName = fileName;
+  }
+
+  toInputsPayload(originalFileName) {
+    let filename = this.fileName;
+    if (filename != originalFileName) {
+      filename += `:${originalFileName}`;
+    }
+    return {
+      filename,
+    };
+  }
+
+  toDatashimDatasetPayload() {
+    return {
+      dataset: this.datasetName,
     };
   }
 }

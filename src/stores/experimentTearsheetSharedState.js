@@ -2,9 +2,11 @@ import { reactive } from "vue";
 
 import S3Configuration from "@/classes/S3Configuration";
 import { PVCConfiguration } from "@/classes/PVCConfiguration";
+import { DatashimDatasetConfiguration } from "@/classes/DatashimDatasetConfiguration";
 import {
   FileConfigurationFromS3,
   FileConfigurationFromPVC,
+  FileConfigurationFromDatashim,
 } from "@/classes/FileConfiguration.js";
 
 function loadFromLocalStorage(key) {
@@ -16,6 +18,9 @@ function loadFromLocalStorage(key) {
       break;
     case "pvcConfigurations":
       target_class = PVCConfiguration;
+      break;
+    case "datashimDatasetConfigurations":
+      target_class = DatashimDatasetConfiguration;
       break;
     default:
       return;
@@ -32,6 +37,10 @@ export const tearsheetsSharedState = reactive({
   pvcReferences: new Map(),
   s3Configurations: loadFromLocalStorage("s3Configurations"),
   s3References: new Map(),
+  datashimDatasetConfigurations: loadFromLocalStorage(
+    "datashimDatasetConfigurations",
+  ),
+  datashimDatasetReferences: new Map(),
   s3UriRegex: new RegExp(
     "^s3://(?<bucket>[^/]+)/(?<path>.*?)/?(?<file>[^/]+)$",
     "i",
@@ -49,6 +58,15 @@ export const tearsheetsSharedState = reactive({
     }
   },
 
+  initializeDatashimDatasetReferencesSet() {
+    for (let i = 0; i < this.datashimDatasetConfigurations.length; i++) {
+      this.datashimDatasetReferences.set(
+        this.datashimDatasetConfigurations[i].id,
+        new Set(),
+      );
+    }
+  },
+
   async generateExperimentPayload(experiment) {
     let experimentPayload = {};
     if (experiment.parameterisation.executionOptions.variables.length > 0) {
@@ -58,10 +76,7 @@ export const tearsheetsSharedState = reactive({
     }
     experimentPayload["platform"] = this.generatePayloadPlatform(experiment);
     experimentPayload["inputs"] = await this.generatePayloadInputs();
-    let s3Endpoint = this.getS3Endpoint();
-    if (s3Endpoint) {
-      experimentPayload["s3"] = s3Endpoint;
-    }
+    experimentPayload["s3"] = this.generateS3Payload();
     experimentPayload["volumes"] = this.generatePayloadVolumes();
     return experimentPayload;
   },
@@ -83,6 +98,18 @@ export const tearsheetsSharedState = reactive({
       }
     }
     return volumePayload;
+  },
+
+  generateS3Payload() {
+    let s3Endpoint = this.getS3Endpoint();
+    if (s3Endpoint) {
+      return s3Endpoint;
+    }
+    for (let file of this.files.values()) {
+      if (file instanceof FileConfigurationFromDatashim) {
+        return file.toDatashimDatasetPayload();
+      }
+    }
   },
 
   generatePayloadVariables(variables) {
@@ -112,13 +139,29 @@ export const tearsheetsSharedState = reactive({
     }
   },
 
-  updatePVCEndpoint(pvcConfiguration) {
+  updatePVCEntry(pvcConfiguration) {
     for (let i = 0; i < this.pvcConfigurations.length; i++) {
       if (this.pvcConfigurations[i].id == pvcConfiguration.id) {
         this.pvcConfigurations[i] = pvcConfiguration;
         window.localStorage.setItem(
           "pvcConfigurations",
           JSON.stringify(this.pvcConfigurations),
+        );
+        break;
+      }
+    }
+  },
+
+  updateDatashimDatasetConfiguration(datashimDatasetConfiguration) {
+    for (let i = 0; i < this.datashimDatasetConfigurations.length; i++) {
+      if (
+        this.datashimDatasetConfigurations[i].id ==
+        datashimDatasetConfiguration.id
+      ) {
+        this.datashimDatasetConfigurations[i] = datashimDatasetConfiguration;
+        window.localStorage.setItem(
+          "datashimDatasetConfigurations",
+          JSON.stringify(this.datashimDatasetConfigurations),
         );
       }
     }
@@ -128,6 +171,7 @@ export const tearsheetsSharedState = reactive({
     this.files = new Map();
     this.s3References = new Map();
     this.pvcReferences = new Map();
+    this.datashimDatasetReferences = new Map();
   },
 
   getS3Endpoint() {
@@ -152,25 +196,6 @@ export const tearsheetsSharedState = reactive({
     };
   },
 
-  getPVCEntry() {
-    if (this.pvcReferences.size == 0) {
-      return;
-    }
-
-    let pvcID = this.pvcReferences.keys().next().value;
-    let fileReferences = this.pvcReferences.get(pvcID);
-    if (fileReferences.size == 0) {
-      return;
-    }
-
-    let entry = this.findPVCEntryById(pvcID);
-
-    return {
-      peristentVolumeClaim: entry.pvcName,
-      subPath: entry.subPath,
-    };
-  },
-
   addS3Endpoint(s3Configuration) {
     this.s3Configurations.push(s3Configuration);
     this.s3References.set(s3Configuration.id, new Set());
@@ -186,6 +211,18 @@ export const tearsheetsSharedState = reactive({
     window.localStorage.setItem(
       "pvcConfigurations",
       JSON.stringify(this.pvcConfigurations),
+    );
+  },
+
+  addDatashimDatasetConfiguration(datashimDatasetConfiguration) {
+    this.datashimDatasetConfigurations.push(datashimDatasetConfiguration);
+    this.datashimDatasetReferences.set(
+      datashimDatasetConfiguration.id,
+      new Set(),
+    );
+    window.localStorage.setItem(
+      "datashimDatasetConfigurations",
+      JSON.stringify(this.datashimDatasetConfigurations),
     );
   },
 
@@ -209,12 +246,18 @@ export const tearsheetsSharedState = reactive({
     );
   },
 
-  findS3EndpointById(id) {
-    return this.s3Configurations.find((endpoint) => endpoint.id == id);
+  removeDatashimDatasetConfigurationByIndex(index) {
+    let id = this.datashimDatasetConfigurations[index].id;
+    this.datashimDatasetConfigurations.splice(index, 1);
+    this.datashimDatasetReferences.delete(id);
+    window.localStorage.setItem(
+      "datashimDatasetConfigurations",
+      JSON.stringify(this.datashimDatasetConfigurations),
+    );
   },
 
-  findPVCEntryById(id) {
-    return this.pvcConfigurations.find((entry) => entry.id == id);
+  findS3EndpointById(id) {
+    return this.s3Configurations.find((endpoint) => endpoint.id == id);
   },
 
   setConfigurationForFile(name, fileConfiguration) {
@@ -224,6 +267,9 @@ export const tearsheetsSharedState = reactive({
     }
     if (fileConfiguration instanceof FileConfigurationFromPVC) {
       this.pvcReferences.get(fileConfiguration.pvcName).add(name);
+    }
+    if (fileConfiguration instanceof FileConfigurationFromDatashim) {
+      this.datashimDatasetReferences.get(fileConfiguration.datasetId).add(name);
     }
   },
 
@@ -240,12 +286,8 @@ export const tearsheetsSharedState = reactive({
     return this.pvcReferences.get(id);
   },
 
-  checkS3ReferenceIsEmpty(id) {
-    return getFileReferencesForS3Endpoint(id).size == 0;
-  },
-
-  checkPVCReferenceIsEmpty(id) {
-    return getFileReferencesForPVCEntry(id).size == 0;
+  getFileReferencesForDatashimDatasetConfiguration(id) {
+    return this.datashimDatasetReferences.get(id);
   },
 
   deleteReference(fileName) {
@@ -255,6 +297,11 @@ export const tearsheetsSharedState = reactive({
     }
     if (fileConfiguration instanceof FileConfigurationFromPVC) {
       this.pvcReferences.get(fileConfiguration.pvcName).delete(fileName);
+    }
+    if (fileConfiguration instanceof FileConfigurationFromDatashim) {
+      this.datashimDatasetReferences
+        .get(fileConfiguration.datasetId)
+        .delete(fileName);
     }
   },
 
