@@ -54,7 +54,7 @@ export const tearsheetsSharedState = reactive({
 
   initializePVCReferencesSet() {
     for (let i = 0; i < this.pvcConfigurations.length; i++) {
-      this.pvcReferences.set(this.pvcConfigurations[i].name, new Set());
+      this.pvcReferences.set(this.pvcConfigurations[i].id, new Set());
     }
   },
 
@@ -207,7 +207,7 @@ export const tearsheetsSharedState = reactive({
 
   addPVCEntry(pvcConfiguration) {
     this.pvcConfigurations.push(pvcConfiguration);
-    this.pvcReferences.set(pvcConfiguration.name, new Set());
+    this.pvcReferences.set(pvcConfiguration.id, new Set());
     window.localStorage.setItem(
       "pvcConfigurations",
       JSON.stringify(this.pvcConfigurations),
@@ -266,7 +266,7 @@ export const tearsheetsSharedState = reactive({
       this.s3References.get(fileConfiguration.endpointId).add(name);
     }
     if (fileConfiguration instanceof FileConfigurationFromPVC) {
-      this.pvcReferences.get(fileConfiguration.pvcName).add(name);
+      this.pvcReferences.get(fileConfiguration.pvcId).add(name);
     }
     if (fileConfiguration instanceof FileConfigurationFromDatashim) {
       this.datashimDatasetReferences.get(fileConfiguration.datasetId).add(name);
@@ -296,7 +296,7 @@ export const tearsheetsSharedState = reactive({
       this.s3References.get(fileConfiguration.endpointId).delete(fileName);
     }
     if (fileConfiguration instanceof FileConfigurationFromPVC) {
-      this.pvcReferences.get(fileConfiguration.pvcName).delete(fileName);
+      this.pvcReferences.get(fileConfiguration.pvcId).delete(fileName);
     }
     if (fileConfiguration instanceof FileConfigurationFromDatashim) {
       this.datashimDatasetReferences
