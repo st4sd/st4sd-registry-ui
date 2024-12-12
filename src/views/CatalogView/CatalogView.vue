@@ -67,7 +67,7 @@
 import "@carbon/web-components/es/components/notification/index.js";
 
 import axios from "axios";
-import debounce from "lodash.debounce";
+import lodash from "lodash";
 
 import St4sdLocalFilters from "@/components/St4sdLocalFilters/St4sdLocalFilters.vue";
 import St4sdAdvancedSearchFilter from "@/components/St4sdAdvancedSearchFilter/St4sdAdvancedSearchFilter.vue";
@@ -108,7 +108,7 @@ export default {
     this.loading = true;
     this.getSearchedData();
 
-    this.debouncedHandler = debounce(() => {
+    this.debouncedHandler = lodash.debounce(() => {
       this.callsMade++;
       this.getSearchedData(this.callsMade);
     }, this.debounceDelay);
