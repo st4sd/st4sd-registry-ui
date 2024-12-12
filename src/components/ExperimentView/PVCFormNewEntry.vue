@@ -4,10 +4,7 @@
       :value="configuration.name"
       @input="configuration.name = $event.target.value"
       label="Name"
-      :invalid="
-        !configuration.isValid() ||
-        !tearsheetsSharedState.hasPVCWithName(configuration.name)
-      "
+      :invalid="configurationIsInvalid"
       :invalid-text="pvcInvalidString"
     />
     <br />
@@ -32,10 +29,7 @@
         size="md"
         :title="isInEditMode ? 'Confirm' : 'Add'"
         @click="handleUserConfirmation"
-        :disabled="
-          !configuration.isValid() ||
-          !tearsheetsSharedState.hasPVCWithName(configuration.name)
-        "
+        :disabled="configurationIsInvalid"
         >{{ primaryButtonText }}
       </cds-button>
     </div>
@@ -76,6 +70,16 @@ export default {
   computed: {
     primaryButtonText() {
       return this.isInEditMode ? "Apply changes" : "Add entry";
+    },
+    configurationIsInvalid() {
+      return (
+        !this.configuration.isValid() ||
+        (!this.isInEditMode &&
+          tearsheetsSharedState.hasPVCWithName(this.configuration.name)) ||
+        (this.isInEditMode &&
+          tearsheetsSharedState.hasPVCWithName(this.configuration.name) &&
+          this.configuration.name != this.pvcEditEntry.name)
+      );
     },
   },
   data() {

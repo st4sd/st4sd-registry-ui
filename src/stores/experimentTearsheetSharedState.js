@@ -306,11 +306,6 @@ export const tearsheetsSharedState = reactive({
   },
 
   hasPVCWithName(name) {
-    for (let entry of this.pvcConfigurations) {
-      if (entry.name == name) {
-        return false;
-      }
-    }
-    return true;
+    return this.pvcConfigurations.some((entry) => entry.name == name);
   },
 });
