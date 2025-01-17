@@ -173,7 +173,7 @@ import { getDeploymentEndpoint } from "@/functions/public_path";
 import axios from "axios";
 import router from "@/router";
 import FileConfigurationTearsheet from "@/components/ExperimentView/FileConfigurationTearsheet.vue";
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
 import { FileConfiguration } from "@/classes/FileConfiguration.js";
 
 export default {

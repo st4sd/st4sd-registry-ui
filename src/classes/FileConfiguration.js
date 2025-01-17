@@ -1,5 +1,5 @@
 import readFile from "@/functions/read_file";
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 
 export class FileConfiguration {
   constructor() {}

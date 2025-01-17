@@ -131,7 +131,7 @@ import InputConfigurationDatashimForm from "@/components/ExperimentView/InputCon
 
 import experimentTearsheetTabEnums from "@/enums/experimentTearsheetTabEnums";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 
 import {
   FileConfiguration,

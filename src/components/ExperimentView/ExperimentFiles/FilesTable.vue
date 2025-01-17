@@ -80,7 +80,7 @@ import FilesTableFilter from "@/components/ExperimentView/ExperimentFiles/FilesT
 import NoSearchResultsEmptyState from "@/components/EmptyState/NoSearchResultsEmptyState.vue";
 import NoDataEmptyState from "@/components/EmptyState/NoDataEmptyState.vue";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 
 import inputTypeEnums from "@/enums/inputTypeEnums.js";
 import statusTypeEnums from "@/enums/statusTypeEnums";

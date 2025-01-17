@@ -140,7 +140,7 @@ import "@carbon/web-components/es/components/progress-indicator/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/form-group/index.js";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
 import PVCFormNewEntry from "./PVCFormNewEntry.vue";
 import { PVCConfiguration } from "@/classes/PVCConfiguration";

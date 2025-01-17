@@ -159,7 +159,7 @@ import axios from "axios";
 
 import HttpErrorEmptyState from "@/components/EmptyState/HttpError.vue";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
 
 export default {
   name: "ExperimentView",

@@ -34,7 +34,7 @@
 <script>
 import "@carbon/web-components/es/components/button/index.js";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 
 export default {
   name: "FilesTableRowButtons",

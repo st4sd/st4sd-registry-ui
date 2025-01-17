@@ -46,7 +46,7 @@ import {
   pvcInvalidString,
 } from "@/classes/PVCConfiguration.js";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
 
 export default {
   name: "PVCFormNewEntry",

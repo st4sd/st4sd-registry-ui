@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 
 import S3Configuration from "@/classes/S3Configuration";
 import { PVCConfiguration } from "@/classes/PVCConfiguration";
@@ -31,7 +31,7 @@ function loadFromLocalStorage(key) {
   return storedItems;
 }
 
-export const tearsheetsSharedState = reactive({
+const tearsheetSharedState = reactive({
   files: new Map(),
   pvcConfigurations: loadFromLocalStorage("pvcConfigurations"),
   pvcReferences: new Map(),
@@ -45,6 +45,9 @@ export const tearsheetsSharedState = reactive({
     "^s3://(?<bucket>[^/]+)/(?<path>.*?)/?(?<file>[^/]+)$",
     "i",
   ),
+  someFilesUploaded: computed(() => {
+    return tearsheetSharedState.files.size > 0;
+  }),
 
   initializeS3ReferencesSet() {
     for (let i = 0; i < this.s3Configurations.length; i++) {
@@ -170,8 +173,11 @@ export const tearsheetsSharedState = reactive({
   clear() {
     this.files = new Map();
     this.s3References = new Map();
+    this.initializeS3ReferencesSet();
     this.pvcReferences = new Map();
+    this.initializePVCReferencesSet();
     this.datashimDatasetReferences = new Map();
+    this.initializeDatashimDatasetReferencesSet();
   },
 
   getS3Endpoint() {
@@ -309,3 +315,5 @@ export const tearsheetsSharedState = reactive({
     return this.pvcConfigurations.some((entry) => entry.name == name);
   },
 });
+
+export default tearsheetSharedState;

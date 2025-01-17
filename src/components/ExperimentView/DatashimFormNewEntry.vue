@@ -48,7 +48,7 @@ import {
   datashimDatasetInvalidString,
 } from "@/classes/DatashimDatasetConfiguration.js";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
 
 export default {
   name: "DatashimFormNewEntry",

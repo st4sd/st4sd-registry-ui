@@ -151,7 +151,7 @@ import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/progress-indicator/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 
-import { tearsheetsSharedState } from "@/stores/experimentTearsheetSharedState.js";
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
 import DatashimFormNewEntry from "@/components/ExperimentView/DatashimFormNewEntry.vue";
 import { DatashimDatasetConfiguration } from "@/classes/DatashimDatasetConfiguration.js";

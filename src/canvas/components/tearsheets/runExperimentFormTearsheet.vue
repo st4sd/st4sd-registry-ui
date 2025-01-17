@@ -5,7 +5,8 @@
     hasCloseIcon
     width="wide"
     influencerPlacement="left"
-    @cds-tearsheet-closed="($emit('cds-tearsheet-closed'), (pageNo = 0))"
+    @cds-tearsheet-closed="closeAndClearTearsheet()"
+    :preventCloseOnClickOutside="tearsheetsSharedState.someFilesUploaded"
   >
     <h3 slot="title">Run Experiment</h3>
     <cds-progress-indicator
@@ -55,10 +56,7 @@
         :experiment="experiment"
       />
     </div>
-    <cds-button
-      slot="actions"
-      kind="ghost"
-      @click="($emit('cds-tearsheet-closed'), (pageNo = 0))"
+    <cds-button slot="actions" kind="ghost" @click="closeAndClearTearsheet()"
       >Cancel</cds-button
     >
     <cds-button
@@ -97,6 +95,8 @@ import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunE
 import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
 import RunExperimentPlatforms from "@/components/ExperimentView/RunExperimentPlatforms.vue";
 
+import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
+
 export default {
   name: "runExperimentFormTearsheet",
   props: {
@@ -123,6 +123,7 @@ export default {
         { name: "runExperimentVariablesStep", index: 1 },
         { name: "runExperimentPlatformsStep", index: 2 },
       ],
+      tearsheetsSharedState,
     };
   },
   mounted() {
@@ -135,6 +136,11 @@ export default {
     document.getElementById(this.tabs[0].name).setAttribute("state", "current");
   },
   methods: {
+    closeAndClearTearsheet() {
+      this.$emit("cds-tearsheet-closed");
+      this.pageNo = 0;
+      this.tearsheetsSharedState.clear();
+    },
     setProgressIndicatorStatus(pageNo, index) {
       if (index == pageNo) {
         return "current";
