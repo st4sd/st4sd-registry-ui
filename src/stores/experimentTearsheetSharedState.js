@@ -45,6 +45,9 @@ const tearsheetSharedState = reactive({
     "^s3://(?<bucket>[^/]+)/(?<path>.*?)/?(?<file>[^/]+)$",
     "i",
   ),
+  additionalRuntimeArgs: [],
+  environmentVariables: [],
+  metadata: [],
   someFilesUploaded: computed(() => {
     return tearsheetSharedState.files.size > 0;
   }),
@@ -71,17 +74,32 @@ const tearsheetSharedState = reactive({
   },
 
   async generateExperimentPayload(experiment) {
+    let executionOptions = experiment.parameterisation.executionOptions;
     let experimentPayload = {};
-    if (experiment.parameterisation.executionOptions.variables.length > 0) {
+    if (executionOptions.variables.length > 0) {
       experimentPayload["variables"] = this.generatePayloadVariables(
-        experiment.parameterisation.executionOptions.variables,
+        executionOptions.variables,
       );
     }
-    experimentPayload["platform"] = this.generatePayloadPlatform(experiment);
+    experimentPayload["platform"] = executionOptions?.selectedPlatform;
     experimentPayload["inputs"] = await this.generatePayloadInputs();
     experimentPayload["s3"] = this.generateS3Payload();
     experimentPayload["volumes"] = this.generatePayloadVolumes();
+    experimentPayload["additionalOptions"] = this.additionalRuntimeArgs;
+    experimentPayload["environmentVariables"] =
+      this.generatePayloadObjectFromArray(this.environmentVariables);
+    experimentPayload["metadata"] = this.generatePayloadObjectFromArray(
+      this.metadata,
+    );
     return experimentPayload;
+  },
+
+  generatePayloadObjectFromArray(arr) {
+    let obj = {};
+    for (let arrItem of arr) {
+      obj[arrItem.name] = arrItem.value;
+    }
+    return obj;
   },
 
   async generatePayloadInputs() {
@@ -123,10 +141,6 @@ const tearsheetSharedState = reactive({
       }
     }
     return variablesPayload;
-  },
-
-  generatePayloadPlatform(experiment) {
-    return experiment.parameterisation.executionOptions?.selectedPlatform;
   },
 
   updateS3Endpoint(s3Configuration) {
@@ -178,6 +192,9 @@ const tearsheetSharedState = reactive({
     this.initializePVCReferencesSet();
     this.datashimDatasetReferences = new Map();
     this.initializeDatashimDatasetReferencesSet();
+    this.additionalRuntimeArgs = [];
+    this.environmentVariables = [];
+    this.metadata = [];
   },
 
   getS3Endpoint() {

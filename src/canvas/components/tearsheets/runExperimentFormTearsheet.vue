@@ -29,6 +29,11 @@
         label="Platforms"
         @click="pageNo = 2"
       ></cds-progress-step>
+      <cds-progress-step
+        id="runExperimentRuntimeOptionsStep"
+        label="Runtime Options"
+        @click="pageNo = 3"
+      ></cds-progress-step>
     </cds-progress-indicator>
     <div v-if="pageNo == 0" class="tab-panels">
       <RunExperimentFiles />
@@ -56,6 +61,14 @@
         :experiment="experiment"
       />
     </div>
+    <div v-if="pageNo == 3" class="tab-panels">
+      <RunExperimentRuntimeOptions
+        @required-configuration-complete="
+          requiredStepConfigurationComplete[3] = $event
+        "
+        :experiment="experiment"
+      />
+    </div>
     <cds-button slot="actions" kind="ghost" @click="closeAndClearTearsheet()"
       >Cancel</cds-button
     >
@@ -67,7 +80,7 @@
       >Back</cds-button
     >
     <cds-button
-      v-if="pageNo < 2"
+      v-if="pageNo < tabs.length - 1"
       slot="actions"
       kind="primary"
       @click="pageNo++"
@@ -94,6 +107,7 @@ import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.v
 import RunExperimentFiles from "@/components/ExperimentView/ExperimentFiles/RunExperimentFiles.vue";
 import RunExperimentVariables from "@/components/ExperimentView/RunExperimentVariables.vue";
 import RunExperimentPlatforms from "@/components/ExperimentView/RunExperimentPlatforms.vue";
+import RunExperimentRuntimeOptions from "@/components/ExperimentView/RunExperimentRuntimeOptions.vue";
 
 import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState";
 
@@ -113,15 +127,17 @@ export default {
     RunExperimentFiles,
     RunExperimentVariables,
     RunExperimentPlatforms,
+    RunExperimentRuntimeOptions,
   },
   data() {
     return {
-      requiredStepConfigurationComplete: [false, false, false],
+      requiredStepConfigurationComplete: [false, false, false, false],
       pageNo: 0,
       tabs: [
         { name: "runExperimentFilesStep", index: 0 },
         { name: "runExperimentVariablesStep", index: 1 },
         { name: "runExperimentPlatformsStep", index: 2 },
+        { name: "runExperimentRuntimeOptionsStep", index: 3 },
       ],
       tearsheetsSharedState,
     };
