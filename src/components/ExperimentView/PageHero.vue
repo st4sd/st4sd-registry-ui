@@ -139,7 +139,7 @@
     </div>
     <FileConfigurationTearsheet
       :isOpen="openFileConfigurationTearsheet"
-      @cds-tearsheet-closed="
+      @c4p-tearsheet-closed="
         openFileConfigurationTearsheet = !openFileConfigurationTearsheet
       "
       :fileName="fileName"
@@ -150,7 +150,7 @@
       :experiment="experiment"
       :open="runExperimentFormTearsheetVisibility"
       :runExperimentFormEmit="runExperimentFormEmit"
-      @cds-tearsheet-closed="
+      @c4p-tearsheet-closed="
         toggleModalVisibility('runExperimentFormTearsheetVisibility')
       "
       @file-being-configured="startFileConfiguration"

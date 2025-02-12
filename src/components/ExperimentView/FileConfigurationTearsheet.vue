@@ -1,11 +1,11 @@
 <template>
-  <cds-tearsheet
+  <c4p-tearsheet
     class="cds-theme-zone-g10"
     :open="isOpen"
     data-index="two"
     hasCloseIcon
     width="wide"
-    @cds-tearsheet-closed="$emit('cds-tearsheet-closed')"
+    @c4p-tearsheet-closed="$emit('c4p-tearsheet-closed')"
   >
     <h3 slot="title">Provide a file for {{ fileName }}</h3>
     <p slot="description">
@@ -99,7 +99,7 @@
     <cds-button
       slot="actions"
       kind="ghost"
-      @click="$emit('cds-tearsheet-closed')"
+      @click="$emit('c4p-tearsheet-closed')"
       >Cancel</cds-button
     >
     <cds-button
@@ -116,11 +116,11 @@
       @click="primaryButtonClicked()"
       >{{ primaryButtonIsSubmit ? "Submit" : "Next" }}</cds-button
     >
-  </cds-tearsheet>
+  </c4p-tearsheet>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/tearsheet/index.js";
+import "@carbon/ibm-products-web-components/es/components/tearsheet/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/tabs/index.js";
 
@@ -151,7 +151,7 @@ export default {
     },
     isOpen: Boolean,
   },
-  emits: ["cds-tearsheet-closed", "push-to-toast-errors"],
+  emits: ["c4p-tearsheet-closed", "push-to-toast-errors"],
   components: {
     InputConfigurationFileUploadForm,
     InputConfigurationS3Form,
@@ -269,7 +269,7 @@ export default {
             this.fileName,
             this.userFileConfiguration,
           );
-          this.$emit("cds-tearsheet-closed");
+          this.$emit("c4p-tearsheet-closed");
           return;
         case experimentTearsheetTabEnums.S3:
           if (
@@ -280,7 +280,7 @@ export default {
               this.fileName,
               this.userFileConfiguration,
             );
-            this.$emit("cds-tearsheet-closed");
+            this.$emit("c4p-tearsheet-closed");
           }
           this.s3FormPage = this.s3FormPage == 0 ? 1 : 0;
           return;
@@ -293,7 +293,7 @@ export default {
               this.fileName,
               this.userFileConfiguration,
             );
-            this.$emit("cds-tearsheet-closed");
+            this.$emit("c4p-tearsheet-closed");
           }
           this.pvcFormPage = this.pvcFormPage == 0 ? 1 : 0;
           return;
@@ -306,7 +306,7 @@ export default {
               this.fileName,
               this.userFileConfiguration,
             );
-            this.$emit("cds-tearsheet-closed");
+            this.$emit("c4p-tearsheet-closed");
           }
           this.datashimFormPage = this.datashimFormPage == 0 ? 1 : 0;
       }

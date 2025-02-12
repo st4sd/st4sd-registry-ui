@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     includeOverlay="true"
     title="Select Entrypoint"
-    @cds-side-panel-closed="this.$emit('side-panel-closed')"
+    @c4p-side-panel-closed="this.$emit('side-panel-closed')"
   >
     <template v-if="Object.keys(entryPointSelectionNodes).length > 0">
       <cds-radio-button-group
@@ -42,12 +42,12 @@
       :disabled="selectedNodeId == ''"
       >Save changes</cds-button
     >
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>
 import "@carbon/web-components/es/components/radio-button/index.js";
-import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/ibm-products-web-components/es/components/side-panel/index.js";
 
 export default {
   props: {

@@ -1,11 +1,11 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="lg"
     includeOverlay="true"
     :title="`Add <${toBeNestedNode.label}> to a workflow`"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <div>
       <p>Choose a workflow:</p>
@@ -73,13 +73,13 @@
     >
       Submit
     </cds-button>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>
 import "@carbon/web-components/es/components/radio-button/index.js";
 import "@carbon/web-components/es/components/button/index.js";
-import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/ibm-products-web-components/es/components/side-panel/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 

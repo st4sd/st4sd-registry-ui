@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="md"
     includeOverlay="true"
     :title="this.step == 0 ? 'Register Experiment' : 'DSL Validation Errors'"
     :currentStep="this.step"
-    @cds-side-panel-navigate-back="this.step = 0"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-navigate-back="this.step = 0"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <div v-if="this.step == 1">
       <DslValidationErrors
@@ -77,7 +77,7 @@
     >
       Register Experiment
     </cds-button>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>

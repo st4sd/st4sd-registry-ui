@@ -1,10 +1,10 @@
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="lg"
     includeOverlay="true"
     title="Edge Parameters"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <cds-structured-list>
       <cds-structured-list-head>
@@ -37,7 +37,7 @@
         </cds-structured-list-row>
       </cds-structured-list-body>
     </cds-structured-list>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>

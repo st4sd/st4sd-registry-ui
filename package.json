@@ -12,7 +12,11 @@
   "dependencies": {
     "@carbon/charts": "^1.22.11",
     "@carbon/grid": "^11.30.0",
+    "@carbon/ibm-products-styles": "^2.53.0",
+    "@carbon/ibm-products-web-components": "^0.8.0",
     "@carbon/ibmdotcom-web-components": "^2.16.2",
+    "@carbon/layout": "^11.28.0",
+    "@carbon/motion": "^11.24.0",
     "@carbon/styles": "^1.72.0",
     "@carbon/themes": "^11.44.0",
     "@carbon/type": "^11.34.0",

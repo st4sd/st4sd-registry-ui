@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="lg"
     includeOverlay="true"
     :title="step == 0 ? 'Update workflow details' : 'DSL Validation Errors'"
     :currentStep="step"
-    @cds-side-panel-navigate-back="step = 0"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-navigate-back="step = 0"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <div v-if="this.step == 1">
       <DslValidationErrors
@@ -94,11 +94,11 @@
     >
       Save changes
     </cds-button>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/ibm-products-web-components/es/components/side-panel/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 import workflowForm from "@/canvas/components/forms/workflowForm.vue";

@@ -1,12 +1,12 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="lg"
     includeOverlay="true"
     title="Create component"
     selector-initial-focus=".createComponentSidePanel"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <componentForm
       ref="componentForm"
@@ -28,11 +28,11 @@
     >
       Submit
     </cds-button>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/ibm-products-web-components/es/components/side-panel/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import componentForm from "@/canvas/components/forms/componentForm.vue";
 

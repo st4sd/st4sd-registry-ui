@@ -1,11 +1,11 @@
 <template>
-  <cds-tearsheet
+  <c4p-tearsheet
     data-index="one"
     class="cds-theme-zone-g10"
     hasCloseIcon
     width="wide"
     influencerPlacement="left"
-    @cds-tearsheet-closed="closeAndClearTearsheet()"
+    @c4p-tearsheet-closed="closeAndClearTearsheet()"
     :preventCloseOnClickOutside="tearsheetsSharedState.someFilesUploaded"
   >
     <h3 slot="title">Run Experiment</h3>
@@ -96,11 +96,11 @@
       @click="$emit('st4sd-experiment-run-submitted')"
       >Submit</cds-button
     >
-  </cds-tearsheet>
+  </c4p-tearsheet>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/tearsheet/index.js";
+import "@carbon/ibm-products-web-components/es/components/tearsheet/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 
 import FilesTable from "@/components/ExperimentView/ExperimentFiles/FilesTable.vue";
@@ -119,7 +119,7 @@ export default {
   },
   emits: [
     "st4sd-experiment-run-submitted",
-    "cds-tearsheet-closed",
+    "c4p-tearsheet-closed",
     "file-being-configured",
   ],
   components: {
@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     closeAndClearTearsheet() {
-      this.$emit("cds-tearsheet-closed");
+      this.$emit("c4p-tearsheet-closed");
       this.pageNo = 0;
       this.tearsheetsSharedState.clear();
     },

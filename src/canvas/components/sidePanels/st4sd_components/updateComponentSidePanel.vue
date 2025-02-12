@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-deprecated-slot-attribute -->
 <template>
-  <cds-side-panel
+  <c4p-side-panel
     open
     size="lg"
     includeOverlay="true"
@@ -8,8 +8,8 @@
       this.step == 0 ? 'Update component details' : 'DSL Validation Errors'
     "
     :currentStep="this.step"
-    @cds-side-panel-navigate-back="this.step = 0"
-    @cds-side-panel-closed="$emit('side-panel-closed')"
+    @c4p-side-panel-navigate-back="this.step = 0"
+    @c4p-side-panel-closed="$emit('side-panel-closed')"
   >
     <div>
       <div v-if="this.step == 1">
@@ -99,11 +99,11 @@
     >
       Save
     </cds-button>
-  </cds-side-panel>
+  </c4p-side-panel>
 </template>
 
 <script>
-import "@carbon/web-components/es/components/side-panel/index.js";
+import "@carbon/ibm-products-web-components/es/components/side-panel/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/notification/index.js";
 import DslValidationErrors from "@/canvas/components/DslValidationErrors.vue";
