@@ -163,5 +163,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@use "@/styles/structured-list-grid-column-styles.css";
+@use "@/styles/structured-list-grid-column-styles.scss";
 </style>

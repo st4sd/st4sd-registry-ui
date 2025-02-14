@@ -69,17 +69,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@carbon/layout";
 @use "@/styles/svg.scss";
 
 .download-icon {
-  height: 16px;
-  width: 16px;
+  height: layout.$spacing-05;
+  width: layout.$spacing-05;
   filter: invert(100);
 }
 
 // Padding has to be 2 rems instead of 1 rem like the rest of the items
 //  because otherwise the padding will appear "internal" to the code snippet
 #code-snippet {
-  padding-left: 2rem;
+  padding-left: layout.$spacing-07;
 }
 </style>

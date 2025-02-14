@@ -2,6 +2,8 @@
 preset parameters and base package info tables 
 in Experiment View*/
 
+@use "@carbon/layout";
+
 /* 
     cds grid classes overwrite structured-list component display attributes to block, causing issues.
     setting 'display: table-cell !important;' resets the elements to the correct display value 
@@ -11,7 +13,7 @@ in Experiment View*/
   display: table-cell !important;
 }
 .cds--col-sm-3 {
-  padding-left: 2.5rem;
+  padding-left: layout.$spacing-08;
   display: table-cell !important;
 }
 cds-structured-list {

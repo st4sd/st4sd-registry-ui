@@ -360,7 +360,7 @@ export default {
 @use "@/styles/toast-notification-styles.scss";
 
 .empty-state {
-  margin: 1rem 0;
+  margin: layout.$spacing-05 0;
 }
 
 #http-error-empty-state {
