@@ -662,6 +662,10 @@ const toggleVisibility = (modal) => {
 let nestingNode = {};
 let nestingWFs = [];
 const onDrop = (event) => {
+  if (!canvasStore.node) {
+    event.preventDefault();
+    return;
+  }
   //copy the element so we do not change the source
   const newNode = JSON.parse(JSON.stringify(canvasStore.node));
   const { left, top } = vueFlowRef.value.getBoundingClientRect();
@@ -735,6 +739,7 @@ const onDrop = (event) => {
       toggleVisibility("nestNodeSidePanel");
     }
   });
+  canvasStore.setNode(null);
 };
 
 function setEntrypointAndNotify(id) {
