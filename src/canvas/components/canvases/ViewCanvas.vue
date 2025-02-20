@@ -30,7 +30,24 @@
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
-      <Controls />
+      <Controls>
+        <cds-button
+          class="controls-extra-button"
+          size="md"
+          style="padding-left: 4px"
+          title="Auto align nodes"
+          @click="alignNodes()"
+          :disabled="!nodes.some((node) => node.type != 'input')"
+        >
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/align--horizontal-center.svg"
+          />
+        </cds-button>
+      </Controls>
 
       <Panel :position="PanelPosition.TopRight" class="controls">
         <cds-button
@@ -179,6 +196,7 @@ import {
   getWorkflowsEdges,
   hide,
 } from "@/canvas/functions/hideExpand";
+import { autoAlignNodes } from "@/canvas/functions/autoAlignNodes";
 
 import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/button/index.js";
@@ -217,9 +235,12 @@ const {
   onPaneReady,
   onEdgeDoubleClick,
   onConnect,
+  addNodes,
   addEdges,
   onNodeDoubleClick,
   removeEdges,
+  getIntersectingNodes,
+  getConnectedEdges,
   nodes,
   edges,
 } = useVueFlow("vue-flow-view-canvas");
@@ -314,6 +335,27 @@ const downloadExperimentFiles = () => {
     toastNotifications.value.push(dslDownloadError);
   }
 };
+
+function alignNodes() {
+  autoAlignNodes(
+    nodes.value,
+    edges.value,
+    getIntersectingNodes,
+    getConnectedEdges,
+  ).then(({ newNodes, newEdges }) => {
+    edges.value = [];
+    nodes.value = [];
+    /*
+      AP (25/09/24):
+      We're adding a delay of 5ms due to this issue:
+      https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
+    */
+    setTimeout(() => {
+      addNodes(newNodes);
+      addEdges(newEdges);
+    }, 5);
+  });
+}
 </script>
 <style scoped lang="scss">
 @use "@/canvas/styles/main.scss";

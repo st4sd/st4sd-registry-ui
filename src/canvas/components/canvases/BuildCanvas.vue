@@ -15,7 +15,24 @@
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
-      <Controls />
+      <Controls>
+        <cds-button
+          class="controls-extra-button"
+          size="md"
+          style="padding-left: 4px"
+          title="Auto align nodes"
+          @click="alignNodes()"
+          :disabled="!allNodes.some((node) => node.type != 'input')"
+        >
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/align--horizontal-center.svg"
+          />
+        </cds-button>
+      </Controls>
       <Panel :position="PanelPosition.TopRight" class="controls">
         <cds-button
           size="md"
@@ -358,6 +375,7 @@ import readFile from "@/functions/read_file.js";
 import { updateNodeLabel } from "@/canvas/functions/updateNodeLabel";
 import axios from "axios";
 import { getEntryWorkflowBlock } from "@/canvas/functions/getEntryWorkflowBlock";
+import { autoAlignNodes } from "@/canvas/functions/autoAlignNodes";
 
 import { getDeploymentEndpoint } from "@/functions/public_path";
 
@@ -387,6 +405,7 @@ const {
   removeEdges,
   removeNodes,
   findNode,
+  getConnectedEdges,
   fitView,
   project,
   vueFlowRef,
@@ -575,7 +594,7 @@ function applyUploadedFiles() {
       // we are sure that this is the first workflow added to the canvas
       setEntrypointAndNotify(id);
       /*
-        AP (18/09/24): 
+        AP (18/09/24):
         Fix timing issues in a similar way to what was done for applyUploadedFiles
         ref: https://github.ibm.com/st4sd/st4sd-registry-ui/pull/820
       */
@@ -597,11 +616,11 @@ function applyUploadedFiles() {
       //Canvas is wiped clean
       nodes.value = [];
       edges.value = [];
-      /* 
-      AP (16/09/24): 
-      We're adding a delay of 20ms due to this issue: 
+      /*
+      AP (16/09/24):
+      We're adding a delay of 20ms due to this issue:
       https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
-      AP: 20/09/24: 
+      AP: 20/09/24:
       The delay was originally 10ms but was bumped to 20 in:
       https://github.ibm.com/st4sd/st4sd-registry-ui/pull/820#issuecomment-91519950
       We're resetting the values referenced by the refs nodes, edges.
@@ -1003,6 +1022,27 @@ let dslValidationErrors = ref([]);
 const setDslValidationError = (dslError) => {
   dslValidationErrors.value = dslError;
 };
+
+function alignNodes() {
+  autoAlignNodes(
+    nodes.value,
+    edges.value,
+    getIntersectingNodes,
+    getConnectedEdges,
+  ).then(({ newNodes, newEdges }) => {
+    edges.value = [];
+    nodes.value = [];
+    /*
+      AP (25/09/24):
+      We're adding a delay of 5ms due to this issue:
+      https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
+    */
+    setTimeout(() => {
+      addNodes(newNodes);
+      addEdges(newEdges);
+    }, 5);
+  });
+}
 </script>
 
 <style scoped lang="scss">

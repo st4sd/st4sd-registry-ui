@@ -122,10 +122,11 @@
   background: #292524;
   color: #fffffb;
 }
-.basicflow.dark .vue-flow__controls .vue-flow__controls-button {
+.basicflow.dark .vue-flow__controls .vue-flow__controls-button,
+.basicflow.dark .controls-extra-button::part(button):enabled {
   background: #292524;
   fill: #fffffb;
-  border-color: #fffffb;
+  border-color: #292524;
 }
 .basicflow.dark .vue-flow__edge-textbg {
   fill: #292524;

@@ -30,7 +30,24 @@
     >
       <Background :pattern-color="dark ? '#FFFFFB' : '#aaa'" gap="8" />
       <MiniMap />
-      <Controls />
+      <Controls>
+        <cds-button
+          class="controls-extra-button"
+          size="md"
+          style="padding-left: 4px"
+          title="Auto align nodes"
+          @click="alignNodes()"
+          :disabled="!nodes.some((node) => node.type != 'input')"
+        >
+          <img
+            slot="icon"
+            class="white-svg"
+            width="16"
+            height="16"
+            src="@/assets/align--horizontal-center.svg"
+          />
+        </cds-button>
+      </Controls>
 
       <Panel :position="PanelPosition.TopRight" class="controls">
         <cds-button
@@ -163,13 +180,16 @@ import readWorkflowSidePanel from "@/canvas/components/sidePanels/st4sd_workflow
 import readComponentSidePanel from "@/canvas/components/sidePanels/st4sd_components/readComponentSidePanel.vue";
 import readExperimentInputsSidePanel from "@/canvas/components/sidePanels/experiment/readExperimentInputsSidePanel.vue";
 import readEdgeSidePanel from "@/canvas/components/sidePanels/edges/readEdgeSidePanel.vue";
+//Functions
 import { downloadExperiment } from "@/canvas/functions/downloadJSON";
 import {
   getWorkflowsDimensions,
   getWorkflowsEdges,
   hide,
 } from "@/canvas/functions/hideExpand";
+import { autoAlignNodes } from "@/canvas/functions/autoAlignNodes";
 import TransformLibrary from "@/canvas/components/TransformLibrary.vue";
+
 import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 
@@ -185,9 +205,12 @@ const {
   onPaneReady,
   onEdgeDoubleClick,
   onConnect,
+  addNodes,
   addEdges,
   onNodeDoubleClick,
   removeEdges,
+  getIntersectingNodes,
+  getConnectedEdges,
   nodes,
   edges,
 } = useVueFlow("vue-flow-edit-canvas");
@@ -322,6 +345,27 @@ const emit = defineEmits(["transformSelected"]);
 const handleTransformSelected = (loading, transformId) => {
   emit("transformSelected", loading, transformId);
 };
+
+function alignNodes() {
+  autoAlignNodes(
+    nodes.value,
+    edges.value,
+    getIntersectingNodes,
+    getConnectedEdges,
+  ).then(({ newNodes, newEdges }) => {
+    edges.value = [];
+    nodes.value = [];
+    /*
+      AP (25/09/24):
+      We're adding a delay of 5ms due to this issue:
+      https://github.ibm.com/st4sd/st4sd-registry-ui/issues/811
+    */
+    setTimeout(() => {
+      addNodes(newNodes);
+      addEdges(newEdges);
+    }, 5);
+  });
+}
 </script>
 <style scoped lang="scss">
 @use "@/canvas/styles/main.scss";
