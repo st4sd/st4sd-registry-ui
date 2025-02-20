@@ -36,7 +36,7 @@
           size="md"
           style="padding-left: 4px"
           title="Auto align nodes"
-          @click="alignNodes()"
+          @click="alignNodesAndFitView()"
           :disabled="!nodes.some((node) => node.type != 'input')"
         >
           <img
@@ -202,7 +202,7 @@ import "@carbon/web-components/es/components/button/index.js";
 const elements = ref(canvasStore.DAG);
 
 const {
-  onPaneReady,
+  onInit,
   onEdgeDoubleClick,
   onConnect,
   addNodes,
@@ -211,6 +211,7 @@ const {
   removeEdges,
   getIntersectingNodes,
   getConnectedEdges,
+  fitView,
   nodes,
   edges,
 } = useVueFlow("vue-flow-edit-canvas");
@@ -275,13 +276,8 @@ const showHideInputNodes = () => {
       : "Hide presets & other";
 };
 
-/**
- * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
- *
- * onPaneReady is called when viewpane & nodes have visible dimensions
- */
-onPaneReady(({ fitView }) => {
-  fitView();
+onInit((vueFlowInstance) => {
+  vueFlowInstance.fitView();
 });
 
 onNodeDoubleClick(({ node }) => {
@@ -346,7 +342,7 @@ const handleTransformSelected = (loading, transformId) => {
   emit("transformSelected", loading, transformId);
 };
 
-function alignNodes() {
+function alignNodesAndFitView() {
   autoAlignNodes(
     nodes.value,
     edges.value,
@@ -363,6 +359,7 @@ function alignNodes() {
     setTimeout(() => {
       addNodes(newNodes);
       addEdges(newEdges);
+      nextTick(() => fitView());
     }, 5);
   });
 }

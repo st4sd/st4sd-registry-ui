@@ -202,6 +202,7 @@ import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 
 import { registryUISharedState } from "@/stores/registryUISharedState";
+import { nextTick } from "process";
 
 /**
  * useVueFlow provides all event handlers and store properties
@@ -232,13 +233,14 @@ const props = defineProps({
 const emits = defineEmits(["transform-button-clicked"]);
 
 const {
-  onPaneReady,
+  onInit,
   onEdgeDoubleClick,
   onConnect,
   addNodes,
   addEdges,
   onNodeDoubleClick,
   removeEdges,
+  fitView,
   getIntersectingNodes,
   getConnectedEdges,
   nodes,
@@ -269,13 +271,9 @@ const showHideInputNodes = () => {
 
 const workflowsDims = getWorkflowsDimensions(nodes.value);
 const workflowsEdges = getWorkflowsEdges(nodes.value, edges.value);
-/**
- * This is a Vue Flow event-hook which can be listened to from anywhere you call the composable, instead of only on the main component
- *
- * onPaneReady is called when viewpane & nodes have visible dimensions
- */
-onPaneReady(({ fitView }) => {
-  fitView();
+
+onInit((vueFlowInstance) => {
+  vueFlowInstance.fitView();
 });
 
 const toggleModalVisibility = (modal) => {
@@ -353,6 +351,7 @@ function alignNodes() {
     setTimeout(() => {
       addNodes(newNodes);
       addEdges(newEdges);
+      nextTick(() => fitView());
     }, 5);
   });
 }

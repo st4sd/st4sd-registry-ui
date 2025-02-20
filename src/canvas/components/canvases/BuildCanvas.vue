@@ -21,7 +21,7 @@
           size="md"
           style="padding-left: 4px"
           title="Auto align nodes"
-          @click="alignNodes()"
+          @click="alignNodesAndFitView()"
           :disabled="!allNodes.some((node) => node.type != 'input')"
         >
           <img
@@ -599,7 +599,7 @@ function applyUploadedFiles() {
         ref: https://github.ibm.com/st4sd/st4sd-registry-ui/pull/820
       */
       setTimeout(function () {
-        fitView({ padding: 0.4 });
+        fitView();
       }, 20);
     } else {
       let notification = {
@@ -647,7 +647,7 @@ function applyUploadedFiles() {
           setEntrypointAndNotify(entrypoints[0].id);
         }
         componentVisibilities["confirmUploadModal"].value = false;
-        fitView({ padding: 0.4 });
+        fitView();
       }, 20);
       return;
     } else {
@@ -1023,7 +1023,7 @@ const setDslValidationError = (dslError) => {
   dslValidationErrors.value = dslError;
 };
 
-function alignNodes() {
+function alignNodesAndFitView() {
   autoAlignNodes(
     nodes.value,
     edges.value,
@@ -1040,6 +1040,7 @@ function alignNodes() {
     setTimeout(() => {
       addNodes(newNodes);
       addEdges(newEdges);
+      nextTick(() => fitView());
     }, 5);
   });
 }
