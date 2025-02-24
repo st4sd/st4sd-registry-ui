@@ -42,12 +42,13 @@ export async function autoAlignNodes(
 
     let elkGraph = await elk.layout(graph);
 
+    let processedNodes = [];
     for (let i = 0; i < allNodes.length; i++) {
       let foundNode = elkGraph.children.find(
         (node) => allNodes[i].id == node.id,
       );
       if (foundNode) {
-        allNodes[i] = {
+        let processedNode = {
           ...foundNode,
           /* 
             APev (19/02/25): Add 35 to y axis to stop nested 
@@ -55,6 +56,8 @@ export async function autoAlignNodes(
           */
           position: { x: foundNode.x, y: foundNode.y + 35 },
         };
+        processedNodes.push(processedNode);
+        allNodes[i] = processedNode;
       }
     }
 
@@ -64,10 +67,45 @@ export async function autoAlignNodes(
         allEdges[i] = { ...foundEdge };
       }
     }
+
+    let { boundingBoxWidth: workflowWidth, boundingBoxHeight: workflowHeight } =
+      calculateBoundingBoxArea(processedNodes);
+
+    /*
+      APev (21/02/2025): width + 24 due to additional workflow x axis padding
+      height + 24 due to additional y axis workflow padding + 35 due to title space
+    */
+    workflowNode.style = {
+      width: `${workflowWidth + 24}px`,
+      height: `${workflowHeight + 59}px`,
+    };
+    workflowNode.dimensions = {
+      width: workflowWidth + 24,
+      height: workflowHeight + 59,
+    };
   }
 
   return {
     newNodes: allNodes,
     newEdges: allEdges,
   };
+}
+
+function calculateBoundingBoxArea(nodes) {
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+
+  nodes.forEach((node) => {
+    minX = Math.min(minX, node.position.x);
+    minY = Math.min(minY, node.position.y);
+    maxX = Math.max(maxX, node.position.x + (node.width || 0));
+    maxY = Math.max(maxY, node.position.y + (node.height || 0));
+  });
+
+  const boundingBoxWidth = maxX - minX;
+  const boundingBoxHeight = maxY - minY;
+
+  return { boundingBoxWidth, boundingBoxHeight };
 }
