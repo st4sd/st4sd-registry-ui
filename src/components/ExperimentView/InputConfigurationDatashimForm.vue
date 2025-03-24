@@ -20,101 +20,18 @@
       </cds-progress-indicator>
     </div>
     <div v-if="pageNumber == 0" class="cds--subgrid cds--subgrid--wide">
-      <div
-        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
-      >
-        <cds-tile
-          class="cds-theme-zone-white"
-          v-if="datasetConfigurations.length == 0"
-        >
-          <p><strong>No Datasets configured.</strong></p>
-          <p>Add a new Dataset to continue.</p>
-        </cds-tile>
-        <div v-else>
-          <cds-tile-group
-            @cds-current-radio-tile-selection="updateRadioTileGroupSelection"
-          >
-            <cds-radio-tile
-              v-for="(dataset, idx) in datasetConfigurations"
-              :value="dataset"
-              :selected="dataset.id == lastSelectedDatashimTile.id"
-            >
-              <cds-button
-                size="md"
-                kind="danger-ghost"
-                style="position: absolute; bottom: 10px; right: 100px"
-                title="Remove Dataset"
-                @click="deleteDatasetEntry(idx)"
-              >
-                <img
-                  slot="icon"
-                  width="16"
-                  height="16"
-                  src="@/assets/trash-can.svg"
-                />
-              </cds-button>
-              <cds-button
-                size="md"
-                kind="ghost"
-                style="position: absolute; bottom: 10px; right: 150px"
-                title="Edit Dataset"
-                :disabled="this.isInEdit"
-                @click="editDatasetEntry(dataset)"
-              >
-                <img
-                  slot="icon"
-                  class="black-svg"
-                  width="16"
-                  height="16"
-                  src="@/assets/edit.svg"
-                />
-              </cds-button>
-              Name: {{ dataset.name }}
-            </cds-radio-tile></cds-tile-group
-          >
-        </div>
-      </div>
-      <div
-        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
-      >
-        <cds-tile>
-          <p>
-            {{
-              isInEdit
-                ? "Edit Dataset Configuration"
-                : "Add a new Dataset Configuration"
-            }}
-          </p>
-
-          <cds-inline-notification
-            v-if="datasetConfigurations.length != 0 && !isInEdit"
-            title="Only one Dataset is allowed."
-            subtitle="You can only delete or edit the available configuration."
-            low-contrast
-            hide-close-button
-            kind="warning"
-          >
-          </cds-inline-notification>
-          <cds-inline-notification
-            v-else-if="isInEdit"
-            title="Be careful."
-            subtitle="Changing the Dataset here will change it for all files referencing it."
-            low-contrast
-            hide-close-button
-            kind="warning"
-          >
-          </cds-inline-notification>
-
-          <DatashimFormNewEntry
-            :isInEditMode="isInEdit"
-            :datasetEditConfiguration="datasetToEdit"
-            :disableForm="datasetConfigurations.length != 0 && !isInEdit"
-            @add-new-datashim-entry="addNewDatasetEntry($event)"
-            @edit-datashim-entry="updateDatasetConfiguration($event, idx)"
-            @cancel-edit="isInEdit = false"
-          />
-        </cds-tile>
-      </div>
+      <DatashimAddModifyDatasets
+        :datasetConfigurations="datasetConfigurations"
+        :lastSelectedDatashimTile="lastSelectedDatashimTile"
+        :isInEdit="isInEdit"
+        :datasetToEdit="datasetToEdit"
+        @updateRadioTileGroupSelection="updateRadioTileGroupSelection($event)"
+        @deleteDatasetConfiguration="deleteDatasetConfiguration($event)"
+        @editDatasetConfiguration="editDatasetConfiguration($event)"
+        @addNewDatasetConfiguration="addNewDatasetConfiguration($event)"
+        @updateDatasetConfiguration="updateDatasetConfiguration($event)"
+        @updateIsInEdit="isInEdit = $event"
+      />
     </div>
     <div class="cds--subgrid cds--subgrid--wide" v-else>
       <div
@@ -153,12 +70,13 @@ import "@carbon/web-components/es/components/notification/index.js";
 
 import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
-import DatashimFormNewEntry from "@/components/ExperimentView/DatashimFormNewEntry.vue";
+
 import { DatashimDatasetConfiguration } from "@/classes/DatashimDatasetConfiguration.js";
 import {
   FileConfiguration,
   FileConfigurationFromDatashim,
 } from "@/classes/FileConfiguration";
+import DatashimAddModifyDatasets from "@/components/ExperimentView/DatashimAddModifyDatasets.vue";
 
 export default {
   name: "InputConfigurationDatashimForm",
@@ -181,7 +99,7 @@ export default {
     },
   },
   components: {
-    DatashimFormNewEntry,
+    DatashimAddModifyDatasets,
   },
   data() {
     return {
@@ -274,14 +192,14 @@ export default {
       tearsheetsSharedState.updateDatashimDatasetConfiguration(datashim);
       this.isInEdit = false;
     },
-    editDatasetEntry(datashim) {
+    editDatasetConfiguration(datashim) {
       this.datasetToEdit = datashim;
       this.isInEdit = true;
     },
-    addNewDatasetEntry(obj) {
+    addNewDatasetConfiguration(obj) {
       tearsheetsSharedState.addDatashimDatasetConfiguration(obj);
     },
-    deleteDatasetEntry(idx) {
+    deleteDatasetConfiguration(idx) {
       let fileReferencesForDatashim =
         tearsheetsSharedState.getFileReferencesForDatashimDatasetConfiguration(
           this.datasetConfigurations[idx].id,
@@ -383,10 +301,6 @@ export default {
 
 cds-progress-indicator {
   padding-bottom: layout.$spacing-05;
-}
-
-cds-inline-notification {
-  margin-top: layout.$spacing-05;
 }
 
 cds-text-input {

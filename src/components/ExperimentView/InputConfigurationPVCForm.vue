@@ -20,85 +20,18 @@
       </cds-progress-indicator>
     </div>
     <div v-if="pageNumber == 0" class="cds--subgrid cds--subgrid--wide">
-      <div
-        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
-      >
-        <cds-tile
-          class="cds-theme-zone-white"
-          v-if="pvcConfigurations.length == 0"
-        >
-          <p><strong> No PVC entries configured.</strong></p>
-          <p>Add a new PVC entry to continue.</p>
-        </cds-tile>
-        <div v-else>
-          <cds-tile-group
-            @cds-current-radio-tile-selection="updateRadioTileGroupSelection"
-          >
-            <cds-radio-tile
-              v-for="(entry, idx) in pvcConfigurations"
-              :value="entry"
-              :selected="entry.id == lastSelectedPVCTile.id"
-            >
-              <cds-button
-                size="md"
-                kind="danger-ghost"
-                style="position: absolute; bottom: 10px; right: 100px"
-                title="Delete PVC Entry"
-                @click="deletePVCEntry(idx)"
-              >
-                <img
-                  slot="icon"
-                  width="16"
-                  height="16"
-                  src="@/assets/trash-can.svg"
-                />
-              </cds-button>
-              <cds-button
-                size="md"
-                kind="ghost"
-                style="position: absolute; bottom: 10px; right: 150px"
-                title="Edit PVC Entry"
-                :disabled="this.isInEdit"
-                @click="editPVCEntry(entry)"
-              >
-                <img
-                  slot="icon"
-                  class="black-svg"
-                  width="16"
-                  height="16"
-                  src="@/assets/edit.svg"
-                />
-              </cds-button>
-              Name: {{ entry.name }}
-            </cds-radio-tile></cds-tile-group
-          >
-        </div>
-      </div>
-      <div
-        class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-8"
-      >
-        <cds-tile>
-          <p>{{ isInEdit ? "Edit PVC Entry" : "Add a new PVC Entry" }}</p>
-
-          <cds-inline-notification
-            v-if="isInEdit"
-            title="Be careful."
-            subtitle="Changing the PVC name here will change it for all files referencing it."
-            low-contrast
-            hide-close-button
-            kind="warning"
-          >
-          </cds-inline-notification>
-
-          <PVCFormNewEntry
-            :isInEditMode="isInEdit"
-            :pvcEditEntry="pvcToEdit"
-            @add-new-pvc-entry="addNewPVCEntry($event)"
-            @edit-pvc-entry="updatePVCEntry($event, idx)"
-            @cancel-edit="isInEdit = false"
-          />
-        </cds-tile>
-      </div>
+      <PVCAddModifyEntries
+        :pvcConfigurations="pvcConfigurations"
+        :lastSelectedPVCTile="lastSelectedPVCTile"
+        :isInEdit="isInEdit"
+        :pvcToEdit="pvcToEdit"
+        @updateRadioTileGroupSelection="updateRadioTileGroupSelection($event)"
+        @deletePVCEntry="deletePVCEntry($event)"
+        @editPVCEntry="editPVCEntry($event)"
+        @addNewPVCEntry="addNewPVCEntry($event)"
+        @updatePVCEntry="updatePVCEntry($event)"
+        @updateIsInEdit="isInEdit = $event"
+      />
     </div>
     <div class="cds--subgrid cds--subgrid--wide" v-else>
       <div
@@ -137,17 +70,17 @@ import "@carbon/web-components/es/components/tile/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/button/index.js";
 import "@carbon/web-components/es/components/progress-indicator/index.js";
-import "@carbon/web-components/es/components/notification/index.js";
+
 import "@carbon/web-components/es/components/form-group/index.js";
 
 import tearsheetsSharedState from "@/stores/experimentTearsheetSharedState.js";
 import { progressStepOverflowFix } from "@/functions/progress_indicator_step_overflow_fix";
-import PVCFormNewEntry from "./PVCFormNewEntry.vue";
 import { PVCConfiguration } from "@/classes/PVCConfiguration";
 import {
   FileConfiguration,
   FileConfigurationFromPVC,
 } from "@/classes/FileConfiguration";
+import PVCAddModifyEntries from "@/components/ExperimentView/PVCAddModifyEntries.vue";
 
 export default {
   name: "InputConfigurationPVCForm",
@@ -161,7 +94,7 @@ export default {
       default: new FileConfiguration(),
     },
   },
-  components: { PVCFormNewEntry },
+  components: { PVCAddModifyEntries },
   emits: [
     "disable-tearsheet-primary-action",
     "disable-tearsheet-secondary-action",
@@ -388,10 +321,6 @@ export default {
 
 cds-progress-indicator {
   padding-bottom: layout.$spacing-05;
-}
-
-cds-inline-notification {
-  margin-top: layout.$spacing-05;
 }
 
 cds-text-input {
