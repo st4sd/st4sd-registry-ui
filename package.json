@@ -14,7 +14,8 @@
     "brace-expansion": "1.1.12",
     "axios": ">=1.13.2",
     "form-data": ">=4.0.5",
-    "@eslint/plugin-kit": ">=0.5.0"
+    "@eslint/plugin-kit": ">=0.5.0",
+    "js-yaml": ">=4.1.1"
   },
   "dependencies": {
     "@carbon/charts": "^1.27.0",
