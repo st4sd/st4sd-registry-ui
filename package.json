@@ -40,17 +40,17 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-vue": "^10.6.2",
-    "prettier": "^3.7.4",
-    "sass": "^1.95.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.7.0",
+    "prettier": "^3.8.1",
+    "sass": "^1.97.3",
     "typescript": "~5.5.4",
     "vite": "^6.4.1",
-    "vue": "^3.5.25",
+    "vue": "^3.5.27",
     "vue-eslint-parser": "^10.2.0",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.4"
   },
   "eslintConfig": {
     "root": true,
