@@ -9,6 +9,11 @@
     "preview": "vite preview",
     "format": "npx prettier src --write"
   },
+  "resolutions": {
+    "axios": ">=1.15.0",
+    "lodash-es": ">=4.18.0",
+    "picomatch": ">=4.0.4"
+  },
   "dependencies": {
     "@carbon/charts": "^1.27.2",
     "@carbon/grid": "^11.53.0",
